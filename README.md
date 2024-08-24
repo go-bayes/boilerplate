@@ -1,11 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# boilerplate
-
-<!-- badges: start -->
-<!-- badges: end -->
-
 The `boilerplate` package offers a lightweight and flexible toolkit for
 managing, accessing, and compiling boilerplate text templates. Designed
 to streamline the creation and upkeep of template databases,
@@ -42,4 +37,4 @@ dbDisconnect(conn)
 
 ## Code
 
-Go to: <https://github.com/go-bayes/margot>
+Go to: <https://github.com/go-bayes/boilerplate>
