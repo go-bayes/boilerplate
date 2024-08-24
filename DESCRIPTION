@@ -1,0 +1,24 @@
+Package: boilerplate
+Title: Tools for Managing and Compiling Boilerplate Templates
+Version: 0.0.0.9000
+Authors@R: 
+    person("Joseph", "Bulbulia", email = "joseph.bulbulia@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-5861-2056"))
+Description: The 'boilerplate' package provides a comprehensive suite of tools 
+    for managing, accessing, and compiling boilerplate text templates. 
+    It simplifies the creation and maintenance of template databases, 
+    enabling users to efficiently store, retrieve, and update content. 
+    The package supports various output formats including Markdown, LaTeX, 
+    and HTML, making it versatile for different types of document generation. 
+    Additionally, it includes utility functions for version control and 
+    timestamping, ensuring that templates are well-organised and up-to-date.
+License: GPL-3
+Encoding: UTF-8
+Imports: 
+    RSQLite,
+    DBI,
+    glue,
+    here,
+    qs
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
