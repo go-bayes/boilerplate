@@ -6,15 +6,11 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-Certainly! Here’s an improved version for clarity and interest:
-
 The `boilerplate` package offers a lightweight and flexible toolkit for
 managing, accessing, and compiling boilerplate text templates. Designed
 to streamline the creation and upkeep of template databases,
 `boilerplate` allows users to efficiently store, retrieve, and update
-their content. Initially supporting Markdown, the package will soon
-extend its capabilities to include LaTeX and HTML, making it a versatile
-solution for a variety of document generation needs.
+their content. Initially, the package supports (quarto) markdown.
 
 ## Installation
 
@@ -43,3 +39,7 @@ conn <- boilerplate_connect_db()
 # don't forget to disconnect from the database when done
 dbDisconnect(conn)
 ```
+
+## Code
+
+Go to: <https://github.com/go-bayes/margot>
