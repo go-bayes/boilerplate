@@ -1,0 +1,26 @@
+url: https://go-bayes.github.io/boilerplate/
+
+template:
+  bootstrap: 5
+  bslib:
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "Fira Code"}
+    preset: "bootstrap"
+
+authors:
+  Joseph A Bulbulia:
+    href: https://github.com/go-bayes
+
+development:
+  version_label: default
+  version_tooltip: "Version"
+
+vignette_engine: quarto
+
+reference:
+
+  - title: "Create templates"
+    contents:
+    - boilerplate_manage_measures
+

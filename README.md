@@ -2,10 +2,11 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 The `boilerplate` package offers a lightweight and flexible toolkit for
-managing, accessing, and compiling boilerplate text templates. Designed
-to streamline the creation and upkeep of template databases,
-`boilerplate` allows users to efficiently store, retrieve, and update
-their content. Initially, the package supports (quarto) markdown.
+managing, accessing, and compiling reports and from templates
+(boilerplates). Simple and intutive command line interfaces allows users
+to efficiently store, retrieve, and update their content. Outputed
+markdown text can be dropped directly into markdown documents, such as
+`quarto` documents.
 
 ## Installation
 
@@ -27,12 +28,13 @@ database and create the necessary tables:
 
 ``` r
 library(boilerplate)
+library(here)
 
-# connect to the default database (creates it if it doesn't exist)
-conn <- boilerplate_connect_db()
+# set path to data folder
+measures_path <-  here::here("boilerplate", 'data')
 
-# don't forget to disconnect from the database when done
-dbDisconnect(conn)
+# open gui to enter and save measures data
+boilerplate_manage_measures(measures_path = measures_path)
 ```
 
 ## Code

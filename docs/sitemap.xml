@@ -1,8 +1,10 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/reference/hello.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/404.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/LICENSE.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/authors.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/index.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/news/index.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_manage_measures.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/index.html</loc></url>
 </urlset>
 

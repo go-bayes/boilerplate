@@ -1,6 +1,6 @@
 Package: boilerplate
 Title: Tools for Managing and Compiling Manuscript Templates
-Version: 0.0.0.9000
+Version: 0.0.0.91
 Authors@R: 
     person("Joseph", "Bulbulia", email = "joseph.bulbulia@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5861-2056"))
@@ -15,10 +15,10 @@ Description: The 'boilerplate' package provides a comprehensive suite of tools
 License: GPL-3
 Encoding: UTF-8
 Imports: 
-    RSQLite,
-    DBI,
     glue,
     here,
-    qs
+    cli,
+    R6,
+    rlang,
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.2.9000
