@@ -23,6 +23,7 @@ reference:
   - title: "Create templates"
     contents:
     - boilerplate_manage_measures
+    - boilerplate_merge_databases
 
 
   - title: "Generate Markdown"

@@ -1,5 +1,12 @@
 ## boilerplate (development version)
 
+## [24-08-2024] boilerplate 0.0.1.1-alpha
+
+### New
+
+* `boilerplate_merge_databases()`: merges databases, currently implemented for measures_data.
+* fixed helper functions on the `boilerplate_report_methods()` function.
+
 ## [24-08-2024] boilerplate 0.0.1.0-alpha
 
 * alpha release

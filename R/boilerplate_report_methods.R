@@ -104,7 +104,7 @@ boilerplate_report_methods <- function(exposure_var, outcome_vars, n_total, base
   # Define sections based on sections_to_include parameter
   sections <- if(identical(sections_to_include, 'all')) all_sections else sections_to_include
 
-  cli::cli_alert_info("Starting boilerplate_methods function")
+  cli::cli_alert_info("Starting boilerplate_report_methods function")
 
   # initialise an empty list to store all sections
   methods_sections <- list()
@@ -144,7 +144,7 @@ boilerplate_report_methods <- function(exposure_var, outcome_vars, n_total, base
   for (section in sections) {
     cli::cli_h1("Processing section: {section}")
     section_name <- section
-    func_name <- paste0("boilerplate_methods_", section)
+    func_name <- paste0("boilerplate_report_", section)
 
     # Prepare base arguments for all sections
     args <- list(
@@ -180,7 +180,7 @@ boilerplate_report_methods <- function(exposure_var, outcome_vars, n_total, base
 
     # Execute the function for each section
     if (section_name == "variables") {
-      result <- do.call(boilerplate_methods_variables, args)
+      result <- do.call(boilerplate_report_variables, args)
     } else {
       result <- safe_execute(func_name, args)
     }
@@ -198,7 +198,7 @@ boilerplate_report_methods <- function(exposure_var, outcome_vars, n_total, base
   cli::cli_alert_info("Combining all sections")
   markdown_output <- paste(unlist(methods_sections), collapse = "\n\n")
 
-  cli::cli_alert_success("Finished boilerplate_methods function \U0001F44D")
+  cli::cli_alert_success("Finished boilerplate_report_methods function \U0001F44D")
 
   return(markdown_output)
 }
