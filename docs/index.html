@@ -72,12 +72,62 @@
 <span><span class="va">measures_path</span> <span class="op">&lt;-</span>  <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">'data'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># open gui to enter and save measures data</span></span>
-<span><span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span>measures_path <span class="op">=</span> <span class="va">measures_path</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span>measures_path <span class="op">=</span> <span class="va">measures_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create measures report (assuming measures data saved as 'measures_data.rds')</span></span>
+<span><span class="va">measure_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="va">measures_path</span>, <span class="st">"measure_data.rds"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># baseline variables</span></span>
+<span><span class="va">baseline_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"male_binary"</span>, <span class="st">"parent_binary"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># exposure variable (intervention)</span></span>
+<span><span class="va">exposure_var</span> <span class="op">&lt;-</span> <span class="st">"political_conservative"</span></span>
+<span></span>
+<span><span class="co"># outcomes, perhaps defined by domains</span></span>
+<span><span class="va">outcomes_health</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"smoker_binary"</span>, <span class="st">"hlth_bmi"</span>, <span class="st">"log_hours_exercise"</span><span class="op">)</span></span>
+<span><span class="va">outcomes_psychological</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hlth_fatigue"</span>, <span class="st">"kessler_latent_anxiety"</span><span class="op">)</span></span>
+<span><span class="va">outcomes_social</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"belong"</span>, <span class="st">"neighbourhood_community"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># variable definitions: option 1</span></span>
+<span><span class="va">outcome_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">outcomes_health</span>, <span class="va">outcomes_psychological</span>, <span class="va">outcomes_social</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># variable definitions: option 2 using `boilerplate_report_variables`</span></span>
+<span><span class="va">all_outcomes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  health <span class="op">=</span> <span class="va">outcomes_health</span>,</span>
+<span>  psychological <span class="op">=</span> <span class="va">outcomes_psychological</span>,</span>
+<span>  social <span class="op">=</span> <span class="va">outcomes_social</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># view</span></span>
+<span><span class="va">appendix_text_version_1</span> <span class="op">&lt;-</span> <span class="fu">boilerplate</span><span class="fu">::</span><span class="fu">biolerplate_report_measures</span><span class="op">(</span></span>
+<span>  baseline_vars <span class="op">=</span> <span class="va">baseline_vars</span>,</span>
+<span>  exposure_var <span class="op">=</span> <span class="va">exposure_var</span>,</span>
+<span>  outcome_vars <span class="op">=</span> <span class="va">outcome_vars</span>,</span>
+<span>  measure_data <span class="op">=</span> <span class="va">measure_data</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># view</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">appendix_text_version_1</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># another option</span></span>
+<span><span class="va">appendix_text_version_2</span> <span class="op">&lt;-</span> <span class="fu">boilerplate</span><span class="fu">::</span><span class="fu"><a href="reference/boilerplate_report_variables.html">boilerplate_report_variables</a></span><span class="op">(</span></span>
+<span>  exposure_var <span class="op">=</span> <span class="va">exposure_var</span>,</span>
+<span>  outcome_vars <span class="op">=</span> <span class="va">all_outcomes</span>,</span>
+<span>  appendices_measures <span class="op">=</span> <span class="st">"Appendix C"</span>,</span>
+<span>  measure_data <span class="op">=</span> <span class="va">measure_data</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">appendix_text_version_2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="code">Code<a class="anchor" aria-label="anchor" href="#code"></a>
 </h2>
 <p>Go to: <a href="https://github.com/go-bayes/boilerplate" class="external-link uri">https://github.com/go-bayes/boilerplate</a></p>
+</div>
+<div class="section level2">
+<h2 id="doi">DOI<a class="anchor" aria-label="anchor" href="#doi"></a>
+</h2>
+<p><a href="https://zenodo.org/doi/10.5281/zenodo.13370825" class="external-link"><img src="https://zenodo.org/badge/846820825.svg" alt="DOI"></a></p>
 </div>
 
   </main><aside class="col-md-3"><div class="license">

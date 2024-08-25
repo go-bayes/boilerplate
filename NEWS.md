@@ -1,8 +1,10 @@
 ## boilerplate (development version)
 
-## [24-08-2024] boilerplate 0.0.1.0
+## [24-08-2024] boilerplate 0.0.1.0-alpha
 
 * alpha release
+* doi: 10.5281/zenodo.13370816
+
 
 ## [24-08-2024] boilerplate 0.0.0.92
 

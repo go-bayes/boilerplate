@@ -45,9 +45,60 @@ measures_path <-  here::here("boilerplate", 'data')
 
 # open gui to enter and save measures data
 boilerplate_manage_measures(measures_path = measures_path)
+
+# create measures report (assuming measures data saved as 'measures_data.rds')
+measure_data <- readRDS(here::here(measures_path, "measure_data.rds"))
+
+# baseline variables
+baseline_vars <- c("age", "male_binary", "parent_binary")
+
+# exposure variable (intervention)
+exposure_var <- "political_conservative"
+
+# outcomes, perhaps defined by domains
+outcomes_health <- c("smoker_binary", "hlth_bmi", "log_hours_exercise")
+outcomes_psychological <- c("hlth_fatigue", "kessler_latent_anxiety")
+outcomes_social <- c("belong", "neighbourhood_community")
+
+# variable definitions: option 1
+outcome_vars <- c(outcomes_health, outcomes_psychological, outcomes_social)
+
+# variable definitions: option 2 using `boilerplate_report_variables`
+all_outcomes <- list(
+  health = outcomes_health,
+  psychological = outcomes_psychological,
+  social = outcomes_social
+)
+
+# view
+appendix_text_version_1 <- boilerplate::biolerplate_report_measures(
+  baseline_vars = baseline_vars,
+  exposure_var = exposure_var,
+  outcome_vars = outcome_vars,
+  measure_data = measure_data
+)
+
+# view
+cat(appendix_text_version_1)
+
+
+# another option
+appendix_text_version_2 <- boilerplate::boilerplate_report_variables(
+  exposure_var = exposure_var,
+  outcome_vars = all_outcomes,
+  appendices_measures = "Appendix C",
+  measure_data = measure_data
+)
+cat(appendix_text_version_2)
 ```
 
 ## Code
 
 Go to: <https://github.com/go-bayes/boilerplate>
+
+
+## DOI
+
+[![DOI](https://zenodo.org/badge/846820825.svg)](https://zenodo.org/doi/10.5281/zenodo.13370825)
+
 
