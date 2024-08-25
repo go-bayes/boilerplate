@@ -1,8 +1,12 @@
 ## boilerplate (development version)
 
+## [24-08-2024] boilerplate 0.0.1.0
+
+* alpha release
+
 ## [24-08-2024] boilerplate 0.0.0.92
 
-* boilerplate_report_additional_sections()
+*  boilerplate_report_additional_sections()
 *  boilerplate_report_confounding_control()
 *  boilerplate_report_eligibility_criteria()
 *  boilerplate_report_identification_assumptions()
