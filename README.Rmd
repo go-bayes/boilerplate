@@ -71,7 +71,7 @@ all_outcomes <- list(
 )
 
 # view
-appendix_text_version_1 <- boilerplate::biolerplate_report_measures(
+appendix_text_version_1 <- boilerplate::boilerplate_report_measures(
   baseline_vars = baseline_vars,
   exposure_var = exposure_var,
   outcome_vars = outcome_vars,

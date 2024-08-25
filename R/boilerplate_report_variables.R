@@ -42,7 +42,7 @@
 #' @export
 boilerplate_report_variables <- function(exposure_var, outcome_vars, measure_data, appendices_measures = NULL, ...) {
   # Generate the bibliography
-  bibliography_text <- biolerplate_report_measures(
+  bibliography_text <- boilerplate_report_measures(
     all_vars = c(exposure_var, unlist(outcome_vars)),
     exposure_var = exposure_var,
     outcome_vars = unlist(outcome_vars),
