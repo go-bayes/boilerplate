@@ -24,3 +24,11 @@ reference:
     contents:
     - boilerplate_manage_measures
 
+
+  - title: "Generate Markdown"
+    contents:
+    - boilerplate_report_measures
+    - boilerplate_report_causal_interventions
+    - boilerplate_report_variables
+
+

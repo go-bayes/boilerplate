@@ -32,7 +32,7 @@ The function provides the following main functionalities:
 }
 }
 \note{
-This function requires the rlang, here, cli, and R6 packages.
+This function uses the rlang, here, cli, and R6 packages.
 }
 \examples{
 \dontrun{

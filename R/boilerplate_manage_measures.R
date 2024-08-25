@@ -22,7 +22,7 @@
 #'   \item Perform batch edits on measures
 #' }
 #'
-#' @note This function requires the rlang, here, cli, and R6 packages.
+#' @note This function uses the rlang, here, cli, and R6 packages.
 #'
 #' @examples
 #' \dontrun{
@@ -33,15 +33,16 @@
 #' boilerplate_manage_measures("/path/to/measures/directory")
 #' }
 #'
-#' @import rlang
-#' @import here
-#' @import cli
-#' @import R6
+#' @importFrom rlang .data
+#' @importFrom here here
+#' @importFrom cli cli_alert
+#' @importFrom R6 R6Class
 #' @export
 boilerplate_manage_measures <- function(measures_path = NULL) {
-  require(rlang)
-  require(here)
-  require(cli)
+
+  if (is.null(measures_path)) {
+    measures_path <- here::here()
+  }
 
   measures_path <- measures_path %||% here::here()
   db <- MeasuresDatabase$new(measures_path)
