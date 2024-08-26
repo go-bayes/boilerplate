@@ -210,6 +210,19 @@ UserInterface <- R6::R6Class("UserInterface",
                              )
 )
 # runs the graphical user interface for the measures database manager
+boilerplate_manage_measures <- function(measures_path = NULL) {
+  if (is.null(measures_path)) {
+    measures_path <- here::here()
+  }
+
+  measures_path <- measures_path %||% here::here()
+  db <- MeasuresDatabase$new(measures_path)
+  ui <- UserInterface$new()
+
+  run_gui(db, ui)
+}
+
+# runs the graphical user interface for the measures database manager
 run_gui <- function(db, ui) {
   cli::cli_h1("Welcome to the Boilerplate Measures Database Manager")
 
@@ -225,9 +238,13 @@ run_gui <- function(db, ui) {
     choice <- ui$get_choice("Enter your choice: ", length(options))
 
     if (choice == 1) {
-      create_new_database(db, ui)
+      if (create_new_database(db, ui)) {
+        break  # Only break if database was successfully created
+      }
     } else if (choice == 2) {
-      open_existing_database(db, ui)
+      if (open_existing_database(db, ui)) {
+        break  # Only break if database was successfully opened
+      }
     } else if (choice == 3) {
       list_rds_files(db$path)
     } else if (choice == 4) {
@@ -237,12 +254,11 @@ run_gui <- function(db, ui) {
         return()
       }
     }
-
-    if (choice == 1 || choice == 2) break
   }
 
   manage_database(db, ui)
 }
+
 
 # creates a new measures database
 create_new_database <- function(db, ui) {
@@ -276,12 +292,16 @@ create_new_database <- function(db, ui) {
 # opens an existing measures database
 open_existing_database <- function(db, ui) {
   files <- list_rds_files(db$path)
-  if (is.null(files)) return()
+  if (is.null(files)) return(FALSE)
 
   file_choice <- ui$get_choice("Enter the number of the file you want to open: ", length(files))
 
   file_name <- files[file_choice]
-  db$load_data(file_name)
+  if (db$load_data(file_name)) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
 }
 
 # lists available .rds files in the specified directory
@@ -604,3 +624,4 @@ review_and_save_measure <- function(db, ui, measure, is_new = TRUE) {
     }
   }
 }
+

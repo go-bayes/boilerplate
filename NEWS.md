@@ -1,5 +1,11 @@
 ## boilerplate (development version)
 
+## [24-08-2024] boilerplate 0.0.1.2
+
+### Improved
+
+* fixed issue in `boilerplate_manage_measures()`: now, if 'n' is selected for new database name, the manager will return to the main menu instead of charging along. 
+
 ## [24-08-2024] boilerplate 0.0.1.1-alpha
 
 ### New
