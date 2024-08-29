@@ -49,14 +49,15 @@
 #' @import cli
 #' @export
 boilerplate_report_measures <- function(all_vars = NULL,
-                                            baseline_vars = NULL,
-                                            exposure_var = NULL,
-                                            outcome_vars = NULL,
-                                            measure_data,
-                                            custom_titles = NULL,
-                                            print_keywords = FALSE,
-                                            print_waves = FALSE) {
+                                        baseline_vars = NULL,
+                                        exposure_var = NULL,
+                                        outcome_vars = NULL,
+                                        measure_data,
+                                        custom_titles = NULL,
+                                        print_keywords = FALSE,
+                                        print_waves = FALSE) {
 
+  # Generate section for variables
   # Generate section for variables
   generate_section <- function(vars, section_title) {
     section <- paste0(cli::col_magenta("### ", section_title, "\n\n"))
@@ -64,6 +65,32 @@ boilerplate_report_measures <- function(all_vars = NULL,
       section <- paste0(section, format_measure(var, measure_data[[var]]))
     }
     return(section)
+  }
+
+  # Input validation and processing
+  if (is.null(all_vars) && is.null(baseline_vars) && is.null(exposure_var) && is.null(outcome_vars)) {
+    # If no variables are specified, use all variables from measure_data
+    all_vars <- names(measure_data)
+  } else if (!is.null(all_vars)) {
+    if (is.logical(all_vars) && all_vars) {
+      all_vars <- unique(c(baseline_vars, exposure_var, outcome_vars))
+    } else if (!is.character(all_vars)) {
+      stop("all_vars must be either TRUE or a character vector")
+    }
+  } else {
+    # Check if only one of baseline_vars, exposure_var, or outcome_vars is provided
+    provided_vars <- c(!is.null(baseline_vars), !is.null(exposure_var), !is.null(outcome_vars))
+    if (sum(provided_vars) == 1) {
+      if (!is.null(baseline_vars)) {
+        all_vars <- baseline_vars
+      } else if (!is.null(exposure_var)) {
+        all_vars <- exposure_var
+      } else {
+        all_vars <- outcome_vars
+      }
+    } else {
+      all_vars <- unique(c(baseline_vars, exposure_var, outcome_vars))
+    }
   }
 
   # Input validation and processing

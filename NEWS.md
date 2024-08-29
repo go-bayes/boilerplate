@@ -1,5 +1,14 @@
 ## boilerplate (development version)
 
+
+## [24-08-2024] boilerplate 0.0.1.3
+
+### Improved
+
+* fixed issue in `boilerplate_report_measures()` works if only `baseline_vars`, `exposure_var`, or `outcome_vars` are passed. 
+
+
+
 ## [24-08-2024] boilerplate 0.0.1.2
 
 ### Improved
