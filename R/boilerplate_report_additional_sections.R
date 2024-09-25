@@ -55,7 +55,7 @@
 #' @export
 boilerplate_report_additional_sections <- function(
     sensitivity_analysis = list(
-      description = "To assess the sensitivity of results to unmeasured confounding, we report VanderWeele and Ding's \"E-value\" in all analyses [@vanderweele2017]. The E-value quantifies the minimum strength of association (on the risk ratio scale) that an unmeasured confounder would need to have with both the exposure and the outcome (after considering the measured covariates) to explain away the observed exposure-outcome association [@vanderweele2020; @linden2020EVALUE]. To evaluate the strength of evidence, we use the bound of the E-value 95% confidence interval closest to 1. This provides a clear metric for understanding the robustness of our findings in the presence of potential unmeasured confounding."
+      description = "To assess the sensitivity of results to unmeasured confounding, we report VanderWeele and Ding's E-value in all analyses [@vanderweele2017]. The E-value quantifies the minimum strength of association (on the risk ratio scale) that an unmeasured confounder would need to have with both the exposure and the outcome (after considering the measured covariates) to explain away the observed exposure-outcome association [@vanderweele2020; @linden2020EVALUE]. To evaluate the strength of evidence, we use the bound of the E-value 95% confidence interval closest to 1. This provides a clear metric for understanding the robustness of our findings in the presence of potential unmeasured confounding."
     ),
     scope_interventions = list(
       figure_ref = "@fig-hist",
@@ -106,8 +106,7 @@ transition_table$table
 #| echo: false
 #| fig-width: 10
 #| fig-height: 12
-graph_histogram <- margot::here_read("graph_histogram")
-graph_histogram + theme_classic()
+histogram_exposure # defined in preamble
 ```
 '
     )
@@ -123,8 +122,8 @@ graph_histogram + theme_classic()
 #| tbl-cap: "TBA."
 #| eval: true
 #| echo: false
-transition_table <- margot::here_read("transition_table")
-transition_table$table
+transition_matrix <- margot::here_read("transition_matrix")
+transition_matrix$table
 ```
 '
     )
