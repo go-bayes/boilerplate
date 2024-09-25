@@ -22,7 +22,7 @@ boilerplate_report_eligibility_criteria <- function(inclusion_criteria, exclusio
   markdown_text <- glue::glue("
 ### Eligibility Criteria
 
-To be included in the analysis of this study, participants needed to meet the following eligibility criteria:
+To be included in the analysis of this study, participants needed to participate in the {baseline_wave} of the the study and respond to {nice_exposure_name}:
 
 #### Inclusion Criteria
 

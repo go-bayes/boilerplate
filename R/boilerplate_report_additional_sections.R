@@ -122,8 +122,7 @@ histogram_exposure # defined in preamble
 #| tbl-cap: "TBA."
 #| eval: true
 #| echo: false
-transition_matrix <- margot::here_read("transition_matrix")
-transition_matrix$table
+transition_matrix$table # defined in preamble
 ```
 '
     )
