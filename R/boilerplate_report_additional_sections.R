@@ -81,7 +81,7 @@ graph_histogram + theme_classic()
 #| tbl-cap: "TBA."
 #| eval: true
 #| echo: false
-transition_table <- margot::here_read("transition_table")
+transition_matrix$table # defined in preamble
 transition_table$table
 ```
 '
