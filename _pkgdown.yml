@@ -28,6 +28,7 @@ reference:
 
   - title: "Generate Markdown"
     contents:
+    - boilerplate_measures
     - boilerplate_report_additional_sections
     - boilerplate_report_causal_interventions
     - boilerplate_report_confounding_control

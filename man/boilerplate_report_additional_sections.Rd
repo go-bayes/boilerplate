@@ -10,7 +10,7 @@ boilerplate_report_additional_sections(
   scope_interventions = list(figure_ref = "@fig-hist", code =
     "\\n```{r}\\n#| label: fig-hist\\n#| fig-cap: \\" \\"\\n#| eval: true\\n#| include: true\\n#| echo: false\\n#| fig-width: 10\\n#| fig-height: 12\\ngraph_histogram <- margot::here_read(\\"graph_histogram\\")\\ngraph_histogram + theme_classic()\\n```\\n"),
   evidence_change = list(table_ref = "@tbl-transition", code =
-    "\\n```{r}\\n#| label: tbl-transition\\n#| tbl-cap: \\"TBA.\\"\\n#| eval: true\\n#| echo: false\\ntransition_table <- margot::here_read(\\"transition_table\\")\\ntransition_table$table\\n```\\n"),
+    "\\n```{r}\\n#| label: tbl-transition\\n#| tbl-cap: \\"TBA.\\"\\n#| eval: true\\n#| echo: false\\ntransition_matrix$table # defined in preamble\\ntransition_table$table\\n```\\n"),
   ...
 )
 }

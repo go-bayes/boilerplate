@@ -1,6 +1,11 @@
 ## boilerplate (development version)
 
 
+## [22-12-2024] boilerplate 0.0.1.5
+
+### New
+`boilerplate_measures()` - one function that does all we need for measures reporting
+
 ## [25-09-2024] boilerplate 0.0.1.4
 
 - more flexible handling of additional sections in methods (still work to be done)
