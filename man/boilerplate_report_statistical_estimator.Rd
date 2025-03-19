@@ -2,16 +2,22 @@
 % Please edit documentation in R/boilerplate_report_statistical_estimator.R
 \name{boilerplate_report_statistical_estimator}
 \alias{boilerplate_report_statistical_estimator}
-\title{Generate Statistical Estimator Description}
+\title{Generate Statistical Estimator Descriptions}
 \usage{
-boilerplate_report_statistical_estimator(estimators = "lmtp")
+boilerplate_report_statistical_estimator(
+  estimators = "lmtp",
+  version = "short"
+)
 }
 \arguments{
-\item{estimators}{Character vector specifying the statistical estimators used.}
+\item{estimators}{A character vector of estimator names. Supported values are:
+\code{"lmtp"}, \code{"sdr"}, \code{"grf"}.}
+
+\item{version}{Either \code{"short"} or \code{"long"}. Defaults to \code{"short"}.}
 }
 \value{
-A character string containing the statistical estimator description in markdown format.
+A character string with the description in markdown format.
 }
 \description{
-Generate Statistical Estimator Description
+Produces short or long descriptions of various statistical estimators.
 }
