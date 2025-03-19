@@ -1,5 +1,8 @@
 ## boilerplate (development version)
 
+## [22-12-2024] boilerplate 0.0.1.6
+### Improved
+- `boilerplate_report_statistical_estimator()` enhanced for `grf` and allows short and long reporting. 
 
 ## [22-12-2024] boilerplate 0.0.1.5
 
