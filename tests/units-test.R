@@ -1,6 +1,6 @@
-# Unit tests for boilerplate_measures_text
+# Unit tests forboilerplate::boilerplate_generate_measures
 library(testthat)
-test_that("boilerplate_measures_text generates correct formatted output", {
+test_that("boilerplate_generate_measures generates correct formatted output", {
   # Create a test measures database
   test_db <- list(
     test_var1 = list(
@@ -22,7 +22,7 @@ test_that("boilerplate_measures_text generates correct formatted output", {
   )
 
   # Test with single variable
-  result1 <- boilerplate::boilerplate_measures_text(
+  result1 <- boilerplate::boilerplate_generate_measures(
     variable_heading = "Test Heading",
     variables = "test_var1",
     db = test_db,
@@ -40,7 +40,7 @@ test_that("boilerplate_measures_text generates correct formatted output", {
   expect_false(grepl("Keywords", result1)) # Keywords not printed by default
 
   # Test with multiple variables
-  result2 <- boilerplate_measures_text(
+  result2 <- boilerplate::boilerplate_generate_measures(
     variable_heading = "Multiple Variables",
     variables = c("test_var1", "test_var2"),
     db = test_db,
@@ -56,7 +56,7 @@ test_that("boilerplate_measures_text generates correct formatted output", {
   expect_true(grepl("\\*Waves: 2-4\\*", result2))
 
   # Test with custom heading levels
-  result3 <- boilerplate_measures_text(
+  result3 <- boilerplate::boilerplate_generate_measures(
     variable_heading = "Custom Headings",
     variables = "test_var1",
     db = test_db,
@@ -69,7 +69,7 @@ test_that("boilerplate_measures_text generates correct formatted output", {
   expect_true(grepl("### Test Var1", result3))
 
   # Test with appendix reference
-  result4 <- boilerplate_measures_text(
+  result4 <- boilerplate::boilerplate_generate_measures(
     variable_heading = "With Appendix",
     variables = "test_var1",
     db = test_db,
@@ -80,7 +80,7 @@ test_that("boilerplate_measures_text generates correct formatted output", {
   expect_true(grepl("found in \\*\\*Appendix B\\*\\*", result4))
 
   # Test with missing measure
-  result5 <- boilerplate_measures_text(
+  result5 <- boilerplate::boilerplate_generate_measures(
     variable_heading = "Missing Measure",
     variables = c("test_var1", "nonexistent_var"),
     db = test_db
@@ -91,10 +91,10 @@ test_that("boilerplate_measures_text generates correct formatted output", {
   expect_true(grepl("No information available for this variable", result5))
 })
 
-test_that("boilerplate_measures_text handles edge cases", {
+test_that("boilerplate_generate_measures handles edge cases", {
   # Empty measures database
   empty_db <- list()
-  result1 <- boilerplate_measures_text(
+  result1 <- boilerplate::boilerplate_generate_measures(
     variable_heading = "Empty DB",
     variables = "test_var",
     db = empty_db
@@ -103,7 +103,7 @@ test_that("boilerplate_measures_text handles edge cases", {
 
   # Empty variables list
   test_db <- list(test_var = list(name = "test"))
-  result2 <- boilerplate_measures_text(
+  result2 <- boilerplate::boilerplate_generate_measures(
     variable_heading = "Empty Variables",
     variables = character(0),
     db = test_db
@@ -117,7 +117,7 @@ test_that("boilerplate_measures_text handles edge cases", {
       description = "This variable has no items."
     )
   )
-  result3 <-  boilerplate::boilerplate_measures_text(
+  result3 <-  boilerplate::boilerplate_generate_measures(
     variable_heading = "No Items",
     variables = "no_items",
     db = test_db

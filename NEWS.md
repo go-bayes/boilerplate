@@ -1,10 +1,18 @@
-# boilerplate (development version)
+## boilerplate
+
+## [2024-04-01] boilerplate 0.3.0
+## Improved
+-  `boilerplate_measures_text()` now `boilerplate_generate_text`
+-  user-proof defaults for checking against writing over existing databases. 
+
 ## [2024-04-01] boilerplate 0.2.1
 ### Improved
 - added cli alerts to main functions
 
 ## Deprecated
 - `boilerplate_results_text()`, `boilerplate_measures_text()`, handled more simply with `boilerplate_generate_text()`
+- templating now possible for templating full manuscripts. 
+- different version (technical, non-technical) of templated manuscripts now possible. 
 
 ## [2024-03-29] boilerplate 0.2.0
 ## New

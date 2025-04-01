@@ -2,10 +2,26 @@ url: https://go-bayes.github.io/boilerplate/
 template:
   bootstrap: 5
   bslib:
-    base_font: {google: "Roboto"}
-    heading_font: {google: "Roboto Slab"}
+    # set the base font family using a Google Font
+    base_font: {google: "Fira Code"}
+    # set the font for headings
+    heading_font: {google: "Fira Sans"}
+    # set the font for code elements
     code_font: {google: "Fira Code"}
-    preset: "bootstrap"
+
+    # adjust the overall font size scale
+    font_scale: 0.75  # makes the font smaller; 1 is the default size
+    bg: "#ffffff"      # white background
+    fg: "#333333"      # dark gray font color for better readability
+    primary: "#007bff" # primary blue theme color for links, buttons, etc.
+    secondary: "#6c757d" # secondary color (used for muted text, etc.)
+    # Additional color settings for a cohesive blue theme
+    info: "#17a2b8"    # info color (light blue)
+    success: "#28a745" # success color (green)
+    warning: "#ffc107" # warning color (yellow)
+    danger: "#dc3545"  # danger color (red)
+    light: "#f8f9fa"   # light color for contrasts
+    dark: "#343a40"    # dark color for contrasts
 authors:
   Joseph A Bulbulia:
     href: https://github.com/go-bayes
@@ -23,7 +39,7 @@ reference:
   - title: "Generate Markdown"
     contents:
     - boilerplate_generate_text
-    - boilerplate_measures_text
+    - boilerplate_generate_measures
   - title: "Utilities"
     contents:
     - boilerplate_merge_databases

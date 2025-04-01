@@ -9,6 +9,7 @@
 #' @param db1_name Character string. The name of the first database (default: "Database 1").
 #' @param db2_name Character string. The name of the second database (default: "Database 2").
 #' @param recursive Logical. Whether to merge hierarchical structures recursively (default: TRUE).
+#' @param sort_results Logical. Whether to sort the merged database alphabetically (default: TRUE).
 #'
 #' @return A list representing the merged measure database.
 #'
@@ -21,6 +22,7 @@
 #' }
 #' Measures that exist in only one database are automatically added to the merged database.
 #' If recursive is TRUE, the function will recursively merge nested folders/categories.
+#' If sort_results is TRUE, the function will sort the merged database alphabetically at each level.
 #'
 #' @examples
 #' \dontrun{
@@ -32,13 +34,17 @@
 #'
 #' # Merge but do not process nested structures recursively
 #' merged_db <- boilerplate_merge_databases(test_a, test_b, recursive = FALSE)
+#'
+#' # Merge but do not sort the result
+#' merged_db <- boilerplate_merge_databases(test_a, test_b, sort_results = FALSE)
 #' }
 #'
 #' @importFrom cli cli_h1 cli_h2 cli_text cli_code cli_progress_bar cli_progress_update
 #' @importFrom cli cli_progress_done cli_alert_success cli_alert_info
 #'
 #' @export
-boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_name = "Database 2", recursive = TRUE) {
+boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_name = "Database 2",
+                                        recursive = TRUE, sort_results = TRUE) {
   merged_db <- list()
 
   # Helper function to get user choice
@@ -110,6 +116,11 @@ boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_n
       }
     }
 
+    # sort alphabetically if requested
+    if (sort_results) {
+      local_merged <- local_merged[order(names(local_merged))]
+    }
+
     return(local_merged)
   }
 
@@ -148,4 +159,3 @@ boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_n
 
   return(merged_db)
 }
-

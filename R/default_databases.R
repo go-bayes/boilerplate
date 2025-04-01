@@ -117,3 +117,152 @@ get_default_discussion_db <- function() {
   )
 }
 
+#' Get Default Appendix Database
+#'
+#' @return List. The default appendix database.
+#'
+#' @noRd
+get_default_appendix_db <- function() {
+  list(
+    supplementary_methods = "This appendix provides additional methodological details that supplement the main manuscript.",
+    sensitivity_analyses = "We conducted several sensitivity analyses to evaluate the robustness of our findings to different assumptions.",
+    additional_tables = "This appendix contains additional tables that could not be included in the main manuscript due to space constraints.",
+    alternative_specifications = "We tested alternative model specifications to ensure that our results are not sensitive to specific modeling choices."
+  )
+}
+
+#' Get Default Template Database
+#'
+#' @return List. The default template database.
+#'
+#' @noRd
+get_default_template_db <- function() {
+  list(
+    journal_article = "---
+title: \"{{title}}\"
+author: \"{{authors}}\"
+date: \"{{date}}\"
+format:
+  docx:
+    reference-doc: journal_template.docx
+bibliography: references.bib
+---
+
+# Abstract
+
+{{abstract}}
+
+# Introduction
+
+{{introduction}}
+
+# Methods
+
+## Sample
+{{methods_sample}}
+
+## Measures
+{{methods_measures}}
+
+## Statistical Approach
+{{methods_statistical}}
+
+# Results
+
+{{results}}
+
+# Discussion
+
+{{discussion}}
+
+# References
+",
+
+    conference_presentation = "---
+title: \"{{title}}\"
+author: \"{{authors}}\"
+date: \"{{date}}\"
+format:
+  revealjs:
+    theme: default
+    logo: institution_logo.png
+bibliography: references.bib
+---
+
+## Research Question
+
+{{research_question}}
+
+## Methods
+{{methods_brief}}
+
+## Key Findings
+{{results_highlights}}
+
+## Implications
+{{implications}}
+
+## Thank You
+{{acknowledgments}}
+",
+
+    grant_proposal = "---
+title: \"{{title}}\"
+author: \"{{authors}}\"
+date: \"{{date}}\"
+format: pdf
+---
+
+# Project Summary
+{{project_summary}}
+
+# Specific Aims
+{{specific_aims}}
+
+# Background and Significance
+{{background}}
+
+# Preliminary Studies
+{{preliminary_studies}}
+
+# Research Strategy
+
+## Methods
+{{methods_planned}}
+
+## Timeline
+{{timeline}}
+
+# Budget Justification
+{{budget_justification}}
+
+# References
+"
+  )
+}
+
+#' Get Default Database for a Category
+#'
+#' @param category Character. Category to get default database for.
+#'
+#' @return List. Default database for the category.
+#'
+#' @noRd
+get_default_db <- function(category) {
+  # Return category-specific defaults
+  if (category == "methods") {
+    return(get_default_methods_db())
+  } else if (category == "results") {
+    return(get_default_results_db())
+  } else if (category == "discussion") {
+    return(get_default_discussion_db())
+  } else if (category == "measures") {
+    return(get_default_measures_db())
+  } else if (category == "appendix") {
+    return(get_default_appendix_db())
+  } else if (category == "template") {
+    return(get_default_template_db())
+  } else {
+    return(list())
+  }
+}

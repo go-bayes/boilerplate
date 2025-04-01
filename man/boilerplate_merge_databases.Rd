@@ -9,7 +9,8 @@ boilerplate_merge_databases(
   db2,
   db1_name = "Database 1",
   db2_name = "Database 2",
-  recursive = TRUE
+  recursive = TRUE,
+  sort_results = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ boilerplate_merge_databases(
 \item{db2_name}{Character string. The name of the second database (default: "Database 2").}
 
 \item{recursive}{Logical. Whether to merge hierarchical structures recursively (default: TRUE).}
+
+\item{sort_results}{Logical. Whether to sort the merged database alphabetically (default: TRUE).}
 }
 \value{
 A list representing the merged measure database.
@@ -40,6 +43,7 @@ in both databases:
 }
 Measures that exist in only one database are automatically added to the merged database.
 If recursive is TRUE, the function will recursively merge nested folders/categories.
+If sort_results is TRUE, the function will sort the merged database alphabetically at each level.
 }
 \examples{
 \dontrun{
@@ -51,6 +55,9 @@ merged_db <- boilerplate_merge_databases(test_a, test_b, "NZAVS 2009", "NZAVS 20
 
 # Merge but do not process nested structures recursively
 merged_db <- boilerplate_merge_databases(test_a, test_b, recursive = FALSE)
+
+# Merge but do not sort the result
+merged_db <- boilerplate_merge_databases(test_a, test_b, sort_results = FALSE)
 }
 
 }
