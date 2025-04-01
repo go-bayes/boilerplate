@@ -2,7 +2,7 @@
 % Please edit documentation in R/boilerplate_generate_text.R
 \name{boilerplate_generate_text}
 \alias{boilerplate_generate_text}
-\title{Generate Text from Boilerplate}
+\title{Generate text from boilerplate}
 \usage{
 boilerplate_generate_text(
   category = c("measures", "methods", "results", "discussion"),
@@ -15,7 +15,8 @@ boilerplate_generate_text(
   warn_missing = TRUE,
   add_headings = FALSE,
   heading_level = "###",
-  custom_headings = list()
+  custom_headings = list(),
+  quiet = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ If NULL (default), the function will look in the following locations in order:
 \item{heading_level}{Character. The heading level to use (e.g., "###"). Default is "###".}
 
 \item{custom_headings}{List. Custom headings for specific sections. Names should match section names.}
+
+\item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
 }
 \value{
 Character. The combined text with optional headings.
@@ -53,7 +56,7 @@ Character. The combined text with optional headings.
 \description{
 This function generates text by retrieving and combining text from
 a boilerplate database. It allows for template variable substitution and
-customization through overrides. Supports arbitrarily nested section paths
+customisation through overrides. Supports arbitrarily nested section paths
 using dot notation.
 }
 \examples{

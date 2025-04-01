@@ -2,13 +2,14 @@
 % Please edit documentation in R/boilerplate_init_measures.R
 \name{boilerplate_init_measures}
 \alias{boilerplate_init_measures}
-\title{Initialize Boilerplate Measures Database}
+\title{Initialise Boilerplate Measures Database}
 \usage{
 boilerplate_init_measures(
   merge_strategy = c("keep_existing", "merge_recursive", "overwrite_all"),
   measures_path = NULL,
   file_name = NULL,
-  overwrite = FALSE
+  overwrite = FALSE,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -22,17 +23,19 @@ via the here::here() function. The directory will be created if it doesn't exist
 If NULL (default), uses "measures_db.rds".}
 
 \item{overwrite}{Logical. Whether to overwrite existing entries (deprecated, use merge_strategy instead).}
+
+\item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
 }
 \value{
 No return value, called for side effects.
 }
 \description{
-This function initializes or updates the boilerplate measures database with default values.
+This function initialises or updates the boilerplate measures database with default values.
 It's useful for setting up the system initially or adding new default entries.
 }
 \examples{
 \dontrun{
-# Initialize measures database with default merge strategy
+# Initialise measures database with default merge strategy
 boilerplate_init_measures()
 
 # Use recursive merging
@@ -41,7 +44,7 @@ boilerplate_init_measures(merge_strategy = "merge_recursive")
 # Completely overwrite existing database
 boilerplate_init_measures(merge_strategy = "overwrite_all")
 
-# Initialize in a specific directory with a custom file name
+# Initialise in a specific directory with a custom file name
 boilerplate_init_measures(
   measures_path = "path/to/project/data",
   file_name = "my_measures.rds"

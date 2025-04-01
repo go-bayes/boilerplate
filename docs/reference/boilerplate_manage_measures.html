@@ -9,7 +9,7 @@ sorts measures alphabetically after adding or updating them."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,8 @@ sorts measures alphabetically after adding or updating them.</p>
 <span>  db <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  measures_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  file_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  auto_sort <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  auto_sort <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,6 +92,10 @@ If NULL (default), uses "measures_db.rds".</p></dd>
 <dd><p>Logical. Whether to automatically sort the database alphabetically
 after add/update operations. Default is TRUE.</p></dd>
 
+
+<dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
+<dd><p>Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -104,7 +109,11 @@ after add/update operations. Default is TRUE.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># List all measures</span></span></span>
 <span class="r-in"><span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_manage_measures</span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Measures database loaded from /Users/joseph/GIT/boilerplate/boilerplate/data/measures_db.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> performing list action on measures database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> loading measures database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> attempting to load database from /Users/joseph/GIT/boilerplate/boilerplate/data/measures_db.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> measures database loaded from /Users/joseph/GIT/boilerplate/boilerplate/data/measures_db.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> listing complete database</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Add a new measure with automatic sorting</span></span></span>
 <span class="r-in"><span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_manage_measures</span><span class="op">(</span></span></span>
@@ -118,7 +127,13 @@ after add/update operations. Default is TRUE.</p></dd>
 <span class="r-in"><span>    items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"How often do you have a drink containing alcohol?"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Measures database loaded from /Users/joseph/GIT/boilerplate/boilerplate/data/measures_db.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> performing add action on measures database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> loading measures database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> attempting to load database from /Users/joseph/GIT/boilerplate/boilerplate/data/measures_db.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> measures database loaded from /Users/joseph/GIT/boilerplate/boilerplate/data/measures_db.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> adding measure alcohol_frequency</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> auto-sorting database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> successfully added measure: alcohol_frequency</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

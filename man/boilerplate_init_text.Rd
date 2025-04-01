@@ -2,17 +2,18 @@
 % Please edit documentation in R/boilerplate_init_text.R
 \name{boilerplate_init_text}
 \alias{boilerplate_init_text}
-\title{Initialize Boilerplate Text Databases}
+\title{Initialise Boilerplate Text Databases}
 \usage{
 boilerplate_init_text(
   categories = c("measures", "methods", "results", "discussion"),
   merge_strategy = c("keep_existing", "merge_recursive", "overwrite_all"),
   text_path = NULL,
-  overwrite = FALSE
+  overwrite = FALSE,
+  quiet = FALSE
 )
 }
 \arguments{
-\item{categories}{Character vector. Categories to initialize.}
+\item{categories}{Character vector. Categories to initialise.}
 
 \item{merge_strategy}{Character. How to merge with existing databases: "keep_existing", "merge_recursive", or "overwrite_all".}
 
@@ -21,20 +22,22 @@ If NULL (default), uses the "boilerplate/data/" subdirectory of the current work
 via the here::here() function. The directory will be created if it doesn't exist.}
 
 \item{overwrite}{Logical. Whether to overwrite existing entries (deprecated, use merge_strategy instead).}
+
+\item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
 }
 \value{
 No return value, called for side effects.
 }
 \description{
-This function initializes or updates the boilerplate text databases with default values.
+This function initialises or updates the boilerplate text databases with default values.
 It's useful for setting up the system initially or adding new default entries.
 }
 \examples{
 \dontrun{
-# Initialize all categories with default merge strategy
+# Initialise all categories with default merge strategy
 boilerplate_init_text()
 
-# Initialize only methods
+# Initialise only methods
 boilerplate_init_text("methods")
 
 # Use recursive merging
@@ -43,7 +46,7 @@ boilerplate_init_text(merge_strategy = "merge_recursive")
 # Completely overwrite existing databases
 boilerplate_init_text(merge_strategy = "overwrite_all")
 
-# Initialize in a specific directory
+# Initialise in a specific directory
 boilerplate_init_text(text_path = "path/to/project/data")
 }
 

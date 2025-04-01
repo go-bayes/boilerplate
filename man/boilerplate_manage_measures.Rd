@@ -11,7 +11,8 @@ boilerplate_manage_measures(
   db = NULL,
   measures_path = NULL,
   file_name = NULL,
-  auto_sort = TRUE
+  auto_sort = TRUE,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ If NULL (default), uses "measures_db.rds".}
 
 \item{auto_sort}{Logical. Whether to automatically sort the database alphabetically
 after add/update operations. Default is TRUE.}
+
+\item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
 }
 \value{
 Depending on action:

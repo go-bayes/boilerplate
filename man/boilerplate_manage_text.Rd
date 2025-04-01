@@ -14,7 +14,8 @@ boilerplate_manage_text(
   file_name = NULL,
   template_vars = list(),
   warn_missing = TRUE,
-  auto_sort = TRUE
+  auto_sort = TRUE,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -47,6 +48,8 @@ If NULL (default), uses "\link{category}_db.rds".}
 
 \item{auto_sort}{Logical. Whether to automatically sort the database alphabetically
 after add/update operations. Default is TRUE.}
+
+\item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
 }
 \value{
 Depending on action:
@@ -61,7 +64,7 @@ Depending on action:
 This function provides a unified interface for managing boilerplate text
 across different categories (measures, methods, etc.). It allows listing,
 adding, updating, removing, and retrieving text entries with template
-variable substitution. Supports arbitrarily nested hierarchical organization
+variable substitution. Supports arbitrarily nested hierarchical organisation
 through dot-separated paths.
 }
 \examples{

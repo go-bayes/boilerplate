@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@
   <main id="main" class="col-md-9"><div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The <code>boilerplate</code> package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organization of text through dot-separated paths.</p>
+<p>The <code>boilerplate</code> package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.</p>
 </div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
@@ -97,8 +97,9 @@
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">boilerplate</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://glue.tidyverse.org/" class="external-link">glue</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Initialize the default databases</span></span>
+<span><span class="co"># Initialise the default databases</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init_text.html">boilerplate_init_text</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add a new method entry</span></span>
@@ -129,7 +130,7 @@
 <p>The package provides functions for managing measures and generating formatted text about them:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View measures database</span></span>
-<span><span class="co"># First initialize the database (creates/updates the file)</span></span>
+<span><span class="co"># First initialise the database (creates/updates the file)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init_measures.html">boilerplate_init_measures</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Then load the database</span></span>
@@ -210,7 +211,7 @@
 <span>category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>action <span class="op">=</span> <span class="st">"add"</span>,</span>
 <span>name <span class="op">=</span> <span class="st">"data_analysis"</span>,</span>
-<span>value <span class="op">=</span> <span class="st">"Data were analyzed using {{software}} version {{version}}."</span>,</span>
+<span>value <span class="op">=</span> <span class="st">"Data were analysed using {{software}} version {{version}}."</span>,</span>
 <span>db <span class="op">=</span> <span class="va">methods_db</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -242,7 +243,7 @@
 </h2>
 <p>This example demonstrates combining multiple components to create a complete methods section:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Initialize databases and define study parameters</span></span>
+<code class="sourceCode R"><span><span class="co"># Initialise databases and define study parameters</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init_measures.html">boilerplate_init_measures</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span>
@@ -283,7 +284,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate methods text for participant selection</span></span>
-<span><span class="va">sample_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_methods_text.html">boilerplate_methods_text</a></span><span class="op">(</span></span>
+<span><span class="va">sample_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample_selection"</span><span class="op">)</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="va">study_params</span>,</span>
 <span>  add_headings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -317,7 +318,8 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">psych_text</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate statistical methods text</span></span>
-<span><span class="va">stats_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_methods_text.html">boilerplate_methods_text</a></span><span class="op">(</span></span>
+<span><span class="va">stats_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
+<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"statistical.longitudinal.lmtp"</span><span class="op">)</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>software <span class="op">=</span> <span class="st">"R version 4.2.0"</span><span class="op">)</span>,</span>
 <span>  add_headings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -340,6 +342,23 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_section</span><span class="op">)</span></span>
 <span><span class="co"># Save the methods section to a file that can be included in a Quarto document</span></span>
 <span><span class="co"># writeLines(methods_section, "methods_section.qmd")</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<p>To cite the boilerplate package in publications, please use:</p>
+<p>Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 0.2.1. <a href="https://doi.org/10.5281/zenodo.13370825" class="external-link uri">https://doi.org/10.5281/zenodo.13370825</a></p>
+<p>A BibTeX entry for LaTeX users:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">@software{bulbulia_boilerplate_2025,</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">  author       = {Bulbulia, Joseph},</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">  title        = {{boilerplate: Tools for Managing and Generating </span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">                   Standardised Text for Scientific Reports}},</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">  year         = 2025,</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">  publisher    = {Zenodo},</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">  version      = {0.2.1},</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">  doi          = {10.5281/zenodo.13370825},</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">  url          = {https://github.com/go-bayes/boilerplate}</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>

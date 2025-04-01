@@ -1,13 +1,20 @@
-## boilerplate (development version)
+# boilerplate (development version)
+## [2024-04-01] boilerplate 0.2.1
+### Improved
+- added cli alerts to main functions
+
+## Deprecated
+- `boilerplate_results_text()`, `boilerplate_measures_text()`, handled more simply with `boilerplate_generate_text()`
+
 ## [2024-03-29] boilerplate 0.2.0
 ## New
 - Major refactoring of package for simplicity. 
 - Change of liscence to MIT.
 
-- boilerplate_manage_text() - uses template variable substitution to create customised text. 
-- boilerplate_generate_text() - produces text for boilerplate_manage_text
-- boilerplate_results_text() - produces results for boilerplate_manage_text
-- boilerplate_init_text() - initialises text for boilerplate_manage_text
+- `boilerplate_manage_text()` - uses template variable substitution to create customised text. 
+- `boilerplate_generate_text()` - produces text for boilerplate_manage_text
+- `boilerplate_results_text()` - produces results for boilerplate_manage_text
+- `boilerplate_init_text()` - initialises text for boilerplate_manage_text
 
 ## Deprecated
 - all previous functions: 

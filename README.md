@@ -6,7 +6,7 @@
 The `boilerplate` package provides tools for managing and generating
 standardised text for methods and results sections of scientific
 reports. It handles template variable substitution and supports
-hierarchical organization of text through dot-separated paths.
+hierarchical organisation of text through dot-separated paths.
 
 ## Features
 
@@ -48,8 +48,9 @@ devtools::install_github("go-bayes/boilerplate")
 
 ``` r
 library(boilerplate)
+library(glue)
 
-# Initialize the default databases
+# Initialise the default databases
 boilerplate_init_text()
 
 # Add a new method entry
@@ -82,7 +83,7 @@ formatted text about them:
 
 ``` r
 # View measures database
-# First initialize the database (creates/updates the file)
+# First initialise the database (creates/updates the file)
 boilerplate_init_measures()
 
 # Then load the database
@@ -164,7 +165,7 @@ methods_db <- boilerplate_manage_text(
 category = "methods",
 action = "add",
 name = "data_analysis",
-value = "Data were analyzed using {{software}} version {{version}}.",
+value = "Data were analysed using {{software}} version {{version}}.",
 db = methods_db
 )
 
@@ -198,7 +199,7 @@ This example demonstrates combining multiple components to create a
 complete methods section:
 
 ``` r
-# Initialize databases and define study parameters
+# Initialise databases and define study parameters
 boilerplate_init_measures()
 
 measures_db <- boilerplate_manage_measures(action = "list")
@@ -239,7 +240,7 @@ study_params <- list(
 )
 
 # Generate methods text for participant selection
-sample_text <- boilerplate_methods_text(
+sample_text <- boilerplate_generate_text(
   sections = c("sample_selection"),
   global_vars = study_params,
   add_headings = TRUE,
@@ -273,7 +274,8 @@ psych_text <- boilerplate_measures_text(
 cat(psych_text)
 
 # Generate statistical methods text
-stats_text <- boilerplate_methods_text(
+stats_text <- boilerplate_generate_text(
+  category = "methods",
   sections = c("statistical.longitudinal.lmtp"),
   global_vars = list(software = "R version 4.2.0"),
   add_headings = TRUE,
@@ -296,6 +298,29 @@ methods_section <- paste(
 cat(methods_section)
 # Save the methods section to a file that can be included in a Quarto document
 # writeLines(methods_section, "methods_section.qmd")
+```
+
+## Citation
+
+To cite the boilerplate package in publications, please use:
+
+Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating
+Standardised Text for Scientific Reports. R package version 0.2.1.
+<https://doi.org/10.5281/zenodo.13370825>
+
+A BibTeX entry for LaTeX users:
+
+``` bibtex
+@software{bulbulia_boilerplate_2025,
+  author       = {Bulbulia, Joseph},
+  title        = {{boilerplate: Tools for Managing and Generating 
+                   Standardised Text for Scientific Reports}},
+  year         = 2025,
+  publisher    = {Zenodo},
+  version      = {0.2.1},
+  doi          = {10.5281/zenodo.13370825},
+  url          = {https://github.com/go-bayes/boilerplate}
+}
 ```
 
 ## License

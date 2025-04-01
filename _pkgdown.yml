@@ -24,8 +24,6 @@ reference:
     contents:
     - boilerplate_generate_text
     - boilerplate_measures_text
-    - boilerplate_methods_text
-    - boilerplate_results_text
   - title: "Utilities"
     contents:
     - boilerplate_merge_databases
