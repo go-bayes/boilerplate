@@ -1,5 +1,4 @@
 url: https://go-bayes.github.io/boilerplate/
-
 template:
   bootstrap: 5
   bslib:
@@ -7,39 +6,26 @@ template:
     heading_font: {google: "Roboto Slab"}
     code_font: {google: "Fira Code"}
     preset: "bootstrap"
-
 authors:
   Joseph A Bulbulia:
     href: https://github.com/go-bayes
-
 development:
   version_label: default
   version_tooltip: "Version"
-
 vignette_engine: quarto
-
 reference:
-
-  - title: "Create templates"
+  - title: "Manage Databases"
     contents:
+    - boilerplate_init_measures
+    - boilerplate_init_text
     - boilerplate_manage_measures
-    - boilerplate_merge_databases
-
-
+    - boilerplate_manage_text
   - title: "Generate Markdown"
     contents:
-    - boilerplate_measures
-    - boilerplate_report_additional_sections
-    - boilerplate_report_causal_interventions
-    - boilerplate_report_confounding_control
-    - boilerplate_report_eligibility_criteria
-    - boilerplate_report_identification_assumptions
-    - boilerplate_report_measures
-    - boilerplate_report_methods
-    - boilerplate_report_missing_data
-    - boilerplate_report_sample
-    - boilerplate_report_statistical_estimator
-    - boilerplate_report_target_population
-    - boilerplate_report_variables
-
-
+    - boilerplate_generate_text
+    - boilerplate_measures_text
+    - boilerplate_methods_text
+    - boilerplate_results_text
+  - title: "Utilities"
+    contents:
+    - boilerplate_merge_databases

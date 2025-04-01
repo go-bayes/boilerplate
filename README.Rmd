@@ -14,8 +14,18 @@ knitr::opts_chunk$set(
 ```
 
 
+## Overview
 
-The `boilerplate` package offers a lightweight and flexible toolkit for managing, accessing, and compiling reports and from templates (boilerplates). Simple and intutive command line interfaces allows users to efficiently store, retrieve, and update their content. Outputed markdown text can be dropped directly into markdown documents, such as `quarto` documents. 
+The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organization of text through dot-separated paths.
+
+## Features
+
+- **Text Template Management**: Create, update, and retrieve reusable text templates
+- **Variable Substitution**: Replace `{{variable}}` placeholders with actual values
+- **Hierarchical Organisation**: Organise text in nested categories using dot notation (e.g., `statistical.longitudinal.lmtp`)
+- **Measures Database**: Special handling for research measures with descriptions, items, and metadata
+- **Default Content**: Comes with pre-loaded defaults for common methods sections
+- **Quarto/R Markdown Integration**: Generate sections for scientific reports
 
 
 ## Installation
@@ -26,71 +36,277 @@ with:
 ```{r, eval = FALSE}
 # Install the devtools package if you don't have it already
 install.packages("devtools")
+devtools::install_github("go-bayes/boilerplate")
 
-# Install boilerplate from GitHub
+```
+
+
+
+## Basic Usage
+
+## Installation
+
+```r
+# Install from GitHub
+# install.packages("devtools")
 devtools::install_github("go-bayes/boilerplate")
 ```
 
-## Example
+## Basic Usage
 
-This is a basic example that shows you how to connect to the boilerplate
-database and create the necessary tables:
-
-```{r, eval = FALSE}
+```r
 library(boilerplate)
-library(here)
 
-# set path to data folder
-measures_path <-  here::here("boilerplate", 'data')
+# Initialize the default databases
+boilerplate_init_text()
 
-# open gui to enter and save measures data
-boilerplate_manage_measures(measures_path = measures_path)
-
-# create measures report (assuming measures data saved as 'measures_data.rds')
-measure_data <- readRDS(here::here(measures_path, "measure_data.rds"))
-
-# baseline variables
-baseline_vars <- c("age", "male_binary", "parent_binary")
-
-# exposure variable (intervention)
-exposure_var <- "political_conservative"
-
-# outcomes, perhaps defined by domains
-outcomes_health <- c("smoker_binary", "hlth_bmi", "log_hours_exercise")
-outcomes_psychological <- c("hlth_fatigue", "kessler_latent_anxiety")
-outcomes_social <- c("belong", "neighbourhood_community")
-
-# variable definitions: option 1
-outcome_vars <- c(outcomes_health, outcomes_psychological, outcomes_social)
-
-# variable definitions: option 2 using `boilerplate_report_variables`
-all_outcomes <- list(
-  health = outcomes_health,
-  psychological = outcomes_psychological,
-  social = outcomes_social
+# Add a new method entry
+methods_db <- boilerplate_manage_text(
+  category = "methods",
+  action = "add",
+  name = "sample_selection",
+  value = "Participants were selected from {{population}} during {{timeframe}}."
 )
 
-# view
-appendix_text_version_1 <- boilerplate::boilerplate_report_measures(
-  baseline_vars = baseline_vars,
-  exposure_var = exposure_var,
-  outcome_vars = outcome_vars,
-  measure_data = measure_data
+# Generate text with variable substitution
+methods_text <- boilerplate_generate_text(
+  category = "methods",
+  sections = c("sample", "sample_selection"),
+  global_vars = list(
+    population = "university students",
+    timeframe = "2020-2021"
+  ),
+  db = methods_db,
+  add_headings = TRUE
 )
 
-# view
-cat(appendix_text_version_1)
-
-
-# another option
-appendix_text_version_2 <- boilerplate::boilerplate_report_variables(
-  exposure_var = exposure_var,
-  outcome_vars = all_outcomes,
-  appendices_measures = "Appendix C",
-  measure_data = measure_data
-)
-cat(appendix_text_version_2)
+cat(methods_text)
 ```
+
+## Managing Measures
+
+The package provides functions for managing measures and generating formatted text about them:
+  
+  ```r
+# View measures database
+# First initialize the database (creates/updates the file)
+boilerplate_init_measures()
+
+# Then load the database
+measures_db <- boilerplate_manage_measures(action = "list")
+
+# Add a measure
+# First, load the measures database
+measures_db <- boilerplate_manage_measures(action = "list")
+
+# Add the measure with a flat name (no dots)
+measures_db <- boilerplate_manage_measures(
+  action = "add",
+  name = "anxiety_gad7", # Use underscore instead of dot
+  measure = list(
+    description = "Anxiety was measured using the GAD-7 scale.",
+    reference = "spitzer2006",
+    waves = "1-3",
+    keywords = c("anxiety", "mental health", "gad"),
+    items = list(
+      "Feeling nervous, anxious, or on edge",
+      "Not being able to stop or control worrying",
+      "Worrying too much about different things",
+      "Trouble relaxing"
+    )
+  ),
+  db = measures_db
+)
+
+# Then reference it with the same flat name
+exposure_text <- boilerplate_measures_text(
+  variable_heading = "Exposure Variable",
+  variables = "anxiety_gad7", # Match the name you used above
+  db = measures_db,
+  heading_level = 3,
+  subheading_level = 4,
+  print_waves = TRUE
+)# First, load the measures database
+measures_db <- boilerplate_manage_measures(action = "list")
+
+# dd the measure
+measures_db <- boilerplate_manage_measures(
+  action = "add",
+  name = "anxiety_gad7", # Use underscore instead of dot
+  measure = list(
+    description = "Anxiety was measured using the GAD-7 scale.",
+    reference = "spitzer2006",
+    waves = "1-3",
+    keywords = c("anxiety", "mental health", "gad"),
+    items = list(
+      "Feeling nervous, anxious, or on edge",
+      "Not being able to stop or control worrying",
+      "Worrying too much about different things",
+      "Trouble relaxing"
+    )
+  ),
+  db = measures_db
+)
+
+# Then reference it with the same flat name
+exposure_text <- boilerplate_measures_text(
+  variable_heading = "Exposure Variable",
+  variables = "anxiety_gad7", # Match the name you used above
+  db = measures_db,
+  heading_level = 3,
+  subheading_level = 4,
+  print_waves = TRUE
+)
+
+cat(exposure_text)
+```
+
+## Text and Measure Management
+
+The core functions for managing text and measures are:
+  
+  ```r
+# Add text to a database
+methods_db <- boilerplate_manage_text(
+  category = "methods",
+  action = "add",
+  name = "data_analysis",
+  value = "Data were analyzed using {{software}} version {{version}}.",
+  db = methods_db
+)
+
+# Get text with variables substituted
+analysis_text <- boilerplate_manage_text(
+  category = "methods",
+  action = "get",
+  name = "data_analysis",
+  template_vars = list(software = "R", version = "4.2.0"),
+  db = methods_db
+)
+
+# Add a measure to a database
+measures_db <- boilerplate_manage_measures(
+  action = "add",
+  name = "wellbeing",
+  measure = list(
+    description = "Wellbeing was measured using a 5-item scale.",
+    reference = "smith2020",
+    items = list("I am satisfied with my life", "My life has meaning"),
+    keywords = c("wellbeing", "satisfaction")
+  ),
+  db = measures_db
+)
+str(measures_db$wellbeing)
+```
+
+## Complete Workflow Example
+
+This example demonstrates combining multiple components to create a complete methods section:
+  
+```r
+# Initialize databases and define study parameters
+boilerplate_init_measures()
+
+measures_db <- boilerplate_manage_measures(action = "list")
+
+# Load the measures database
+measures_db <- boilerplate_manage_measures(action = "list")
+
+# Add perfectionism measure
+measures_db <- boilerplate_manage_measures(
+  action = "add",
+  name = "perfectionism",
+  measure = list(
+    name = "perfectionism",
+    description = "Perfectionism was measured using a 3-item scale assessing maladaptive perfectionism tendencies.",
+    reference = "rice_short_2014",
+    waves = "10-current",
+    keywords = c("personality", "mental health"),
+    items = list(
+      "Doing my best never seems to be enough.",
+      "My performance rarely measures up to my standards.",
+      "I am hardly ever satisfied with my performance."
+    )
+  ),
+  db = measures_db
+)
+
+# Save the updated database
+boilerplate_manage_measures(
+  action = "save",
+  db = measures_db
+)
+# Define parameters
+study_params <- list(
+  exposure_var = "perfectionism",
+  population = "university students",
+  timeframe = "2020-2021",
+  sampling_method = "convenience"
+)
+
+# Generate methods text for participant selection
+sample_text <- boilerplate_methods_text(
+  sections = c("sample_selection"),
+  global_vars = study_params,
+  add_headings = TRUE,
+  heading_level = "###",
+  db = methods_db
+)
+cat(sample_text)
+
+# Generate measures text for exposure variable
+exposure_text <- boilerplate_measures_text(
+  variable_heading = "Exposure Variable",
+  variables = "perfectionism",
+  heading_level = 3,
+  subheading_level = 4,
+  print_waves = TRUE, 
+  db= measures_db
+)
+
+cat(exposure_text)
+
+
+# Generate text for outcome variables by domain
+psych_text <- boilerplate_measures_text(
+  variable_heading = "Psychological Outcomes",
+  variables = c("anxiety.gad7", "depression.phq9"),
+  db = measures_db,
+  heading_level = 3,
+  subheading_level = 4,
+  print_waves = TRUE
+)
+cat(psych_text)
+
+# Generate statistical methods text
+stats_text <- boilerplate_methods_text(
+  sections = c("statistical.longitudinal.lmtp"),
+  global_vars = list(software = "R version 4.2.0"),
+  add_headings = TRUE,
+  custom_headings = list("statistical.longitudinal.lmtp" = "LMTP"),
+  heading_level = "###",
+  db = methods_db
+)
+
+# Combine all sections into a complete methods section
+methods_section <- paste(
+  "## Methods\n\n",
+  sample_text, "\n\n",
+  "### Variables\n\n",
+  exposure_text, "\n",
+  "### Outcome Variables\n\n",
+  psych_text, "\n\n",
+  stats_text,
+  sep = ""
+)
+cat(methods_section)
+# Save the methods section to a file that can be included in a Quarto document
+# writeLines(methods_section, "methods_section.qmd")
+```
+
+## License
+
+This package is licensed under the MIT License.
 
 ## Code
 

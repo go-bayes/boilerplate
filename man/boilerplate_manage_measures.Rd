@@ -2,45 +2,71 @@
 % Please edit documentation in R/boilerplate_manage_measures.R
 \name{boilerplate_manage_measures}
 \alias{boilerplate_manage_measures}
-\title{Manage Boilerplate Measures Database}
+\title{Enhanced Manage Boilerplate Measures Database with Auto-Sorting}
 \usage{
-boilerplate_manage_measures(measures_path = NULL)
+boilerplate_manage_measures(
+  action = c("list", "add", "update", "remove", "get", "save"),
+  name = NULL,
+  measure = NULL,
+  db = NULL,
+  measures_path = NULL,
+  file_name = NULL,
+  auto_sort = TRUE
+)
 }
 \arguments{
-\item{measures_path}{A character string specifying the path to the directory
-where the measures database files are stored. If NULL (default), the
-function will use the current working directory as determined by here::here().}
+\item{action}{Character. Action to perform: "list", "add", "update", "remove", "get", or "save".}
+
+\item{name}{Character. Name of the measure (required for add/update/remove/get).
+For nested entries, use a dot-separated path (e.g., "psychological.anxiety").}
+
+\item{measure}{List. Measure details (required for add/update). Should contain elements
+like "description", "reference", "waves", "keywords", and "items".}
+
+\item{db}{Optional existing measures database. If not supplied, the default db is loaded.}
+
+\item{measures_path}{Character. Path to the directory where measure database files are stored.
+If NULL (default), the function will look in the following locations in order:
+\enumerate{
+\item "boilerplate/data/" subdirectory of the current working directory (via here::here())
+\item Package installation directory's "boilerplate/data/" folder
+\item "boilerplate/data/" relative to the current working directory
+}}
+
+\item{file_name}{Character. Name of the file to save or load (without path).
+If NULL (default), uses "measures_db.rds".}
+
+\item{auto_sort}{Logical. Whether to automatically sort the database alphabetically
+after add/update operations. Default is TRUE.}
 }
 \value{
-This function does not return a value. It runs an interactive
-command-line interface for database management.
+Depending on action:
+\itemize{
+\item "list": Returns the database or part of it
+\item "add"/"update"/"remove": Returns the modified database
+\item "get": Returns a specific measure
+\item "save": Returns TRUE if successful, FALSE otherwise
+}
 }
 \description{
-This function provides a command-line interface for managing a database of
-boilerplate measures. It allows users to create new databases, open existing
-ones, and perform various operations on the measures within the database.
-}
-\details{
-The function provides the following main functionalities:
-\itemize{
-\item Create a new measures database
-\item Open an existing measures database
-\item List available .rds files in the specified directory
-\item Add, delete, modify, and copy measures
-\item Create backups of the measures database
-\item Perform batch edits on measures
-}
-}
-\note{
-This function uses the rlang, here, cli, and R6 packages.
+A light, enhanced version of boilerplate_manage_text specifically for measures that automatically
+sorts measures alphabetically after adding or updating them.
 }
 \examples{
-\dontrun{
-# Run the function with default path (current working directory)
-boilerplate_manage_measures()
+# List all measures
+measures_db <- boilerplate_manage_measures(action = "list")
 
-# Run the function with a specific path
-boilerplate_manage_measures("/path/to/measures/directory")
-}
+# Add a new measure with automatic sorting
+measures_db <- boilerplate_manage_measures(
+  action = "add",
+  name = "alcohol_frequency",
+  measure = list(
+    description = "Frequency of alcohol consumption was measured using a single item.",
+    reference = "nzavs2009",
+    waves = "1-current",
+    keywords = c("alcohol", "frequency", "consumption"),
+    items = list("How often do you have a drink containing alcohol?")
+  )
+)
 
 }
