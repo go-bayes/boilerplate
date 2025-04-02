@@ -13,8 +13,8 @@
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Tools for Managing and Compiling Manuscript Templates">
-<meta name="description" content="The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organization of text through dot-separated paths.">
-<meta property="og:description" content="The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organization of text through dot-separated paths.">
+<meta name="description" content="The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.">
+<meta property="og:description" content="The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,12 +50,14 @@
   <main id="main" class="col-md-9"><div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The <code>boilerplate</code> package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.</p>
+<p>The <code>boilerplate</code> package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. The package features a unified database approach that simplifies workflows and provides consistent management of all content types.</p>
 </div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
 <ul>
+<li>
+<strong>Unified Database System</strong>: Work with all content types through a consistent interface</li>
 <li>
 <strong>Text Template Management</strong>: Create, update, and retrieve reusable text templates</li>
 <li>
@@ -73,7 +75,7 @@
 <li>
 <strong>Quarto/R Markdown Integration</strong>: Generate sections for scientific reports</li>
 <li>
-<strong>Safety Features</strong>: Prevention of accidental file overwrites and clear separation of text and measures databases</li>
+<strong>Safety Features</strong>: Prevention of accidental file overwrites and standardised file naming</li>
 </ul>
 </div>
 <div class="section level2">
@@ -81,8 +83,8 @@
 </h2>
 <p>The <code>boilerplate</code> package includes several safety features to prevent accidental overwrites:</p>
 <ul>
-<li>When using <code><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures()</a></code> or <code><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text()</a></code> with <code>action="save"</code>, you must explicitly provide both <code>db</code> and <code>file_name</code> parameters</li>
-<li>Text and measures databases are initialized separately using <code><a href="reference/boilerplate_init_text.html">boilerplate_init_text()</a></code> and <code><a href="reference/boilerplate_init_measures.html">boilerplate_init_measures()</a></code> respectively</li>
+<li>The unified <code><a href="reference/boilerplate_save.html">boilerplate_save()</a></code> function requires explicit specification of categories when saving individual databases</li>
+<li>Standard file naming conventions ensure consistency across projects</li>
 <li>All functions that modify files include confirmation prompts (when <code>confirm=TRUE</code>) before making changes</li>
 <li>Consistent sorting of database entries ensures predictable structure and easier version control</li>
 </ul>
@@ -97,10 +99,10 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"go-bayes/boilerplate"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
+<h2 id="basic-usage-with-unified-database">Basic Usage with Unified Database<a class="anchor" aria-label="anchor" href="#basic-usage-with-unified-database"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install from GitHub if not already installed</span></span>
+<code class="sourceCode R"><span><span class="co"># install from github if not already installed</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">boilerplate</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># install devtools if necessary</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -109,19 +111,45 @@
 <span>  <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"go-bayes/boilerplate"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># initialise the default text databases (excluding measures)</span></span>
-<span><span class="fu"><a href="reference/boilerplate_init_text.html">boilerplate_init_text</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># initialise all databases with a single function</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># initialise the measures database separately</span></span>
-<span><span class="fu"><a href="reference/boilerplate_init_measures.html">boilerplate_init_measures</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># import all databases into a unified structure</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># add a new method entry directly to the unified database</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">sample_selection</span> <span class="op">&lt;-</span> <span class="st">"Participants were selected from {{population}} during {{timeframe}}."</span></span>
+<span></span>
+<span><span class="co"># save all changes at once</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># generate text with variable substitution</span></span>
+<span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
+<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
+<span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"sample_selection"</span><span class="op">)</span>,</span>
+<span>  global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    population <span class="op">=</span> <span class="st">"university students"</span>,</span>
+<span>    timeframe <span class="op">=</span> <span class="st">"2020-2021"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span>,  <span class="co"># pass the unified database</span></span>
+<span>  add_headings <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_text</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="working-with-individual-databases">Working with Individual Databases<a class="anchor" aria-label="anchor" href="#working-with-individual-databases"></a>
+</h2>
+<p>You can still work with individual databases if preferred:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># import just the methods database</span></span>
+<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add a new method entry</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"sample_selection"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"Participants were selected from {{population}} during {{timeframe}}."</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">methods_db</span><span class="op">$</span><span class="va">sample_selection</span> <span class="op">&lt;-</span> <span class="st">"Participants were selected from {{population}} during {{timeframe}}."</span></span>
+<span></span>
+<span><span class="co"># save just the methods database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">methods_db</span>, <span class="st">"methods"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate text with variable substitution</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -138,47 +166,39 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_text</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="managing-measures">Managing Measures<a class="anchor" aria-label="anchor" href="#managing-measures"></a>
+<h2 id="managing-measures-with-the-unified-database">Managing Measures with the Unified Database<a class="anchor" aria-label="anchor" href="#managing-measures-with-the-unified-database"></a>
 </h2>
-<p>The package provides functions for managing measures and generating formatted text about them:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># First initialise the measures database separately from text databases</span></span>
-<span><span class="fu"><a href="reference/boilerplate_init_measures.html">boilerplate_init_measures</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<p>The package provides a simplified way to manage measures and generate formatted text about them:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Then load the database</span></span>
-<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Add a measure with a flat name (no dots)</span></span>
-<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span></span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"anxiety_gad7"</span>, <span class="co"># use underscore instead of dot</span></span>
-<span>  measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    description <span class="op">=</span> <span class="st">"Anxiety was measured using the GAD-7 scale."</span>,</span>
-<span>    reference <span class="op">=</span> <span class="st">"spitzer2006"</span>,</span>
-<span>    waves <span class="op">=</span> <span class="st">"1-3"</span>,</span>
-<span>    keywords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety"</span>, <span class="st">"mental health"</span>, <span class="st">"gad"</span><span class="op">)</span>,</span>
-<span>    items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="st">"Feeling nervous, anxious, or on edge"</span>,</span>
-<span>      <span class="st">"Not being able to stop or control worrying"</span>,</span>
-<span>      <span class="st">"Worrying too much about different things"</span>,</span>
-<span>      <span class="st">"Trouble relaxing"</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span></span>
+<span><span class="co"># add a measure directly to the unified database</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">anxiety_gad7</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Generalised anxiety disorder scale (GAD-7)"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Anxiety was measured using the GAD-7 scale."</span>,</span>
+<span>  reference <span class="op">=</span> <span class="st">"spitzer2006"</span>,</span>
+<span>  waves <span class="op">=</span> <span class="st">"1-3"</span>,</span>
+<span>  keywords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety"</span>, <span class="st">"mental health"</span>, <span class="st">"gad"</span><span class="op">)</span>,</span>
+<span>  items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Feeling nervous, anxious, or on edge"</span>,</span>
+<span>    <span class="st">"Not being able to stop or control worrying"</span>,</span>
+<span>    <span class="st">"Worrying too much about different things"</span>,</span>
+<span>    <span class="st">"Trouble relaxing"</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Save the measures database with an explicit file name (required for save action)</span></span>
-<span><span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span></span>
-<span>  action <span class="op">=</span> <span class="st">"save"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span>,</span>
-<span>  file_name <span class="op">=</span> <span class="st">"measures_db.rds"</span>  <span class="co"># explicit file name required for save action</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># save the entire unified database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Then reference it with the same flat name</span></span>
+<span><span class="co"># alternatively, save just the measures portion</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span>, <span class="st">"measures"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># then reference it with the same flat name</span></span>
 <span><span class="va">exposure_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
 <span>  variable_heading <span class="op">=</span> <span class="st">"Exposure Variable"</span>,</span>
 <span>  variables <span class="op">=</span> <span class="st">"anxiety_gad7"</span>, <span class="co"># match the name you used above</span></span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span>,</span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span>,  <span class="co"># can pass the unified database</span></span>
 <span>  heading_level <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  subheading_level <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  print_waves <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -186,18 +206,21 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">exposure_text</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Generate text for outcome variables by domain</span></span>
+<span><span class="co"># you can also use the helper function to extract just the measures</span></span>
+<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_measures.html">boilerplate_measures</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># generate text for outcome variables by domain using just the measures database</span></span>
 <span><span class="va">psych_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
 <span>  variable_heading <span class="op">=</span> <span class="st">"Psychological Outcomes"</span>,</span>
-<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety.gad7"</span>, <span class="st">"depression.phq9"</span><span class="op">)</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span>,</span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety_gad7"</span>, <span class="st">"depression_phq9"</span><span class="op">)</span>,</span>
+<span>  db <span class="op">=</span> <span class="va">measures_db</span>,  <span class="co"># or use the extracted measures database</span></span>
 <span>  heading_level <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  subheading_level <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  print_waves <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">psych_text</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Generate statistical methods text</span></span>
+<span><span class="co"># generate statistical methods text</span></span>
 <span><span class="va">stats_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"statistical.longitudinal.lmtp"</span><span class="op">)</span>,</span>
@@ -205,10 +228,10 @@
 <span>  add_headings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  custom_headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"statistical.longitudinal.lmtp"</span> <span class="op">=</span> <span class="st">"LMTP"</span><span class="op">)</span>,</span>
 <span>  heading_level <span class="op">=</span> <span class="st">"###"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span>  <span class="co"># pass the unified database</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Combine all sections into a complete methods section</span></span>
+<span><span class="co"># combine all sections into a complete methods section</span></span>
 <span><span class="va">methods_section</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
 <span>  <span class="st">"## Methods\n\n"</span>,</span>
 <span>  <span class="va">sample_text</span>, <span class="st">"\n\n"</span>,</span>
@@ -224,39 +247,18 @@
 <span><span class="co"># writeLines(methods_section, "methods_section.qmd")</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="appendix-content">Appendix Content<a class="anchor" aria-label="anchor" href="#appendix-content"></a>
+<h2 id="appendix-content-with-the-unified-database">Appendix Content with the Unified Database<a class="anchor" aria-label="anchor" href="#appendix-content-with-the-unified-database"></a>
 </h2>
-<p>The package now supports appendix content that can be managed separately from the main document:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># initialise appendix database</span></span>
-<span><span class="fu"><a href="reference/boilerplate_init_text.html">boilerplate_init_text</a></span><span class="op">(</span></span>
-<span>  categories <span class="op">=</span> <span class="st">"appendix"</span>,</span>
-<span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>  confirm <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># load appendix database</span></span>
-<span><span class="va">appendix_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"appendix"</span>, </span>
-<span>  action <span class="op">=</span> <span class="st">"list"</span></span>
-<span><span class="op">)</span></span>
+<p>The package supports appendix content that can be managed within the unified database:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add detailed measures documentation to appendix</span></span>
-<span><span class="va">appendix_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"appendix"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"detailed_measures"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"# Detailed Measures Documentation\n\n## Overview\n\nThis appendix provides comprehensive documentation for all measures used in this study, including full item text, response options, and psychometric properties.\n\n## {{exposure_var}} Measure\n\n{{exposure_details}}\n\n## Outcome Measures\n\n{{outcome_details}}"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">appendix_db</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">appendix</span><span class="op">$</span><span class="va">detailed_measures</span> <span class="op">&lt;-</span> <span class="st">"# Detailed Measures Documentation\n\n## Overview\n\nThis appendix provides comprehensive documentation for all measures used in this study, including full item text, response options, and psychometric properties.\n\n## {{exposure_var}} Measure\n\n{{exposure_details}}\n\n## Outcome Measures\n\n{{outcome_details}}"</span></span>
 <span></span>
-<span><span class="co"># save appendix database with explicit file name</span></span>
-<span><span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"appendix"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"save"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">appendix_db</span>,</span>
-<span>  file_name <span class="op">=</span> <span class="st">"appendix_db.rds"</span>  <span class="co"># explicit file name required for save action</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># save the changes to the unified database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate appendix text with variable substitution</span></span>
 <span><span class="va">appendix_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -267,7 +269,7 @@
 <span>    exposure_details <span class="op">=</span> <span class="st">"The perfectionism measure consists of 3 items..."</span>,</span>
 <span>    outcome_details <span class="op">=</span> <span class="st">"Anxiety was measured using the GAD-7 scale..."</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">appendix_db</span></span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span>  <span class="co"># pass the unified database</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">appendix_text</span><span class="op">)</span></span></code></pre></div>
@@ -275,22 +277,15 @@
 <div class="section level2">
 <h2 id="creating-complete-document-workflows">Creating Complete Document Workflows<a class="anchor" aria-label="anchor" href="#creating-complete-document-workflows"></a>
 </h2>
-<p>You can create complete workflows that integrate methods, results, and templates:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># load template database</span></span>
-<span><span class="va">template_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"template"</span>, </span>
-<span>  action <span class="op">=</span> <span class="st">"list"</span></span>
-<span><span class="op">)</span></span>
+<p>You can create complete workflows that integrate methods, results, and templates using the unified database:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># function to generate a complete document from a template</span></span>
-<span><span class="va">generate_document</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">template_name</span>, <span class="va">study_params</span>, <span class="va">section_contents</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># get the template</span></span>
-<span>  <span class="va">template_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>    category <span class="op">=</span> <span class="st">"template"</span>,</span>
-<span>    action <span class="op">=</span> <span class="st">"get"</span>,</span>
-<span>    name <span class="op">=</span> <span class="va">template_name</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="va">generate_document</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">template_name</span>, <span class="va">study_params</span>, <span class="va">section_contents</span>, <span class="va">db</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># extract the template using the boilerplate_template helper</span></span>
+<span>  <span class="va">template_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_template.html">boilerplate_template</a></span><span class="op">(</span><span class="va">db</span>, <span class="va">template_name</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="co"># apply template variables (combining study params and section contents)</span></span>
 <span>  <span class="va">all_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">study_params</span>, <span class="va">section_contents</span><span class="op">)</span></span>
@@ -326,54 +321,32 @@
 <span><span class="va">journal_article</span> <span class="op">&lt;-</span> <span class="fu">generate_document</span><span class="op">(</span></span>
 <span>  template_name <span class="op">=</span> <span class="st">"journal_article"</span>,</span>
 <span>  study_params <span class="op">=</span> <span class="va">study_params</span>,</span>
-<span>  section_contents <span class="op">=</span> <span class="va">section_contents</span></span>
+<span>  section_contents <span class="op">=</span> <span class="va">section_contents</span>,</span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">journal_article</span>, <span class="fl">1</span>, <span class="fl">500</span><span class="op">)</span>, <span class="st">"..."</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">journal_article</span>, <span class="fl">1</span>, <span class="fl">2500</span><span class="op">)</span>, <span class="st">"..."</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="advanced-usage-audience-specific-reports">Advanced Usage: Audience-Specific Reports<a class="anchor" aria-label="anchor" href="#advanced-usage-audience-specific-reports"></a>
+<h2 id="advanced-usage-audience-specific-reports-with-the-unified-database">Advanced Usage: Audience-Specific Reports with the Unified Database<a class="anchor" aria-label="anchor" href="#advanced-usage-audience-specific-reports-with-the-unified-database"></a>
 </h2>
 <p>You can create tailored reports for different audiences from the same underlying data:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># define audience-specific methods databases</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"methods"</span>, action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add audience-specific LMTP descriptions</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"statistical_estimator.lmtp.technical_audience"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"We estimate causal effects using the Longitudinal Modified Treatment Policy (LMTP) estimator within a Targeted Minimum Loss-based Estimation (TMLE) framework. This semi-parametric estimator leverages the efficient influence function (EIF) to achieve double robustness and asymptotic efficiency."</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">statistical_estimator</span><span class="op">$</span><span class="va">lmtp</span><span class="op">$</span><span class="va">technical_audience</span> <span class="op">&lt;-</span> <span class="st">"We estimate causal effects using the Longitudinal Modified Treatment Policy (LMTP) estimator within a Targeted Minimum Loss-based Estimation (TMLE) framework. This semi-parametric estimator leverages the efficient influence function (EIF) to achieve double robustness and asymptotic efficiency."</span></span>
 <span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"statistical_estimator.lmtp.applied_audience"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"We estimate causal effects using the LMTP estimator. This approach combines machine learning with causal inference methods to estimate treatment effects while avoiding strict parametric assumptions."</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">statistical_estimator</span><span class="op">$</span><span class="va">lmtp</span><span class="op">$</span><span class="va">applied_audience</span> <span class="op">&lt;-</span> <span class="st">"We estimate causal effects using the LMTP estimator. This approach combines machine learning with causal inference methods to estimate treatment effects while avoiding strict parametric assumptions."</span></span>
 <span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"statistical_estimator.lmtp.general_audience"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"We used advanced statistical methods that account for multiple factors that might influence both {{exposure_var}} and {{outcome_var}}. This method helps us distinguish between mere association and actual causal effects."</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">statistical_estimator</span><span class="op">$</span><span class="va">lmtp</span><span class="op">$</span><span class="va">general_audience</span> <span class="op">&lt;-</span> <span class="st">"We used advanced statistical methods that account for multiple factors that might influence both {{exposure_var}} and {{outcome_var}}. This method helps us distinguish between mere association and actual causal effects."</span></span>
 <span></span>
-<span><span class="co"># save methods database with explicit file name</span></span>
-<span><span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"save"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span>,</span>
-<span>  file_name <span class="op">=</span> <span class="st">"methods_db.rds"</span>  <span class="co"># explicit file name required for save action</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># save the updated unified database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># function to generate methods text for different audiences</span></span>
-<span><span class="va">generate_methods_by_audience</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">audience</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"technical"</span>, <span class="st">"applied"</span>, <span class="st">"general"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">generate_methods_by_audience</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">audience</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"technical"</span>, <span class="st">"applied"</span>, <span class="st">"general"</span><span class="op">)</span>, <span class="va">db</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">audience</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg</a></span><span class="op">(</span><span class="va">audience</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="co"># select appropriate paths based on audience</span></span>
@@ -387,89 +360,54 @@
 <span>      exposure_var <span class="op">=</span> <span class="st">"political_conservative"</span>,</span>
 <span>      outcome_var <span class="op">=</span> <span class="st">"social_wellbeing"</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    db <span class="op">=</span> <span class="va">methods_db</span></span>
+<span>    db <span class="op">=</span> <span class="va">db</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># generate reports for different audiences</span></span>
-<span><span class="va">technical_report</span> <span class="op">&lt;-</span> <span class="fu">generate_methods_by_audience</span><span class="op">(</span><span class="st">"technical"</span><span class="op">)</span></span>
-<span><span class="va">applied_report</span> <span class="op">&lt;-</span> <span class="fu">generate_methods_by_audience</span><span class="op">(</span><span class="st">"applied"</span><span class="op">)</span></span>
-<span><span class="va">general_report</span> <span class="op">&lt;-</span> <span class="fu">generate_methods_by_audience</span><span class="op">(</span><span class="st">"general"</span><span class="op">)</span></span>
+<span><span class="va">technical_report</span> <span class="op">&lt;-</span> <span class="fu">generate_methods_by_audience</span><span class="op">(</span><span class="st">"technical"</span>, <span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="va">applied_report</span> <span class="op">&lt;-</span> <span class="fu">generate_methods_by_audience</span><span class="op">(</span><span class="st">"applied"</span>, <span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="va">general_report</span> <span class="op">&lt;-</span> <span class="fu">generate_methods_by_audience</span><span class="op">(</span><span class="st">"general"</span>, <span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"General audience report:\n\n"</span>, <span class="va">general_report</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="text-and-measure-management">Text and Measure Management<a class="anchor" aria-label="anchor" href="#text-and-measure-management"></a>
+<h2 id="helper-functions-for-the-unified-database">Helper Functions for the Unified Database<a class="anchor" aria-label="anchor" href="#helper-functions-for-the-unified-database"></a>
 </h2>
-<p>The core functions for managing text and measures are:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># add text to a database</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"data_analysis"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"Data were analysed using {{software}} version {{version}}."</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
-<span><span class="op">)</span></span>
+<p>The unified database approach includes several helper functions to extract specific categories:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># get text with variables substituted</span></span>
-<span><span class="va">analysis_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"get"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"data_analysis"</span>,</span>
-<span>  template_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>software <span class="op">=</span> <span class="st">"R"</span>, version <span class="op">=</span> <span class="st">"4.2.0"</span><span class="op">)</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># extract specific categories using helper functions</span></span>
+<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_methods.html">boilerplate_methods</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_measures.html">boilerplate_measures</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="va">results_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_results.html">boilerplate_results</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="va">discussion_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_discussion.html">boilerplate_discussion</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="va">appendix_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_appendix.html">boilerplate_appendix</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="va">template_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_template.html">boilerplate_template</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># add a measure to a database</span></span>
-<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span></span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"wellbeing"</span>,</span>
-<span>  measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    description <span class="op">=</span> <span class="st">"Wellbeing was measured using a 5-item scale."</span>,</span>
-<span>    reference <span class="op">=</span> <span class="st">"smith2020"</span>,</span>
-<span>    items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"I am satisfied with my life"</span>, <span class="st">"My life has meaning"</span><span class="op">)</span>,</span>
-<span>    keywords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wellbeing"</span>, <span class="st">"satisfaction"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># extract specific items using dot notation</span></span>
+<span><span class="va">lmtp_method</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_methods.html">boilerplate_methods</a></span><span class="op">(</span><span class="va">unified_db</span>, <span class="st">"statistical.longitudinal.lmtp"</span><span class="op">)</span></span>
+<span><span class="va">anxiety_measure</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_measures.html">boilerplate_measures</a></span><span class="op">(</span><span class="va">unified_db</span>, <span class="st">"anxiety_gad7"</span><span class="op">)</span></span>
+<span><span class="va">main_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_results.html">boilerplate_results</a></span><span class="op">(</span><span class="va">unified_db</span>, <span class="st">"main_effect"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># save measures explicitly</span></span>
-<span><span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span></span>
-<span>  action <span class="op">=</span> <span class="st">"save"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span>,</span>
-<span>  file_name <span class="op">=</span> <span class="st">"wellbeing_measures.rds"</span>  <span class="co"># explicit file name required</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">measures_db</span><span class="op">$</span><span class="va">wellbeing</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># you can also directly access via the list structure</span></span>
+<span><span class="va">causal_assumptions</span> <span class="op">&lt;-</span> <span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">causal_assumptions</span><span class="op">$</span><span class="va">identification</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="document-templates">Document Templates<a class="anchor" aria-label="anchor" href="#document-templates"></a>
+<h2 id="document-templates-with-the-unified-database">Document Templates with the Unified Database<a class="anchor" aria-label="anchor" href="#document-templates-with-the-unified-database"></a>
 </h2>
-<p>The package now supports document templates that can be used to create complete documents with placeholders for dynamic content:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># list available templates</span></span>
-<span><span class="va">template_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"template"</span>, </span>
-<span>  action <span class="op">=</span> <span class="st">"list"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">template_db</span><span class="op">)</span></span>
+<p>The package supports document templates that can be used to create complete documents with placeholders for dynamic content:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># import unified database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add a custom conference abstract template</span></span>
-<span><span class="va">template_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"template"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"conference_abstract"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"# {{title}}\n\n**Authors**: {{authors}}\n\n## Background\n{{background}}\n\n## Methods\n{{methods}}\n\n## Results\n{{results}}"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">template</span><span class="op">$</span><span class="va">conference_abstract</span> <span class="op">&lt;-</span> <span class="st">"# {{title}}\n\n**Authors**: {{authors}}\n\n## Background\n{{background}}\n\n## Methods\n{{methods}}\n\n## Results\n{{results}}"</span></span>
 <span></span>
-<span><span class="co"># save template database with explicit file name</span></span>
-<span><span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"template"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"save"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">template_db</span>,</span>
-<span>  file_name <span class="op">=</span> <span class="st">"template_db.rds"</span>  <span class="co"># explicit file name required</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># save the updated unified database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate a document from template with variables</span></span>
 <span><span class="va">abstract_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -481,110 +419,37 @@
 <span>    background <span class="op">=</span> <span class="st">"Previous research has shown mixed findings..."</span>,</span>
 <span>    methods <span class="op">=</span> <span class="st">"We used data from a longitudinal study (N=47,000)..."</span>,</span>
 <span>    results <span class="op">=</span> <span class="st">"We found significant positive effects..."</span></span>
-<span>  <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">abstract_text</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="audience-specific-methods-descriptions">Audience-Specific Methods Descriptions<a class="anchor" aria-label="anchor" href="#audience-specific-methods-descriptions"></a>
+<h2 id="complete-workflow-example-with-the-unified-database">Complete Workflow Example with the Unified Database<a class="anchor" aria-label="anchor" href="#complete-workflow-example-with-the-unified-database"></a>
 </h2>
-<p>You can create and manage audience-specific descriptions for different contexts:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># load methods database</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"methods"</span>, action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># add statistical descriptions for different audiences</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"statistical_estimator.lmtp.technical_audience"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"We estimate causal effects using the Longitudinal Modified Treatment Policy (LMTP) estimator within a Targeted Minimum Loss-based Estimation (TMLE) framework [@van2014targeted; @van2012targeted]. This semi-parametric estimator leverages the efficient influence function (EIF) to achieve double robustness and asymptotic efficiency."</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"statistical_estimator.lmtp.general_audience"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"We used advanced statistical methods that account for multiple factors that might influence both {{exposure_var}} and {{outcome_var}}. Our approach uses recent developments in causal inference that provide more reliable estimates than traditional statistical methods."</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># save methods database with explicit file name</span></span>
-<span><span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  action <span class="op">=</span> <span class="st">"save"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span>,</span>
-<span>  file_name <span class="op">=</span> <span class="st">"audience_methods_db.rds"</span>  <span class="co"># explicit file name required</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># function to generate methods text for different audiences</span></span>
-<span><span class="va">generate_methods_by_audience</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">audience</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"technical"</span>, <span class="st">"general"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">audience</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg</a></span><span class="op">(</span><span class="va">audience</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co"># select appropriate path based on audience</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">audience</span> <span class="op">==</span> <span class="st">"technical"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">lmtp_path</span> <span class="op">&lt;-</span> <span class="st">"statistical_estimator.lmtp.technical_audience"</span></span>
-<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>    <span class="va">lmtp_path</span> <span class="op">&lt;-</span> <span class="st">"statistical_estimator.lmtp.general_audience"</span></span>
-<span>  <span class="op">}</span></span>
-<span>  </span>
-<span>  <span class="co"># generate text</span></span>
-<span>  <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
-<span>    category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>    sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="va">lmtp_path</span><span class="op">)</span>,</span>
-<span>    global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      exposure_var <span class="op">=</span> <span class="st">"political_conservative"</span>,</span>
-<span>      outcome_var <span class="op">=</span> <span class="st">"social_wellbeing"</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># generate reports for different audiences</span></span>
-<span><span class="va">technical_report</span> <span class="op">&lt;-</span> <span class="fu">generate_methods_by_audience</span><span class="op">(</span><span class="st">"technical"</span><span class="op">)</span></span>
-<span><span class="va">general_report</span> <span class="op">&lt;-</span> <span class="fu">generate_methods_by_audience</span><span class="op">(</span><span class="st">"general"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">general_report</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="complete-workflow-example">Complete Workflow Example<a class="anchor" aria-label="anchor" href="#complete-workflow-example"></a>
-</h2>
-<p>This example demonstrates combining multiple components to create a complete methods section:</p>
+<p>This example demonstrates combining multiple components to create a complete methods section using the unified database approach:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># initialise databases and define study parameters</span></span>
-<span><span class="fu"><a href="reference/boilerplate_init_measures.html">boilerplate_init_measures</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># initialise all databases and import them</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># load the measures database</span></span>
-<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># add perfectionism measure</span></span>
-<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span></span>
-<span>  action <span class="op">=</span> <span class="st">"add"</span>,</span>
+<span><span class="co"># add perfectionism measure to the unified database</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">perfectionism</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"perfectionism"</span>,</span>
-<span>  measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="st">"perfectionism"</span>,</span>
-<span>    description <span class="op">=</span> <span class="st">"Perfectionism was measured using a 3-item scale assessing maladaptive perfectionism tendencies."</span>,</span>
-<span>    reference <span class="op">=</span> <span class="st">"rice_short_2014"</span>,</span>
-<span>    waves <span class="op">=</span> <span class="st">"10-current"</span>,</span>
-<span>    keywords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"personality"</span>, <span class="st">"mental health"</span><span class="op">)</span>,</span>
-<span>    items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="st">"Doing my best never seems to be enough."</span>,</span>
-<span>      <span class="st">"My performance rarely measures up to my standards."</span>,</span>
-<span>      <span class="st">"I am hardly ever satisfied with my performance."</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span></span>
+<span>  description <span class="op">=</span> <span class="st">"Perfectionism was measured using a 3-item scale assessing maladaptive perfectionism tendencies."</span>,</span>
+<span>  reference <span class="op">=</span> <span class="st">"rice_short_2014"</span>,</span>
+<span>  waves <span class="op">=</span> <span class="st">"10-current"</span>,</span>
+<span>  keywords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"personality"</span>, <span class="st">"mental health"</span><span class="op">)</span>,</span>
+<span>  items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Doing my best never seems to be enough."</span>,</span>
+<span>    <span class="st">"My performance rarely measures up to my standards."</span>,</span>
+<span>    <span class="st">"I am hardly ever satisfied with my performance."</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># save the updated database with explicit file name</span></span>
-<span><span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span></span>
-<span>  action <span class="op">=</span> <span class="st">"save"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span>,</span>
-<span>  file_name <span class="op">=</span> <span class="st">"perfectionism_measures.rds"</span>  <span class="co"># explicit file name required</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># save the updated unified database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># define parameters</span></span>
 <span><span class="va">study_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -596,11 +461,12 @@
 <span></span>
 <span><span class="co"># generate methods text for participant selection</span></span>
 <span><span class="va">sample_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
+<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample_selection"</span><span class="op">)</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="va">study_params</span>,</span>
 <span>  add_headings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  heading_level <span class="op">=</span> <span class="st">"###"</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span></span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">sample_text</span><span class="op">)</span></span>
 <span></span>
@@ -611,26 +477,40 @@
 <span>  heading_level <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  subheading_level <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  print_waves <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>  db <span class="op">=</span> <span class="va">measures_db</span><span class="op">)</span></span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">exposure_text</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="backward-compatibility">Backward Compatibility<a class="anchor" aria-label="anchor" href="#backward-compatibility"></a>
+</h2>
+<p>The package maintains backward compatibility with previous versions through wrapper functions:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># old style still works with deprecation warnings</span></span>
+<span><span class="va">measures_db_old</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span>
+<span><span class="va">methods_db_old</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># recommended to use the new functions instead</span></span>
+<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"measures"</span><span class="op">)</span></span>
+<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>To cite the boilerplate package in publications, please use:</p>
-<p>Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 0.3.0. <a href="https://doi.org/10.5281/zenodo.13370825" class="external-link uri">https://doi.org/10.5281/zenodo.13370825</a></p>
+<p>Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 1.0.0. <a href="https://doi.org/10.5281/zenodo.13370825" class="external-link uri">https://doi.org/10.5281/zenodo.13370825</a></p>
 <p>A BibTeX entry for LaTeX users:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co">@software{bulbulia_boilerplate_2025,</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">  author       = {Bulbulia, Joseph},</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">  title        = {{boilerplate: Tools for Managing and Generating </span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">                   Standardised Text for Scientific Reports}},</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">  year         = 2025,</span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">  publisher    = {Zenodo},</span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">  version      = {0.3.0},</span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">  doi          = {10.5281/zenodo.13370825},</span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">  url          = {https://github.com/go-bayes/boilerplate}</span></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">@software{bulbulia_boilerplate_2025,</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">  author       = {Bulbulia, Joseph},</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">  title        = {{boilerplate: Tools for Managing and Generating </span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">                   Standardised Text for Scientific Reports}},</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">  year         = 2025,</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">  publisher    = {Zenodo},</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">  version      = {1.0.0},</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">  doi          = {10.5281/zenodo.13370825},</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">  url          = {https://github.com/go-bayes/boilerplate}</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="licence">Licence<a class="anchor" aria-label="anchor" href="#licence"></a>
@@ -645,14 +525,14 @@
 <div class="section level2">
 <h2 id="doi">DOI<a class="anchor" aria-label="anchor" href="#doi"></a>
 </h2>
-<p><a href="https://zenodo.org/doi/10.5281/zenodo.13370825" class="external-link"><img src="https://zenodo.org/badge/846820825.svg" alt="DOI"></a> ```</p>
+<p><a href="https://zenodo.org/doi/10.5281/zenodo.13370825" class="external-link"><img src="https://zenodo.org/badge/846820825.svg" alt="DOI"></a></p>
 </div>
 
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small>The <a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> License</small></li>
 </ul>
 </div>
 

@@ -30,16 +30,43 @@ development:
   version_tooltip: "Version"
 vignette_engine: quarto
 reference:
-  - title: "Manage Databases"
+  - title: "Core Database Functions"
     contents:
-    - boilerplate_init_measures
-    - boilerplate_init_text
-    - boilerplate_manage_measures
-    - boilerplate_manage_text
-  - title: "Generate Markdown"
+    - boilerplate_import
+    - boilerplate_save
+    - boilerplate_init
+    - boilerplate_init_category
+  - title: "Category accessor functions"
+    contents:
+    - boilerplate_methods
+    - boilerplate_measures
+    - boilerplate_results
+    - boilerplate_discussion
+    - boilerplate_appendix
+    - boilerplate_template
+  - title: "Text generation functions"
     contents:
     - boilerplate_generate_text
     - boilerplate_generate_measures
+  - title: "Path based operations"
+    contents:
+    - boilerplate_add_entry
+    - boilerplate_update_entry
+    - boilerplate_remove_entry
+    - boilerplate_get_entry
+    - boilerplate_sort_db
+    - boilerplate_path_exists
+    - boilerplate_list_paths
   - title: "Utilities"
     contents:
+    - boilerplate_manage_measures
+    - boilerplate_manage_text
+    - boilerplate_merge_category
+    - boilerplate_merge_unified
+    - boilerplate_update_from_external
+  - title: "Legecy Functions"
+    contents:
+    - boilerplate_init_text
+    - boilerplate_init_measures
+    - boilerplate_measures_text
     - boilerplate_merge_databases

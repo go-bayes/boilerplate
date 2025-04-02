@@ -1,20 +1,19 @@
 Package: boilerplate
 Title: Tools for Managing and Compiling Manuscript Templates
-Version: 0.3.0
+Version: 1.0.0
 Authors@R: 
     person("Joseph", "Bulbulia", email = "joseph.bulbulia@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5861-2056"))
-Description: The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organization of text through dot-separated paths.
-License: MIT + file LICENSE
+Description: The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.
+License: The MIT License
 Encoding: UTF-8
-Imports: 
+Imports:
+    cli,
     glue,
     here,
-    cli,
-    utils,
+    janitor,
     stringr,
-    janitor
-Suggests:
-    here
+    tools,
+    utils
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2.9000

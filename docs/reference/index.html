@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="manage-databases">Manage Databases<a class="anchor" aria-label="anchor" href="#manage-databases"></a></h2>
+      <h2 id="core-database-functions">Core Database Functions<a class="anchor" aria-label="anchor" href="#core-database-functions"></a></h2>
 
 
 
@@ -43,30 +43,77 @@
 
       <dl><dt>
 
-          <code><a href="boilerplate_init_measures.html">boilerplate_init_measures()</a></code>
+          <code><a href="boilerplate_import.html">boilerplate_import()</a></code>
 
         </dt>
-        <dd>Initialise Boilerplate Measures Database</dd>
+        <dd>Import Boilerplate Database(s)</dd>
       </dl><dl><dt>
 
-          <code><a href="boilerplate_init_text.html">boilerplate_init_text()</a></code>
+          <code><a href="boilerplate_save.html">boilerplate_save()</a></code>
 
         </dt>
-        <dd>Initialise Boilerplate Text Databases</dd>
+        <dd>Save Boilerplate Database</dd>
       </dl><dl><dt>
 
-          <code><a href="boilerplate_manage_measures.html">boilerplate_manage_measures()</a></code>
+          <code><a href="boilerplate_init.html">boilerplate_init()</a></code>
 
         </dt>
-        <dd>Manage Measures in Boilerplate Database</dd>
+        <dd>Initialize All Boilerplate Databases</dd>
       </dl><dl><dt>
 
-          <code><a href="boilerplate_manage_text.html">boilerplate_manage_text()</a></code>
+          <code><a href="boilerplate_init_category.html">boilerplate_init_category()</a></code>
 
         </dt>
-        <dd>Manage Text in Boilerplate Database</dd>
+        <dd>Initialize a Specific Boilerplate Database Category</dd>
       </dl></div><div class="section level2">
-      <h2 id="generate-markdown">Generate Markdown<a class="anchor" aria-label="anchor" href="#generate-markdown"></a></h2>
+      <h2 id="category-accessor-functions">Category accessor functions<a class="anchor" aria-label="anchor" href="#category-accessor-functions"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="boilerplate_methods.html">boilerplate_methods()</a></code>
+
+        </dt>
+        <dd>Access Methods from Unified Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_measures.html">boilerplate_measures()</a></code>
+
+        </dt>
+        <dd>Access Measures from Unified Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_results.html">boilerplate_results()</a></code>
+
+        </dt>
+        <dd>Access Results from Unified Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_discussion.html">boilerplate_discussion()</a></code>
+
+        </dt>
+        <dd>Access Discussion from Unified Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_appendix.html">boilerplate_appendix()</a></code>
+
+        </dt>
+        <dd>Access Appendix from Unified Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_template.html">boilerplate_template()</a></code>
+
+        </dt>
+        <dd>Access Templates from Unified Database</dd>
+      </dl></div><div class="section level2">
+      <h2 id="text-generation-functions">Text generation functions<a class="anchor" aria-label="anchor" href="#text-generation-functions"></a></h2>
 
 
 
@@ -89,6 +136,59 @@
         </dt>
         <dd>Generate Formatted Text for Measures</dd>
       </dl></div><div class="section level2">
+      <h2 id="path-based-operations">Path based operations<a class="anchor" aria-label="anchor" href="#path-based-operations"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="boilerplate_add_entry.html">boilerplate_add_entry()</a></code>
+
+        </dt>
+        <dd>Path-Based Database Operations</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_update_entry.html">boilerplate_update_entry()</a></code>
+
+        </dt>
+        <dd>Update a Nested Entry in a Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_remove_entry.html">boilerplate_remove_entry()</a></code>
+
+        </dt>
+        <dd>Remove a Nested Entry from a Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_get_entry.html">boilerplate_get_entry()</a></code>
+
+        </dt>
+        <dd>Get a Nested Entry from a Database by Path</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_sort_db.html">boilerplate_sort_db()</a></code>
+
+        </dt>
+        <dd>Sort a Database Recursively</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_path_exists.html">boilerplate_path_exists()</a></code>
+
+        </dt>
+        <dd>Check if a Path Exists in a Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_list_paths.html">boilerplate_list_paths()</a></code>
+
+        </dt>
+        <dd>List All Available Paths in a Database</dd>
+      </dl></div><div class="section level2">
       <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
 
 
@@ -100,6 +200,65 @@
 
 
       <dl><dt>
+
+          <code><a href="boilerplate_manage_measures.html">boilerplate_manage_measures()</a></code>
+
+        </dt>
+        <dd>Manage Measures in Boilerplate Database (Deprecated)</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_manage_text.html">boilerplate_manage_text()</a></code>
+
+        </dt>
+        <dd>Manage Text in Boilerplate Database (Deprecated)</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_merge_category.html">boilerplate_merge_category()</a></code>
+
+        </dt>
+        <dd>Merge Selected Category Between Two Unified Databases</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_merge_unified.html">boilerplate_merge_unified()</a></code>
+
+        </dt>
+        <dd>Merge Unified Databases</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_update_from_external.html">boilerplate_update_from_external()</a></code>
+
+        </dt>
+        <dd>Update Category from External Database</dd>
+      </dl></div><div class="section level2">
+      <h2 id="legecy-functions">Legecy Functions<a class="anchor" aria-label="anchor" href="#legecy-functions"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="boilerplate_init_text.html">boilerplate_init_text()</a></code>
+
+        </dt>
+        <dd>Initialise Boilerplate Text Databases</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_init_measures.html">boilerplate_init_measures()</a></code>
+
+        </dt>
+        <dd>Initialise Boilerplate Measures Database</dd>
+      </dl><dl><dt>
+
+          <code><a href="boilerplate_generate_measures.html">boilerplate_generate_measures()</a></code> <code><a href="boilerplate_generate_measures.html">boilerplate_measures_text()</a></code>
+
+        </dt>
+        <dd>Generate Formatted Text for Measures</dd>
+      </dl><dl><dt>
 
           <code><a href="boilerplate_merge_databases.html">boilerplate_merge_databases()</a></code>
 

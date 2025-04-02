@@ -16,10 +16,11 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.
+The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. The package features a unified database approach that simplifies workflows and provides consistent management of all content types.
 
 ## Features
 
+- **Unified Database System**: Work with all content types through a consistent interface
 - **Text Template Management**: Create, update, and retrieve reusable text templates
 - **Variable Substitution**: Replace `{{variable}}` placeholders with actual values
 - **Hierarchical Organisation**: Organise text in nested categories using dot notation (e.g., `statistical.longitudinal.lmtp`)
@@ -28,14 +29,14 @@ The `boilerplate` package provides tools for managing and generating standardise
 - **Multiple Categories**: Support for methods, results, discussion, measures, appendices and document templates
 - **Default Content**: Comes with pre-loaded defaults for common methods sections
 - **Quarto/R Markdown Integration**: Generate sections for scientific reports
-- **Safety Features**: Prevention of accidental file overwrites and clear separation of text and measures databases
+- **Safety Features**: Prevention of accidental file overwrites and standardised file naming
 
 ## Safety Features
 
 The `boilerplate` package includes several safety features to prevent accidental overwrites:
 
-- When using `boilerplate_manage_measures()` or `boilerplate_manage_text()` with `action="save"`, you must explicitly provide both `db` and `file_name` parameters
-- Text and measures databases are initialized separately using `boilerplate_init_text()` and `boilerplate_init_measures()` respectively
+- The unified `boilerplate_save()` function requires explicit specification of categories when saving individual databases
+- Standard file naming conventions ensure consistency across projects
 - All functions that modify files include confirmation prompts (when `confirm=TRUE`) before making changes
 - Consistent sorting of database entries ensures predictable structure and easier version control
 
@@ -48,13 +49,12 @@ with:
 # install the devtools package if you don't have it already
 install.packages("devtools")
 devtools::install_github("go-bayes/boilerplate")
-
 ```
 
-## Basic Usage
+## Basic Usage with Unified Database
 
 ```{r, eval = FALSE}
-# install from GitHub if not already installed
+# install from github if not already installed
 if (!require(boilerplate, quietly = TRUE)) {
   # install devtools if necessary
   if (!require(devtools, quietly = TRUE)) {
@@ -63,19 +63,46 @@ if (!require(boilerplate, quietly = TRUE)) {
   devtools::install_github("go-bayes/boilerplate")
 }
 
-# initialise the default text databases (excluding measures)
-boilerplate_init_text(create_dirs = TRUE, confirm = TRUE)
+# initialise all databases with a single function
+boilerplate_init(create_dirs = TRUE, confirm = TRUE)
 
-# initialise the measures database separately
-boilerplate_init_measures(create_dirs = TRUE, confirm = TRUE)
+# import all databases into a unified structure
+unified_db <- boilerplate_import()
+
+# add a new method entry directly to the unified database
+unified_db$methods$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
+
+# save all changes at once
+boilerplate_save(unified_db)
+
+# generate text with variable substitution
+methods_text <- boilerplate_generate_text(
+  category = "methods",
+  sections = c("sample", "sample_selection"),
+  global_vars = list(
+    population = "university students",
+    timeframe = "2020-2021"
+  ),
+  db = unified_db,  # pass the unified database
+  add_headings = TRUE
+)
+
+cat(methods_text)
+```
+
+## Working with Individual Databases
+
+You can still work with individual databases if preferred:
+
+```{r, eval = FALSE}
+# import just the methods database
+methods_db <- boilerplate_import("methods")
 
 # add a new method entry
-methods_db <- boilerplate_manage_text(
-  category = "methods",
-  action = "add",
-  name = "sample_selection",
-  value = "Participants were selected from {{population}} during {{timeframe}}."
-)
+methods_db$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
+
+# save just the methods database
+boilerplate_save(methods_db, "methods")
 
 # generate text with variable substitution
 methods_text <- boilerplate_generate_text(
@@ -92,48 +119,40 @@ methods_text <- boilerplate_generate_text(
 cat(methods_text)
 ```
 
-## Managing Measures
+## Managing Measures with the Unified Database
 
-The package provides functions for managing measures and generating formatted text about them:
+The package provides a simplified way to manage measures and generate formatted text about them:
   
 ```{r, eval = FALSE}
-# First initialise the measures database separately from text databases
-boilerplate_init_measures(create_dirs = TRUE, confirm = TRUE)
+# import the unified database
+unified_db <- boilerplate_import()
 
-# Then load the database
-measures_db <- boilerplate_manage_measures(action = "list")
-
-# Add a measure with a flat name (no dots)
-measures_db <- boilerplate_manage_measures(
-  action = "add",
-  name = "anxiety_gad7", # use underscore instead of dot
-  measure = list(
-    description = "Anxiety was measured using the GAD-7 scale.",
-    reference = "spitzer2006",
-    waves = "1-3",
-    keywords = c("anxiety", "mental health", "gad"),
-    items = list(
-      "Feeling nervous, anxious, or on edge",
-      "Not being able to stop or control worrying",
-      "Worrying too much about different things",
-      "Trouble relaxing"
-    )
-  ),
-  db = measures_db
+# add a measure directly to the unified database
+unified_db$measures$anxiety_gad7 <- list(
+  name = "Generalised anxiety disorder scale (GAD-7)",
+  description = "Anxiety was measured using the GAD-7 scale.",
+  reference = "spitzer2006",
+  waves = "1-3",
+  keywords = c("anxiety", "mental health", "gad"),
+  items = list(
+    "Feeling nervous, anxious, or on edge",
+    "Not being able to stop or control worrying",
+    "Worrying too much about different things",
+    "Trouble relaxing"
+  )
 )
 
-# Save the measures database with an explicit file name (required for save action)
-boilerplate_manage_measures(
-  action = "save",
-  db = measures_db,
-  file_name = "measures_db.rds"  # explicit file name required for save action
-)
+# save the entire unified database
+boilerplate_save(unified_db)
 
-# Then reference it with the same flat name
+# alternatively, save just the measures portion
+boilerplate_save(unified_db$measures, "measures")
+
+# then reference it with the same flat name
 exposure_text <- boilerplate_generate_measures(
   variable_heading = "Exposure Variable",
   variables = "anxiety_gad7", # match the name you used above
-  db = measures_db,
+  db = unified_db,  # can pass the unified database
   heading_level = 3,
   subheading_level = 4,
   print_waves = TRUE
@@ -141,18 +160,21 @@ exposure_text <- boilerplate_generate_measures(
 
 cat(exposure_text)
 
-# Generate text for outcome variables by domain
+# you can also use the helper function to extract just the measures
+measures_db <- boilerplate_measures(unified_db)
+
+# generate text for outcome variables by domain using just the measures database
 psych_text <- boilerplate_generate_measures(
   variable_heading = "Psychological Outcomes",
-  variables = c("anxiety.gad7", "depression.phq9"),
-  db = measures_db,
+  variables = c("anxiety_gad7", "depression_phq9"),
+  db = measures_db,  # or use the extracted measures database
   heading_level = 3,
   subheading_level = 4,
   print_waves = TRUE
 )
 cat(psych_text)
 
-# Generate statistical methods text
+# generate statistical methods text
 stats_text <- boilerplate_generate_text(
   category = "methods",
   sections = c("statistical.longitudinal.lmtp"),
@@ -160,10 +182,10 @@ stats_text <- boilerplate_generate_text(
   add_headings = TRUE,
   custom_headings = list("statistical.longitudinal.lmtp" = "LMTP"),
   heading_level = "###",
-  db = methods_db
+  db = unified_db  # pass the unified database
 )
 
-# Combine all sections into a complete methods section
+# combine all sections into a complete methods section
 methods_section <- paste(
   "## Methods\n\n",
   sample_text, "\n\n",
@@ -179,40 +201,19 @@ cat(methods_section)
 # writeLines(methods_section, "methods_section.qmd")
 ```
 
-## Appendix Content
+## Appendix Content with the Unified Database
 
-The package now supports appendix content that can be managed separately from the main document:
+The package supports appendix content that can be managed within the unified database:
 
 ```{r, eval = FALSE}
-# initialise appendix database
-boilerplate_init_text(
-  categories = "appendix",
-  create_dirs = TRUE, 
-  confirm = TRUE
-)
-
-# load appendix database
-appendix_db <- boilerplate_manage_text(
-  category = "appendix", 
-  action = "list"
-)
+# import the unified database
+unified_db <- boilerplate_import()
 
 # add detailed measures documentation to appendix
-appendix_db <- boilerplate_manage_text(
-  category = "appendix",
-  action = "add",
-  name = "detailed_measures",
-  value = "# Detailed Measures Documentation\n\n## Overview\n\nThis appendix provides comprehensive documentation for all measures used in this study, including full item text, response options, and psychometric properties.\n\n## {{exposure_var}} Measure\n\n{{exposure_details}}\n\n## Outcome Measures\n\n{{outcome_details}}",
-  db = appendix_db
-)
+unified_db$appendix$detailed_measures <- "# Detailed Measures Documentation\n\n## Overview\n\nThis appendix provides comprehensive documentation for all measures used in this study, including full item text, response options, and psychometric properties.\n\n## {{exposure_var}} Measure\n\n{{exposure_details}}\n\n## Outcome Measures\n\n{{outcome_details}}"
 
-# save appendix database with explicit file name
-boilerplate_manage_text(
-  category = "appendix",
-  action = "save",
-  db = appendix_db,
-  file_name = "appendix_db.rds"  # explicit file name required for save action
-)
+# save the changes to the unified database
+boilerplate_save(unified_db)
 
 # generate appendix text with variable substitution
 appendix_text <- boilerplate_generate_text(
@@ -223,7 +224,7 @@ appendix_text <- boilerplate_generate_text(
     exposure_details = "The perfectionism measure consists of 3 items...",
     outcome_details = "Anxiety was measured using the GAD-7 scale..."
   ),
-  db = appendix_db
+  db = unified_db  # pass the unified database
 )
 
 cat(appendix_text)
@@ -231,23 +232,16 @@ cat(appendix_text)
 
 ## Creating Complete Document Workflows
 
-You can create complete workflows that integrate methods, results, and templates:
+You can create complete workflows that integrate methods, results, and templates using the unified database:
 
 ```{r, eval = FALSE}
-# load template database
-template_db <- boilerplate_manage_text(
-  category = "template", 
-  action = "list"
-)
+# import the unified database
+unified_db <- boilerplate_import()
 
 # function to generate a complete document from a template
-generate_document <- function(template_name, study_params, section_contents) {
-  # get the template
-  template_text <- boilerplate_manage_text(
-    category = "template",
-    action = "get",
-    name = template_name
-  )
+generate_document <- function(template_name, study_params, section_contents, db) {
+  # extract the template using the boilerplate_template helper
+  template_text <- boilerplate_template(db, template_name)
   
   # apply template variables (combining study params and section contents)
   all_vars <- c(study_params, section_contents)
@@ -283,55 +277,33 @@ section_contents <- list(
 journal_article <- generate_document(
   template_name = "journal_article",
   study_params = study_params,
-  section_contents = section_contents
+  section_contents = section_contents,
+  db = unified_db
 )
 
-cat(substr(journal_article, 1, 500), "...")
+cat(substr(journal_article, 1, 2500), "...")
 ```
 
-## Advanced Usage: Audience-Specific Reports
+## Advanced Usage: Audience-Specific Reports with the Unified Database
 
 You can create tailored reports for different audiences from the same underlying data:
 
 ```{r, eval = FALSE}
-# define audience-specific methods databases
-methods_db <- boilerplate_manage_text(category = "methods", action = "list")
+# import the unified database
+unified_db <- boilerplate_import()
 
 # add audience-specific LMTP descriptions
-methods_db <- boilerplate_manage_text(
-  category = "methods",
-  action = "add",
-  name = "statistical_estimator.lmtp.technical_audience",
-  value = "We estimate causal effects using the Longitudinal Modified Treatment Policy (LMTP) estimator within a Targeted Minimum Loss-based Estimation (TMLE) framework. This semi-parametric estimator leverages the efficient influence function (EIF) to achieve double robustness and asymptotic efficiency.",
-  db = methods_db
-)
+unified_db$methods$statistical_estimator$lmtp$technical_audience <- "We estimate causal effects using the Longitudinal Modified Treatment Policy (LMTP) estimator within a Targeted Minimum Loss-based Estimation (TMLE) framework. This semi-parametric estimator leverages the efficient influence function (EIF) to achieve double robustness and asymptotic efficiency."
 
-methods_db <- boilerplate_manage_text(
-  category = "methods",
-  action = "add",
-  name = "statistical_estimator.lmtp.applied_audience",
-  value = "We estimate causal effects using the LMTP estimator. This approach combines machine learning with causal inference methods to estimate treatment effects while avoiding strict parametric assumptions.",
-  db = methods_db
-)
+unified_db$methods$statistical_estimator$lmtp$applied_audience <- "We estimate causal effects using the LMTP estimator. This approach combines machine learning with causal inference methods to estimate treatment effects while avoiding strict parametric assumptions."
 
-methods_db <- boilerplate_manage_text(
-  category = "methods",
-  action = "add",
-  name = "statistical_estimator.lmtp.general_audience",
-  value = "We used advanced statistical methods that account for multiple factors that might influence both {{exposure_var}} and {{outcome_var}}. This method helps us distinguish between mere association and actual causal effects.",
-  db = methods_db
-)
+unified_db$methods$statistical_estimator$lmtp$general_audience <- "We used advanced statistical methods that account for multiple factors that might influence both {{exposure_var}} and {{outcome_var}}. This method helps us distinguish between mere association and actual causal effects."
 
-# save methods database with explicit file name
-boilerplate_manage_text(
-  category = "methods",
-  action = "save",
-  db = methods_db,
-  file_name = "methods_db.rds"  # explicit file name required for save action
-)
+# save the updated unified database
+boilerplate_save(unified_db)
 
 # function to generate methods text for different audiences
-generate_methods_by_audience <- function(audience = c("technical", "applied", "general")) {
+generate_methods_by_audience <- function(audience = c("technical", "applied", "general"), db) {
   audience <- match.arg(audience)
   
   # select appropriate paths based on audience
@@ -345,91 +317,56 @@ generate_methods_by_audience <- function(audience = c("technical", "applied", "g
       exposure_var = "political_conservative",
       outcome_var = "social_wellbeing"
     ),
-    db = methods_db
+    db = db
   )
 }
 
 # generate reports for different audiences
-technical_report <- generate_methods_by_audience("technical")
-applied_report <- generate_methods_by_audience("applied")
-general_report <- generate_methods_by_audience("general")
+technical_report <- generate_methods_by_audience("technical", unified_db)
+applied_report <- generate_methods_by_audience("applied", unified_db)
+general_report <- generate_methods_by_audience("general", unified_db)
 
 cat("General audience report:\n\n", general_report)
 ```
 
-## Text and Measure Management
+## Helper Functions for the Unified Database
 
-The core functions for managing text and measures are:
-  
+The unified database approach includes several helper functions to extract specific categories:
+
 ```{r, eval = FALSE}
-# add text to a database
-methods_db <- boilerplate_manage_text(
-  category = "methods",
-  action = "add",
-  name = "data_analysis",
-  value = "Data were analysed using {{software}} version {{version}}.",
-  db = methods_db
-)
+# import the unified database
+unified_db <- boilerplate_import()
 
-# get text with variables substituted
-analysis_text <- boilerplate_manage_text(
-  category = "methods",
-  action = "get",
-  name = "data_analysis",
-  template_vars = list(software = "R", version = "4.2.0"),
-  db = methods_db
-)
+# extract specific categories using helper functions
+methods_db <- boilerplate_methods(unified_db)
+measures_db <- boilerplate_measures(unified_db)
+results_db <- boilerplate_results(unified_db)
+discussion_db <- boilerplate_discussion(unified_db)
+appendix_db <- boilerplate_appendix(unified_db)
+template_db <- boilerplate_template(unified_db)
 
-# add a measure to a database
-measures_db <- boilerplate_manage_measures(
-  action = "add",
-  name = "wellbeing",
-  measure = list(
-    description = "Wellbeing was measured using a 5-item scale.",
-    reference = "smith2020",
-    items = list("I am satisfied with my life", "My life has meaning"),
-    keywords = c("wellbeing", "satisfaction")
-  ),
-  db = measures_db
-)
+# extract specific items using dot notation
+lmtp_method <- boilerplate_methods(unified_db, "statistical.longitudinal.lmtp")
+anxiety_measure <- boilerplate_measures(unified_db, "anxiety_gad7")
+main_result <- boilerplate_results(unified_db, "main_effect")
 
-# save measures explicitly
-boilerplate_manage_measures(
-  action = "save",
-  db = measures_db,
-  file_name = "wellbeing_measures.rds"  # explicit file name required
-)
-
-str(measures_db$wellbeing)
+# you can also directly access via the list structure
+causal_assumptions <- unified_db$methods$causal_assumptions$identification
 ```
 
-## Document Templates
+## Document Templates with the Unified Database
 
-The package now supports document templates that can be used to create complete documents with placeholders for dynamic content:
+The package supports document templates that can be used to create complete documents with placeholders for dynamic content:
 
 ```{r, eval = FALSE}
-# list available templates
-template_db <- boilerplate_manage_text(
-  category = "template", 
-  action = "list"
-)
-names(template_db)
+# import unified database
+unified_db <- boilerplate_import()
 
 # add a custom conference abstract template
-template_db <- boilerplate_manage_text(
-  category = "template",
-  action = "add",
-  name = "conference_abstract",
-  value = "# {{title}}\n\n**Authors**: {{authors}}\n\n## Background\n{{background}}\n\n## Methods\n{{methods}}\n\n## Results\n{{results}}"
-)
+unified_db$template$conference_abstract <- "# {{title}}\n\n**Authors**: {{authors}}\n\n## Background\n{{background}}\n\n## Methods\n{{methods}}\n\n## Results\n{{results}}"
 
-# save template database with explicit file name
-boilerplate_manage_text(
-  category = "template",
-  action = "save",
-  db = template_db,
-  file_name = "template_db.rds"  # explicit file name required
-)
+# save the updated unified database
+boilerplate_save(unified_db)
 
 # generate a document from template with variables
 abstract_text <- boilerplate_generate_text(
@@ -441,112 +378,38 @@ abstract_text <- boilerplate_generate_text(
     background = "Previous research has shown mixed findings...",
     methods = "We used data from a longitudinal study (N=47,000)...",
     results = "We found significant positive effects..."
-  )
+  ),
+  db = unified_db
 )
 
 cat(abstract_text)
 ```
 
-## Audience-Specific Methods Descriptions
+## Complete Workflow Example with the Unified Database
 
-You can create and manage audience-specific descriptions for different contexts:
-
-```{r, eval = FALSE}
-# load methods database
-methods_db <- boilerplate_manage_text(category = "methods", action = "list")
-
-# add statistical descriptions for different audiences
-methods_db <- boilerplate_manage_text(
-  category = "methods",
-  action = "add",
-  name = "statistical_estimator.lmtp.technical_audience",
-  value = "We estimate causal effects using the Longitudinal Modified Treatment Policy (LMTP) estimator within a Targeted Minimum Loss-based Estimation (TMLE) framework [@van2014targeted; @van2012targeted]. This semi-parametric estimator leverages the efficient influence function (EIF) to achieve double robustness and asymptotic efficiency.",
-  db = methods_db
-)
-
-methods_db <- boilerplate_manage_text(
-  category = "methods",
-  action = "add",
-  name = "statistical_estimator.lmtp.general_audience",
-  value = "We used advanced statistical methods that account for multiple factors that might influence both {{exposure_var}} and {{outcome_var}}. Our approach uses recent developments in causal inference that provide more reliable estimates than traditional statistical methods.",
-  db = methods_db
-)
-
-# save methods database with explicit file name
-boilerplate_manage_text(
-  category = "methods",
-  action = "save",
-  db = methods_db,
-  file_name = "audience_methods_db.rds"  # explicit file name required
-)
-
-# function to generate methods text for different audiences
-generate_methods_by_audience <- function(audience = c("technical", "general")) {
-  audience <- match.arg(audience)
-  
-  # select appropriate path based on audience
-  if (audience == "technical") {
-    lmtp_path <- "statistical_estimator.lmtp.technical_audience"
-  } else {
-    lmtp_path <- "statistical_estimator.lmtp.general_audience"
-  }
-  
-  # generate text
-  boilerplate_generate_text(
-    category = "methods",
-    sections = c("sample", lmtp_path),
-    global_vars = list(
-      exposure_var = "political_conservative",
-      outcome_var = "social_wellbeing"
-    )
-  )
-}
-
-# generate reports for different audiences
-technical_report <- generate_methods_by_audience("technical")
-general_report <- generate_methods_by_audience("general")
-
-cat(general_report)
-```
-
-## Complete Workflow Example
-
-This example demonstrates combining multiple components to create a complete methods section:
+This example demonstrates combining multiple components to create a complete methods section using the unified database approach:
   
 ```{r, eval = FALSE}
-# initialise databases and define study parameters
-boilerplate_init_measures(create_dirs = TRUE, confirm = TRUE)
+# initialise all databases and import them
+boilerplate_init(create_dirs = TRUE, confirm = TRUE)
+unified_db <- boilerplate_import()
 
-measures_db <- boilerplate_manage_measures(action = "list")
-
-# load the measures database
-measures_db <- boilerplate_manage_measures(action = "list")
-
-# add perfectionism measure
-measures_db <- boilerplate_manage_measures(
-  action = "add",
+# add perfectionism measure to the unified database
+unified_db$measures$perfectionism <- list(
   name = "perfectionism",
-  measure = list(
-    name = "perfectionism",
-    description = "Perfectionism was measured using a 3-item scale assessing maladaptive perfectionism tendencies.",
-    reference = "rice_short_2014",
-    waves = "10-current",
-    keywords = c("personality", "mental health"),
-    items = list(
-      "Doing my best never seems to be enough.",
-      "My performance rarely measures up to my standards.",
-      "I am hardly ever satisfied with my performance."
-    )
-  ),
-  db = measures_db
+  description = "Perfectionism was measured using a 3-item scale assessing maladaptive perfectionism tendencies.",
+  reference = "rice_short_2014",
+  waves = "10-current",
+  keywords = c("personality", "mental health"),
+  items = list(
+    "Doing my best never seems to be enough.",
+    "My performance rarely measures up to my standards.",
+    "I am hardly ever satisfied with my performance."
+  )
 )
 
-# save the updated database with explicit file name
-boilerplate_manage_measures(
-  action = "save",
-  db = measures_db,
-  file_name = "perfectionism_measures.rds"  # explicit file name required
-)
+# save the updated unified database
+boilerplate_save(unified_db)
 
 # define parameters
 study_params <- list(
@@ -558,11 +421,12 @@ study_params <- list(
 
 # generate methods text for participant selection
 sample_text <- boilerplate_generate_text(
+  category = "methods",
   sections = c("sample_selection"),
   global_vars = study_params,
   add_headings = TRUE,
   heading_level = "###",
-  db = methods_db
+  db = unified_db
 )
 cat(sample_text)
 
@@ -573,18 +437,31 @@ exposure_text <- boilerplate_generate_measures(
   heading_level = 3,
   subheading_level = 4,
   print_waves = TRUE, 
-  db = measures_db)
+  db = unified_db
+)
 
 cat(exposure_text)
 ```
 
+## Backward Compatibility
 
+The package maintains backward compatibility with previous versions through wrapper functions:
+
+```{r, eval = FALSE}
+# old style still works with deprecation warnings
+measures_db_old <- boilerplate_manage_measures(action = "list")
+methods_db_old <- boilerplate_manage_text(action = "list", category = "methods")
+
+# recommended to use the new functions instead
+measures_db <- boilerplate_import("measures")
+methods_db <- boilerplate_import("methods")
+```
 
 ## Citation
 
 To cite the boilerplate package in publications, please use:
 
-Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 0.3.0. https://doi.org/10.5281/zenodo.13370825
+Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 1.0.0. https://doi.org/10.5281/zenodo.13370825
 
 A BibTeX entry for LaTeX users:
 
@@ -595,7 +472,7 @@ A BibTeX entry for LaTeX users:
                    Standardised Text for Scientific Reports}},
   year         = 2025,
   publisher    = {Zenodo},
-  version      = {0.3.0},
+  version      = {1.0.0},
   doi          = {10.5281/zenodo.13370825},
   url          = {https://github.com/go-bayes/boilerplate}
 }
@@ -612,4 +489,3 @@ Go to: <https://github.com/go-bayes/boilerplate>
 ## DOI
 
 [![DOI](https://zenodo.org/badge/846820825.svg)](https://zenodo.org/doi/10.5281/zenodo.13370825)
-```
