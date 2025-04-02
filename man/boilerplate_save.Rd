@@ -10,7 +10,9 @@ boilerplate_save(
   data_path = NULL,
   confirm = TRUE,
   create_dirs = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  entry_level_confirm = TRUE,
+  create_backup = TRUE
 )
 }
 \arguments{
@@ -28,12 +30,17 @@ If NULL (default), uses here::here("boilerplate", "data").}
 \item{create_dirs}{Logical. If TRUE, creates directories that don't exist. Default is FALSE.}
 
 \item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
+
+\item{entry_level_confirm}{Logical. If TRUE, shows changes at the entry level and asks for confirmation. Default is TRUE.}
+
+\item{create_backup}{Logical. If TRUE, creates a backup of existing database before saving. Default is TRUE.}
 }
 \value{
-Invisible. The path(s) where the database(s) was saved.
+Invisibly returns a named list with logical values indicating which categories
+were successfully saved, or the file path if a single category was saved.
 }
 \description{
-This function saves a boilerplate database to disk.
+This function saves a boilerplate database to disk with entry-level change detection.
 }
 \examples{
 # save a specific database

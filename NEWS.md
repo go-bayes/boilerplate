@@ -1,5 +1,10 @@
 ## boilerplate
 
+## [2024-04-03] boilerplate 1.0.1
+### Improved 
+- `boilerplate_save()` confirms intention to overwrite, in case this occurs accidentally
+- `boilerplate_init()` messages are clearer when initialising from existing databases 
+
 ## [2024-04-03] boilerplate 1.0.0
 
 ## Boilerplate Package: Unified Database Implementation

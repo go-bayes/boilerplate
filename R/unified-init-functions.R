@@ -194,18 +194,10 @@ boilerplate_init_category <- function(
     default_db <- get_default_db(category)
   }
 
-  # check if file exists and apply merge strategy
+  # check if file exists and determine operation type
   file_exists <- file.exists(file_path)
 
-  if (file_exists) {
-    action <- if (merge_strategy == "overwrite_all") {
-      "overwriting"
-    } else {
-      "merging with"
-    }
-    if (!quiet) cli_alert_info("{action} existing {category} database file: {file_path}")
-  }
-
+  # handle existing file according to merge strategy
   if (file_exists && merge_strategy != "overwrite_all") {
     if (dry_run) {
       if (!quiet) cli_alert_info("would load and merge existing {category} database from {file_path}")
@@ -213,10 +205,17 @@ boilerplate_init_category <- function(
       return(TRUE) # consider dry runs as successful
     }
 
-    # ask for confirmation if needed
+    # ask for confirmation BEFORE showing merging message
     proceed <- TRUE
     if (confirm) {
-      proceed <- ask_yes_no(paste0("modify existing file: ", file_path, "?"))
+      if (merge_strategy == "keep_existing") {
+        action_desc <- "update existing file (keeping existing entries)"
+      } else if (merge_strategy == "merge_recursive") {
+        action_desc <- "recursively merge with existing file"
+      } else {
+        action_desc <- "modify existing file"
+      }
+      proceed <- ask_yes_no(paste0(action_desc, ": ", file_path, "?"))
     }
 
     if (!proceed) {
@@ -224,8 +223,10 @@ boilerplate_init_category <- function(
       return(FALSE) # return FALSE to indicate cancellation
     }
 
-    # load existing database
+    # Now that user has confirmed, show the action message
     if (!quiet) cli_alert_info("loading existing {category} database from {file_path}")
+
+    # load existing database
     existing_db <- tryCatch({
       readRDS(file_path)
     }, error = function(e) {
@@ -249,6 +250,7 @@ boilerplate_init_category <- function(
     saveRDS(merged_db, file = file_path)
     if (!quiet) cli_alert_success("updated {category} database at: {file_path}")
   } else {
+    # handle overwrite all or new file creation
     if (dry_run) {
       action <- if (file_exists) "would overwrite" else "would create new"
       if (!quiet) cli_alert_info("{action} {category} database at: {file_path}")
@@ -267,8 +269,11 @@ boilerplate_init_category <- function(
       return(FALSE) # return FALSE to indicate cancellation
     }
 
+    # Now that user has confirmed, show the action message
+    action <- if (file_exists) "overwriting" else "creating new"
+    if (!quiet) cli_alert_info("{action} {category} database at: {file_path}")
+
     # save default database
-    if (!quiet) cli_alert_info("saving default {category} database")
     saveRDS(default_db, file = file_path)
     action <- if (file_exists) "overwrote" else "created new"
     if (!quiet) cli_alert_success("{action} {category} database at: {file_path}")

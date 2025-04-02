@@ -476,7 +476,7 @@ methods_db <- boilerplate_import("methods")
 To cite the boilerplate package in publications, please use:
 
 Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating
-Standardised Text for Scientific Reports. R package version 1.0.0.
+Standardised Text for Scientific Reports. R package version 1.0.0
 <https://doi.org/10.5281/zenodo.13370825>
 
 A BibTeX entry for LaTeX users:
