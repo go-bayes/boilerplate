@@ -41,7 +41,7 @@
 #' @importFrom utils modifyList
 #' @importFrom here here
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger cli_alert_danger
-#' @export
+#' @keywords internal
 boilerplate_init_text <- function(
     categories = c("methods", "results", "discussion", "appendix", "template"),
     merge_strategy = c("keep_existing", "merge_recursive", "overwrite_all"),

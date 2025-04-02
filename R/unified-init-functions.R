@@ -13,7 +13,7 @@
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.
 #'
-#' @return No return value, called for side effects.
+#' @return Invisibly returns a logical vector indicating which categories were successfully initialized.
 #'
 #' @examples
 #' \dontrun{
@@ -46,10 +46,16 @@ boilerplate_init <- function(
 
   if (!quiet) cli_alert_info("initializing {length(categories)} databases with strategy: {merge_strategy}")
 
-  for (category in categories) {
+  # track initialization status for each category
+  initialization_status <- logical(length(categories))
+  names(initialization_status) <- categories
+
+  for (i in seq_along(categories)) {
+    category <- categories[i]
     if (!quiet) cli_alert_info("initializing {category} database")
 
-    boilerplate_init_category(
+    # call boilerplate_init_category and capture result
+    initialization_status[i] <- boilerplate_init_category(
       category = category,
       merge_strategy = merge_strategy,
       data_path = data_path,
@@ -60,14 +66,35 @@ boilerplate_init <- function(
     )
   }
 
+  # count successful initializations
+  successful <- sum(initialization_status)
+  canceled <- length(categories) - successful
+
   if (!quiet) {
     if (dry_run) {
       cli_alert_success("dry run completed for all {length(categories)} categories")
-    } else {
+    } else if (canceled == 0) {
       cli_alert_success("initialization complete for all {length(categories)} categories")
+    } else if (successful == 0) {
+      cli_alert_info("initialization canceled for all {length(categories)} categories")
+    } else {
+      successful_cats <- names(initialization_status)[initialization_status]
+      canceled_cats <- names(initialization_status)[!initialization_status]
+
+      cli_alert_info("initialization complete for {successful}/{length(categories)} categories")
+      if (!quiet && successful > 0) {
+        cli_alert_info("completed: {paste(successful_cats, collapse = ', ')}")
+      }
+      if (!quiet && canceled > 0) {
+        cli_alert_info("canceled: {paste(canceled_cats, collapse = ', ')}")
+      }
     }
   }
+
+  # return invisible status
+  invisible(initialization_status)
 }
+
 
 #' Initialize a Specific Boilerplate Database Category
 #'
@@ -83,7 +110,7 @@ boilerplate_init <- function(
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.
 #'
-#' @return No return value, called for side effects.
+#' @return Logical. TRUE if initialization was successful, FALSE if canceled.
 #'
 #' @examples
 #' \dontrun{
@@ -183,7 +210,7 @@ boilerplate_init_category <- function(
     if (dry_run) {
       if (!quiet) cli_alert_info("would load and merge existing {category} database from {file_path}")
       if (!quiet) cli_alert_success("dry run completed for {category}")
-      return(invisible())
+      return(TRUE) # consider dry runs as successful
     }
 
     # ask for confirmation if needed
@@ -194,7 +221,7 @@ boilerplate_init_category <- function(
 
     if (!proceed) {
       if (!quiet) cli_alert_info("{category} database update cancelled by user")
-      return(invisible())
+      return(FALSE) # return FALSE to indicate cancellation
     }
 
     # load existing database
@@ -226,7 +253,7 @@ boilerplate_init_category <- function(
       action <- if (file_exists) "would overwrite" else "would create new"
       if (!quiet) cli_alert_info("{action} {category} database at: {file_path}")
       if (!quiet) cli_alert_success("dry run completed for {category}")
-      return(invisible())
+      return(TRUE) # consider dry runs as successful
     }
 
     # ask for confirmation if needed and file exists
@@ -237,7 +264,7 @@ boilerplate_init_category <- function(
 
     if (!proceed) {
       if (!quiet) cli_alert_info("{category} database creation/overwrite cancelled by user")
-      return(invisible())
+      return(FALSE) # return FALSE to indicate cancellation
     }
 
     # save default database
@@ -248,6 +275,7 @@ boilerplate_init_category <- function(
   }
 
   if (!quiet) cli_alert_success("{category} initialization complete")
+  return(TRUE) # return TRUE to indicate successful initialization
 }
 
 #' Initialize Boilerplate Text Databases (Deprecated)
@@ -263,7 +291,7 @@ boilerplate_init_category <- function(
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist.
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes.
 #'
-#' @return No return value, called for side effects.
+#' @return Invisibly returns a logical vector indicating which categories were successfully initialized.
 #'
 #' @importFrom cli cli_alert_warning cli_alert_info
 #' @export
@@ -300,7 +328,8 @@ boilerplate_init_text <- function(
     if (!quiet) cli_alert_info("'measures' category removed from initialization list")
   }
 
-  boilerplate_init(
+  # call new function and return its result
+  result <- boilerplate_init(
     categories = categories,
     merge_strategy = merge_strategy,
     data_path = text_path,
@@ -309,6 +338,8 @@ boilerplate_init_text <- function(
     create_dirs = create_dirs,
     confirm = confirm
   )
+
+  return(invisible(result))
 }
 
 #' Initialize Boilerplate Measures Database (Deprecated)
@@ -324,7 +355,7 @@ boilerplate_init_text <- function(
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist.
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes.
 #'
-#' @return No return value, called for side effects.
+#' @return Invisibly returns a logical value indicating if the measures database was successfully initialized.
 #'
 #' @importFrom cli cli_alert_warning
 #' @export
@@ -359,7 +390,8 @@ boilerplate_init_measures <- function(
     if (!quiet) cli_alert_warning("custom file_name is not supported in the new unified system")
   }
 
-  boilerplate_init(
+  # call new function and get result
+  result <- boilerplate_init(
     categories = "measures",
     merge_strategy = merge_strategy,
     data_path = measures_path,
@@ -368,4 +400,8 @@ boilerplate_init_measures <- function(
     create_dirs = create_dirs,
     confirm = confirm
   )
+
+  # return just the measures result (first element of the vector)
+  return(invisible(result["measures"]))
 }
+

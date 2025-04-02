@@ -32,7 +32,7 @@ If NULL (default), uses here::here("boilerplate", "data").}
 \item{confirm}{Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.}
 }
 \value{
-No return value, called for side effects.
+Logical. TRUE if initialization was successful, FALSE if canceled.
 }
 \description{
 This function initializes or updates a specific boilerplate database category with default values.
