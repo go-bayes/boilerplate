@@ -1,5 +1,12 @@
 ## boilerplate
 
+## [2024-04-03] boilerplate 1.0.2
+### Improved 
+ - `get_default_measures_db()` creates measures data with the correct structure.
+ -  improved README examples for clarity
+ -  tidyed up R folder to remove old functions
+
+
 ## [2024-04-03] boilerplate 1.0.1
 ### Improved 
 - `boilerplate_save()` confirms intention to overwrite, in case this occurs accidentally

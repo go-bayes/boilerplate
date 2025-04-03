@@ -409,6 +409,31 @@ boilerplate_generate_measures <- function(
   return(output_text)
 }
 
+
+#' Transform a label using provided mappings
+#'
+#' @param label Character. The original label to transform
+#' @param label_mapping Named character vector. Mappings to transform the label
+#' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
+#'
+#' @return Character. The transformed label
+#' @noRd
+transform_label <- function(label, label_mapping = NULL, quiet = FALSE) {
+  # apply mapping with partial substitutions
+  if (!is.null(label_mapping)) {
+    for (pattern in names(label_mapping)) {
+      if (grepl(pattern, label, fixed = TRUE)) {
+        replacement <- label_mapping[[pattern]]
+        label <- gsub(pattern, replacement, label, fixed = TRUE)
+        if (!quiet) cli_alert_info("mapped label: {pattern} -> {replacement}")
+      }
+    }
+  }
+  return(label)
+}
+
+
+
 #' @rdname boilerplate_generate_measures
 #' @export
 boilerplate_measures_text <- function(
@@ -441,3 +466,6 @@ boilerplate_measures_text <- function(
     quiet = quiet
   )
 }
+
+
+

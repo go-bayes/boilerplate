@@ -1,28 +1,61 @@
+
 #' Get Default Measures Database
 #'
 #' @return List. The default measures database.
 #'
 #' @noRd
 get_default_measures_db <- function() {
+  # return a properly structured measures database with measures at the top level
   list(
-    # Top-level entries
-    scale = "Default scale measure description",
-    reliability = "Default reliability metric description",
-
-    # Subcategories
-    psychological = list(
-      anxiety = "Anxiety was measured using the {{scale_name}} scale [@{{reference}}]",
-      depression = "Depression was measured using the {{scale_name}} scale [@{{reference}}]",
-
-      # Nested example
-      clinical = list(
-        ptsd = "PTSD was assessed using the {{ptsd_scale}} [@{{ptsd_ref}}]",
-        default = "Standard clinical assessment protocols were followed."
+    # anxiety measure as a top-level entry
+    anxiety = list(
+      name = "anxiety scale",
+      description = "anxiety was measured using a standard anxiety scale",
+      reference = "anxiety_reference",
+      waves = "1-3",
+      keywords = c("anxiety", "mental health"),
+      items = list(
+        "feeling nervous or anxious",
+        "worrying too much about different things"
       )
     ),
-    demographic = list(
-      age = "Age was measured in years",
-      gender = "Gender was recorded as self-identified by participants"
+
+    # depression measure as a top-level entry
+    depression = list(
+      name = "depression scale",
+      description = "depression was measured using a standard depression scale",
+      reference = "depression_reference",
+      waves = "1-3",
+      keywords = c("depression", "mental health"),
+      items = list(
+        "feeling down or depressed",
+        "having little interest in doing things"
+      )
+    ),
+
+    # alcohol frequency measure
+    alcohol_frequency = list(
+      name = "alcohol consumption frequency",
+      description = "frequency of alcohol consumption was measured with a single item",
+      reference = "alcohol_reference",
+      waves = "1-4",
+      keywords = c("alcohol", "substance use"),
+      items = list(
+        "how often do you consume alcoholic beverages?"
+      )
+    ),
+
+    # another example measure
+    life_satisfaction = list(
+      name = "life satisfaction scale",
+      description = "life satisfaction was measured using a standard scale",
+      reference = "satisfaction_reference",
+      waves = "1-4",
+      keywords = c("wellbeing", "satisfaction"),
+      items = list(
+        "i am satisfied with my life",
+        "the conditions of my life are excellent"
+      )
     )
   )
 }

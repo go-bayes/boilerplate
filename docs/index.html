@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +111,8 @@
 <span>  <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"go-bayes/boilerplate"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># initialise all databases with a single function</span></span>
+<span><span class="co"># initialise all databases with a single function </span></span>
+<span><span class="co"># (this creates database files in the "boilerplate/data" folder relative to your project root)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import all databases into a unified structure</span></span>
@@ -138,10 +139,94 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_text</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="working-with-custom-data-paths">Working with Custom Data Paths<a class="anchor" aria-label="anchor" href="#working-with-custom-data-paths"></a>
+</h2>
+<p>By default, boilerplate stores database files in the “boilerplate/data” subdirectory of your working directory (using <code><a href="https://here.r-lib.org//reference/here.html" class="external-link">here::here()</a></code>). However, there are many situations where you might need to use a different location:</p>
+<ul>
+<li>Working with multiple projects that each need their own boilerplate databases</li>
+<li>Storing databases in a shared network location</li>
+<li>Organizing files according to a specific project structure</li>
+<li>Testing and development scenarios</li>
+</ul>
+<p>All key functions in the package (<code><a href="reference/boilerplate_init.html">boilerplate_init()</a></code>, <code><a href="reference/boilerplate_import.html">boilerplate_import()</a></code>, and <code><a href="reference/boilerplate_save.html">boilerplate_save()</a></code>) accept a <code>data_path</code> parameter to specify a custom location. When working with custom paths, be sure to use the same path consistently across all functions.</p>
+<div class="section level3">
+<h3 id="example-full-workflow-with-custom-paths">Example: Full Workflow with Custom Paths<a class="anchor" aria-label="anchor" href="#example-full-workflow-with-custom-paths"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define your custom path</span></span>
+<span><span class="va">my_project_path</span> <span class="op">&lt;-</span> <span class="st">"path/to/your/project/data"</span></span>
+<span></span>
+<span><span class="co"># Initialize databases in your custom location</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
+<span>  categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"measures"</span>, <span class="st">"methods"</span>, <span class="st">"results"</span>, <span class="st">"discussion"</span>, <span class="st">"appendix"</span>, <span class="st">"template"</span><span class="op">)</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">my_project_path</span>,  <span class="co"># Specify custom path here</span></span>
+<span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Import all databases from your custom location</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span></span>
+<span>  data_path <span class="op">=</span> <span class="va">my_project_path</span>  <span class="co"># Specify the same custom path</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Make some changes</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">new_measure</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"new measure scale"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"a newly added measure"</span>,</span>
+<span>  reference <span class="op">=</span> <span class="st">"author2023"</span>,</span>
+<span>  waves <span class="op">=</span> <span class="st">"1-2"</span>,</span>
+<span>  keywords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"new"</span>, <span class="st">"test"</span><span class="op">)</span>,</span>
+<span>  items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"test item 1"</span>, <span class="st">"test item 2"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save changes back to your custom location</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span></span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">my_project_path</span>,  <span class="co"># Specify the same custom path</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># To save just a specific category:</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span></span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span>,</span>
+<span>  category <span class="op">=</span> <span class="st">"measures"</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">my_project_path</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="multiple-projects">Multiple Projects<a class="anchor" aria-label="anchor" href="#multiple-projects"></a>
+</h3>
+<p>You can easily work with multiple distinct sets of boilerplate databases by using different paths:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Project A</span></span>
+<span><span class="va">project_a_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"projects/project_a/data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Project B</span></span>
+<span><span class="va">project_b_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"projects/project_b/data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Make changes specific to Project A</span></span>
+<span><span class="va">project_a_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="st">"Participants for Project A were recruited from..."</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">project_a_db</span>, data_path <span class="op">=</span> <span class="st">"projects/project_a/data"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="relative-vs-absolute-paths">Relative vs. Absolute Paths<a class="anchor" aria-label="anchor" href="#relative-vs-absolute-paths"></a>
+</h3>
+<p>Both relative and absolute paths are supported:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Relative path (relative to working directory)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"my_project/data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Absolute path</span></span>
+<span><span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"/Users/researcher/projects/study_2023/data"</span><span class="op">)</span></span></code></pre></div>
+<p>For portable code, consider using relative paths or functions like <code><a href="https://here.r-lib.org//reference/here.html" class="external-link">here::here()</a></code> to construct paths.</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="working-with-individual-databases">Working with Individual Databases<a class="anchor" aria-label="anchor" href="#working-with-individual-databases"></a>
 </h2>
 <p>You can still work with individual databases if preferred:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import just the methods database</span></span>
 <span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
 <span></span>
@@ -168,33 +253,34 @@
 <div class="section level2">
 <h2 id="managing-measures-with-the-unified-database">Managing Measures with the Unified Database<a class="anchor" aria-label="anchor" href="#managing-measures-with-the-unified-database"></a>
 </h2>
-<p>The package provides a simplified way to manage measures and generate formatted text about them:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
+<p>The package provides a simplified way to manage measures and generate formatted text about them. Measures are stored as top-level entries in the measures database, with each measure containing standardized properties like name, description, reference, etc.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Import the unified database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># add a measure directly to the unified database</span></span>
+<span><span class="co"># Add a measure directly to the unified database</span></span>
+<span><span class="co"># Note: Measures should be at the top level of the measures database</span></span>
 <span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">anxiety_gad7</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  name <span class="op">=</span> <span class="st">"Generalised anxiety disorder scale (GAD-7)"</span>,</span>
-<span>  description <span class="op">=</span> <span class="st">"Anxiety was measured using the GAD-7 scale."</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"generalised anxiety disorder scale (GAD-7)"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"anxiety was measured using the GAD-7 scale."</span>,</span>
 <span>  reference <span class="op">=</span> <span class="st">"spitzer2006"</span>,</span>
 <span>  waves <span class="op">=</span> <span class="st">"1-3"</span>,</span>
 <span>  keywords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety"</span>, <span class="st">"mental health"</span>, <span class="st">"gad"</span><span class="op">)</span>,</span>
 <span>  items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Feeling nervous, anxious, or on edge"</span>,</span>
-<span>    <span class="st">"Not being able to stop or control worrying"</span>,</span>
-<span>    <span class="st">"Worrying too much about different things"</span>,</span>
-<span>    <span class="st">"Trouble relaxing"</span></span>
+<span>    <span class="st">"feeling nervous, anxious, or on edge"</span>,</span>
+<span>    <span class="st">"not being able to stop or control worrying"</span>,</span>
+<span>    <span class="st">"worrying too much about different things"</span>,</span>
+<span>    <span class="st">"trouble relaxing"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># save the entire unified database</span></span>
+<span><span class="co"># Save the entire unified database</span></span>
 <span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># alternatively, save just the measures portion</span></span>
+<span><span class="co"># Alternatively, save just the measures portion</span></span>
 <span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span>, <span class="st">"measures"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># then reference it with the same flat name</span></span>
+<span><span class="co"># Then generate text referencing the measure by its top-level name</span></span>
 <span><span class="va">exposure_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
 <span>  variable_heading <span class="op">=</span> <span class="st">"Exposure Variable"</span>,</span>
 <span>  variables <span class="op">=</span> <span class="st">"anxiety_gad7"</span>, <span class="co"># match the name you used above</span></span>
@@ -203,13 +289,12 @@
 <span>  subheading_level <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  print_waves <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">exposure_text</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># you can also use the helper function to extract just the measures</span></span>
+<span><span class="co"># You can also use the helper function to extract just the measures</span></span>
 <span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_measures.html">boilerplate_measures</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># generate text for outcome variables by domain using just the measures database</span></span>
+<span><span class="co"># Generate text for outcome variables using just the measures database</span></span>
 <span><span class="va">psych_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
 <span>  variable_heading <span class="op">=</span> <span class="st">"Psychological Outcomes"</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety_gad7"</span>, <span class="st">"depression_phq9"</span><span class="op">)</span>,</span>
@@ -220,7 +305,7 @@
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">psych_text</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># generate statistical methods text</span></span>
+<span><span class="co"># Generate statistical methods text</span></span>
 <span><span class="va">stats_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"statistical.longitudinal.lmtp"</span><span class="op">)</span>,</span>
@@ -231,7 +316,15 @@
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>  <span class="co"># pass the unified database</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># combine all sections into a complete methods section</span></span>
+<span><span class="co"># Initialize a sample text (assuming this was defined earlier)</span></span>
+<span><span class="va">sample_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
+<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
+<span>  sections <span class="op">=</span> <span class="st">"sample"</span>,</span>
+<span>  global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>population <span class="op">=</span> <span class="st">"university students"</span>, timeframe <span class="op">=</span> <span class="st">"2023-2024"</span><span class="op">)</span>,</span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Combine all sections into a complete methods section</span></span>
 <span><span class="va">methods_section</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
 <span>  <span class="st">"## Methods\n\n"</span>,</span>
 <span>  <span class="va">sample_text</span>, <span class="st">"\n\n"</span>,</span>
@@ -243,14 +336,36 @@
 <span>  sep <span class="op">=</span> <span class="st">""</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_section</span><span class="op">)</span></span>
-<span><span class="co"># save the methods section to a file that can be included in a quarto document</span></span>
+<span></span>
+<span><span class="co"># Save the methods section to a file that can be included in a quarto document</span></span>
 <span><span class="co"># writeLines(methods_section, "methods_section.qmd")</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="important-notes-on-measure-structure">Important Notes on Measure Structure<a class="anchor" aria-label="anchor" href="#important-notes-on-measure-structure"></a>
+</h3>
+<p>When adding measures to the database:</p>
+<ol style="list-style-type: decimal">
+<li>Each measure should be a top-level entry in the measures database</li>
+<li>Standard properties include: <code>name</code>, <code>description</code>, <code>reference</code>, <code>waves</code>, <code>keywords</code>, and <code>items</code>
+</li>
+<li>The <code>items</code> property should be a list of item text strings</li>
+<li>When referencing measures in <code><a href="reference/boilerplate_generate_measures.html">boilerplate_generate_measures()</a></code>, use the top-level name</li>
+</ol>
+<p>Incorrect structure (avoid this):</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Don't organize measures under categories at the top level</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">psychological</span><span class="op">$</span><span class="va">anxiety</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>  <span class="co"># WRONG</span></span></code></pre></div>
+<p>Correct structure:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Add measures directly at the top level</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">anxiety_gad7</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>  <span class="co"># CORRECT</span></span>
+<span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">depression_phq9</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="co"># CORRECT</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="appendix-content-with-the-unified-database">Appendix Content with the Unified Database<a class="anchor" aria-label="anchor" href="#appendix-content-with-the-unified-database"></a>
 </h2>
 <p>The package supports appendix content that can be managed within the unified database:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -278,7 +393,7 @@
 <h2 id="creating-complete-document-workflows">Creating Complete Document Workflows<a class="anchor" aria-label="anchor" href="#creating-complete-document-workflows"></a>
 </h2>
 <p>You can create complete workflows that integrate methods, results, and templates using the unified database:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -331,7 +446,7 @@
 <h2 id="advanced-usage-audience-specific-reports-with-the-unified-database">Advanced Usage: Audience-Specific Reports with the Unified Database<a class="anchor" aria-label="anchor" href="#advanced-usage-audience-specific-reports-with-the-unified-database"></a>
 </h2>
 <p>You can create tailored reports for different audiences from the same underlying data:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -375,7 +490,7 @@
 <h2 id="helper-functions-for-the-unified-database">Helper Functions for the Unified Database<a class="anchor" aria-label="anchor" href="#helper-functions-for-the-unified-database"></a>
 </h2>
 <p>The unified database approach includes several helper functions to extract specific categories:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -399,7 +514,7 @@
 <h2 id="document-templates-with-the-unified-database">Document Templates with the Unified Database<a class="anchor" aria-label="anchor" href="#document-templates-with-the-unified-database"></a>
 </h2>
 <p>The package supports document templates that can be used to create complete documents with placeholders for dynamic content:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import unified database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -429,7 +544,7 @@
 <h2 id="complete-workflow-example-with-the-unified-database">Complete Workflow Example with the Unified Database<a class="anchor" aria-label="anchor" href="#complete-workflow-example-with-the-unified-database"></a>
 </h2>
 <p>This example demonstrates combining multiple components to create a complete methods section using the unified database approach:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># initialise all databases and import them</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -486,7 +601,7 @@
 <h2 id="backward-compatibility">Backward Compatibility<a class="anchor" aria-label="anchor" href="#backward-compatibility"></a>
 </h2>
 <p>The package maintains backward compatibility with previous versions through wrapper functions:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># old style still works with deprecation warnings</span></span>
 <span><span class="va">measures_db_old</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_measures.html">boilerplate_manage_measures</a></span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span>
 <span><span class="va">methods_db_old</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_manage_text.html">boilerplate_manage_text</a></span><span class="op">(</span>action <span class="op">=</span> <span class="st">"list"</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
@@ -501,16 +616,16 @@
 <p>To cite the boilerplate package in publications, please use:</p>
 <p>Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 1.0.1 <a href="https://doi.org/10.5281/zenodo.13370825" class="external-link uri">https://doi.org/10.5281/zenodo.13370825</a></p>
 <p>A BibTeX entry for LaTeX users:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">@software{bulbulia_boilerplate_2025,</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">  author       = {Bulbulia, Joseph},</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">  title        = {{boilerplate: Tools for Managing and Generating </span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">                   Standardised Text for Scientific Reports}},</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">  year         = 2025,</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">  publisher    = {Zenodo},</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">  version      = {1.0.1},</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">  doi          = {10.5281/zenodo.13370825},</span></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">  url          = {https://github.com/go-bayes/boilerplate}</span></span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co">@software{bulbulia_boilerplate_2025,</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">  author       = {Bulbulia, Joseph},</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co">  title        = {{boilerplate: Tools for Managing and Generating </span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">                   Standardised Text for Scientific Reports}},</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">  year         = 2025,</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">  publisher    = {Zenodo},</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">  version      = {1.0.1},</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">  doi          = {10.5281/zenodo.13370825},</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">  url          = {https://github.com/go-bayes/boilerplate}</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="co">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="licence">Licence<a class="anchor" aria-label="anchor" href="#licence"></a>
