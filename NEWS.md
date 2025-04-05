@@ -1,5 +1,15 @@
 ## boilerplate
 
+## [2024-04-03] boilerplate 1.0.3
+### New
+- `boilerplate_init()` supports initialising empty database structures by default.
+- `boilerplate_expost()` export wholes or parts of databases, for 
+  - Full database export (ideal for versioning)
+  - Selective export using dot notation (e.g., "methods.statistical.longitudinal")
+  - Wildcard selections using "*" (e.g., "methods.*" selects all methods)
+  - Category-prefixed paths for unified databases
+- Export is distinct from save: use `boilerplate_save()` for normal database updates and `boilerplate_export()` for creating standalone exports.
+
 ## [2024-04-03] boilerplate 1.0.2
 ### Improved 
  - `get_default_measures_db()` creates measures data with the correct structure.

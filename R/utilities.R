@@ -377,3 +377,97 @@ apply_template_vars <- function(text, template_vars = list(), warn_missing = TRU
     return(text)
   })
 }
+#' Get default database for a category
+#'
+#' @param category Character. Category to get default database for.
+#'
+#' @return List. Default database for the category.
+#'
+#' @noRd
+get_default_db <- function(category) {
+  # this would be implemented to return category-specific defaults
+  # placeholder implementation - in reality this would have actual default content
+  if (category == "methods") {
+    return(list(
+      sample = "Participants were recruited from {{population}}.",
+      statistical = list(
+        longitudinal = list(
+          lmtp = "We used the longitudinal modified treatment policy estimator."
+        )
+      )
+    ))
+  } else if (category == "results") {
+    return(list(
+      descriptive = "We describe the characteristics of the sample.",
+      primary = "Our primary analysis revealed {{result}}."
+    ))
+  } else if (category == "discussion") {
+    return(list(
+      limitations = "This study has several limitations.",
+      strengths = "The strengths of this study include {{strengths}}.",
+      future = "Future research should explore {{future_directions}}."
+    ))
+  } else if (category == "measures") {
+    return(list(
+      demographics = "Standard demographic information was collected.",
+      outcomes = "Our primary outcome was {{primary_outcome}}."
+    ))
+  } else {
+    return(list())
+  }
+}
+
+#' Get Empty Database Structure for a Category
+#'
+#' Creates an empty database structure with only top-level entries
+#' based on the default database for a category.
+#'
+#' @param category Character. Category to get empty database structure for.
+#'
+#' @return List. Empty structure for the category.
+#'
+#' @noRd
+get_empty_db_structure <- function(category) {
+  # get the default database first
+  default_db <- get_default_db(category)
+
+  # create empty structure based on default
+  empty_db <- list()
+
+  # for each top-level entry in the default database
+  for (name in names(default_db)) {
+    entry <- default_db[[name]]
+
+    # if entry is a list (nested structure), create an empty list
+    # otherwise create NULL placeholder
+    if (is.list(entry)) {
+      empty_db[[name]] <- list()
+    } else {
+      empty_db[[name]] <- NULL
+    }
+  }
+
+  return(empty_db)
+}
+
+#' Get Empty Measures Database Structure
+#'
+#' @return List. Empty measures database structure.
+#'
+#' @noRd
+get_empty_measures_db_structure <- function() {
+  # for measures, we'll create an example empty structure
+  # this could alternatively be based on default measures
+  list(
+    # example placeholder for an anxiety measure
+    anxiety = list(
+      name = NULL,
+      description = NULL,
+      reference = NULL,
+      waves = NULL,
+      keywords = NULL,
+      items = NULL
+    )
+  )
+}
+

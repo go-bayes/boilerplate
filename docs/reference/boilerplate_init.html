@@ -9,7 +9,7 @@ It's a convenience wrapper around boilerplate_init_category() for all categories
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,8 @@ It's a convenience wrapper around boilerplate_init_category() for all categories
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dry_run <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  confirm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  create_empty <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,6 +86,11 @@ If NULL (default), uses here::here("boilerplate", "data").</p></dd>
 <dt id="arg-confirm">confirm<a class="anchor" aria-label="anchor" href="#arg-confirm"></a></dt>
 <dd><p>Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.</p></dd>
 
+
+<dt id="arg-create-empty">create_empty<a class="anchor" aria-label="anchor" href="#arg-create-empty"></a></dt>
+<dd><p>Logical. If TRUE, creates empty database structures with just the template headings.
+Default is TRUE. Set to FALSE to use default content.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -97,8 +103,11 @@ If NULL (default), uses here::here("boilerplate", "data").</p></dd>
 <span class="r-in"><span><span class="co"># run in dry-run mode first to see what would happen</span></span></span>
 <span class="r-in"><span><span class="fu">boilerplate_init</span><span class="op">(</span>dry_run <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># initialize all databases with confirmation prompts</span></span></span>
-<span class="r-in"><span><span class="fu">boilerplate_init</span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># initialize all databases with empty structures</span></span></span>
+<span class="r-in"><span><span class="fu">boilerplate_init</span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, create_empty <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># initialize all databases with default content</span></span></span>
+<span class="r-in"><span><span class="fu">boilerplate_init</span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, create_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># initialize specific categories only</span></span></span>
 <span class="r-in"><span><span class="fu">boilerplate_init</span><span class="op">(</span></span></span>

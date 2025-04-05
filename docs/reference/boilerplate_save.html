@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,9 @@
 <span>  create_dirs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  entry_level_confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  create_backup <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  create_backup <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  select_elements <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_file <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -88,6 +90,17 @@ If NULL (default), uses here::here("boilerplate", "data").</p></dd>
 <dt id="arg-create-backup">create_backup<a class="anchor" aria-label="anchor" href="#arg-create-backup"></a></dt>
 <dd><p>Logical. If TRUE, creates a backup of existing database before saving. Default is TRUE.</p></dd>
 
+
+<dt id="arg-select-elements">select_elements<a class="anchor" aria-label="anchor" href="#arg-select-elements"></a></dt>
+<dd><p>Character vector. Paths to select in dot notation (e.g., "statistical.longitudinal.lmtp").
+Use "<em>" for wildcard selection (e.g., "statistical.</em>" selects all statistical methods).
+If NULL (default), saves the entire database.</p></dd>
+
+
+<dt id="arg-output-file">output_file<a class="anchor" aria-label="anchor" href="#arg-output-file"></a></dt>
+<dd><p>Character. Name of the output file if saving selected elements to a separate file.
+If NULL (default), overwrites the original file.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -108,6 +121,30 @@ were successfully saved, or the file path if a single category was saved.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> using default path: /Users/joseph/GIT/boilerplate/boilerplate/data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> directory does not exist: /Users/joseph/GIT/boilerplate/boilerplate/data</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in boilerplate_save(methods_db, "methods"):</span> Directory does not exist: /Users/joseph/GIT/boilerplate/boilerplate/data. Set create_dirs=TRUE to create it.</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># save selected elements from a database</span></span></span>
+<span class="r-in"><span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> importing all categories</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> using default path: /Users/joseph/GIT/boilerplate/boilerplate/data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> data directory does not exist: /Users/joseph/GIT/boilerplate/boilerplate/data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> importing measures database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> measures database file not found, using default</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> importing methods database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> methods database file not found, using default</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> importing results database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> results database file not found, using default</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> importing discussion database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> discussion database file not found, using default</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> importing appendix database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> appendix database file not found, using default</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> importing template database</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> template database file not found, using default</span>
+<span class="r-in"><span><span class="fu">boilerplate_save</span><span class="op">(</span><span class="va">unified_db</span>,</span></span>
+<span class="r-in"><span>                select_elements <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"methods.statistical.*"</span>, <span class="st">"results.main_effect"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                output_file <span class="op">=</span> <span class="st">"selected_elements.rds"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> using default path: /Users/joseph/GIT/boilerplate/boilerplate/data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> directory does not exist: /Users/joseph/GIT/boilerplate/boilerplate/data</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in boilerplate_save(unified_db, select_elements = c("methods.statistical.*",     "results.main_effect"), output_file = "selected_elements.rds"):</span> Directory does not exist: /Users/joseph/GIT/boilerplate/boilerplate/data. Set create_dirs=TRUE to create it.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># save multiple databases at once</span></span></span>
 <span class="r-in"><span><span class="va">all_dbs</span> <span class="op">&lt;-</span> <span class="fu"><a href="boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span></span>

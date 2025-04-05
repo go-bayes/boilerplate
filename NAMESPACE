@@ -3,6 +3,7 @@
 export(boilerplate_add_entry)
 export(boilerplate_appendix)
 export(boilerplate_discussion)
+export(boilerplate_export)
 export(boilerplate_generate_measures)
 export(boilerplate_generate_text)
 export(boilerplate_get_entry)

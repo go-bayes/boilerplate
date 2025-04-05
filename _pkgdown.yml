@@ -32,6 +32,7 @@ vignette_engine: quarto
 reference:
   - title: "Core Database Functions"
     contents:
+    - boilerplate_export
     - boilerplate_import
     - boilerplate_save
     - boilerplate_init

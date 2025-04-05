@@ -38,8 +38,9 @@ and provides consistent management of all content types.
 The `boilerplate` package includes several safety features to prevent
 accidental overwrites:
 
-- The unified `boilerplate_save()` function requires explicit
-  specification of categories when saving individual databases
+- The unified `boilerplate_save()` and `boilerplate_export()` functions
+  requires explicit specification of categories when saving individual
+  databases
 - Standard file naming conventions ensure consistency across projects
 - All functions that modify files include confirmation prompts (when
   `confirm=TRUE`) before making changes
@@ -111,9 +112,10 @@ location:
 - Testing and development scenarios
 
 All key functions in the package (`boilerplate_init()`,
-`boilerplate_import()`, and `boilerplate_save()`) accept a `data_path`
-parameter to specify a custom location. When working with custom paths,
-be sure to use the same path consistently across all functions.
+`boilerplate_import()`, `boilerplate_save()`, and
+`boilerplate_export()`) accept a `data_path` parameter to specify a
+custom location. When working with custom paths, be sure to use the same
+path consistently across all functions.
 
 ### Example: Full Workflow with Custom Paths
 
@@ -220,6 +222,66 @@ methods_text <- boilerplate_generate_text(
 
 cat(methods_text)
 ```
+
+## Creating Empty Databases
+
+The package supports initialising empty database structures by default,
+providing a clean slate for your project without sample content.
+
+``` r
+# Initialise empty databases (default behavior)
+boilerplate_init(
+  categories = c("methods", "results"),
+  data_path = "~/project/data",
+  create_dirs = TRUE
+)
+
+# Initialise with default content when needed
+boilerplate_init(
+  categories = c("methods", "results"),
+  data_path = "~/project/data",
+  create_dirs = TRUE,
+  create_empty = FALSE
+)
+```
+
+Empty databases provide just the top-level structure without example
+content, making it easier to start with a clean slate.
+
+## Database Export
+
+The package now supports exporting databases for versioning or sharing
+specific elements:
+
+``` r
+# Export entire database for versioning
+# Creates a point-in-time snapshot of your boilerplate content
+unified_db <- boilerplate_import()
+boilerplate_export(
+  db = unified_db,
+  output_file = "boilerplate_v1.0.rds",
+  data_path = "~/project/data"
+)
+
+# Export selected elements (specific methods and results)
+# Useful for sharing specialized subsets with collaborators
+boilerplate_export(
+  db = unified_db,
+  output_file = "causal_methods_subset.rds",
+  select_elements = c("methods.statistical.*", "results.main_effect"),
+  data_path = "~/project/data"
+)
+```
+
+The export function supports: - Full database export (ideal for
+versioning) - Selective export using dot notation (e.g.,
+“methods.statistical.longitudinal”) - Wildcard selections using “*”
+(e.g., ”methods.*” selects all methods) - Category-prefixed paths for
+unified databases
+
+Export is distinct from save: use `boilerplate_save()` for normal
+database updates and `boilerplate_export()` for creating standalone
+exports.
 
 ## Managing Measures with the Unified Database
 
@@ -609,7 +671,7 @@ methods_db <- boilerplate_import("methods")
 To cite the boilerplate package in publications, please use:
 
 Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating
-Standardised Text for Scientific Reports. R package version 1.0.1
+Standardised Text for Scientific Reports. R package version 1.0.3
 <https://doi.org/10.5281/zenodo.13370825>
 
 A BibTeX entry for LaTeX users:
@@ -621,7 +683,7 @@ A BibTeX entry for LaTeX users:
                    Standardised Text for Scientific Reports}},
   year         = 2025,
   publisher    = {Zenodo},
-  version      = {1.0.1},
+  version      = {1.0.3},
   doi          = {10.5281/zenodo.13370825},
   url          = {https://github.com/go-bayes/boilerplate}
 }

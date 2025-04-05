@@ -1,3 +1,57 @@
+#' Get Empty Database Structure for a Category
+#'
+#' Creates an empty database structure with only top-level entries
+#' based on the default database for a category.
+#'
+#' @param category Character. Category to get empty database structure for.
+#'
+#' @return List. Empty structure for the category.
+#'
+#' @noRd
+get_empty_db_structure <- function(category) {
+  # get the default database first
+  default_db <- get_default_db(category)
+
+  # create empty structure based on default
+  empty_db <- list()
+
+  # for each top-level entry in the default database
+  for (name in names(default_db)) {
+    entry <- default_db[[name]]
+
+    # if entry is a list (nested structure), create an empty list
+    # otherwise create NULL placeholder
+    if (is.list(entry)) {
+      empty_db[[name]] <- list()
+    } else {
+      empty_db[[name]] <- NULL
+    }
+  }
+
+  return(empty_db)
+}
+
+#' Get Empty Measures Database Structure
+#'
+#' @return List. Empty measures database structure.
+#'
+#' @noRd
+get_empty_measures_db_structure <- function() {
+  # for measures, we'll create an example empty structure
+  # this could alternatively be based on default measures
+  list(
+    # example placeholder for an anxiety measure
+    anxiety = list(
+      name = NULL,
+      description = NULL,
+      reference = NULL,
+      waves = NULL,
+      keywords = NULL,
+      items = NULL
+    )
+  )
+}
+
 #' Initialize All Boilerplate Databases
 #'
 #' This function initializes or updates all boilerplate databases with default values.
@@ -12,6 +66,8 @@
 #' @param dry_run Logical. If TRUE, simulates the operation without writing files. Default is FALSE.
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.
+#' @param create_empty Logical. If TRUE, creates empty database structures with just the template headings.
+#'   Default is TRUE. Set to FALSE to use default content.
 #'
 #' @return Invisibly returns a logical vector indicating which categories were successfully initialized.
 #'
@@ -20,8 +76,11 @@
 #' # run in dry-run mode first to see what would happen
 #' boilerplate_init(dry_run = TRUE)
 #'
-#' # initialize all databases with confirmation prompts
-#' boilerplate_init(create_dirs = TRUE)
+#' # initialize all databases with empty structures
+#' boilerplate_init(create_dirs = TRUE, create_empty = TRUE)
+#'
+#' # initialize all databases with default content
+#' boilerplate_init(create_dirs = TRUE, create_empty = FALSE)
 #'
 #' # initialize specific categories only
 #' boilerplate_init(
@@ -40,11 +99,13 @@ boilerplate_init <- function(
     quiet = FALSE,
     dry_run = FALSE,
     create_dirs = FALSE,
-    confirm = TRUE
+    confirm = TRUE,
+    create_empty = TRUE
 ) {
   merge_strategy <- match.arg(merge_strategy)
 
   if (!quiet) cli_alert_info("initializing {length(categories)} databases with strategy: {merge_strategy}")
+  if (create_empty && !quiet) cli_alert_info("creating empty database structures")
 
   # track initialization status for each category
   initialization_status <- logical(length(categories))
@@ -62,7 +123,8 @@ boilerplate_init <- function(
       quiet = quiet,
       dry_run = dry_run,
       create_dirs = create_dirs,
-      confirm = confirm
+      confirm = confirm,
+      create_empty = create_empty
     )
   }
 
@@ -109,19 +171,22 @@ boilerplate_init <- function(
 #' @param dry_run Logical. If TRUE, simulates the operation without writing files. Default is FALSE.
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.
+#' @param create_empty Logical. If TRUE, creates empty database structures with just the template headings.
+#'   Default is TRUE. Set to FALSE to use default content.
 #'
 #' @return Logical. TRUE if initialization was successful, FALSE if canceled.
 #'
 #' @examples
 #' \dontrun{
-#' # initialize the methods database
-#' boilerplate_init_category("methods", create_dirs = TRUE)
+#' # initialize the methods database with empty structure
+#' boilerplate_init_category("methods", create_dirs = TRUE, create_empty = TRUE)
 #'
-#' # initialize measures database with recursive merging
+#' # initialize measures database with recursive merging and default content
 #' boilerplate_init_category(
 #'   category = "measures",
 #'   merge_strategy = "merge_recursive",
-#'   create_dirs = TRUE
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE
 #' )
 #' }
 #'
@@ -135,7 +200,8 @@ boilerplate_init_category <- function(
     quiet = FALSE,
     dry_run = FALSE,
     create_dirs = FALSE,
-    confirm = TRUE
+    confirm = TRUE,
+    create_empty = TRUE
 ) {
   # validate category
   all_categories <- c("measures", "methods", "results", "discussion", "appendix", "template")
@@ -147,6 +213,7 @@ boilerplate_init_category <- function(
   merge_strategy <- match.arg(merge_strategy)
 
   if (!quiet) cli_alert_info("initializing {category} database with strategy: {merge_strategy}")
+  if (create_empty && !quiet) cli_alert_info("creating empty database structure")
   if (dry_run && !quiet) cli_alert_info("dry run mode: no files will be written")
 
   # set default path if not provided
@@ -186,12 +253,28 @@ boilerplate_init_category <- function(
   # get file path
   file_path <- file.path(data_path, paste0(category, "_db.rds"))
 
-  # get default database for the category
-  if (!quiet) cli_alert_info("loading default {category} database")
-  if (category == "measures") {
-    default_db <- get_default_measures_db()
+  # get default database for the category (either full or empty)
+  if (!quiet) {
+    if (create_empty) {
+      cli_alert_info("loading empty {category} database structure")
+    } else {
+      cli_alert_info("loading default {category} database")
+    }
+  }
+
+  # get appropriate database based on create_empty flag
+  if (create_empty) {
+    if (category == "measures") {
+      default_db <- get_empty_measures_db_structure()
+    } else {
+      default_db <- get_empty_db_structure(category)
+    }
   } else {
-    default_db <- get_default_db(category)
+    if (category == "measures") {
+      default_db <- get_default_measures_db()
+    } else {
+      default_db <- get_default_db(category)
+    }
   }
 
   # check if file exists and determine operation type
@@ -282,7 +365,6 @@ boilerplate_init_category <- function(
   if (!quiet) cli_alert_success("{category} initialization complete")
   return(TRUE) # return TRUE to indicate successful initialization
 }
-
 #' Initialize Boilerplate Text Databases (Deprecated)
 #'
 #' This function is deprecated. Please use boilerplate_init() instead.
@@ -409,4 +491,8 @@ boilerplate_init_measures <- function(
   # return just the measures result (first element of the vector)
   return(invisible(result["measures"]))
 }
+
+
+
+
 
