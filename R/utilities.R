@@ -377,45 +377,7 @@ apply_template_vars <- function(text, template_vars = list(), warn_missing = TRU
     return(text)
   })
 }
-#' Get default database for a category
-#'
-#' @param category Character. Category to get default database for.
-#'
-#' @return List. Default database for the category.
-#'
-#' @noRd
-get_default_db <- function(category) {
-  # this would be implemented to return category-specific defaults
-  # placeholder implementation - in reality this would have actual default content
-  if (category == "methods") {
-    return(list(
-      sample = "Participants were recruited from {{population}}.",
-      statistical = list(
-        longitudinal = list(
-          lmtp = "We used the longitudinal modified treatment policy estimator."
-        )
-      )
-    ))
-  } else if (category == "results") {
-    return(list(
-      descriptive = "We describe the characteristics of the sample.",
-      primary = "Our primary analysis revealed {{result}}."
-    ))
-  } else if (category == "discussion") {
-    return(list(
-      limitations = "This study has several limitations.",
-      strengths = "The strengths of this study include {{strengths}}.",
-      future = "Future research should explore {{future_directions}}."
-    ))
-  } else if (category == "measures") {
-    return(list(
-      demographics = "Standard demographic information was collected.",
-      outcomes = "Our primary outcome was {{primary_outcome}}."
-    ))
-  } else {
-    return(list())
-  }
-}
+
 
 #' Get Empty Database Structure for a Category
 #'

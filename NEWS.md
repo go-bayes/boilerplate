@@ -1,6 +1,12 @@
 ## boilerplate
 
-## [2024-04-03] boilerplate 1.0.3
+## [2024-04-06] boilerplate 1.0.4
+
+### Improved
+- cleaned up codebase
+- added back missing helper function `find_changes()`
+
+## [2024-04-05] boilerplate 1.0.3
 ### New
 - `boilerplate_init()` supports initialising empty database structures by default.
 - `boilerplate_export()` export wholes or parts of databases, for 

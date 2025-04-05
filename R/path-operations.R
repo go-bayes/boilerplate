@@ -231,6 +231,7 @@ find_matching_paths <- function(db, pattern_parts, current_path = "") {
   return(matching_paths)
 }
 
+
 #' Extract an Element at a Specific Path
 #'
 #' @param db List. The source database.

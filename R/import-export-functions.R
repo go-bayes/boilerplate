@@ -1,3 +1,67 @@
+# helper function to find changes between old and new databases
+find_changes <- function(old_db, new_db, prefix = "") {
+  if (!is.list(old_db) || !is.list(new_db)) {
+    # For non-list entries, just return if they're different
+    if (!identical(old_db, new_db)) {
+      return(list(modified = prefix))
+    } else {
+      return(list(added = character(0), removed = character(0), modified = character(0)))
+    }
+  }
+
+  # Start with empty change lists
+  added <- character(0)
+  removed <- character(0)
+  modified <- character(0)
+
+  # Find added and modified entries
+  for (name in names(new_db)) {
+    key <- if (prefix == "") name else paste0(prefix, ".", name)
+
+    if (!name %in% names(old_db)) {
+      # Entry exists in new but not in old
+      added <- c(added, key)
+    } else {
+      # Entry exists in both, check if modified
+      if (is.list(new_db[[name]]) && is.list(old_db[[name]])) {
+        # Recursive comparison for nested lists
+        sub_changes <- find_changes(old_db[[name]], new_db[[name]], key)
+        added <- c(added, sub_changes$added)
+        removed <- c(removed, sub_changes$removed)
+        modified <- c(modified, sub_changes$modified)
+      } else if (!identical(old_db[[name]], new_db[[name]])) {
+        # Entry exists in both but is different
+        modified <- c(modified, key)
+      }
+    }
+  }
+
+  # Find removed entries
+  for (name in names(old_db)) {
+    if (!name %in% names(new_db)) {
+      key <- if (prefix == "") name else paste0(prefix, ".", name)
+      removed <- c(removed, key)
+    }
+  }
+
+  return(list(added = added, removed = removed, modified = modified))
+}
+
+# helper function to create a backup file
+create_db_backup <- function(file_path, quiet = FALSE) {
+  if (!file.exists(file_path)) return(FALSE)
+
+  # Create backup filename with timestamp
+  timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+  backup_path <- paste0(file_path, ".", timestamp, ".bak")
+
+  # Copy file to backup
+  file.copy(file_path, backup_path)
+  if (!quiet) cli_alert_info("created backup at: {backup_path}")
+
+  return(backup_path)
+}
+
 #' Import Boilerplate Database(s)
 #'
 #' This function imports one or more boilerplate databases from disk.
@@ -99,197 +163,6 @@ boilerplate_import <- function(
   }
 
   return(result)
-}
-
-#' Extract Selected Elements from a Database
-#'
-#' This function extracts selected elements from a database based on specified paths.
-#'
-#' @param db List. The database to extract from.
-#' @param select_paths Character vector. Paths to select in dot notation (e.g., "methods.statistical.longitudinal").
-#'   Use "*" for wildcard selection at any level (e.g., "methods.*" selects all methods).
-#'
-#' @return List. A new database containing only the selected elements.
-#'
-#' @noRd
-extract_selected_elements <- function(db, select_paths) {
-  if (length(select_paths) == 0) {
-    return(db)  # return full database if no paths specified
-  }
-
-  # Initialize result database
-  result_db <- list()
-
-  # Process each selection path
-  for (path in select_paths) {
-    # Handle wildcards
-    if (grepl("\\*", path)) {
-      # Contains wildcards
-      result_db <- extract_wildcard_path(db, path, result_db)
-    } else {
-      # Exact path
-      result_db <- extract_exact_path(db, path, result_db)
-    }
-  }
-
-  return(result_db)
-}
-
-#' Extract Elements Matching a Wildcard Path
-#'
-#' @param db List. The source database.
-#' @param wildcard_path Character. Path with wildcards.
-#' @param result_db List. The result database to update.
-#'
-#' @return List. The updated result database.
-#'
-#' @noRd
-extract_wildcard_path <- function(db, wildcard_path, result_db) {
-  # Split path into parts
-  path_parts <- strsplit(wildcard_path, "\\.")[[1]]
-
-  # Find matching paths
-  all_paths <- find_matching_paths(db, path_parts)
-
-  # Extract each matching path
-  for (path in all_paths) {
-    result_db <- extract_exact_path(db, path, result_db)
-  }
-
-  return(result_db)
-}
-
-#' Find Paths Matching a Pattern with Wildcards
-#'
-#' @param db List. The database to search.
-#' @param pattern_parts Character vector. Path pattern parts, with possible wildcards.
-#' @param current_path Character. Current path being built (for recursion).
-#'
-#' @return Character vector. Paths that match the pattern.
-#'
-#' @noRd
-find_matching_paths <- function(db, pattern_parts, current_path = "") {
-  if (!is.list(db) || length(pattern_parts) == 0) {
-    return(character(0))
-  }
-
-  matching_paths <- character(0)
-
-  # Get current part and remaining parts
-  current_part <- pattern_parts[1]
-  remaining_parts <- pattern_parts[-1]
-
-  # Handle wildcard at current level
-  if (current_part == "*") {
-    # Select all items at this level
-    for (name in names(db)) {
-      # Build path
-      path_prefix <- if (current_path == "") name else paste(current_path, name, sep = ".")
-
-      if (length(remaining_parts) == 0) {
-        # This is the end of the pattern, add current path
-        matching_paths <- c(matching_paths, path_prefix)
-      } else if (is.list(db[[name]])) {
-        # Continue search in nested structure
-        nested_paths <- find_matching_paths(db[[name]], remaining_parts, path_prefix)
-        matching_paths <- c(matching_paths, nested_paths)
-      }
-    }
-  } else {
-    # Exact match at current level
-    if (current_part %in% names(db)) {
-      # Build path
-      path_prefix <- if (current_path == "") current_part else paste(current_path, current_part, sep = ".")
-
-      if (length(remaining_parts) == 0) {
-        # This is the end of the pattern, add current path
-        matching_paths <- c(matching_paths, path_prefix)
-      } else if (is.list(db[[current_part]])) {
-        # Continue search in nested structure
-        nested_paths <- find_matching_paths(db[[current_part]], remaining_parts, path_prefix)
-        matching_paths <- c(matching_paths, nested_paths)
-      }
-    }
-  }
-
-  return(matching_paths)
-}
-
-#' Extract an Element at a Specific Path
-#'
-#' @param db List. The source database.
-#' @param path Character. Dot-separated path to the element.
-#' @param result_db List. The result database to update.
-#'
-#' @return List. The updated result database.
-#'
-#' @noRd
-extract_exact_path <- function(db, path, result_db) {
-  # Split the path into parts
-  path_parts <- strsplit(path, "\\.")[[1]]
-
-  # Get the value at the specified path
-  value <- get_nested_value(db, path_parts)
-
-  # Update result database with the extracted value
-  result_db <- set_nested_value(result_db, path_parts, value)
-
-  return(result_db)
-}
-
-#' Get a Nested Value from a Database
-#'
-#' @param db List. The database to query.
-#' @param path_parts Character vector. Path components.
-#'
-#' @return Any. The value at the specified path.
-#'
-#' @noRd
-get_nested_value <- function(db, path_parts) {
-  current_item <- db
-
-  for (part in path_parts) {
-    if (!is.list(current_item) || !(part %in% names(current_item))) {
-      stop("Path component '", part, "' not found")
-    }
-    current_item <- current_item[[part]]
-  }
-
-  return(current_item)
-}
-
-#' Set a Nested Value in a Database
-#'
-#' @param db List. The database to modify.
-#' @param path_parts Character vector. Path components.
-#' @param value Any. The value to set.
-#'
-#' @return List. The modified database.
-#'
-#' @noRd
-set_nested_value <- function(db, path_parts, value) {
-  if (length(path_parts) == 1) {
-    # Set value at top level
-    db[[path_parts[1]]] <- value
-    return(db)
-  }
-
-  # Process nested path
-  current_part <- path_parts[1]
-  remaining_parts <- path_parts[-1]
-
-  # Create nested structure if needed
-  if (!(current_part %in% names(db))) {
-    db[[current_part]] <- list()
-  } else if (!is.list(db[[current_part]])) {
-    # Handle case where existing item is not a list
-    stop("Cannot set nested path: '", current_part, "' exists but is not a list")
-  }
-
-  # Recursively set nested value
-  db[[current_part]] <- set_nested_value(db[[current_part]], remaining_parts, value)
-
-  return(db)
 }
 
 #' Save Boilerplate Database
@@ -618,7 +491,7 @@ boilerplate_save <- function(
 
     # Create backup if requested
     if (create_backup && has_changes) {
-      backup_path <- create_db_backup(file_path)
+      backup_path <- create_db_backup(file_path, quiet)
     }
   } else if (file.exists(file_path) && confirm) {
     # Simple file-level confirmation without entry detection
