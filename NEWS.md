@@ -3,7 +3,7 @@
 ## [2024-04-03] boilerplate 1.0.3
 ### New
 - `boilerplate_init()` supports initialising empty database structures by default.
-- `boilerplate_expost()` export wholes or parts of databases, for 
+- `boilerplate_export()` export wholes or parts of databases, for 
   - Full database export (ideal for versioning)
   - Selective export using dot notation (e.g., "methods.statistical.longitudinal")
   - Wildcard selections using "*" (e.g., "methods.*" selects all methods)
