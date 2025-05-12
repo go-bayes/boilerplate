@@ -648,7 +648,7 @@ A BibTeX entry for LaTeX users:
                    Standardised Text for Scientific Reports}},
   year         = 2025,
   publisher    = {Zenodo},
-  version      = {1.0.42},
+  version      = {1.0.43},
   doi          = {10.5281/zenodo.13370825},
   url          = {https://github.com/go-bayes/boilerplate}
 }

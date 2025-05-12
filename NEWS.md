@@ -1,4 +1,7 @@
 ## boilerplate
+## [2024-04-06] boilerplate 1.0.43
+- `boilerplate_export()` fixed, works now
+
 
 ## [2024-04-06] boilerplate 1.0.42
 ### Changed

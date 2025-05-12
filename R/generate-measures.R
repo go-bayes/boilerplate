@@ -209,20 +209,51 @@ boilerplate_generate_measures <- function(
 #'
 #' @return Character. The transformed label
 #' @noRd
-transform_label <- function(label, label_mapping = NULL, quiet = FALSE) {
-  # apply mapping with partial substitutions
+transform_label <- function(label, label_mapping = NULL, options = list()) {
+  # coerce each flag to a single TRUE/FALSE
+  remove_tx_prefix   <- isTRUE(options$remove_tx_prefix)
+  remove_z_suffix    <- isTRUE(options$remove_z_suffix)
+  remove_underscores <- isTRUE(options$remove_underscores)
+  use_title_case     <- isTRUE(options$use_title_case)
+
+  original_label <- label
+
+  # 1) explicit mappings
   if (!is.null(label_mapping)) {
-    for (pattern in names(label_mapping)) {
-      if (grepl(pattern, label, fixed = TRUE)) {
-        replacement <- label_mapping[[pattern]]
-        label <- gsub(pattern, replacement, label, fixed = TRUE)
-        if (!quiet) cli_alert_info("mapped label: {pattern} -> {replacement}")
+    for (pat in names(label_mapping)) {
+      if (grepl(pat, label, fixed = TRUE)) {
+        repl  <- label_mapping[[pat]]
+        label <- gsub(pat, repl, label, fixed = TRUE)
+        cli::cli_alert_info("Mapped label: {pat} -> {repl}")
       }
     }
   }
-  return(label)
-}
 
+  # 2) strip trailing numeric-range suffix
+  label <- sub(" - \\(.*\\]$", "", label)
+
+  # 3) default transforms if unmapped
+  if (identical(label, original_label)) {
+    if (remove_tx_prefix)   label <- sub("^t[0-9]+_", "", label)
+    if (remove_z_suffix)    label <- sub("_z$", "", label)
+    if (remove_underscores) label <- gsub("_", " ", label, fixed = TRUE)
+
+    if (use_title_case) {
+      # convert to title case and enforce specific uppercase acronyms
+      label <- tools::toTitleCase(label)
+      label <- gsub("Nz",  "NZ",  label, fixed = TRUE)
+      label <- gsub("Sdo", "SDO", label, fixed = TRUE)
+      label <- gsub("Rwa", "RWA", label, fixed = TRUE)
+    }
+  }
+
+  # log if changed
+  if (!identical(label, original_label)) {
+    cli::cli_alert_info("Transformed label: {original_label} -> {label}")
+  }
+
+  label
+}
 
 
 #' @rdname boilerplate_generate_measures
