@@ -7,6 +7,8 @@ Authors@R:
 Description: The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.
 License: The MIT License
 Encoding: UTF-8
+Depends: 
+    R (>= 4.1)
 Imports:
     cli,
     glue,
