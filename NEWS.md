@@ -1,5 +1,11 @@
 ## boilerplate
 
+## [2024-04-06] boilerplate 1.0.42
+### Changed
+- `extract_selected_elements()` fixed (was not properly handling the traversal to get all elements.)
+- `merge_recursive_lists()` improved handling
+
+
 ## [2024-04-06] boilerplate 1.0.41
 ### Changed
 - added helpers to enable selective save using `boilerplate_save()`

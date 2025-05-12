@@ -250,7 +250,7 @@ ask_yes_no <- function(question) {
 #' Recursively Merge Two Lists
 #'
 #' Performs a deep recursive merge of two lists,
-#' combining nested structures.
+#' combining nested structures properly.
 #'
 #' @param x First list
 #' @param y Second list (takes precedence in conflicts)
@@ -259,23 +259,33 @@ ask_yes_no <- function(question) {
 #'
 #' @noRd
 merge_recursive_lists <- function(x, y) {
+  # Handle base cases
+  if (is.null(x) && is.null(y)) return(NULL)
+  if (is.null(x)) return(y)
+  if (is.null(y)) return(x)
+
+  # If either is not a list, y takes precedence
   if (!is.list(x) || !is.list(y)) return(y)
 
-  # for each name in x
+  # Start with y as the base
+  result <- y
+
+  # Add elements from x that are not in y
   for (name in names(x)) {
-    if (name %in% names(y)) {
-      if (is.list(x[[name]]) && is.list(y[[name]])) {
-        # recursively merge lists
-        y[[name]] <- merge_recursive_lists(x[[name]], y[[name]])
-      }
-      # otherwise y's value takes precedence
+    if (!(name %in% names(result))) {
+      # Name doesn't exist in y, add from x
+      result[[name]] <- x[[name]]
     } else {
-      # if not in y, add from x
-      y[[name]] <- x[[name]]
+      # Name exists in both, merge recursively
+      if (is.list(x[[name]]) && is.list(result[[name]])) {
+        # Both are lists, merge recursively
+        result[[name]] <- merge_recursive_lists(x[[name]], result[[name]])
+      }
+      # Otherwise, y's value takes precedence (already in result)
     }
   }
 
-  return(y)
+  return(result)
 }
 
 #' Apply Template Variables to Text

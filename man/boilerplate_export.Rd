@@ -6,22 +6,24 @@
 \usage{
 boilerplate_export(
   db,
-  output_file,
+  output_file = NULL,
   select_elements = NULL,
   data_path = NULL,
   confirm = TRUE,
   create_dirs = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  save_by_category = TRUE
 )
 }
 \arguments{
 \item{db}{List. The database to export from. Can be a single category database
 or a unified database with multiple categories.}
 
-\item{output_file}{Character. Name of the output file.}
+\item{output_file}{Character. Name of the output file prefix for single files,
+or ignored for unified databases (which automatically save by category).}
 
 \item{select_elements}{Character vector. Optional paths to select in dot notation.
-Use "\emph{" for wildcard selection (e.g., "statistical.}" selects all statistical methods).
+Use "\emph{" for wildcard selection (e.g., "measures.}" selects all measures).
 If NULL or empty (default), exports the entire database.}
 
 \item{data_path}{Character. Base path for data directory.
@@ -32,38 +34,43 @@ If NULL (default), uses here::here("boilerplate", "data").}
 \item{create_dirs}{Logical. If TRUE, creates directories that don't exist. Default is FALSE.}
 
 \item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
+
+\item{save_by_category}{Logical. If TRUE and db is unified, saves each category
+to separate files (e.g., measures_db.rds, methods_db.rds). If FALSE, saves
+to a single unified file. Default is TRUE.}
 }
 \value{
-Invisibly returns the path to the saved file if successful, or NULL if cancelled.
+Invisibly returns the path(s) to the saved file(s) if successful, or NULL if cancelled.
 }
 \description{
-This function exports a database (fully or partially) to a new file
-without modifying the original database. It's useful for versioning,
-sharing, or creating targeted subsets of your boilerplate content.
+This function exports a database (fully or partially) to new files
+without modifying the original database. For unified databases,
+it automatically saves each category to its own file.
 }
 \examples{
 \dontrun{
-# Export the entire database (versioning)
+# Export the entire unified database by category (creates separate files)
 unified_db <- boilerplate_import()
 boilerplate_export(
   unified_db,
-  output_file = "boilerplate_backup_20250405.rds"
+  data_path = "path/to/export/"
 )
 
-# Export selected elements from a unified database (sharing specific parts)
+# Export selected elements by category
 unified_db <- boilerplate_import()
 boilerplate_export(
   unified_db,
-  output_file = "causal_methods_subset.rds",
-  select_elements = c("methods.statistical.*", "results.main_effect")
+  data_path = "path/to/export/",
+  select_elements = c("measures.*", "methods.statistical.*")
 )
 
-# Export selected elements from a single category (creating a subset)
-methods_db <- boilerplate_import("methods")
+# Export to a single unified file instead
+unified_db <- boilerplate_import()
 boilerplate_export(
-  methods_db,
-  output_file = "causal_methods.rds",
-  select_elements = c("statistical.longitudinal.*", "causal_assumptions")
+  unified_db,
+  output_file = "unified_backup.rds",
+  data_path = "path/to/export/",
+  save_by_category = FALSE
 )
 }
 

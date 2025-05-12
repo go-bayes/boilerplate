@@ -8,69 +8,131 @@
 #' @param select_paths A \code{character} vector of dot-notation paths (\code{*} allowed).
 #' @param quiet A \code{logical}. If \code{FALSE}, shows CLI alerts.
 #' @return A \code{list} containing only the matching branches.
-#' @noRd
+#' @keywords internal
+#' Extract selected elements from a nested database
+#'
+#' This helper walks a nested list and returns only
+#' those branches whose dot-notation paths match the user patterns.
+#' It understands \code{*} as a wildcard for one whole segment.
+#'
+#' @param db A \code{list}. The database to extract from.
+#' @param select_paths A \code{character} vector of dot-notation paths (\code{*} allowed).
+#' @param quiet A \code{logical}. If \code{FALSE}, shows CLI alerts.
+#' @return A \code{list} containing only the matching branches.
+#' @keywords internal
 extract_selected_elements <- function(db, select_paths, quiet = FALSE) {
   if (!is.list(db)) {
-    stop("db must be a list")                 # hard fail is still appropriate here
+    stop("db must be a list")
   }
   if (length(select_paths) == 0) {
     if (!quiet) cli::cli_alert_warning("no paths specified for selection")
     return(list())
   }
 
-  # helper: merge many partial hits
-  merge_hits <- function(x, y) merge_recursive_lists(x, y)
+  # Helper to determine if an element is a leaf (measure) or a folder
+  is_leaf <- function(elem) {
+    if (!is.list(elem)) return(TRUE)
+    # Check for measure-like fields that indicate this is a leaf measure
+    measure_fields <- c("name", "description", "reference", "items", "waves", "keywords")
+    return(any(names(elem) %in% measure_fields))
+  }
 
-  # ----------------------------------------------------------------------------
-  # recursive extractor --------------------------------------------------------
-  # ----------------------------------------------------------------------------
+  # Recursive extractor
   recurse <- function(node, parts, path_so_far = character()) {
-    # no more parts → reached a terminal hit
-    if (length(parts) == 0) return(node)
+    # If no more parts and we're at a node, return the entire node
+    if (length(parts) == 0) {
+      return(node)
+    }
 
-    head   <- parts[1]
-    tail   <- parts[-1]
+    head <- parts[1]
+    tail <- parts[-1]
 
     if (head == "*") {
-      # wildcard: iterate over all child names
-      if (!is.list(node)) return(list())      # can't descend non-list
-      hits <- purrr::imap(node, \(subnode, nm) {
-        recurse(subnode, tail, c(path_so_far, nm))
-      })
-      # drop empty hits then merge
-      hits <- purrr::compact(hits)
-      if (length(hits) == 0) return(list())
-      purrr::reduce(hits, merge_hits)
+      # Wildcard: handle specially based on context
+      if (length(tail) == 0) {
+        # Pattern ends with *, so we want all direct children
+        # For measures.*, this should return all measures
+        if (is.list(node)) {
+          # Return all direct children
+          return(node)
+        } else {
+          return(list())
+        }
+      } else {
+        # Pattern continues after *, need to search through all children
+        if (!is.list(node)) return(list())
+        hits <- list()
+        for (name in names(node)) {
+          hit <- recurse(node[[name]], tail, c(path_so_far, name))
+          if (length(hit) > 0) {
+            hits[[name]] <- hit
+          }
+        }
+        return(hits)
+      }
     } else {
-      # exact segment
-      if (!is.list(node) || !(head %in% names(node))) return(list())
-      child_hit <- recurse(node[[head]], tail, c(path_so_far, head))
-      if (length(child_hit) == 0) return(list())
-      # rebuild structure for this branch
-      setNames(list(child_hit), head)
+      # Exact match
+      if (!is.list(node) || !(head %in% names(node))) {
+        return(list())
+      }
+
+      if (length(tail) == 0) {
+        # End of pattern - return this element
+        result <- list()
+        result[[head]] <- node[[head]]
+        return(result)
+      } else {
+        # Continue recursing
+        hit <- recurse(node[[head]], tail, c(path_so_far, head))
+        if (length(hit) > 0) {
+          result <- list()
+          result[[head]] <- hit
+          return(result)
+        } else {
+          return(list())
+        }
+      }
     }
   }
 
-  # apply each pattern and merge results
-  out <- purrr::map(select_paths, \(pth) {
-    parts <- strsplit(pth, "\\.")[[1]]
-    recurse(db, parts)
-  }) |> purrr::reduce(merge_hits, .init = list())
+  # Apply each pattern and merge results
+  result <- list()
+  for (path in select_paths) {
+    parts <- strsplit(path, "\\.")[[1]]
+    hit <- recurse(db, parts)
+    if (length(hit) > 0) {
+      # Merge the hit into result
+      result <- merge_recursive_lists(result, hit)
+    }
+  }
 
-  # user feedback
+  # Count total elements for user feedback
+  count_elements <- function(lst) {
+    if (!is.list(lst)) return(1)
+    count <- 0
+    for (item in lst) {
+      if (is_leaf(item)) {
+        count <- count + 1
+      } else if (is.list(item)) {
+        count <- count + count_elements(item)
+      }
+    }
+    return(count)
+  }
+
   if (!quiet) {
     n_paths <- length(select_paths)
-    n_hits  <- length(unlist(out, recursive = TRUE, use.names = FALSE))
+    # Count actual elements, not nested lists
+    n_hits <- count_elements(result)
     cli::cli_alert_info("{n_paths} pattern{?s} processed; {n_hits} element{?s} extracted")
   }
 
-  out
+  return(result)
 }
 
 
-
 # helper function to find changes between old and new databases
-#' @noRd
+#' @keywords internal
 find_changes <- function(old_db, new_db, prefix = "") {
   if (!is.list(old_db) || !is.list(new_db)) {
     # For non-list entries, just return if they're different
@@ -120,7 +182,7 @@ find_changes <- function(old_db, new_db, prefix = "") {
 }
 
 # helper function to create a backup file
-#' @noRd
+#' @keywords internal
 create_db_backup <- function(file_path, quiet = FALSE) {
   if (!file.exists(file_path)) return(FALSE)
 
@@ -590,47 +652,52 @@ boilerplate_save <- function(
 
 #' Export Database Elements to a File
 #'
-#' This function exports a database (fully or partially) to a new file
-#' without modifying the original database. It's useful for versioning,
-#' sharing, or creating targeted subsets of your boilerplate content.
+#' This function exports a database (fully or partially) to new files
+#' without modifying the original database. For unified databases,
+#' it automatically saves each category to its own file.
 #'
 #' @param db List. The database to export from. Can be a single category database
 #'   or a unified database with multiple categories.
-#' @param output_file Character. Name of the output file.
+#' @param output_file Character. Name of the output file prefix for single files,
+#'   or ignored for unified databases (which automatically save by category).
 #' @param select_elements Character vector. Optional paths to select in dot notation.
-#'   Use "*" for wildcard selection (e.g., "statistical.*" selects all statistical methods).
+#'   Use "*" for wildcard selection (e.g., "measures.*" selects all measures).
 #'   If NULL or empty (default), exports the entire database.
 #' @param data_path Character. Base path for data directory.
 #'   If NULL (default), uses here::here("boilerplate", "data").
 #' @param confirm Logical. If TRUE, asks for confirmation before overwriting. Default is TRUE.
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
+#' @param save_by_category Logical. If TRUE and db is unified, saves each category
+#'   to separate files (e.g., measures_db.rds, methods_db.rds). If FALSE, saves
+#'   to a single unified file. Default is TRUE.
 #'
-#' @return Invisibly returns the path to the saved file if successful, or NULL if cancelled.
+#' @return Invisibly returns the path(s) to the saved file(s) if successful, or NULL if cancelled.
 #'
 #' @examples
 #' \dontrun{
-#' # Export the entire database (versioning)
+#' # Export the entire unified database by category (creates separate files)
 #' unified_db <- boilerplate_import()
 #' boilerplate_export(
 #'   unified_db,
-#'   output_file = "boilerplate_backup_20250405.rds"
+#'   data_path = "path/to/export/"
 #' )
 #'
-#' # Export selected elements from a unified database (sharing specific parts)
+#' # Export selected elements by category
 #' unified_db <- boilerplate_import()
 #' boilerplate_export(
 #'   unified_db,
-#'   output_file = "causal_methods_subset.rds",
-#'   select_elements = c("methods.statistical.*", "results.main_effect")
+#'   data_path = "path/to/export/",
+#'   select_elements = c("measures.*", "methods.statistical.*")
 #' )
 #'
-#' # Export selected elements from a single category (creating a subset)
-#' methods_db <- boilerplate_import("methods")
+#' # Export to a single unified file instead
+#' unified_db <- boilerplate_import()
 #' boilerplate_export(
-#'   methods_db,
-#'   output_file = "causal_methods.rds",
-#'   select_elements = c("statistical.longitudinal.*", "causal_assumptions")
+#'   unified_db,
+#'   output_file = "unified_backup.rds",
+#'   data_path = "path/to/export/",
+#'   save_by_category = FALSE
 #' )
 #' }
 #'
@@ -638,27 +705,17 @@ boilerplate_save <- function(
 #' @export
 boilerplate_export <- function(
     db,
-    output_file,
+    output_file = NULL,
     select_elements = NULL,
     data_path = NULL,
     confirm = TRUE,
     create_dirs = FALSE,
-    quiet = FALSE
+    quiet = FALSE,
+    save_by_category = TRUE
 ) {
   if (!is.list(db)) {
     if (!quiet) cli_alert_danger("db must be a list")
     stop("db must be a list")
-  }
-
-  # If select_elements is NULL or empty, export the entire database
-  if (is.null(select_elements) || length(select_elements) == 0) {
-    if (!quiet) cli_alert_info("no specific elements selected, exporting entire database")
-    selected_db <- db  # Use the entire database
-  }
-
-  if (is.null(output_file) || output_file == "") {
-    if (!quiet) cli_alert_danger("output_file cannot be empty")
-    stop("output_file cannot be empty")
   }
 
   # Set default path if not provided
@@ -678,7 +735,6 @@ boilerplate_export <- function(
       stop("Directory does not exist: ", data_path, ". Set create_dirs=TRUE to create it.")
     }
 
-    # Ask for confirmation if needed
     proceed <- TRUE
     if (confirm) {
       proceed <- ask_yes_no(paste0("directory does not exist: ", data_path, ". create it?"))
@@ -693,49 +749,50 @@ boilerplate_export <- function(
     }
   }
 
-  # Determine if db is a unified database or a single category
+  # Determine if this is a unified database
   category_names <- c("measures", "methods", "results", "discussion", "appendix", "template")
   is_unified <- all(names(db) %in% category_names) && length(names(db)) > 1
 
-  # Process selection only if select_elements is provided
+  # Process selections if specified
+  selected_db <- db
   if (!is.null(select_elements) && length(select_elements) > 0) {
     if (is_unified) {
       if (!quiet) cli_alert_info("extracting selected elements from unified database")
 
-      # Extract from unified database (similar to boilerplate_save)
       selected_db <- list()
 
       for (cat in intersect(names(db), category_names)) {
-        # Get category-specific paths (those starting with "category.")
+        # Get category-specific paths
         cat_prefix <- paste0(cat, ".")
         cat_paths <- select_elements[startsWith(select_elements, cat_prefix)]
 
-        # Strip category prefix for processing
+        # Strip category prefix
         stripped_paths <- sub(paste0("^", cat, "\\."), "", cat_paths)
 
         if (length(stripped_paths) > 0) {
           if (!quiet) cli_alert_info("extracting {length(stripped_paths)} paths from {cat}")
-          selected_db[[cat]] <- extract_selected_elements(db[[cat]], stripped_paths)
+          selected_db[[cat]] <- extract_selected_elements(db[[cat]], stripped_paths, quiet)
         }
       }
 
-      # For paths without category prefix, apply to all categories
+      # Handle paths without category prefix
       unprefixed_paths <- select_elements[!grepl("^[^.]+\\.", select_elements)]
 
       if (length(unprefixed_paths) > 0) {
         if (!quiet) cli_alert_info("applying {length(unprefixed_paths)} general paths to all categories")
         for (cat in intersect(names(db), category_names)) {
           if (!(cat %in% names(selected_db))) {
-            selected_db[[cat]] <- extract_selected_elements(db[[cat]], unprefixed_paths)
+            selected_db[[cat]] <- extract_selected_elements(db[[cat]], unprefixed_paths, quiet)
           } else {
-            # Merge with existing selections
-            cat_selections <- extract_selected_elements(db[[cat]], unprefixed_paths)
+            cat_selections <- extract_selected_elements(db[[cat]], unprefixed_paths, quiet)
             selected_db[[cat]] <- merge_recursive_lists(selected_db[[cat]], cat_selections)
           }
         }
       }
 
-      # Check if any selections were found
+      # Remove empty categories
+      selected_db <- selected_db[sapply(selected_db, function(x) length(x) > 0)]
+
       if (length(selected_db) == 0) {
         if (!quiet) cli_alert_warning("no elements matched the specified paths")
         return(invisible(NULL))
@@ -743,11 +800,8 @@ boilerplate_export <- function(
     } else {
       # Single category database
       if (!quiet) cli_alert_info("extracting selected elements from database")
+      selected_db <- extract_selected_elements(db, select_elements, quiet)
 
-      # Extract selected elements
-      selected_db <- extract_selected_elements(db, select_elements)
-
-      # Check if any selections were found
       if (length(selected_db) == 0) {
         if (!quiet) cli_alert_warning("no elements matched the specified paths")
         return(invisible(NULL))
@@ -755,22 +809,66 @@ boilerplate_export <- function(
     }
   }
 
-  # Save selected elements
-  output_path <- file.path(data_path, output_file)
+  # Save the data
+  if (is_unified && save_by_category) {
+    # Save each category to its own file
+    if (!quiet) cli_alert_info("saving unified database by category")
 
-  # Confirm if file exists
-  proceed <- TRUE
-  if (confirm && file.exists(output_path)) {
-    proceed <- ask_yes_no(paste0("save to output file? this will overwrite: ", output_path))
-  }
+    saved_files <- character()
 
-  if (proceed) {
-    if (!quiet) cli_alert_info("saving selected elements to {output_path}")
-    saveRDS(selected_db, file = output_path)
-    if (!quiet) cli_alert_success("saved selected elements to {output_path}")
-    return(invisible(output_path))
+    for (cat in names(selected_db)) {
+      cat_file <- file.path(data_path, paste0(cat, "_db.rds"))
+
+      # Check for overwrite
+      proceed <- TRUE
+      if (confirm && file.exists(cat_file)) {
+        proceed <- ask_yes_no(paste0("overwrite existing file: ", cat_file, "?"))
+      }
+
+      if (proceed) {
+        if (!quiet) cli_alert_info("saving {cat} to {cat_file}")
+        saveRDS(selected_db[[cat]], file = cat_file)
+        saved_files <- c(saved_files, cat_file)
+        if (!quiet) cli_alert_success("saved {cat} database")
+      } else {
+        if (!quiet) cli_alert_info("save cancelled for {cat}")
+      }
+    }
+
+    if (length(saved_files) > 0) {
+      if (!quiet) cli_alert_success("export completed. saved {length(saved_files)} category files")
+      return(invisible(saved_files))
+    } else {
+      if (!quiet) cli_alert_info("no files were saved")
+      return(invisible(NULL))
+    }
   } else {
-    if (!quiet) cli_alert_info("save cancelled by user")
-    return(invisible(NULL))
+    # Save as a single file
+    if (is.null(output_file)) {
+      if (is_unified) {
+        output_file <- "unified_db.rds"
+      } else {
+        output_file <- "exported_db.rds"
+      }
+      if (!quiet) cli_alert_info("using default output file: {output_file}")
+    }
+
+    output_path <- file.path(data_path, output_file)
+
+    # Check for overwrite
+    proceed <- TRUE
+    if (confirm && file.exists(output_path)) {
+      proceed <- ask_yes_no(paste0("save to output file? this will overwrite: ", output_path))
+    }
+
+    if (proceed) {
+      if (!quiet) cli_alert_info("saving selected elements to {output_path}")
+      saveRDS(selected_db, file = output_path)
+      if (!quiet) cli_alert_success("saved selected elements to {output_path}")
+      return(invisible(output_path))
+    } else {
+      if (!quiet) cli_alert_info("save cancelled by user")
+      return(invisible(NULL))
+    }
   }
 }
