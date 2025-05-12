@@ -1,5 +1,9 @@
 ## boilerplate
 
+## [2024-04-06] boilerplate 1.0.41
+### Changed
+- added helpers to enable selective save using `boilerplate_save()`
+
 ## [2024-04-06] boilerplate 1.0.4
 
 ### Improved

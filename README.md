@@ -671,7 +671,7 @@ methods_db <- boilerplate_import("methods")
 To cite the boilerplate package in publications, please use:
 
 Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating
-Standardised Text for Scientific Reports. R package version 1.0.3
+Standardised Text for Scientific Reports. R package version 1.0.4
 <https://doi.org/10.5281/zenodo.13370825>
 
 A BibTeX entry for LaTeX users:
@@ -683,7 +683,7 @@ A BibTeX entry for LaTeX users:
                    Standardised Text for Scientific Reports}},
   year         = 2025,
   publisher    = {Zenodo},
-  version      = {1.0.3},
+  version      = {1.0.41},
   doi          = {10.5281/zenodo.13370825},
   url          = {https://github.com/go-bayes/boilerplate}
 }

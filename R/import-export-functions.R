@@ -1,4 +1,76 @@
+#' Extract selected elements from a nested database
+#'
+#' This helper walks a nested list and returns only
+#' those branches whose dot-notation paths match the user patterns.
+#' It understands \code{*} as a wildcard for one whole segment.
+#'
+#' @param db A \code{list}. The database to extract from.
+#' @param select_paths A \code{character} vector of dot-notation paths (\code{*} allowed).
+#' @param quiet A \code{logical}. If \code{FALSE}, shows CLI alerts.
+#' @return A \code{list} containing only the matching branches.
+#' @noRd
+extract_selected_elements <- function(db, select_paths, quiet = FALSE) {
+  if (!is.list(db)) {
+    stop("db must be a list")                 # hard fail is still appropriate here
+  }
+  if (length(select_paths) == 0) {
+    if (!quiet) cli::cli_alert_warning("no paths specified for selection")
+    return(list())
+  }
+
+  # helper: merge many partial hits
+  merge_hits <- function(x, y) merge_recursive_lists(x, y)
+
+  # ----------------------------------------------------------------------------
+  # recursive extractor --------------------------------------------------------
+  # ----------------------------------------------------------------------------
+  recurse <- function(node, parts, path_so_far = character()) {
+    # no more parts → reached a terminal hit
+    if (length(parts) == 0) return(node)
+
+    head   <- parts[1]
+    tail   <- parts[-1]
+
+    if (head == "*") {
+      # wildcard: iterate over all child names
+      if (!is.list(node)) return(list())      # can't descend non-list
+      hits <- purrr::imap(node, \(subnode, nm) {
+        recurse(subnode, tail, c(path_so_far, nm))
+      })
+      # drop empty hits then merge
+      hits <- purrr::compact(hits)
+      if (length(hits) == 0) return(list())
+      purrr::reduce(hits, merge_hits)
+    } else {
+      # exact segment
+      if (!is.list(node) || !(head %in% names(node))) return(list())
+      child_hit <- recurse(node[[head]], tail, c(path_so_far, head))
+      if (length(child_hit) == 0) return(list())
+      # rebuild structure for this branch
+      setNames(list(child_hit), head)
+    }
+  }
+
+  # apply each pattern and merge results
+  out <- purrr::map(select_paths, \(pth) {
+    parts <- strsplit(pth, "\\.")[[1]]
+    recurse(db, parts)
+  }) |> purrr::reduce(merge_hits, .init = list())
+
+  # user feedback
+  if (!quiet) {
+    n_paths <- length(select_paths)
+    n_hits  <- length(unlist(out, recursive = TRUE, use.names = FALSE))
+    cli::cli_alert_info("{n_paths} pattern{?s} processed; {n_hits} element{?s} extracted")
+  }
+
+  out
+}
+
+
+
 # helper function to find changes between old and new databases
+#' @noRd
 find_changes <- function(old_db, new_db, prefix = "") {
   if (!is.list(old_db) || !is.list(new_db)) {
     # For non-list entries, just return if they're different
@@ -48,6 +120,7 @@ find_changes <- function(old_db, new_db, prefix = "") {
 }
 
 # helper function to create a backup file
+#' @noRd
 create_db_backup <- function(file_path, quiet = FALSE) {
   if (!file.exists(file_path)) return(FALSE)
 
