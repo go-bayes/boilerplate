@@ -18,14 +18,3 @@ List or character. The requested results database or specific result
 This function extracts and returns the results portion of a unified database,
 optionally retrieving a specific result by name using dot notation.
 }
-\examples{
-# Import all databases
-unified_db <- boilerplate_import()
-
-# Get all results
-results_db <- boilerplate_results(unified_db)
-
-# Get a specific result using dot notation
-main_effect <- boilerplate_results(unified_db, "main_effect")
-
-}

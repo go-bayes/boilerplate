@@ -56,16 +56,17 @@ boilerplate_methods <- function(unified_db, name = NULL) {
 #'
 #' @return List. The requested measures database or specific measure
 #'
-#' @examples
-#' # Import all databases
-#' unified_db <- boilerplate_import()
-#'
-#' # Get all measures
-#' measures_db <- boilerplate_measures(unified_db)
-#'
-#' # Get a specific measure
-#' anxiety_measure <- boilerplate_measures(unified_db, "anxiety_gad7")
-#'
+#’ @examples
+#’ \dontrun{
+#’ # import all databases
+#’ unified_db <- boilerplate_import()
+#’
+#’ # get all measures
+#’ measures_db <- boilerplate_measures(unified_db)
+#’
+#’ # get a specific measure
+#’ anxiety_measure <- boilerplate_measures(unified_db, "anxiety_gad7")
+#’ }
 #' @export
 boilerplate_measures <- function(unified_db, name = NULL) {
   # check if the database contains a measures element
@@ -95,15 +96,17 @@ boilerplate_measures <- function(unified_db, name = NULL) {
 #'
 #' @return List or character. The requested results database or specific result
 #'
-#' @examples
-#' # Import all databases
-#' unified_db <- boilerplate_import()
-#'
-#' # Get all results
-#' results_db <- boilerplate_results(unified_db)
-#'
-#' # Get a specific result using dot notation
-#' main_effect <- boilerplate_results(unified_db, "main_effect")
+#’ @examples
+#’ \dontrun{
+#’ # import all databases
+#’ unified_db <- boilerplate_import()
+#’
+#’ # get all results
+#’ results_db <- boilerplate_results(unified_db)
+#’
+#’ # get a specific result using dot notation
+#’ main_effect <- boilerplate_results(unified_db, "main_effect")
+#’ }
 #'
 #' @export
 boilerplate_results <- function(unified_db, name = NULL) {
@@ -144,15 +147,16 @@ boilerplate_results <- function(unified_db, name = NULL) {
 #' @return List or character. The requested discussion database or specific section
 #'
 #' @examples
-#' # Import all databases
+#' \dontrun{
+#' # import all databases
 #' unified_db <- boilerplate_import()
 #'
-#' # Get all discussion sections
+#' # get all discussion sections
 #' discussion_db <- boilerplate_discussion(unified_db)
 #'
-#' # Get a specific discussion section using dot notation
+#' # get a specific discussion section using dot notation
 #' limitations <- boilerplate_discussion(unified_db, "limitations")
-#'
+#' }
 #' @export
 boilerplate_discussion <- function(unified_db, name = NULL) {
   # check if the database contains a discussion element
@@ -192,15 +196,16 @@ boilerplate_discussion <- function(unified_db, name = NULL) {
 #' @return List or character. The requested appendix database or specific section
 #'
 #' @examples
+#' \dontrun{
 #' # Import all databases
 #' unified_db <- boilerplate_import()
 #'
-#' # Get all appendix sections
-#' appendix_db <- boilerplate_appendix(unified_db)
+#' # Get all templates
+#' template_db <- boilerplate_template(unified_db)
 #'
-#' # Get a specific appendix section using dot notation
-#' sensitivity <- boilerplate_appendix(unified_db, "sensitivity_analyses")
-#'
+#' # Get a specific template
+#' journal_template <- boilerplate_template(unified_db, "journal_article")
+#' }
 #' @export
 boilerplate_appendix <- function(unified_db, name = NULL) {
   # check if the database contains a appendix element
@@ -240,6 +245,7 @@ boilerplate_appendix <- function(unified_db, name = NULL) {
 #' @return List or character. The requested template database or specific template
 #'
 #' @examples
+#' \dontrun{
 #' # Import all databases
 #' unified_db <- boilerplate_import()
 #'
@@ -248,7 +254,7 @@ boilerplate_appendix <- function(unified_db, name = NULL) {
 #'
 #' # Get a specific template
 #' journal_template <- boilerplate_template(unified_db, "journal_article")
-#'
+#' }
 #' @export
 boilerplate_template <- function(unified_db, name = NULL) {
   # check if the database contains a template element

@@ -19,13 +19,14 @@ This function extracts and returns the appendix portion of a unified database,
 optionally retrieving a specific appendix section by name using dot notation.
 }
 \examples{
+\dontrun{
 # Import all databases
 unified_db <- boilerplate_import()
 
-# Get all appendix sections
-appendix_db <- boilerplate_appendix(unified_db)
+# Get all templates
+template_db <- boilerplate_template(unified_db)
 
-# Get a specific appendix section using dot notation
-sensitivity <- boilerplate_appendix(unified_db, "sensitivity_analyses")
-
+# Get a specific template
+journal_template <- boilerplate_template(unified_db, "journal_article")
+}
 }

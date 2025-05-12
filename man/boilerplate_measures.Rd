@@ -18,14 +18,3 @@ List. The requested measures database or specific measure
 This function extracts and returns the measures portion of a unified database,
 optionally retrieving a specific measure by name.
 }
-\examples{
-# Import all databases
-unified_db <- boilerplate_import()
-
-# Get all measures
-measures_db <- boilerplate_measures(unified_db)
-
-# Get a specific measure
-anxiety_measure <- boilerplate_measures(unified_db, "anxiety_gad7")
-
-}

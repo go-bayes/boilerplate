@@ -51,21 +51,3 @@ were successfully saved, or the file path if a single category was saved.
 \description{
 This function saves a boilerplate database to disk with entry-level change detection.
 }
-\examples{
-# save a specific database
-methods_db <- boilerplate_import("methods")
-methods_db$new_section <- "New content"
-boilerplate_save(methods_db, "methods")
-
-# save selected elements from a database
-unified_db <- boilerplate_import()
-boilerplate_save(unified_db,
-                select_elements = c("methods.statistical.*", "results.main_effect"),
-                output_file = "selected_elements.rds")
-
-# save multiple databases at once
-all_dbs <- boilerplate_import()
-all_dbs$methods$new_section <- "New content"
-boilerplate_save(all_dbs)
-
-}

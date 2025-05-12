@@ -118,26 +118,4 @@ outcome_text <- boilerplate_generate_measures(
   appendices_measures = "Appendix A"
 )
 
-# Import unified database
-unified_db <- boilerplate_import()
-
-# Generate exposure variable text with unified database
-exposure_text <- boilerplate_generate_measures(
-  variable_heading = "Exposure Variable",
-  variables = "political_conservative",
-  db = unified_db,  # Pass the unified database
-  print_waves = TRUE
-)
-
-# Import just the measures database
-measures_db <- boilerplate_import("measures")
-
-# Generate outcome variables text with measures database
-outcome_text <- boilerplate_generate_measures(
-  variable_heading = "Outcome Variables",
-  variables = c("anxiety_gad7", "depression_phq9"),
-  db = measures_db,  # Pass just the measures database
-  appendices_measures = "Appendix A"
-)
-
 }

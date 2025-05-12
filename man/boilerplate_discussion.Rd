@@ -19,13 +19,14 @@ This function extracts and returns the discussion portion of a unified database,
 optionally retrieving a specific discussion section by name using dot notation.
 }
 \examples{
-# Import all databases
+\dontrun{
+# import all databases
 unified_db <- boilerplate_import()
 
-# Get all discussion sections
+# get all discussion sections
 discussion_db <- boilerplate_discussion(unified_db)
 
-# Get a specific discussion section using dot notation
+# get a specific discussion section using dot notation
 limitations <- boilerplate_discussion(unified_db, "limitations")
-
+}
 }

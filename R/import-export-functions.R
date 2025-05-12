@@ -77,17 +77,19 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 #'   returns that database. If multiple categories were requested, returns a named
 #'   list with each category's database.
 #'
-#' @examples
-#' # import just the methods database
-#' methods_db <- boilerplate_import("methods")
-#'
-#' # import multiple specific databases
-#' dbs <- boilerplate_import(c("methods", "measures"))
-#' methods_db <- dbs$methods
-#' measures_db <- dbs$measures
-#'
-#' # import all databases
-#' all_dbs <- boilerplate_import()
+#’ @examples
+#’ \dontrun{
+#’ # import just the methods database
+#’ methods_db <- boilerplate_import("methods")
+#’
+#’ # import multiple specific databases
+#’ dbs <- boilerplate_import(c("methods", "measures"))
+#’ methods_db  <- dbs$methods
+#’ measures_db <- dbs$measures
+#’
+#’ # import all databases
+#’ all_dbs <- boilerplate_import()
+#’ }
 #'
 #' @importFrom cli cli_alert_info cli_alert_warning cli_alert_danger
 #' @importFrom here here
@@ -189,23 +191,26 @@ boilerplate_import <- function(
 #' @return Invisibly returns a named list with logical values indicating which categories
 #'   were successfully saved, or the file path if a single category was saved.
 #'
-#' @examples
-#' # save a specific database
-#' methods_db <- boilerplate_import("methods")
-#' methods_db$new_section <- "New content"
-#' boilerplate_save(methods_db, "methods")
-#'
-#' # save selected elements from a database
-#' unified_db <- boilerplate_import()
-#' boilerplate_save(unified_db,
-#'                 select_elements = c("methods.statistical.*", "results.main_effect"),
-#'                 output_file = "selected_elements.rds")
-#'
-#' # save multiple databases at once
-#' all_dbs <- boilerplate_import()
-#' all_dbs$methods$new_section <- "New content"
-#' boilerplate_save(all_dbs)
-#'
+#’ @examples
+#’ \dontrun{
+#’ # save a specific database
+#’ methods_db <- boilerplate_import("methods")
+#’ methods_db$new_section <- "New content"
+#’ boilerplate_save(methods_db, "methods")
+#’
+#’ # save selected elements from a database
+#’ unified_db <- boilerplate_import()
+#’ boilerplate_save(
+#’   unified_db,
+#’   select_elements = c("methods.statistical.*", "results.main_effect"),
+#’   output_file     = "selected_elements.rds"
+#’ )
+#’
+#’ # save multiple databases at once
+#’ all_dbs <- boilerplate_import()
+#’ all_dbs$methods$new_section <- "New content"
+#’ boilerplate_save(all_dbs)
+#’ }
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
 #' @importFrom here here
 #' @export

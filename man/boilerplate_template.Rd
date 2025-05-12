@@ -19,6 +19,7 @@ This function extracts and returns the template portion of a unified database,
 optionally retrieving a specific template by name.
 }
 \examples{
+\dontrun{
 # Import all databases
 unified_db <- boilerplate_import()
 
@@ -27,5 +28,5 @@ template_db <- boilerplate_template(unified_db)
 
 # Get a specific template
 journal_template <- boilerplate_template(unified_db, "journal_article")
-
+}
 }

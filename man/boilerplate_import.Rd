@@ -24,16 +24,3 @@ list with each category's database.
 \description{
 This function imports one or more boilerplate databases from disk.
 }
-\examples{
-# import just the methods database
-methods_db <- boilerplate_import("methods")
-
-# import multiple specific databases
-dbs <- boilerplate_import(c("methods", "measures"))
-methods_db <- dbs$methods
-measures_db <- dbs$measures
-
-# import all databases
-all_dbs <- boilerplate_import()
-
-}
