@@ -54,12 +54,16 @@ reference:
     - boilerplate_add_entry
     - boilerplate_update_entry
     - boilerplate_remove_entry
+    - boilerplate_batch_edit
+    - boilerplate_batch_edit_multi
+    - boilerplate_batch_clean
     - boilerplate_get_entry
     - boilerplate_sort_db
     - boilerplate_path_exists
     - boilerplate_list_paths
   - title: "Utilities"
     contents:
+    - boilerplate_find_chars
     - boilerplate_manage_measures
     - boilerplate_manage_text
     - boilerplate_merge_category

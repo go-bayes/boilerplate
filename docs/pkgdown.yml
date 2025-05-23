@@ -1,8 +1,8 @@
-pandoc: '3.2'
-pkgdown: 2.1.1
+pandoc: '3.4'
+pkgdown: 2.1.2
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-05-12T09:16Z
+last_built: 2025-05-23T08:35Z
 urls:
   reference: https://go-bayes.github.io/boilerplate/reference
   article: https://go-bayes.github.io/boilerplate/articles

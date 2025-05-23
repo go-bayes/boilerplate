@@ -1,4 +1,12 @@
-## boilerplate
+# boilerplate
+
+## [2024-05-06] boilerplate 1.0.44
+
+- `boilerplate_batch_edit()` allows batch editing of specific fields across multiple entries in a boilerplate database
+- `boilerplated_batch_edit_multi()` allows editing multiple fields across multiple entries in a single operation.
+- `boilerplate_batch_clean()`  - allows batch cleaning of text fields by removing or replacing specific characters or patterns across multiple entries in a boilerplate database.
+- `boilerplate_find_chars()` - helper to search across a biolerplate database.
+
 ## [2024-04-06] boilerplate 1.0.43
 - `boilerplate_export()` fixed, works now
 
