@@ -1,4 +1,10 @@
 # boilerplate
+## [2024-05-28] boilerplate 1.0.45
+- `boilerplate_generate_measures()` now fully replacing `boilerplate_measures_text()`
+- `boilerplate_standardise_measures()` - standardises measure entries by extracting scale information, identifying reversed items, cleaning descriptions, and ensuring consistent structure.
+- `boilerplate_measures_report()` - analyses a measures database and reports on completeness and consistency.
+- updated package examples
+
 
 ## [2024-05-06] boilerplate 1.0.44
 

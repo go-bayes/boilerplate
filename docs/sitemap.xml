@@ -22,6 +22,8 @@
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_manage_measures.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_manage_text.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_measures.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_measures_report.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_measures_text.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_merge_category.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_merge_databases.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_merge_unified.html</loc></url>
@@ -43,6 +45,7 @@
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_results.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_results_text.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_save.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_standardise_measures.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_template.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_update_from_external.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/extract_selected_elements.html</loc></url>

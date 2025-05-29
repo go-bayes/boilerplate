@@ -18,17 +18,48 @@ knitr::opts_chunk$set(
 
 The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. The package features a unified database approach that simplifies workflows and provides consistent management of all content types.
 
+## Installation
+
+You can install the development version of `boilerplate` from GitHub
+with:
+
+```{r, eval = FALSE}
+# install the devtools package if you don't have it already
+install.packages("devtools")
+devtools::install_github("go-bayes/boilerplate")
+```
+
+
+
 ## Features
 
+### Core Features
+
 - **Unified Database System**: Work with all content types through a consistent interface
-- **Text Template Management**: Create, update, and retrieve reusable text templates
-- **Variable Substitution**: Replace `{{variable}}` placeholders with actual values
-- **Hierarchical Organisation**: Organise text in nested categories using dot notation (e.g., `statistical.longitudinal.lmtp`)
-- **Measures Database**: Special handling for research measures with descriptions, items, and metadata
-- **Document Templates**: Streamlined creation of journal articles, conference presentations, and grant proposals
 - **Multiple Categories**: Support for methods, results, discussion, measures, appendices and document templates
+- **Hierarchical Organisation**: Organise content in nested categories using dot notation (e.g., `statistical.longitudinal.lmtp`)
 - **Default Content**: Comes with pre-loaded defaults for common methods sections
 - **Quarto/R Markdown Integration**: Generate sections for scientific reports
+
+### Text and Document Features
+
+- **Text Template Management**: Create, update, and retrieve reusable text templates
+- **Variable Substitution**: Replace `{{variable}}` placeholders with actual values
+- **Document Templates**: Streamlined creation of journal articles, conference presentations, and grant proposals
+- **Custom Headings**: Flexible heading levels and custom text for generated sections
+
+### Measurement Features
+
+- **Measures Database**: Special handling for research measures with descriptions, items, and metadata
+- **Measure Standardisation**: Automatically clean and standardise measure entries for consistency
+- **Quality Reporting**: Assess completeness and consistency of your measures database
+- **Formatted Output**: Generate publication-ready measure descriptions with multiple format options
+
+### Database Management Features
+
+- **Batch Operations**: Efficiently update or clean multiple entries at once with pattern matching and wildcards
+- **Preview Mode**: See all changes before applying them to prevent accidents
+- **Export Functions**: Create backups and share specific database subsets
 - **Safety Features**: Prevention of accidental file overwrites and standardised file naming
 
 ## Safety Features
@@ -40,16 +71,6 @@ The `boilerplate` package includes several safety features to prevent accidental
 - All functions that modify files include confirmation prompts (when `confirm=TRUE`) before making changes
 - Consistent sorting of database entries ensures predictable structure and easier version control
 
-## Installation
-
-You can install the development version of `boilerplate` from GitHub
-with:
-
-```{r, eval = FALSE}
-# install the devtools package if you don't have it already
-install.packages("devtools")
-devtools::install_github("go-bayes/boilerplate")
-```
 
 ## Basic Usage with Unified Database
 
@@ -377,6 +398,442 @@ unified_db$measures$anxiety_gad7 <- list(...)  # CORRECT
 unified_db$measures$depression_phq9 <- list(...) # CORRECT
 ```
 
+## Standardising and Reporting on Measures
+
+The package includes powerful tools for standardising measure entries and reporting on database quality. This is particularly useful when working with legacy databases or when multiple contributors have added measures with inconsistent formatting.
+
+### Standardising Measures
+
+The `boilerplate_standardise_measures()` function automatically cleans and standardises your measures:
+
+```r
+# Import your database
+unified_db <- boilerplate_import()
+
+# Check quality before standardisation
+boilerplate_measures_report(unified_db$measures)
+
+# Standardise all measures
+unified_db$measures <- boilerplate_standardise_measures(
+  unified_db$measures,
+  extract_scale = TRUE,      # Extract scale info from descriptions
+  identify_reversed = TRUE,   # Identify reversed items
+  clean_descriptions = TRUE,  # Clean up description text
+  verbose = TRUE             # Show what's being done
+)
+
+# Save the standardised database
+boilerplate_save(unified_db)
+```
+
+#### What Standardisation Does
+
+1. **Extracts Scale Information**: Identifies and extracts scale details from descriptions
+   ```r
+   # Before:
+   description = "Ordinal response: (1 = Strongly Disagree, 7 = Strongly Agree)"
+   
+   # After:
+   description = NULL  # Removed if only contains scale info
+   scale_info = "1 = Strongly Disagree, 7 = Strongly Agree"
+   scale_anchors = c("1 = Strongly Disagree", "7 = Strongly Agree")
+   ```
+
+2. **Identifies Reversed Items**: Detects items marked with (r), (reversed), etc.
+   ```r
+   # Items with (r) markers are identified
+   items = list(
+     "I have frequent mood swings.",
+     "I am relaxed most of the time. (r)",
+     "I get upset easily."
+   )
+   # Creates: reversed_items = c(2)
+   ```
+
+3. **Cleans Descriptions**: Removes extra whitespace, fixes punctuation
+4. **Standardises References**: Ensures consistent reference formatting
+5. **Ensures Complete Structure**: All measures have standard fields
+
+### Quality Reporting
+
+Use `boilerplate_measures_report()` to assess your measures database:
+
+```r
+# Get a quality overview
+boilerplate_measures_report(unified_db$measures)
+
+# Output:
+# === Measures Database Quality Report ===
+# Total measures: 180
+# Complete descriptions: 165 (91.7%)
+# With references: 172 (95.6%)
+# With items: 180 (100.0%)
+# With wave info: 178 (98.9%)
+# Already standardised: 180 (100.0%)
+
+# Get detailed report as data frame
+quality_report <- boilerplate_measures_report(
+  unified_db$measures, 
+  return_report = TRUE
+)
+
+# Find measures missing information
+missing_refs <- quality_report[!quality_report$has_reference, ]
+missing_desc <- quality_report[!quality_report$has_description, ]
+
+# View specific measure details
+View(quality_report)
+```
+
+### Standardising Specific Measures
+
+You can also standardise individual measures or a subset:
+
+```r
+# Standardise only specific measures
+unified_db$measures <- boilerplate_standardise_measures(
+  unified_db$measures,
+  measure_names = c("anxiety_gad7", "depression_phq9", "self_esteem")
+)
+
+# Or standardise a single measure
+unified_db$measures$anxiety_gad7 <- boilerplate_standardise_measures(
+  unified_db$measures$anxiety_gad7
+)
+```
+
+### Enhanced Output with Standardised Measures
+
+After standardisation, the `boilerplate_generate_measures()` function can better format your measures:
+
+```r
+# Generate formatted output with enhanced features
+measures_text <- boilerplate_generate_measures(
+  variable_heading = "Psychological Measures",
+  variables = c("self_control", "neuroticism"),
+  db = unified_db,
+  table_format = TRUE,        # Use table format
+  sample_items = 3,           # Show only 3 items per measure
+  check_completeness = TRUE,  # Note any missing information
+  quiet = TRUE               # Suppress progress messages
+)
+
+cat(measures_text)
+```
+
+Example output:
+```markdown
+### Psychological Measures
+
+#### Self Control
+
+| Field | Information |
+|-------|-------------|
+| Description | Self-control was measured using two items [@tangney_high_2004]. |
+| Response Scale | 1 = Strongly Disagree, 7 = Strongly Agree |
+| Waves | 5-current |
+
+**Items:**
+
+1. In general, I have a lot of self-control
+2. I wish I had more self-discipline (r)
+
+*(r) denotes reverse-scored item*
+
+#### Neuroticism
+
+| Field | Information |
+|-------|-------------|
+| Description | Mini-IPIP6 Neuroticism dimension [@sibley2011]. |
+| Response Scale | 1 = Strongly Disagree, 7 = Strongly Agree |
+| Waves | 1-current |
+
+**Items:**
+
+1. I have frequent mood swings.
+2. I am relaxed most of the time. (r)
+3. I get upset easily.
+
+*(1 additional items not shown)*
+
+*(r) denotes reverse-scored item*
+```
+
+### Best Practices
+
+1. **Run standardisation after importing** legacy databases to ensure consistency
+2. **Check the quality report** to identify measures needing attention
+3. **Review standardised output** before saving to ensure nothing important was lost
+4. **Keep the original** - use `boilerplate_export()` to create a backup before standardising
+5. **Document changes** - the standardisation adds metadata showing when measures were standardised
+
+
+## Batch Editing and Cleaning Databases
+
+The package includes powerful functions for batch editing and cleaning your databases. These are particularly useful when you need to update multiple entries at once or clean up inconsistent formatting.
+
+### Batch Editing Fields
+
+Use `boilerplate_batch_edit()` to update specific fields across multiple entries:
+
+```r
+# Load your database
+unified_db <- boilerplate_import()
+
+# Example 1: Update specific references
+unified_db <- boilerplate_batch_edit(
+  db = unified_db,
+  field = "reference",
+  new_value = "sibley2021",
+  target_entries = c("ban_hate_speech", "born_nz", "age"),
+  category = "measures"
+)
+
+# Example 2: Update all references containing "NZAVS"
+unified_db <- boilerplate_batch_edit(
+  db = unified_db,
+  field = "reference",
+  new_value = "sibley2021",
+  match_pattern = "NZAVS",
+  category = "measures"
+)
+
+# Example 3: Use wildcards to target groups of entries
+unified_db <- boilerplate_batch_edit(
+  db = unified_db,
+  field = "waves",
+  new_value = "1-15",
+  target_entries = "anxiety*",  # All entries starting with "anxiety"
+  category = "measures"
+)
+
+# Example 4: Update entries with specific values
+unified_db <- boilerplate_batch_edit(
+  db = unified_db,
+  field = "reference",
+  new_value = "sibley2024",
+  match_values = c("dore2022boundaries", "string_is Developed for the NZAVS."),
+  category = "measures"
+)
+```
+
+### Preview Before Editing
+
+Always preview changes before applying them:
+
+```r
+# Preview what would change
+boilerplate_batch_edit(
+  db = unified_db,
+  field = "reference",
+  new_value = "sibley2021",
+  target_entries = c("ban_hate_speech", "born_nz"),
+  category = "measures",
+  preview = TRUE
+)
+
+# Output shows what would change:
+# Preview of changes:
+# ℹ ban_hate_speech: "dore2022boundaries" -> "sibley2021"
+# ℹ born_nz: "sibley2011" -> "sibley2021"
+# ✓ Would update 2 entries
+```
+
+### Batch Editing Multiple Fields
+
+Edit multiple fields in one operation:
+
+```r
+# Update both reference and waves for specific entries
+unified_db <- boilerplate_batch_edit_multi(
+  db = unified_db,
+  edits = list(
+    list(
+      field = "reference",
+      new_value = "sibley2021",
+      target_entries = c("ban_hate_speech", "born_nz")
+    ),
+    list(
+      field = "waves",
+      new_value = "1-15",
+      target_entries = c("ban_hate_speech", "born_nz")
+    )
+  ),
+  category = "measures"
+)
+```
+
+### Batch Cleaning Fields
+
+Clean up formatting issues across your database:
+
+```r
+# Example 1: Remove unwanted characters from references
+unified_db <- boilerplate_batch_clean(
+  db = unified_db,
+  field = "reference",
+  remove_chars = c("@", "[", "]"),
+  category = "measures"
+)
+
+# Example 2: Clean all entries EXCEPT specific ones
+unified_db <- boilerplate_batch_clean(
+  db = unified_db,
+  field = "reference",
+  remove_chars = c("@", "[", "]"),
+  exclude_entries = c("forgiveness", "special_measure"),
+  category = "measures"
+)
+
+# Example 3: Clean with pattern matching and exclusions
+unified_db <- boilerplate_batch_clean(
+  db = unified_db,
+  field = "reference",
+  remove_chars = c("@", "[", "]"),
+  target_entries = "emp_*",        # All entries starting with "emp_"
+  exclude_entries = "emp_special",  # Except this one
+  category = "measures"
+)
+
+# Example 4: Multiple cleaning operations
+unified_db <- boilerplate_batch_clean(
+  db = unified_db,
+  field = "description",
+  remove_chars = c("(", ")"),
+  replace_pairs = list("  " = " "),  # Replace double spaces with single
+  trim_whitespace = TRUE,
+  collapse_spaces = TRUE,
+  category = "measures"
+)
+```
+
+### Finding Entries That Need Cleaning
+
+Before cleaning, identify which entries contain specific characters:
+
+```r
+# Find all entries with problematic characters
+entries_to_clean <- boilerplate_find_chars(
+  db = unified_db,
+  field = "reference",
+  chars = c("@", "[", "]"),
+  category = "measures"
+)
+
+# View the results
+print(entries_to_clean)
+
+# Find entries but exclude some from results
+entries_to_clean <- boilerplate_find_chars(
+  db = unified_db,
+  field = "reference",
+  chars = c("@", "[", "]"),
+  exclude_entries = c("forgiveness", "special_*"),
+  category = "measures"
+)
+```
+
+### Workflow Example: Cleaning References
+
+Here's a complete workflow for cleaning up reference formatting:
+
+```r
+# 1. First, see what needs cleaning
+problem_refs <- boilerplate_find_chars(
+  db = unified_db,
+  field = "reference",
+  chars = c("@", "[", "]", " "),
+  category = "measures"
+)
+
+cat("Found", length(problem_refs), "references that need cleaning\n")
+
+# 2. Preview the cleaning operation
+boilerplate_batch_clean(
+  db = unified_db,
+  field = "reference",
+  remove_chars = c("@", "[", "]"),
+  replace_pairs = list(" " = "_"),  # Replace spaces with underscores
+  trim_whitespace = TRUE,
+  category = "measures",
+  preview = TRUE
+)
+
+# 3. Apply the cleaning
+unified_db <- boilerplate_batch_clean(
+  db = unified_db,
+  field = "reference",
+  remove_chars = c("@", "[", "]"),
+  replace_pairs = list(" " = "_"),
+  trim_whitespace = TRUE,
+  category = "measures",
+  confirm = TRUE  # Will ask for confirmation
+)
+
+# 4. Save the cleaned database
+boilerplate_save(unified_db)
+```
+
+### Best Practices for Batch Operations
+
+1. **Always preview first**: Use `preview = TRUE` to see what will change
+2. **Make backups**: Export your database before major changes
+   ```r
+   boilerplate_export(unified_db, output_file = "backup_before_cleaning.rds")
+   ```
+3. **Use exclusions carefully**: Some entries might have special formatting requirements
+4. **Test on subsets**: Try operations on a few entries before applying to all
+5. **Document changes**: Keep notes about what was changed and why
+
+### Common Use Cases
+
+#### Standardising References
+```r
+# Convert various reference formats to consistent style
+unified_db <- boilerplate_batch_clean(
+  db = unified_db,
+  field = "reference",
+  remove_chars = c("@", "[", "]", "(", ")"),
+  replace_pairs = list(
+    " " = "",           # Remove spaces
+    "," = "_",          # Replace commas
+    "&" = "and"         # Replace ampersands
+  ),
+  category = "measures"
+)
+```
+
+#### Updating Wave Information
+```r
+# Update all measures from a specific wave range
+unified_db <- boilerplate_batch_edit(
+  db = unified_db,
+  field = "waves",
+  new_value = "1-16",
+  match_values = c("1-15", "1-current"),
+  category = "measures"
+)
+```
+
+#### Fixing Description Formatting
+```r
+# Clean up description formatting issues
+unified_db <- boilerplate_batch_clean(
+  db = unified_db,
+  field = "description",
+  replace_pairs = list(
+    ".." = ".",         # Fix double periods
+    " ." = ".",         # Fix space before period
+    "  " = " "          # Fix double spaces
+  ),
+  trim_whitespace = TRUE,
+  category = "measures"
+)
+```
+
+These batch operations make it easy to maintain consistency across your entire database, especially when dealing with legacy data or contributions from multiple sources.
+
+
 ## Appendix Content with the Unified Database
 
 The package supports appendix content that can be managed within the unified database:
@@ -619,19 +1076,7 @@ exposure_text <- boilerplate_generate_measures(
 cat(exposure_text)
 ```
 
-## Backward Compatibility
 
-The package maintains backward compatibility with previous versions through wrapper functions:
-
-```{r, eval = FALSE}
-# old style still works with deprecation warnings
-measures_db_old <- boilerplate_manage_measures(action = "list")
-methods_db_old <- boilerplate_manage_text(action = "list", category = "methods")
-
-# recommended to use the new functions instead
-measures_db <- boilerplate_import("measures")
-methods_db <- boilerplate_import("methods")
-```
 
 ## Citation
 
@@ -648,7 +1093,7 @@ A BibTeX entry for LaTeX users:
                    Standardised Text for Scientific Reports}},
   year         = 2025,
   publisher    = {Zenodo},
-  version      = {1.0.44},
+  version      = {1.0.45},
   doi          = {10.5281/zenodo.13370825},
   url          = {https://github.com/go-bayes/boilerplate}
 }

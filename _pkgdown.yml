@@ -66,12 +66,13 @@ reference:
     - boilerplate_find_chars
     - boilerplate_manage_measures
     - boilerplate_manage_text
+    - boilerplate_measures_report
     - boilerplate_merge_category
     - boilerplate_merge_unified
+    - boilerplate_standardise_measures
     - boilerplate_update_from_external
   - title: "Legecy Functions"
     contents:
     - boilerplate_init_text
     - boilerplate_init_measures
-    - boilerplate_measures_text
     - boilerplate_merge_databases

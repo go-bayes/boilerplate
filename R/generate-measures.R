@@ -14,36 +14,32 @@
 #' @param print_keywords Logical. Whether to include keyword information in the output. Default is FALSE.
 #' @param appendices_measures Character. Optional reference to appendices containing measure details.
 #' @param label_mappings Named character vector. Mappings to transform variable names in the output.
-#'   For example, c("sdo" = "Social Dominance Orientation", "born_nz_binary" = "Born in NZ").
-#'   If a variable name contains any of the keys in this vector, that part will be replaced with the corresponding value.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
+#' @param sample_items Integer or FALSE. If numeric (1-3), shows only that many sample items. Default is FALSE (show all).
+#' @param table_format Logical. If TRUE, formats output as markdown tables. Default is FALSE.
+#' @param check_completeness Logical. If TRUE, adds notes about missing information. Default is FALSE.
+#' @param extract_scale_info Logical. If TRUE, attempts to extract scale information from descriptions. Default is TRUE.
 #'
 #' @return Character string with formatted text describing the measures.
 #'
-#’ @examples
-#’ \dontrun{
-#’ # Import unified database
-#’ unified_db <- boilerplate_import()
-#’
-#’ # Generate exposure variable text with unified database
-#’ exposure_text <- boilerplate_generate_measures(
-#’   variable_heading   = "Exposure Variable",
-#’   variables          = "political_conservative",
-#’   db                 = unified_db,  # pass the unified database
-#’   print_waves        = TRUE
-#’ )
-#’
-#’ # Import just the measures database
-#’ measures_db <- boilerplate_import("measures")
-#’
-#’ # Generate outcome variables text with measures database
-#’ outcome_text <- boilerplate_generate_measures(
-#’   variable_heading     = "Outcome Variables",
-#’   variables            = c("anxiety_gad7", "depression_phq9"),
-#’   db                   = measures_db,  # pass just the measures database
-#’   appendices_measures  = "Appendix A"
-#’ )
-#’ }
+#' @examples
+#' \dontrun{
+#' # Generate with sample items only
+#' exposure_text <- boilerplate_generate_measures(
+#'   variable_heading = "Exposure Variable",
+#'   variables = "political_conservative",
+#'   db = unified_db,
+#'   sample_items = 3  # Show only first 3 items
+#' )
+#'
+#' # Generate with table format
+#' outcome_text <- boilerplate_generate_measures(
+#'   variable_heading = "Outcome Variables",
+#'   variables = c("anxiety_gad7", "depression_phq9"),
+#'   db = measures_db,
+#'   table_format = TRUE
+#' )
+#' }
 #'
 #' @importFrom janitor make_clean_names
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
@@ -58,7 +54,11 @@ boilerplate_generate_measures <- function(
     print_keywords = FALSE,
     appendices_measures = NULL,
     label_mappings = NULL,
-    quiet = FALSE
+    quiet = FALSE,
+    sample_items = FALSE,
+    table_format = FALSE,
+    check_completeness = FALSE,
+    extract_scale_info = TRUE
 ) {
   # input validation
   if (!is.character(variable_heading)) {
@@ -69,6 +69,12 @@ boilerplate_generate_measures <- function(
   if (!is.character(variables)) {
     if (!quiet) cli_alert_danger("variables must be a character vector")
     stop("variables must be a character vector")
+  }
+
+  # validate sample_items
+  if (!isFALSE(sample_items) && (!is.numeric(sample_items) || sample_items < 1 || sample_items > 3)) {
+    if (!quiet) cli_alert_danger("sample_items must be FALSE or a number between 1 and 3")
+    stop("sample_items must be FALSE or a number between 1 and 3")
   }
 
   # prepare the database
@@ -112,11 +118,10 @@ boilerplate_generate_measures <- function(
       if (!quiet) cli_alert_warning("no information available for variable: {var}")
       title <- janitor::make_clean_names(var_display, case = "title")
       var_text <- paste0(subheading_marker, " ", title, "\n\n",
-                         "no information available for this variable.\n\n")
+                         "No information available for this variable.\n\n")
     } else {
-      # get variable title, applying mapping if provided
+      # get variable title
       title <- if (!is.null(measure_info$name)) {
-        # apply mapping to the name from measure_info
         name_display <- if (!is.null(label_mappings)) {
           if (!quiet) cli_alert_info("applying label mappings to measure name: {measure_info$name}")
           transform_label(measure_info$name, label_mappings, quiet)
@@ -128,56 +133,189 @@ boilerplate_generate_measures <- function(
         janitor::make_clean_names(var_display, case = "title")
       }
 
-      # start with variable title
-      var_text <- paste0(subheading_marker, " ", title, "\n\n")
+      # extract scale information if present in description
+      scale_info <- NULL
+      description_text <- measure_info$description
+      reversed_items <- character()
 
-      # add items if available
-      items <- measure_info$items
-      if (!is.null(items) && length(items) > 0) {
-        if (!quiet) cli_alert_info("adding {length(items)} items for {var}")
-        if (is.list(items)) {
-          items_text <- paste(sapply(items, function(item) {
-            paste0("*", item, "*")
-          }), collapse = "\n")
-        } else if (is.character(items)) {
-          items_text <- paste(sapply(items, function(item) {
-            paste0("*", item, "*")
-          }), collapse = "\n")
+      if (extract_scale_info && !is.null(description_text)) {
+        # extract scale information from description
+        scale_pattern <- "(?i)(ordinal response|scale|response format|response options?)\\s*:?\\s*\\(([^)]+)\\)"
+        scale_match <- regmatches(description_text, regexpr(scale_pattern, description_text, perl = TRUE))
+
+        if (length(scale_match) > 0) {
+          scale_info <- gsub(scale_pattern, "\\2", scale_match, perl = TRUE)
+          # remove scale info from description to avoid duplication
+          description_text <- trimws(gsub(scale_pattern, "", description_text, perl = TRUE))
+          if (description_text == "") description_text <- NULL
         }
-        var_text <- paste0(var_text, items_text, "\n\n")
       }
 
-      # add description if available
-      if (!is.null(measure_info$description)) {
-        if (!quiet) cli_alert_info("adding description for {var}")
-        var_text <- paste0(var_text, measure_info$description)
-
-        # add reference if available
-        if (!is.null(measure_info$reference)) {
-          if (!quiet) cli_alert_info("adding reference: {measure_info$reference}")
-          var_text <- paste0(var_text, " [@", measure_info$reference, "]")
-        }
-
-        var_text <- paste0(var_text, "\n\n")
-      }
-
-      # add waves if requested and available
-      if (print_waves && !is.null(measure_info$waves)) {
-        if (!quiet) cli_alert_info("adding waves information: {measure_info$waves}")
-        var_text <- paste0(var_text, "*waves: ", measure_info$waves, "*\n\n")
-      }
-
-      # add keywords if requested and available
-      if (print_keywords && !is.null(measure_info$keywords)) {
-        if (is.character(measure_info$keywords)) {
-          if (length(measure_info$keywords) > 1) {
-            keywords <- paste(measure_info$keywords, collapse = ", ")
-          } else {
-            keywords <- measure_info$keywords
+      # check for reversed items in item text
+      has_reversed_markers <- FALSE
+      if (!is.null(measure_info$items)) {
+        for (i in seq_along(measure_info$items)) {
+          if (grepl("\\(reversed\\)|\\(r\\)|\\breversed\\b", measure_info$items[[i]], ignore.case = TRUE)) {
+            reversed_items <- c(reversed_items, as.character(i))
+            has_reversed_markers <- TRUE
           }
-          if (!quiet) cli_alert_info("adding keywords: {keywords}")
-          var_text <- paste0(var_text, "*keywords: ", keywords, "*\n\n")
         }
+      }
+
+      # check if variable name indicates reversal
+      if (grepl("_reversed$", var)) {
+        if (!quiet) cli_alert_info("variable name indicates reversed scoring: {var}")
+      }
+
+      # check completeness if requested
+      missing_info <- character()
+      if (check_completeness) {
+        if (is.null(measure_info$description) && is.null(description_text)) missing_info <- c(missing_info, "description")
+        if (is.null(measure_info$reference)) missing_info <- c(missing_info, "reference")
+        if (is.null(measure_info$items) || length(measure_info$items) == 0) missing_info <- c(missing_info, "items")
+        if (is.null(measure_info$waves)) missing_info <- c(missing_info, "waves")
+      }
+
+      # build output based on format
+      if (table_format) {
+        # table format output
+        var_text <- paste0(subheading_marker, " ", title, "\n\n")
+
+        # create info table
+        var_text <- paste0(var_text, "| Field | Information |\n")
+        var_text <- paste0(var_text, "|-------|-------------|\n")
+
+        # add description
+        if (!is.null(description_text)) {
+          desc_with_ref <- description_text
+          if (!is.null(measure_info$reference)) {
+            # Remove trailing punctuation from description
+            desc_with_ref <- sub("[.:;]\\s*$", "", desc_with_ref)
+            desc_with_ref <- paste0(desc_with_ref, " [@", measure_info$reference, "].")
+          } else if (!grepl("[.!?]\\s*$", desc_with_ref)) {
+            desc_with_ref <- paste0(desc_with_ref, ".")
+          }
+          var_text <- paste0(var_text, "| Description | ", desc_with_ref, " |\n")
+        }
+
+        # add scale info
+        if (!is.null(scale_info)) {
+          var_text <- paste0(var_text, "| Response Scale | ", scale_info, " |\n")
+        }
+
+        # add waves
+        if (!is.null(measure_info$waves) && measure_info$waves != "") {
+          var_text <- paste0(var_text, "| Waves | ", measure_info$waves, " |\n")
+        }
+
+        # add reversed items info
+        if (length(reversed_items) > 0) {
+          var_text <- paste0(var_text, "| Reversed Items | ", paste(reversed_items, collapse = ", "), " |\n")
+        }
+
+        var_text <- paste0(var_text, "\n")
+
+        # add items
+        if (!is.null(measure_info$items) && length(measure_info$items) > 0) {
+          var_text <- paste0(var_text, "**Items:**\n\n")
+
+          # determine how many items to show
+          n_items <- length(measure_info$items)
+          items_to_show <- if (!isFALSE(sample_items)) min(sample_items, n_items) else n_items
+
+          for (i in 1:items_to_show) {
+            item_text <- measure_info$items[[i]]
+            var_text <- paste0(var_text, i, ". ", item_text, "\n")
+          }
+
+          if (!isFALSE(sample_items) && n_items > items_to_show) {
+            var_text <- paste0(var_text, "\n*(", n_items - items_to_show, " additional items not shown)*\n")
+          }
+
+          var_text <- paste0(var_text, "\n")
+        }
+
+      } else {
+        # standard format output
+        var_text <- paste0(subheading_marker, " ", title, "\n\n")
+
+        # add description and reference
+        if (!is.null(description_text)) {
+          if (!quiet) cli_alert_info("adding description for {var}")
+
+          # Remove trailing punctuation from description if reference will be added
+          if (!is.null(measure_info$reference)) {
+            # Remove trailing period, colon, or semicolon
+            description_text <- sub("[.:;]\\s*$", "", description_text)
+          }
+
+          var_text <- paste0(var_text, description_text)
+
+          if (!is.null(measure_info$reference)) {
+            if (!quiet) cli_alert_info("adding reference: {measure_info$reference}")
+            var_text <- paste0(var_text, " [@", measure_info$reference, "].")
+          } else {
+            # Add period if no reference and description doesn't end with punctuation
+            if (!grepl("[.!?]\\s*$", description_text)) {
+              var_text <- paste0(var_text, ".")
+            }
+          }
+
+          var_text <- paste0(var_text, "\n\n")
+        }
+
+        # add scale info if extracted
+        if (!is.null(scale_info)) {
+          var_text <- paste0(var_text, "**Response scale:** ", scale_info, "\n\n")
+        }
+
+        # add waves if requested
+        if (print_waves && !is.null(measure_info$waves) && measure_info$waves != "") {
+          if (!quiet) cli_alert_info("adding waves information: {measure_info$waves}")
+          var_text <- paste0(var_text, "*Waves: ", measure_info$waves, "*\n\n")
+        }
+
+        # add items
+        items <- measure_info$items
+        if (!is.null(items) && length(items) > 0) {
+          if (!quiet) cli_alert_info("adding {length(items)} items for {var}")
+
+          if (!is.null(description_text)) {
+            var_text <- paste0(var_text, "Items:\n\n")
+          }
+
+          # determine how many items to show
+          n_items <- length(items)
+          items_to_show <- if (!isFALSE(sample_items)) min(sample_items, n_items) else n_items
+
+          for (i in 1:items_to_show) {
+            var_text <- paste0(var_text, "* ", items[[i]], "\n")
+          }
+
+          if (!isFALSE(sample_items) && n_items > items_to_show) {
+            var_text <- paste0(var_text, "\n*(", n_items - items_to_show, " additional items not shown)*\n")
+          }
+
+          var_text <- paste0(var_text, "\n")
+        }
+
+        # add keywords if requested
+        if (print_keywords && !is.null(measure_info$keywords)) {
+          if (is.character(measure_info$keywords)) {
+            if (length(measure_info$keywords) > 1) {
+              keywords <- paste(measure_info$keywords, collapse = ", ")
+            } else {
+              keywords <- measure_info$keywords
+            }
+            if (!quiet) cli_alert_info("adding keywords: {keywords}")
+            var_text <- paste0(var_text, "*Keywords: ", keywords, "*\n\n")
+          }
+        }
+      }
+
+      # add completeness note if requested and info is missing
+      if (check_completeness && length(missing_info) > 0) {
+        var_text <- paste0(var_text, "*Note: Missing ", paste(missing_info, collapse = ", "), "*\n\n")
       }
     }
 
@@ -190,7 +328,7 @@ boilerplate_generate_measures <- function(
     if (!quiet) cli_alert_info("adding appendix reference: {appendices_measures}")
     output_text <- paste0(
       output_text,
-      "detailed descriptions of how these variables were measured and operationalised can be found in **",
+      "Detailed descriptions of how these variables were measured and operationalised can be found in **",
       appendices_measures,
       "**.\n\n"
     )
@@ -209,7 +347,15 @@ boilerplate_generate_measures <- function(
 #'
 #' @return Character. The transformed label
 #' @noRd
-transform_label <- function(label, label_mapping = NULL, options = list()) {
+transform_label <- function(label, label_mapping = NULL, quiet = FALSE) {
+  # Default options - could be extended later
+  options <- list(
+    remove_tx_prefix = FALSE,
+    remove_z_suffix = FALSE,
+    remove_underscores = FALSE,
+    use_title_case = FALSE
+  )
+
   # coerce each flag to a single TRUE/FALSE
   remove_tx_prefix   <- isTRUE(options$remove_tx_prefix)
   remove_z_suffix    <- isTRUE(options$remove_z_suffix)
@@ -224,7 +370,7 @@ transform_label <- function(label, label_mapping = NULL, options = list()) {
       if (grepl(pat, label, fixed = TRUE)) {
         repl  <- label_mapping[[pat]]
         label <- gsub(pat, repl, label, fixed = TRUE)
-        cli::cli_alert_info("Mapped label: {pat} -> {repl}")
+        if (!quiet) cli::cli_alert_info("Mapped label: {pat} -> {repl}")
       }
     }
   }
@@ -248,45 +394,9 @@ transform_label <- function(label, label_mapping = NULL, options = list()) {
   }
 
   # log if changed
-  if (!identical(label, original_label)) {
+  if (!identical(label, original_label) && !quiet) {
     cli::cli_alert_info("Transformed label: {original_label} -> {label}")
   }
 
   label
 }
-
-
-#' @rdname boilerplate_generate_measures
-#' @export
-boilerplate_measures_text <- function(
-    variable_heading,
-    variables,
-    db,
-    heading_level = 3,
-    subheading_level = 4,
-    print_waves = FALSE,
-    print_keywords = FALSE,
-    appendices_measures = NULL,
-    label_mappings = NULL,
-    quiet = FALSE
-) {
-  # This function is being kept for backward compatibility
-  # Issue a deprecation warning
-  warning("boilerplate_measures_text() is deprecated. Please use boilerplate_generate_measures() instead.",
-          call. = FALSE)
-
-  boilerplate_generate_measures(
-    variable_heading = variable_heading,
-    variables = variables,
-    db = db,
-    heading_level = heading_level,
-    subheading_level = subheading_level,
-    print_waves = print_waves,
-    print_keywords = print_keywords,
-    appendices_measures = appendices_measures,
-    label_mappings = label_mappings,
-    quiet = quiet
-  )
-}
-
-
