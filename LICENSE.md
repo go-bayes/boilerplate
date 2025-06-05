@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) [2025] [Joseph A Bulbulia]
+Copyright (c) 2025 Joseph A Bulbulia
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -41,14 +41,14 @@ updates the corresponding category in a unified database.
 }
 \examples{
 \dontrun{
-# Import the current unified database
+# Import current unified database
 unified_db <- boilerplate_import()
 
-# Update its measures category from an external project
+# Update methods from an external source
 unified_db <- boilerplate_update_from_external(
   unified_db = unified_db,
-  category = "measures",
-  external_path = "path/to/external/project/data"
+  category = "methods",
+  external_path = "path/to/external/data"
 )
 
 # Save the updated database

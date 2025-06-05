@@ -2,31 +2,59 @@
 % Please edit documentation in R/category-helpers.R
 \name{boilerplate_appendix}
 \alias{boilerplate_appendix}
-\title{Access Appendix from Unified Database}
+\title{Access Appendix Content}
 \usage{
 boilerplate_appendix(unified_db, name = NULL)
 }
 \arguments{
-\item{unified_db}{List. The unified boilerplate database}
+\item{unified_db}{List. The unified boilerplate database containing appendix content}
 
-\item{name}{Character. Optional specific appendix section to retrieve using dot notation}
+\item{name}{Character. Optional specific appendix section to retrieve using dot notation
+(e.g., "supplementary.tables" for nested content)}
 }
 \value{
-List or character. The requested appendix database or specific section
+List or character. The requested appendix database or specific section.
+If name is NULL, returns the entire appendix database. If name is specified,
+returns the content at that path.
 }
 \description{
 This function extracts and returns the appendix portion of a unified database,
 optionally retrieving a specific appendix section by name using dot notation.
 }
-\examples{
-\dontrun{
-# Import all databases
-unified_db <- boilerplate_import()
-
-# Get all templates
-template_db <- boilerplate_template(unified_db)
-
-# Get a specific template
-journal_template <- boilerplate_template(unified_db, "journal_article")
+\details{
+Access Appendix from Unified Database
 }
+\examples{
+# Create a temporary directory and initialise database
+temp_dir <- tempdir()
+data_path <- file.path(temp_dir, "boilerplate_appendix_example", "data")
+
+# Initialise with default appendix content
+boilerplate_init(
+  categories = "appendix",
+  data_path = data_path,
+  create_dirs = TRUE,
+  create_empty = FALSE,
+  confirm = FALSE,
+  quiet = TRUE
+)
+
+# Import all databases
+unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+
+# Get all appendix sections
+appendix_db <- boilerplate_appendix(unified_db)
+names(appendix_db)
+
+# Get a specific appendix section (if it exists)
+if ("appendix" \%in\% names(unified_db) && length(unified_db$appendix) > 0) {
+  section_names <- names(unified_db$appendix)
+  if (length(section_names) > 0) {
+    first_section <- boilerplate_appendix(unified_db, section_names[1])
+  }
+}
+
+# Clean up
+unlink(file.path(temp_dir, "boilerplate_appendix_example"), recursive = TRUE)
+
 }

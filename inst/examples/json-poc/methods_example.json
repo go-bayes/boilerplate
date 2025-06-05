@@ -1,0 +1,45 @@
+{
+  "methods": {
+    "sample": {
+      "default": "We recruited {{n_total}} participants from {{location}} between {{start_date}} and {{end_date}}.",
+      "large": "We recruited {{n_total}} participants ({{n_male}} male, {{n_female}} female, {{n_other}} other) from {{location}}. The mean age was {{mean_age}} years (SD = {{sd_age}}, range: {{min_age}}-{{max_age}}).",
+      "_meta": {
+        "description": "Standard sampling descriptions",
+        "keywords": ["sampling", "recruitment", "participants"]
+      }
+    },
+    "statistical": {
+      "longitudinal": {
+        "lmtp": {
+          "text": "We used Longitudinal Modified Treatment Policies (LMTP) to estimate causal effects under {{shift_type}} shift interventions. The analysis was implemented using the lmtp package in R (version {{lmtp_version}}).",
+          "reference": "Diaz et al. 2021",
+          "keywords": ["causal inference", "LMTP", "longitudinal"]
+        },
+        "gcomp": {
+          "text": "We employed parametric g-computation to estimate the effect of {{exposure}} on {{outcome}} across {{n_timepoints}} time points.",
+          "reference": "Daniel et al. 2013",
+          "keywords": ["g-computation", "causal inference", "longitudinal"]
+        }
+      },
+      "crosssectional": {
+        "regression": {
+          "text": "We used {{model_type}} regression to examine associations between {{predictors}} and {{outcome}}, adjusting for {{covariates}}.",
+          "reference": "Standard statistical approach",
+          "keywords": ["regression", "cross-sectional"]
+        }
+      }
+    },
+    "missing_data": {
+      "multiple_imputation": {
+        "text": "Missing data were handled using multiple imputation by chained equations (MICE) with {{n_imputations}} imputations. The imputation model included {{imputation_vars}}.",
+        "reference": "van Buuren & Groothuis-Oudshoorn 2011",
+        "keywords": ["missing data", "MICE", "imputation"]
+      },
+      "complete_case": {
+        "text": "We conducted complete case analysis, including only participants with complete data on all variables (n = {{n_complete}}, {{pct_complete}}% of the original sample).",
+        "reference": "Standard approach",
+        "keywords": ["missing data", "complete case"]
+      }
+    }
+  }
+}

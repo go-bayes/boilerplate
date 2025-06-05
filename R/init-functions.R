@@ -52,12 +52,12 @@ get_empty_measures_db_structure <- function() {
   )
 }
 
-#' Initialize All Boilerplate Databases
+#' Initialise All Boilerplate Databases
 #'
-#' This function initializes or updates all boilerplate databases with default values.
+#' This function initialises or updates all boilerplate databases with default values.
 #' It's a convenience wrapper around boilerplate_init_category() for all categories.
 #'
-#' @param categories Character vector. Categories to initialize.
+#' @param categories Character vector. Categories to initialise.
 #'   Default is all categories: "measures", "methods", "results", "discussion", "appendix", "template".
 #' @param merge_strategy Character. How to merge with existing databases: "keep_existing", "merge_recursive", or "overwrite_all".
 #' @param data_path Character. Base path for data directory.
@@ -69,26 +69,41 @@ get_empty_measures_db_structure <- function() {
 #' @param create_empty Logical. If TRUE, creates empty database structures with just the template headings.
 #'   Default is TRUE. Set to FALSE to use default content.
 #'
-#' @return Invisibly returns a logical vector indicating which categories were successfully initialized.
+#' @return Invisibly returns a logical vector indicating which categories were successfully initialised.
 #'
 #' @examples
-#' \dontrun{
-#' # run in dry-run mode first to see what would happen
-#' boilerplate_init(dry_run = TRUE)
+#' # Create a temporary directory for examples
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_example", "data")
 #'
-#' # initialize all databases with empty structures
-#' boilerplate_init(create_dirs = TRUE, create_empty = TRUE)
+#' # Run in dry-run mode first to see what would happen
+#' boilerplate_init(data_path = data_path, dry_run = TRUE, quiet = TRUE, create_dirs = TRUE)
 #'
-#' # initialize all databases with default content
-#' boilerplate_init(create_dirs = TRUE, create_empty = FALSE)
+#' # Initialise all databases with empty structures
+#' boilerplate_init(
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = TRUE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
 #'
-#' # initialize specific categories only
+#' # Check that files were created
+#' list.files(data_path)
+#'
+#' # Initialise specific categories only with default content
 #' boilerplate_init(
 #'   categories = c("methods", "measures"),
+#'   data_path = data_path,
 #'   create_dirs = TRUE,
-#'   confirm = FALSE
+#'   create_empty = FALSE,
+#'   merge_strategy = "overwrite_all",
+#'   confirm = FALSE,
+#'   quiet = TRUE
 #' )
-#' }
+#'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_example"), recursive = TRUE)
 #'
 #' @importFrom cli cli_alert_info cli_alert_success
 #' @export
@@ -158,11 +173,11 @@ boilerplate_init <- function(
 }
 
 
-#' Initialize a Specific Boilerplate Database Category
+#' Initialise a Specific Boilerplate Database Category
 #'
-#' This function initializes or updates a specific boilerplate database category with default values.
+#' This function initialises or updates a specific boilerplate database category with default values.
 #'
-#' @param category Character. Category to initialize.
+#' @param category Character. Category to initialise.
 #'   Options include "measures", "methods", "results", "discussion", "appendix", "template".
 #' @param merge_strategy Character. How to merge with existing database: "keep_existing", "merge_recursive", or "overwrite_all".
 #' @param data_path Character. Base path for data directory.
@@ -177,18 +192,41 @@ boilerplate_init <- function(
 #' @return Logical. TRUE if initialization was successful, FALSE if canceled.
 #'
 #' @examples
-#' \dontrun{
-#' # initialize the methods database with empty structure
-#' boilerplate_init_category("methods", create_dirs = TRUE, create_empty = TRUE)
+#' # Create a temporary directory for examples
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_category_example", "data")
 #'
-#' # initialize measures database with recursive merging and default content
+#' # Initialise the methods database with empty structure
+#' boilerplate_init_category(
+#'   "methods",
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = TRUE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
+#' # Check the created file
+#' methods_file <- file.path(data_path, "methods_db.rds")
+#' file.exists(methods_file)
+#'
+#' # Initialise measures database with default content
 #' boilerplate_init_category(
 #'   category = "measures",
 #'   merge_strategy = "merge_recursive",
+#'   data_path = data_path,
 #'   create_dirs = TRUE,
-#'   create_empty = FALSE
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
 #' )
-#' }
+#'
+#' # Load and inspect the measures database
+#' measures_db <- readRDS(file.path(data_path, "measures_db.rds"))
+#' names(measures_db)
+#'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_category_example"), recursive = TRUE)
 #'
 #' @importFrom utils modifyList
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
@@ -240,8 +278,14 @@ boilerplate_init_category <- function(
     }
 
     if (proceed && !dry_run) {
-      dir.create(data_path, recursive = TRUE)
-      if (!quiet) cli_alert_success("created directory: {data_path}")
+      tryCatch({
+        dir.create(data_path, recursive = TRUE)
+        if (!quiet) cli_alert_success("created directory: {data_path}")
+      }, warning = function(w) {
+        stop(paste("Failed to create directory:", conditionMessage(w)))
+      }, error = function(e) {
+        stop(paste("Failed to create directory:", conditionMessage(e)))
+      })
     } else if (!proceed) {
       if (!quiet) cli_alert_danger("directory creation cancelled by user")
       stop("Directory creation cancelled by user.")
@@ -365,11 +409,11 @@ boilerplate_init_category <- function(
   if (!quiet) cli_alert_success("{category} initialization complete")
   return(TRUE) # return TRUE to indicate successful initialization
 }
-#' Initialize Boilerplate Text Databases (Deprecated)
+#' Initialise Boilerplate Text Databases (Deprecated)
 #'
 #' This function is deprecated. Please use boilerplate_init() instead.
 #'
-#' @param categories Character vector. Categories to initialize.
+#' @param categories Character vector. Categories to initialise.
 #' @param merge_strategy Character. How to merge with existing databases.
 #' @param text_path Character. Path to the directory where text database files are stored.
 #' @param overwrite Logical. Whether to overwrite existing entries (deprecated).
@@ -378,7 +422,7 @@ boilerplate_init_category <- function(
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist.
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes.
 #'
-#' @return Invisibly returns a logical vector indicating which categories were successfully initialized.
+#' @return Invisibly returns a logical vector indicating which categories were successfully initialised.
 #'
 #' @importFrom cli cli_alert_warning cli_alert_info
 #' @export
@@ -410,7 +454,7 @@ boilerplate_init_text <- function(
 
   # check if 'measures' is in categories and warn
   if ("measures" %in% categories) {
-    if (!quiet) cli_alert_warning("'measures' category should be initialized using boilerplate_init_measures() or the new boilerplate_init()")
+    if (!quiet) cli_alert_warning("'measures' category should be initialised using boilerplate_init_measures() or the new boilerplate_init()")
     categories <- setdiff(categories, "measures")
     if (!quiet) cli_alert_info("'measures' category removed from initialization list")
   }
@@ -429,7 +473,7 @@ boilerplate_init_text <- function(
   return(invisible(result))
 }
 
-#' Initialize Boilerplate Measures Database (Deprecated)
+#' Initialise Boilerplate Measures Database (Deprecated)
 #'
 #' This function is deprecated. Please use boilerplate_init("measures") instead.
 #'
@@ -442,7 +486,7 @@ boilerplate_init_text <- function(
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist.
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes.
 #'
-#' @return Invisibly returns a logical value indicating if the measures database was successfully initialized.
+#' @return Invisibly returns a logical value indicating if the measures database was successfully initialised.
 #'
 #' @importFrom cli cli_alert_warning
 #' @export

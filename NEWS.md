@@ -1,235 +1,138 @@
-# boilerplate
-## [2024-05-28] boilerplate 1.0.45
-- `boilerplate_generate_measures()` now fully replacing `boilerplate_measures_text()`
-- `boilerplate_standardise_measures()` - standardises measure entries by extracting scale information, identifying reversed items, cleaning descriptions, and ensuring consistent structure.
-- `boilerplate_measures_report()` - analyses a measures database and reports on completeness and consistency.
-- updated package examples
+# boilerplate 1.1.0 [2025-06-06]
 
+## Documentation improvements
 
-## [2024-05-06] boilerplate 1.0.44
+* Added comprehensive bibliography management vignette showing how to use centralised BibTeX files
+* Added complete "Getting Started" tutorial with real-world workflow examples
+* Created enhanced introduction vignette with practical multi-study scenarios
+* Updated all examples to use current API (removed references to deprecated functions)
 
-- `boilerplate_batch_edit()` allows batch editing of specific fields across multiple entries in a boilerplate database
-- `boilerplated_batch_edit_multi()` allows editing multiple fields across multiple entries in a single operation.
-- `boilerplate_batch_clean()`  - allows batch cleaning of text fields by removing or replacing specific characters or patterns across multiple entries in a boilerplate database.
-- `boilerplate_find_chars()` - helper to search across a biolerplate database.
+## Major improvements
 
-## [2024-04-06] boilerplate 1.0.43
-- `boilerplate_export()` fixed, works now
+* **Lighter package**: Reduced dependencies from 9 to 6 by removing glue, janitor, and stringr - replaced with base R equivalents
+* **Cleaner codebase**: Removed deprecated backward compatibility functions (`boilerplate_manage_text()` and `boilerplate_manage_measures()`) - saving 625+ lines of code
+* **Streamlined JSON support**: Consolidated JSON functionality into existing functions rather than separate `_json` variants
+* **Enhanced base functions**: `boilerplate_import()`, `boilerplate_save()`, and `boilerplate_export()` now auto-detect and handle both JSON and RDS formats seamlessly
+* **Quarto integration**: Package now emphasises support for Quarto documents with new vignette and updated README
+* **Smart backup handling**: Backup creation is now context-aware - automatically disabled in temporary directories and non-interactive sessions
+* **Cleaner directory structure**: Removed confusing nested directory structure
 
+## New features
 
-## [2024-04-06] boilerplate 1.0.42
-### Changed
-- `extract_selected_elements()` fixed (was not properly handling the traversal to get all elements.)
-- `merge_recursive_lists()` improved handling
+### Enhanced core functions
+* `boilerplate_import()` - Now auto-detects JSON or RDS format based on file extensions
+* `boilerplate_save()` - Added `format` parameter supporting "json", "rds", or "both"
+* `boilerplate_export()` - Added `format` parameter for flexible export options
+* `boilerplate_batch_edit()` - Can now load databases directly from file paths (JSON or RDS)
+* `boilerplate_standardise_measures()` - Added `json_compatible` parameter for JSON-specific formatting
 
+### JSON utilities
+* `boilerplate_migrate_to_json()` - Migrate RDS databases to JSON format
+* `boilerplate_rds_to_json()` - Convert individual RDS files to JSON
+* `compare_rds_json()` - Compare RDS and JSON databases for migration validation
+* `validate_json_database()` - Validate JSON structure against schemas
 
-## [2024-04-06] boilerplate 1.0.41
-### Changed
-- added helpers to enable selective save using `boilerplate_save()`
+### Bibliography support
+* `boilerplate_add_bibliography()` - Add bibliography information to database
+* `boilerplate_update_bibliography()` - Download and cache bibliography files
+* `boilerplate_copy_bibliography()` - Copy bibliography to project directory
+* `boilerplate_validate_references()` - Check that all citations exist in bibliography
+* `boilerplate_generate_text()` - Now supports automatic bibliography copying with `copy_bibliography` parameter
 
-## [2024-04-06] boilerplate 1.0.4
+### Measures enhancements
+* `boilerplate_generate_measures()` - Now fully replaces deprecated `boilerplate_measures_text()`
+* `boilerplate_standardise_measures()` - Standardises measure entries by extracting scale information, identifying reversed items, cleaning descriptions, and ensuring consistent structure
+* `boilerplate_measures_report()` - Analyses a measures database and reports on completeness and consistency
 
-### Improved
-- cleaned up codebase
-- added back missing helper function `find_changes()`
+## Breaking changes
 
-## [2024-04-05] boilerplate 1.0.3
-### New
-- `boilerplate_init()` supports initialising empty database structures by default.
-- `boilerplate_export()` export wholes or parts of databases, for 
+* Removed `boilerplate_import_json()` - use `boilerplate_import()` instead (auto-detects format)
+* Removed `boilerplate_save_json()` - use `boilerplate_save(..., format = "json")` instead
+* Removed `boilerplate_batch_edit_json()` - use `boilerplate_batch_edit()` instead (accepts file paths)
+* Removed `boilerplate_standardise_measures_json()` - use `boilerplate_standardise_measures(..., json_compatible = TRUE)` instead
+* Removed `boilerplate_manage_text()` and `boilerplate_manage_measures()` - deprecated functions no longer needed
+
+## Minor improvements
+
+* Updated package examples with Quarto-focused workflows
+* Fixed Rd line width issues in documentation
+* Improved example code in export function
+* Replaced janitor::make_clean_names with lightweight base R alternative
+* Replaced glue::glue with base R template substitution
+* Updated all vignettes and tests for consolidated functions
+* Fixed trailing whitespace and indentation issues throughout package
+* Updated pkgdown configuration to reflect current function set
+
+# boilerplate [2025-05-06] 1.0.44
+
+## New features
+
+* `boilerplate_batch_edit()` allows batch editing of specific fields across multiple entries in a boilerplate database
+* `boilerplate_batch_edit_multi()` allows editing multiple fields across multiple entries in a single operation
+* `boilerplate_batch_clean()` - allows batch cleaning of text fields by removing or replacing specific characters or patterns across multiple entries in a boilerplate database
+* `boilerplate_find_chars()` - helper to search across a boilerplate database
+
+# boilerplate [2025-04-06] 1.0.43
+
+## Bug fixes
+
+* `boilerplate_export()` fixed, works now
+
+# boilerplate [2025-04-06] 1.0.42
+
+## Bug fixes
+
+* `extract_selected_elements()` fixed (was not properly handling the traversal to get all elements)
+* `merge_recursive_lists()` improved handling
+
+# boilerplate [2025-04-06] 1.0.41
+
+## Minor improvements
+
+* Added helpers to enable selective save using `boilerplate_save()`
+
+# boilerplate [2025-04-06] 1.0.4
+
+## Minor improvements
+
+* Cleaned up codebase
+* Added back missing helper function `find_changes()`
+
+# boilerplate [2025-04-05] 1.0.3
+
+## New features
+
+* `boilerplate_init()` supports initialising empty database structures by default
+* `boilerplate_export()` export wholes or parts of databases, for:
   - Full database export (ideal for versioning)
   - Selective export using dot notation (e.g., "methods.statistical.longitudinal")
   - Wildcard selections using "*" (e.g., "methods.*" selects all methods)
   - Category-prefixed paths for unified databases
-- Export is distinct from save: use `boilerplate_save()` for normal database updates and `boilerplate_export()` for creating standalone exports.
+* Export is distinct from save: use `boilerplate_save()` for normal database updates and `boilerplate_export()` for creating standalone exports
 
-## [2024-04-03] boilerplate 1.0.2
-### Improved 
- - `get_default_measures_db()` creates measures data with the correct structure.
- -  improved README examples for clarity
- -  tidyed up R folder to remove old functions
+# boilerplate [2025-04-03] 1.0.2
 
+## Minor improvements
 
-## [2024-04-03] boilerplate 1.0.1
-### Improved 
-- `boilerplate_save()` confirms intention to overwrite, in case this occurs accidentally
-- `boilerplate_init()` messages are clearer when initialising from existing databases 
+* `get_default_measures_db()` creates measures data with the correct structure
+* Improved README examples for clarity
+* Tidied up R folder to remove old functions
 
-## [2024-04-03] boilerplate 1.0.0
+# boilerplate [2025-04-03] 1.0.1
 
-## Boilerplate Package: Unified Database Implementation
+## New features
 
-### Changes Overview
+* Unified database system introduced - manage all content types through a single interface
+* New accessors for different content types: `boilerplate_methods()`, `boilerplate_results()`, etc.
+* `boilerplate_merge_databases()` for merging databases with conflict resolution
+* `boilerplate_merge_category()` for category-specific merging
+* `boilerplate_merge_unified()` for merging unified databases
 
-- implemented a unified database approach for the boilerplate package that simplifies workflows and makes the API more consistent. 
-- the redesign:
+## Breaking changes
 
-1. **unifies text databases** (methods, results, discussion, appendix, template) while keeping measures as a distinct but compatible structure
-2. **provides standardised import/save functions** that work consistently across all database types
-3. **maintains backward compatibility** through wrapper functions
-4. **adds helper functions** for accessing specific parts of the unified database
-5. **updates the text generation functions** to work seamlessly with either unified or individual databases
+* Database structure changed to unified format
+* Old separate database functions deprecated in favor of unified approach
 
-### New Functions
-
-| Function | Description |
-|----------|-------------|
-| `boilerplate_import()` | Import one or more databases into a unified structure |
-| `boilerplate_save()` | Save a unified database or individual category |
-| `boilerplate_init()` | Initialize all databases with a single function |
-| `boilerplate_init_category()` | Initialize a specific category |
-| `boilerplate_methods()` | Extract methods from a unified database |
-| `boilerplate_measures()` | Extract measures from a unified database |
-| `boilerplate_results()` | Extract results from a unified database |
-| `boilerplate_discussion()` | Extract discussion from a unified database |
-| `boilerplate_appendix()` | Extract appendix from a unified database |
-| `boilerplate_template()` | Extract templates from a unified database |
-
-### Migration Guide
-
-### Old Workflow vs. New Workflow
-
-#### Old Workflow:
-```r
-# Import separate databases
-measures_db <- boilerplate_manage_measures(action = "list")
-methods_db <- boilerplate_manage_text(action = "list", category = "methods")
-
-# Generate text
-methods_text <- boilerplate_generate_text(
-  category = "methods",
-  sections = c("sample", "statistical.longitudinal"),
-  db = methods_db
-)
-
-# Add a measure
-measures_db <- boilerplate_manage_measures(
-  action = "add",
-  name = "new_measure",
-  measure = list(name = "New Measure", description = "Description")
-)
-
-# Save changes
-boilerplate_manage_measures(
-  action = "save",
-  db = measures_db,
-  file_name = "measures_db.rds"
-)
-```
-
-#### New Workflow:
-```r
-# import unified database
-unified_db <- boilerplate_import()
-
-# generate text (same function, works with unified database)
-methods_text <- boilerplate_generate_text(
-  category = "methods",
-  sections = c("sample", "statistical.longitudinal"),
-  db = unified_db  # just pass the unified database
-)
-
-# add a measure
-unified_db$measures$new_measure <- list(
-  name = "New Measure",
-  description = "Description"
-)
-
-# save all changes at once
-boilerplate_save(unified_db)
-```
-
-### Migration Steps
-
-1. **Replace import calls**:
-   - Replace `boilerplate_manage_measures(action = "list")` with `boilerplate_import("measures")`
-   - Replace `boilerplate_manage_text(action = "list", category = "xyz")` with `boilerplate_import("xyz")`
-
-2. **Replace save calls**:
-   - Replace `boilerplate_manage_measures(action = "save", db = db, ...)` with `boilerplate_save(db, "measures")`
-   - Replace `boilerplate_manage_text(action = "save", category = "xyz", db = db, ...)` with `boilerplate_save(db, "xyz")`
-
-3. **Update database modification**:
-   - Instead of using `action = "add"/"update"/"remove"`, use direct list manipulation:
-     - `db$name <- value` (add/update)
-     - `db$name <- NULL` (remove)
-
-4. **Consider using the unified database**:
-   - use `unified_db <- boilerplate_import()` to get all databases at once
-   - access specific categories with `unified_db$category` or the helper functions
-
-## Technical Implementation Notes
-
-1. **File structure remains the same**:
-   - each category still has its own file on disk
-   - `boilerplate_import()` combines them into a single structure
-   - `boilerplate_save()` writes each category back to its own file
-
-2. **Backward compatibility**:
-   - legacy functions are maintained but issue deprecation warnings
-   - they internally call the new functions to maintain consistency
-
-3. **Database contents**:
-   - the structure and content of databases is unchanged
-   - the new system is just a different way to access and manage them
-
-4. **Text generation**:
-   - `boilerplate_generate_text()` and `boilerplate_generate_measures()` work with either individual databases or the unified database
-
-## Future Enhancements
-
-1. **Database validation** will be added to ensure consistency
-2. **Searching across categories** could be made easier with the unified approach, to be considered
-3. **Export/import between projects** could be implemented for sharing databases (needs thought)
-4. **Version control integration** for database changes could be more straightforward -- presently we rely on overwrite warnings, this is far from user-proof. 
-
-## Breaking Changes
-
-There are no breaking changes in the implementation, as all existing functions are preserved with backward compatibility wrappers. However, using custom file names is now discouraged as the unified system uses standardised file names.
-
-## [2024-04-01] boilerplate 0.3.0
-## Improved
-- `boilerplate_measures_text()` now `boilerplate_generate_text`
--  user-proof defaults for checking against writing over existing databases. 
-
-## [2024-04-01] boilerplate 0.2.1
-### Improved
-- added cli alerts to main functions
-
-## Deprecated
-- `boilerplate_results_text()`, `boilerplate_measures_text()`, handled more simply with `boilerplate_generate_text()`
-- templating now possible for templating full manuscripts. 
-- different version (technical, non-technical) of templated manuscripts now possible. 
-
-## [2024-03-29] boilerplate 0.2.0
-## New
-- Major refactoring of package for simplicity. 
-- Change of liscence to MIT.
-
-- `boilerplate_manage_text()` - uses template variable substitution to create customised text. 
-- `boilerplate_generate_text()` - produces text for boilerplate_manage_text
-- `boilerplate_results_text()` - produces results for boilerplate_manage_text
-- `boilerplate_init_text()` - initialises text for boilerplate_manage_text
-
-## Deprecated
-- all previous functions: 
-    - boilerplate_init_text(previous version) 
-    - boilerplate_manage_measures (previous version)
-    - boilerplate_manage_text (previous version)
-    - boilerplate_merge_databases (previous version)
-    - boilerplate_measures
-    - boilerplate_report_additional_sections
-    - boilerplate_report_causal_interventions
-    - boilerplate_report_confounding_control
-    - boilerplate_report_eligibility_criteria
-    - boilerplate_report_identification_assumptions
-    - boilerplate_report_measures
-    - boilerplate_report_methods
-    - boilerplate_report_missing_data
-    - boilerplate_report_sample
-    - boilerplate_report_statistical_estimator
-    - boilerplate_report_target_population
-    - boilerplate_report_variables
 
 
 ## [2024-12-22] boilerplate 0.0.1.6

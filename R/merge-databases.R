@@ -25,22 +25,37 @@
 #' If sort_results is TRUE, the function will sort the merged database alphabetically at each level.
 #'
 #' @examples
+#' # Create example databases
+#' db1 <- list(
+#'   anxiety = list(
+#'     description = "Anxiety measure from study 1",
+#'     items = 10
+#'   ),
+#'   depression = list(
+#'     description = "Depression scale",
+#'     items = 15
+#'   )
+#' )
+#'
+#' db2 <- list(
+#'   anxiety = list(
+#'     description = "Anxiety measure from study 2",
+#'     items = 12
+#'   ),
+#'   stress = list(
+#'     description = "Stress scale",
+#'     items = 8
+#'   )
+#' )
+#'
 #' \dontrun{
-#' # Merge two flat databases with default names
-#' merged_db <- boilerplate_merge_databases(test_a, test_b)
-#'
-#' # Merge two hierarchical databases with custom names
-#' merged_db <- boilerplate_merge_databases(test_a, test_b, "NZAVS 2009", "NZAVS 2020")
-#'
-#' # Merge but do not process nested structures recursively
-#' merged_db <- boilerplate_merge_databases(test_a, test_b, recursive = FALSE)
-#'
-#' # Merge but do not sort the result
-#' merged_db <- boilerplate_merge_databases(test_a, test_b, sort_results = FALSE)
+#' # Merge databases interactively
+#' merged <- boilerplate_merge_databases(db1, db2, "Study 1", "Study 2")
 #' }
 #'
 #' @importFrom cli cli_h1 cli_h2 cli_text cli_code cli_progress_bar cli_progress_update
 #' @importFrom cli cli_progress_done cli_alert_success cli_alert_info
+#' @importFrom utils capture.output
 #'
 #' @export
 boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_name = "Database 2",
@@ -117,7 +132,7 @@ boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_n
     }
 
     # sort alphabetically if requested
-    if (sort_results) {
+    if (sort_results && length(local_merged) > 0) {
       local_merged <- local_merged[order(names(local_merged))]
     }
 
@@ -249,7 +264,7 @@ boilerplate_merge_unified <- function(
     }
   }
 
-  # initialize result with db1
+  # initialise result with db1
   result <- db1
 
   # process each category
@@ -361,14 +376,14 @@ boilerplate_merge_category <- function(
 #'
 #' @examples
 #' \dontrun{
-#' # Import the current unified database
+#' # Import current unified database
 #' unified_db <- boilerplate_import()
 #'
-#' # Update its measures category from an external project
+#' # Update methods from an external source
 #' unified_db <- boilerplate_update_from_external(
 #'   unified_db = unified_db,
-#'   category = "measures",
-#'   external_path = "path/to/external/project/data"
+#'   category = "methods",
+#'   external_path = "path/to/external/data"
 #' )
 #'
 #' # Save the updated database

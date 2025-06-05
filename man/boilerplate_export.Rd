@@ -2,76 +2,88 @@
 % Please edit documentation in R/import-export-functions.R
 \name{boilerplate_export}
 \alias{boilerplate_export}
-\title{Export Database Elements to a File}
+\title{Export Boilerplate Database}
 \usage{
 boilerplate_export(
   db,
   output_file = NULL,
   select_elements = NULL,
   data_path = NULL,
+  format = "rds",
   confirm = TRUE,
   create_dirs = FALSE,
   quiet = FALSE,
+  pretty = TRUE,
   save_by_category = TRUE
 )
 }
 \arguments{
-\item{db}{List. The database to export from. Can be a single category database
-or a unified database with multiple categories.}
+\item{db}{List. The database to export (unified or single category).}
 
-\item{output_file}{Character. Name of the output file prefix for single files,
-or ignored for unified databases (which automatically save by category).}
+\item{output_file}{Character. Optional output filename. If NULL, uses default naming.}
 
-\item{select_elements}{Character vector. Optional paths to select in dot notation.
-Use "\emph{" for wildcard selection (e.g., "measures.}" selects all measures).
-If NULL or empty (default), exports the entire database.}
+\item{select_elements}{Character vector. Optional paths to export (supports wildcards).}
 
 \item{data_path}{Character. Base path for data directory.
 If NULL (default), uses here::here("boilerplate", "data").}
 
-\item{confirm}{Logical. If TRUE, asks for confirmation before overwriting. Default is TRUE.}
+\item{format}{Character. Format to save: "rds" (default), "json", or "both".}
 
-\item{create_dirs}{Logical. If TRUE, creates directories that don't exist. Default is FALSE.}
+\item{confirm}{Logical. If TRUE (default), asks for confirmation before overwriting.}
+
+\item{create_dirs}{Logical. If TRUE, creates directories if they don't exist.}
 
 \item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
 
-\item{save_by_category}{Logical. If TRUE and db is unified, saves each category
-to separate files (e.g., measures_db.rds, methods_db.rds). If FALSE, saves
-to a single unified file. Default is TRUE.}
+\item{pretty}{Logical. If TRUE (default), pretty-print JSON for readability.}
+
+\item{save_by_category}{Logical. If TRUE (default), saves unified databases by category.}
 }
 \value{
-Invisibly returns the path(s) to the saved file(s) if successful, or NULL if cancelled.
+Invisible TRUE if successful.
 }
 \description{
-This function exports a database (fully or partially) to new files
-without modifying the original database. For unified databases,
-it automatically saves each category to its own file.
+This function exports a boilerplate database or selected elements to disk.
+It supports exporting entire databases, specific categories, or selected
+elements using dot notation paths. Can export in RDS, JSON, or both formats.
 }
 \examples{
-\dontrun{
-# Export the entire unified database by category (creates separate files)
-unified_db <- boilerplate_import()
-boilerplate_export(
-  unified_db,
-  data_path = "path/to/export/"
+# Create a temporary directory and initialise databases
+temp_dir <- tempdir()
+data_path <- file.path(temp_dir, "boilerplate_export_example", "data")
+
+# Initialise and import databases
+boilerplate_init(
+  categories = c("methods", "measures"),
+  data_path = data_path,
+  create_dirs = TRUE,
+  confirm = FALSE,
+  quiet = TRUE
 )
 
-# Export selected elements by category
-unified_db <- boilerplate_import()
+unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+
+# Export entire database
+export_path <- file.path(temp_dir, "export")
 boilerplate_export(
-  unified_db,
-  data_path = "path/to/export/",
-  select_elements = c("measures.*", "methods.statistical.*")
+  db = unified_db,
+  data_path = export_path,
+  create_dirs = TRUE,
+  confirm = FALSE,
+  quiet = TRUE
 )
 
-# Export to a single unified file instead
-unified_db <- boilerplate_import()
+# Export selected elements
 boilerplate_export(
-  unified_db,
-  output_file = "unified_backup.rds",
-  data_path = "path/to/export/",
-  save_by_category = FALSE
+  db = unified_db,
+  select_elements = "methods.*",
+  output_file = "methods_only.rds",
+  data_path = export_path,
+  confirm = FALSE,
+  quiet = TRUE
 )
-}
+
+# Clean up
+unlink(file.path(temp_dir, "boilerplate_export_example"), recursive = TRUE)
 
 }

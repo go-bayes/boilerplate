@@ -3,3 +3,8 @@
 .RData
 .Ruserdata
 *.DS_Store
+*.tar.gz
+*.Rcheck
+debug_test_failures.R
+/doc/
+/Meta/

@@ -25,7 +25,7 @@ boilerplate_batch_clean(
 
 \item{field}{Character. The field to clean (e.g., "reference", "description").}
 
-\item{remove_chars}{Character vector. Characters to remove (e.g., c("@", "\link{", "}")).}
+\item{remove_chars}{Character vector. Characters to remove from text fields.}
 
 \item{replace_pairs}{List. Named list for replacements (e.g., list(" " = "_")).}
 

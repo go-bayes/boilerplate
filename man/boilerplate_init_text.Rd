@@ -2,7 +2,7 @@
 % Please edit documentation in R/init-functions.R
 \name{boilerplate_init_text}
 \alias{boilerplate_init_text}
-\title{Initialize Boilerplate Text Databases (Deprecated)}
+\title{Initialise Boilerplate Text Databases (Deprecated)}
 \usage{
 boilerplate_init_text(
   categories = c("methods", "results", "discussion", "appendix", "template"),
@@ -16,7 +16,7 @@ boilerplate_init_text(
 )
 }
 \arguments{
-\item{categories}{Character vector. Categories to initialize.}
+\item{categories}{Character vector. Categories to initialise.}
 
 \item{merge_strategy}{Character. How to merge with existing databases.}
 
@@ -33,7 +33,7 @@ boilerplate_init_text(
 \item{confirm}{Logical. If TRUE, asks for confirmation before making changes.}
 }
 \value{
-Invisibly returns a logical vector indicating which categories were successfully initialized.
+Invisibly returns a logical vector indicating which categories were successfully initialised.
 }
 \description{
 This function is deprecated. Please use boilerplate_init() instead.

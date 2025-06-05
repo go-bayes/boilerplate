@@ -1,8 +1,18 @@
-pandoc: '3.4'
+pandoc: 3.7.0.2
 pkgdown: 2.1.2
 pkgdown_sha: ~
-articles: {}
-last_built: 2025-05-29T05:06Z
+articles:
+  boilerplate-architecture: boilerplate-architecture.html
+  boilerplate-bibliography-workflow: boilerplate-bibliography-workflow.html
+  boilerplate-getting-started: boilerplate-getting-started.html
+  boilerplate-internals: boilerplate-internals.html
+  boilerplate-intro-enhanced: boilerplate-intro-enhanced.html
+  boilerplate-intro: boilerplate-intro.html
+  boilerplate-json-schema: boilerplate-json-schema.html
+  boilerplate-json-workflow: boilerplate-json-workflow.html
+  boilerplate-measures-workflow: boilerplate-measures-workflow.html
+  boilerplate-quarto-workflow: boilerplate-quarto-workflow.html
+last_built: 2025-06-05T11:46Z
 urls:
   reference: https://go-bayes.github.io/boilerplate/reference
   article: https://go-bayes.github.io/boilerplate/articles

@@ -1,0 +1,286 @@
+name: Validate Boilerplate Database
+
+on:
+  push:
+    paths:
+      - 'boilerplate/data/**/*.json'
+      - 'inst/examples/json-poc/schema/*.json'
+      - '.github/workflows/validate-boilerplate.yml'
+  pull_request:
+    paths:
+      - 'boilerplate/data/**/*.json'
+      - 'inst/examples/json-poc/schema/*.json'
+  workflow_dispatch:
+
+jobs:
+  validate-json:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install JSON validation tools
+      run: |
+        npm install -g ajv-cli
+        npm install -g jsonlint
+    
+    - name: Validate JSON syntax
+      run: |
+        echo "Checking JSON syntax..."
+        find boilerplate/data -name "*.json" -type f | while read file; do
+          echo "Validating syntax: $file"
+          jsonlint -q "$file" || exit 1
+        done
+    
+    - name: Validate against schemas
+      run: |
+        echo "Validating against schemas..."
+        
+        # Validate measures databases
+        for file in boilerplate/data/*measures*.json; do
+          if [ -f "$file" ]; then
+            echo "Validating measures: $file"
+            ajv validate -s inst/examples/json-poc/schema/measures_schema.json -d "$file" || exit 1
+          fi
+        done
+        
+        # Validate methods databases
+        for file in boilerplate/data/*methods*.json; do
+          if [ -f "$file" ]; then
+            echo "Validating methods: $file"
+            ajv validate -s inst/examples/json-poc/schema/methods_schema.json -d "$file" || exit 1
+          fi
+        done
+
+  check-consistency:
+    runs-on: ubuntu-latest
+    needs: validate-json
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: '4.3.0'
+        
+    - name: Install R dependencies
+      uses: r-lib/actions/setup-r-dependencies@v2
+      with:
+        extra-packages: |
+          any::jsonlite
+          any::testthat
+          any::cli
+          
+    - name: Check database consistency
+      run: |
+        Rscript -e '
+          library(jsonlite)
+          
+          # Function to check for missing references
+          check_references <- function(db) {
+            issues <- character()
+            
+            check_recursive <- function(x, path = "") {
+              if (is.list(x)) {
+                if ("reference" %in% names(x) && is.null(x$reference)) {
+                  issues <<- c(issues, paste0(path, " has NULL reference"))
+                }
+                for (name in names(x)) {
+                  if (name != "_meta") {
+                    check_recursive(x[[name]], paste0(path, "/", name))
+                  }
+                }
+              }
+            }
+            
+            check_recursive(db)
+            return(issues)
+          }
+          
+          # Check all JSON files
+          json_files <- list.files("boilerplate/data", pattern = "\\\\.json$", full.names = TRUE)
+          
+          all_issues <- character()
+          
+          for (file in json_files) {
+            cat("Checking", basename(file), "...\n")
+            db <- read_json(file)
+            issues <- check_references(db)
+            if (length(issues) > 0) {
+              all_issues <- c(all_issues, paste0(basename(file), ": ", issues))
+            }
+          }
+          
+          if (length(all_issues) > 0) {
+            cat("\nIssues found:\n")
+            cat(all_issues, sep = "\n")
+            quit(status = 1)
+          } else {
+            cat("\nAll consistency checks passed!\n")
+          }
+        '
+
+  generate-documentation:
+    runs-on: ubuntu-latest
+    needs: validate-json
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Generate database documentation
+      run: |
+        python -c '
+import json
+import os
+from datetime import datetime
+
+def generate_markdown_docs(json_path, output_path):
+    """Generate markdown documentation from JSON database"""
+    
+    with open(json_path, "r") as f:
+        db = json.load(f)
+    
+    md_content = f"# Boilerplate Database Documentation\n\n"
+    md_content += f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+    
+    # Count entries
+    def count_entries(obj):
+        if isinstance(obj, dict):
+            count = 0
+            for key, value in obj.items():
+                if not key.startswith("_"):
+                    if "name" in value or "text" in value or "default" in value:
+                        count += 1
+                    else:
+                        count += count_entries(value)
+            return count
+        return 0
+    
+    for category, content in db.items():
+        if not category.startswith("_"):
+            entry_count = count_entries(content)
+            md_content += f"## {category.title()} ({entry_count} entries)\n\n"
+            
+            # Generate structure tree
+            def print_tree(obj, prefix="", is_last=True):
+                tree = ""
+                if isinstance(obj, dict):
+                    items = [(k, v) for k, v in obj.items() if not k.startswith("_")]
+                    for i, (key, value) in enumerate(items):
+                        is_last_item = i == len(items) - 1
+                        tree += prefix + ("└── " if is_last_item else "├── ") + key
+                        
+                        if "description" in value:
+                            tree += f" - {value['description'][:50]}..."
+                        elif "text" in value:
+                            tree += f" - {value['text'][:50]}..."
+                        tree += "\n"
+                        
+                        if isinstance(value, dict) and not any(k in value for k in ["name", "text", "default"]):
+                            extension = "    " if is_last_item else "│   "
+                            tree += print_tree(value, prefix + extension, is_last_item)
+                return tree
+            
+            md_content += "```\n"
+            md_content += print_tree(content)
+            md_content += "```\n\n"
+    
+    with open(output_path, "w") as f:
+        f.write(md_content)
+
+# Generate docs for each JSON file
+for file in os.listdir("boilerplate/data"):
+    if file.endswith(".json"):
+        json_path = os.path.join("boilerplate/data", file)
+        output_path = os.path.join("docs", f"{file.replace('.json', '_structure.md')}")
+        os.makedirs("docs", exist_ok=True)
+        generate_markdown_docs(json_path, output_path)
+        print(f"Generated documentation for {file}")
+        '
+    
+    - name: Commit documentation
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/*.md
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update database documentation [skip ci]"
+        git push
+
+  check-duplicates:
+    runs-on: ubuntu-latest
+    needs: validate-json
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check for duplicate entries
+      run: |
+        python -c '
+import json
+import sys
+from collections import defaultdict
+
+def find_duplicates(json_path):
+    with open(json_path, "r") as f:
+        db = json.load(f)
+    
+    # Track all text content
+    text_map = defaultdict(list)
+    
+    def extract_texts(obj, path=""):
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                if key.startswith("_"):
+                    continue
+                    
+                current_path = f"{path}/{key}" if path else key
+                
+                if isinstance(value, str) and len(value) > 20:
+                    # Track substantial text content
+                    text_map[value].append(current_path)
+                elif isinstance(value, dict):
+                    extract_texts(value, current_path)
+    
+    extract_texts(db)
+    
+    # Find duplicates
+    duplicates = {text: paths for text, paths in text_map.items() if len(paths) > 1}
+    
+    if duplicates:
+        print(f"\nDuplicates found in {json_path}:")
+        for text, paths in duplicates.items():
+            print(f"\nText: {text[:100]}...")
+            print("Found in:")
+            for path in paths:
+                print(f"  - {path}")
+        return True
+    return False
+
+# Check all JSON files
+import os
+found_duplicates = False
+
+for file in os.listdir("boilerplate/data"):
+    if file.endswith(".json"):
+        json_path = os.path.join("boilerplate/data", file)
+        if find_duplicates(json_path):
+            found_duplicates = True
+
+if found_duplicates:
+    print("\nConsider consolidating duplicate entries.")
+    sys.exit(1)
+else:
+    print("\nNo duplicates found!")
+        '

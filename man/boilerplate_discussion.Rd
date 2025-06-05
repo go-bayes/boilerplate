@@ -2,31 +2,59 @@
 % Please edit documentation in R/category-helpers.R
 \name{boilerplate_discussion}
 \alias{boilerplate_discussion}
-\title{Access Discussion from Unified Database}
+\title{Access Discussion Content}
 \usage{
 boilerplate_discussion(unified_db, name = NULL)
 }
 \arguments{
-\item{unified_db}{List. The unified boilerplate database}
+\item{unified_db}{List. The unified boilerplate database containing discussion content}
 
-\item{name}{Character. Optional specific discussion section to retrieve using dot notation}
+\item{name}{Character. Optional specific discussion section to retrieve using dot notation
+(e.g., "limitations.statistical" for nested content)}
 }
 \value{
-List or character. The requested discussion database or specific section
+List or character. The requested discussion database or specific section.
+If name is NULL, returns the entire discussion database. If name is specified,
+returns the content at that path.
 }
 \description{
 This function extracts and returns the discussion portion of a unified database,
 optionally retrieving a specific discussion section by name using dot notation.
 }
-\examples{
-\dontrun{
-# import all databases
-unified_db <- boilerplate_import()
-
-# get all discussion sections
-discussion_db <- boilerplate_discussion(unified_db)
-
-# get a specific discussion section using dot notation
-limitations <- boilerplate_discussion(unified_db, "limitations")
+\details{
+Access Discussion from Unified Database
 }
+\examples{
+# Create a temporary directory and initialise database
+temp_dir <- tempdir()
+data_path <- file.path(temp_dir, "boilerplate_discussion_example", "data")
+
+# Initialise with default discussion content
+boilerplate_init(
+  categories = "discussion",
+  data_path = data_path,
+  create_dirs = TRUE,
+  create_empty = FALSE,
+  confirm = FALSE,
+  quiet = TRUE
+)
+
+# Import all databases
+unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+
+# Get all discussion sections
+discussion_db <- boilerplate_discussion(unified_db)
+names(discussion_db)
+
+# Get a specific discussion section (if it exists)
+if ("discussion" \%in\% names(unified_db) && length(unified_db$discussion) > 0) {
+  section_names <- names(unified_db$discussion)
+  if (length(section_names) > 0) {
+    first_section <- boilerplate_discussion(unified_db, section_names[1])
+  }
+}
+
+# Clean up
+unlink(file.path(temp_dir, "boilerplate_discussion_example"), recursive = TRUE)
+
 }

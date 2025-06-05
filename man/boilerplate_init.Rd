@@ -2,7 +2,7 @@
 % Please edit documentation in R/init-functions.R
 \name{boilerplate_init}
 \alias{boilerplate_init}
-\title{Initialize All Boilerplate Databases}
+\title{Initialise All Boilerplate Databases}
 \usage{
 boilerplate_init(
   categories = c("measures", "methods", "results", "discussion", "appendix", "template"),
@@ -16,7 +16,7 @@ boilerplate_init(
 )
 }
 \arguments{
-\item{categories}{Character vector. Categories to initialize.
+\item{categories}{Character vector. Categories to initialise.
 Default is all categories: "measures", "methods", "results", "discussion", "appendix", "template".}
 
 \item{merge_strategy}{Character. How to merge with existing databases: "keep_existing", "merge_recursive", or "overwrite_all".}
@@ -36,29 +36,44 @@ If NULL (default), uses here::here("boilerplate", "data").}
 Default is TRUE. Set to FALSE to use default content.}
 }
 \value{
-Invisibly returns a logical vector indicating which categories were successfully initialized.
+Invisibly returns a logical vector indicating which categories were successfully initialised.
 }
 \description{
-This function initializes or updates all boilerplate databases with default values.
+This function initialises or updates all boilerplate databases with default values.
 It's a convenience wrapper around boilerplate_init_category() for all categories.
 }
 \examples{
-\dontrun{
-# run in dry-run mode first to see what would happen
-boilerplate_init(dry_run = TRUE)
+# Create a temporary directory for examples
+temp_dir <- tempdir()
+data_path <- file.path(temp_dir, "boilerplate_example", "data")
 
-# initialize all databases with empty structures
-boilerplate_init(create_dirs = TRUE, create_empty = TRUE)
+# Run in dry-run mode first to see what would happen
+boilerplate_init(data_path = data_path, dry_run = TRUE, quiet = TRUE, create_dirs = TRUE)
 
-# initialize all databases with default content
-boilerplate_init(create_dirs = TRUE, create_empty = FALSE)
+# Initialise all databases with empty structures
+boilerplate_init(
+  data_path = data_path,
+  create_dirs = TRUE,
+  create_empty = TRUE,
+  confirm = FALSE,
+  quiet = TRUE
+)
 
-# initialize specific categories only
+# Check that files were created
+list.files(data_path)
+
+# Initialise specific categories only with default content
 boilerplate_init(
   categories = c("methods", "measures"),
+  data_path = data_path,
   create_dirs = TRUE,
-  confirm = FALSE
+  create_empty = FALSE,
+  merge_strategy = "overwrite_all",
+  confirm = FALSE,
+  quiet = TRUE
 )
-}
+
+# Clean up
+unlink(file.path(temp_dir, "boilerplate_example"), recursive = TRUE)
 
 }

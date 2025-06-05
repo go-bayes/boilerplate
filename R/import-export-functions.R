@@ -9,17 +9,6 @@
 #' @param quiet A \code{logical}. If \code{FALSE}, shows CLI alerts.
 #' @return A \code{list} containing only the matching branches.
 #' @keywords internal
-#' Extract selected elements from a nested database
-#'
-#' This helper walks a nested list and returns only
-#' those branches whose dot-notation paths match the user patterns.
-#' It understands \code{*} as a wildcard for one whole segment.
-#'
-#' @param db A \code{list}. The database to extract from.
-#' @param select_paths A \code{character} vector of dot-notation paths (\code{*} allowed).
-#' @param quiet A \code{logical}. If \code{FALSE}, shows CLI alerts.
-#' @return A \code{list} containing only the matching branches.
-#' @keywords internal
 extract_selected_elements <- function(db, select_paths, quiet = FALSE) {
   if (!is.list(db)) {
     stop("db must be a list")
@@ -197,520 +186,79 @@ create_db_backup <- function(file_path, quiet = FALSE) {
   return(backup_path)
 }
 
-#' Import Boilerplate Database(s)
+# Note: The import function is defined in import-functions.R
+#' Export Boilerplate Database
 #'
-#' This function imports one or more boilerplate databases from disk.
+#' This function exports a boilerplate database or selected elements to disk.
+#' It supports exporting entire databases, specific categories, or selected
+#' elements using dot notation paths. Can export in RDS, JSON, or both formats.
 #'
-#' @param category Character or character vector. Category of database to import.
-#'   Options include "measures", "methods", "results", "discussion", "appendix", "template".
-#'   If NULL (default), imports all available categories.
+#' @param db List. The database to export (unified or single category).
+#' @param output_file Character. Optional output filename. If NULL, uses default naming.
+#' @param select_elements Character vector. Optional paths to export (supports wildcards).
 #' @param data_path Character. Base path for data directory.
 #'   If NULL (default), uses here::here("boilerplate", "data").
+#' @param format Character. Format to save: "rds" (default), "json", or "both".
+#' @param confirm Logical. If TRUE (default), asks for confirmation before overwriting.
+#' @param create_dirs Logical. If TRUE, creates directories if they don't exist.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
+#' @param pretty Logical. If TRUE (default), pretty-print JSON for readability.
+#' @param save_by_category Logical. If TRUE (default), saves unified databases by category.
 #'
-#' @return List. The imported database(s). If a single category was requested,
-#'   returns that database. If multiple categories were requested, returns a named
-#'   list with each category's database.
-#'
-#’ @examples
-#’ \dontrun{
-#’ # import just the methods database
-#’ methods_db <- boilerplate_import("methods")
-#’
-#’ # import multiple specific databases
-#’ dbs <- boilerplate_import(c("methods", "measures"))
-#’ methods_db  <- dbs$methods
-#’ measures_db <- dbs$measures
-#’
-#’ # import all databases
-#’ all_dbs <- boilerplate_import()
-#’ }
-#'
-#' @importFrom cli cli_alert_info cli_alert_warning cli_alert_danger
-#' @importFrom here here
-#' @export
-boilerplate_import <- function(
-    category = NULL,
-    data_path = NULL,
-    quiet = FALSE
-) {
-  # define all valid categories
-  all_categories <- c("measures", "methods", "results", "discussion", "appendix", "template")
-
-  # if no categories specified, import all
-  if (is.null(category)) {
-    category <- all_categories
-    if (!quiet) cli_alert_info("importing all categories")
-  }
-
-  # validate requested categories
-  invalid_categories <- setdiff(category, all_categories)
-  if (length(invalid_categories) > 0) {
-    if (!quiet) cli_alert_danger("invalid categories specified: {paste(invalid_categories, collapse = ', ')}")
-    stop("Invalid categories: ", paste(invalid_categories, collapse = ", "))
-  }
-
-  # set default path if not provided
-  if (is.null(data_path)) {
-    if (!requireNamespace("here", quietly = TRUE)) {
-      if (!quiet) cli_alert_danger("package 'here' is required for default path resolution")
-      stop("Package 'here' is required for default path resolution. Please install it or specify 'data_path' manually.")
-    }
-    data_path <- here::here("boilerplate", "data")
-    if (!quiet) cli_alert_info("using default path: {data_path}")
-  }
-
-  # check if directory exists
-  if (!dir.exists(data_path)) {
-    if (!quiet) cli_alert_warning("data directory does not exist: {data_path}")
-  }
-
-  # load each requested database
-  result <- list()
-  for (cat in category) {
-    if (!quiet) cli_alert_info("importing {cat} database")
-
-    file_path <- file.path(data_path, paste0(cat, "_db.rds"))
-
-    if (file.exists(file_path)) {
-      if (!quiet) cli_alert_info("loading {cat} database from {file_path}")
-      result[[cat]] <- tryCatch({
-        readRDS(file_path)
-      }, error = function(e) {
-        if (!quiet) cli_alert_warning("error loading {cat} database: {e$message}, using default")
-        if (cat == "measures") {
-          get_default_measures_db()
-        } else {
-          get_default_db(cat)
-        }
-      })
-    } else {
-      if (!quiet) cli_alert_warning("{cat} database file not found, using default")
-      if (cat == "measures") {
-        result[[cat]] <- get_default_measures_db()
-      } else {
-        result[[cat]] <- get_default_db(cat)
-      }
-    }
-  }
-
-  # if only one category was requested, return just that database
-  if (length(category) == 1) {
-    return(result[[category]])
-  }
-
-  return(result)
-}
-
-#' Save Boilerplate Database
-#'
-#' This function saves a boilerplate database to disk with entry-level change detection.
-#'
-#' @param db List. The database to save.
-#' @param category Character. Category of the database.
-#'   Options include "measures", "methods", "results", "discussion", "appendix", "template".
-#'   If NULL and db is a named list matching category names, saves each category.
-#' @param data_path Character. Base path for data directory.
-#'   If NULL (default), uses here::here("boilerplate", "data").
-#' @param confirm Logical. If TRUE, asks for confirmation before overwriting. Default is TRUE.
-#' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
-#' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
-#' @param entry_level_confirm Logical. If TRUE, shows changes at the entry level and asks for confirmation. Default is TRUE.
-#' @param create_backup Logical. If TRUE, creates a backup of existing database before saving. Default is TRUE.
-#' @param select_elements Character vector. Paths to select in dot notation (e.g., "statistical.longitudinal.lmtp").
-#'   Use "*" for wildcard selection (e.g., "statistical.*" selects all statistical methods).
-#'   If NULL (default), saves the entire database.
-#' @param output_file Character. Name of the output file if saving selected elements to a separate file.
-#'   If NULL (default), overwrites the original file.
-#'
-#' @return Invisibly returns a named list with logical values indicating which categories
-#'   were successfully saved, or the file path if a single category was saved.
-#'
-#’ @examples
-#’ \dontrun{
-#’ # save a specific database
-#’ methods_db <- boilerplate_import("methods")
-#’ methods_db$new_section <- "New content"
-#’ boilerplate_save(methods_db, "methods")
-#’
-#’ # save selected elements from a database
-#’ unified_db <- boilerplate_import()
-#’ boilerplate_save(
-#’   unified_db,
-#’   select_elements = c("methods.statistical.*", "results.main_effect"),
-#’   output_file     = "selected_elements.rds"
-#’ )
-#’
-#’ # save multiple databases at once
-#’ all_dbs <- boilerplate_import()
-#’ all_dbs$methods$new_section <- "New content"
-#’ boilerplate_save(all_dbs)
-#’ }
-#' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
-#' @importFrom here here
-#' @export
-boilerplate_save <- function(
-    db,
-    category = NULL,
-    data_path = NULL,
-    confirm = TRUE,
-    create_dirs = FALSE,
-    quiet = FALSE,
-    entry_level_confirm = TRUE,
-    create_backup = TRUE,
-    select_elements = NULL,
-    output_file = NULL
-) {
-  # define valid categories
-  all_categories <- c("measures", "methods", "results", "discussion", "appendix", "template")
-
-  # set default path if not provided
-  if (is.null(data_path)) {
-    if (!requireNamespace("here", quietly = TRUE)) {
-      if (!quiet) cli_alert_danger("package 'here' is required for default path resolution")
-      stop("Package 'here' is required for default path resolution. Please install it or specify 'data_path' manually.")
-    }
-    data_path <- here::here("boilerplate", "data")
-    if (!quiet) cli_alert_info("using default path: {data_path}")
-  }
-
-  # check if directory exists and handle creation
-  if (!dir.exists(data_path)) {
-    if (!create_dirs) {
-      if (!quiet) cli_alert_danger("directory does not exist: {data_path}")
-      stop("Directory does not exist: ", data_path, ". Set create_dirs=TRUE to create it.")
-    }
-
-    # ask for confirmation if needed
-    proceed <- TRUE
-    if (confirm) {
-      proceed <- ask_yes_no(paste0("directory does not exist: ", data_path, ". create it?"))
-    }
-
-    if (proceed) {
-      dir.create(data_path, recursive = TRUE)
-      if (!quiet) cli_alert_success("created directory: {data_path}")
-    } else {
-      if (!quiet) cli_alert_danger("directory creation cancelled by user")
-      stop("Directory creation cancelled by user.")
-    }
-  }
-
-  # handle saving multiple databases at once when category is NULL
-  if (is.null(category)) {
-    if (!is.list(db) || length(db) == 0) {
-      if (!quiet) cli_alert_danger("when category is NULL, db must be a non-empty list")
-      stop("When category is NULL, db must be a non-empty named list")
-    }
-
-    # check if db has valid category names
-    db_names <- names(db)
-    if (is.null(db_names) || any(db_names == "")) {
-      if (!quiet) cli_alert_danger("when category is NULL, db must be a named list with valid category names")
-      stop("When category is NULL, db must be a named list with valid category names")
-    }
-
-    # if select_elements is specified, extract selected elements for each category
-    if (!is.null(select_elements)) {
-      if (!quiet) cli_alert_info("extracting selected elements for unified database")
-
-      # Process selection paths that might include category prefixes
-      selected_db <- list()
-
-      for (cat in intersect(db_names, all_categories)) {
-        # Get category-specific paths (those starting with "category.")
-        cat_prefix <- paste0(cat, ".")
-        cat_paths <- select_elements[startsWith(select_elements, cat_prefix)]
-
-        # Strip category prefix for processing
-        stripped_paths <- sub(paste0("^", cat, "\\."), "", cat_paths)
-
-        if (length(stripped_paths) > 0) {
-          if (!quiet) cli_alert_info("extracting {length(stripped_paths)} paths from {cat}")
-          selected_db[[cat]] <- extract_selected_elements(db[[cat]], stripped_paths)
-        }
-      }
-
-      # For paths without category prefix, apply to all categories
-      unprefixed_paths <- select_elements[!grepl("^[^.]+\\.", select_elements)]
-
-      if (length(unprefixed_paths) > 0) {
-        if (!quiet) cli_alert_info("applying {length(unprefixed_paths)} general paths to all categories")
-        for (cat in intersect(db_names, all_categories)) {
-          if (!(cat %in% names(selected_db))) {
-            selected_db[[cat]] <- list()
-          }
-          selected_db[[cat]] <- extract_selected_elements(db[[cat]], unprefixed_paths)
-        }
-      }
-
-      # Replace db with selected elements
-      db <- selected_db
-
-      # If output_file is specified, save to that file
-      if (!is.null(output_file)) {
-        output_path <- file.path(data_path, output_file)
-
-        # Confirm if file exists
-        proceed <- TRUE
-        if (confirm && file.exists(output_path)) {
-          proceed <- ask_yes_no(paste0("save to output file? this will overwrite: ", output_path))
-        }
-
-        if (proceed) {
-          if (!quiet) cli_alert_info("saving selected elements to {output_path}")
-          saveRDS(db, file = output_path)
-          if (!quiet) cli_alert_success("saved selected elements to {output_path}")
-          return(invisible(output_path))
-        } else {
-          if (!quiet) cli_alert_info("save cancelled by user")
-          return(invisible(NULL))
-        }
-      }
-    }
-
-    # check for invalid categories
-    invalid_categories <- setdiff(db_names, all_categories)
-    if (length(invalid_categories) > 0) {
-      if (!quiet) cli_alert_warning("ignoring invalid categories: {paste(invalid_categories, collapse = ', ')}")
-      db_names <- intersect(db_names, all_categories)
-    }
-
-    # prepare for multi-database save
-    if (!quiet) cli_alert_info("preparing to save {length(db_names)} databases")
-
-    # track save status for each category
-    save_status <- logical(length(db_names))
-    names(save_status) <- db_names
-
-    # save each valid category
-    for (i in seq_along(db_names)) {
-      cat_name <- db_names[i]
-      if (!quiet) cli_alert_info("processing {cat_name} database ({i}/{length(db_names)})")
-
-      # Call save for each individual category
-      result <- boilerplate_save(
-        db = db[[cat_name]],
-        category = cat_name,
-        data_path = data_path,
-        confirm = confirm,
-        create_dirs = FALSE,  # directory already exists or was created
-        quiet = quiet,
-        entry_level_confirm = entry_level_confirm,
-        create_backup = create_backup,
-        select_elements = NULL  # selection already processed
-      )
-
-      # Store result
-      save_status[i] <- !is.null(result)
-    }
-
-    # count successful saves
-    successful <- sum(save_status)
-    canceled <- length(db_names) - successful
-
-    # show summary of operations
-    if (!quiet) {
-      if (canceled == 0) {
-        cli_alert_success("successfully saved all {length(db_names)} databases")
-      } else if (successful == 0) {
-        cli_alert_info("all {length(db_names)} database saves were cancelled")
-      } else {
-        successful_cats <- names(save_status)[save_status]
-        canceled_cats <- names(save_status)[!save_status]
-
-        cli_alert_info("saved {successful}/{length(db_names)} databases")
-        if (successful > 0) {
-          cli_alert_info("saved: {paste(successful_cats, collapse = ', ')}")
-        }
-        if (canceled > 0) {
-          cli_alert_info("cancelled: {paste(canceled_cats, collapse = ', ')}")
-        }
-      }
-    }
-
-    return(invisible(save_status))
-  }
-
-  # handle saving a single database
-  if (!category %in% all_categories) {
-    if (!quiet) cli_alert_danger("invalid category: {category}")
-    stop("Invalid category: ", category, ". Must be one of: ", paste(all_categories, collapse = ", "))
-  }
-
-  # Handle selected elements for a single category
-  if (!is.null(select_elements)) {
-    if (!quiet) cli_alert_info("extracting selected elements for {category}")
-    db <- extract_selected_elements(db, select_elements)
-
-    # If output_file is specified, save to that file instead of the category file
-    if (!is.null(output_file)) {
-      output_path <- file.path(data_path, output_file)
-
-      # Confirm if file exists
-      proceed <- TRUE
-      if (confirm && file.exists(output_path)) {
-        proceed <- ask_yes_no(paste0("save to output file? this will overwrite: ", output_path))
-      }
-
-      if (proceed) {
-        if (!quiet) cli_alert_info("saving selected elements to {output_path}")
-        saveRDS(db, file = output_path)
-        if (!quiet) cli_alert_success("saved selected elements to {output_path}")
-        return(invisible(output_path))
-      } else {
-        if (!quiet) cli_alert_info("save cancelled by user")
-        return(invisible(NULL))
-      }
-    }
-  }
-
-  # construct file path
-  file_path <- file.path(data_path, paste0(category, "_db.rds"))
-
-  # Check for changes if file exists and entry-level confirmation is requested
-  if (file.exists(file_path) && (confirm || entry_level_confirm)) {
-    # Load existing database for comparison
-    existing_db <- tryCatch({
-      readRDS(file_path)
-    }, error = function(e) {
-      if (!quiet) cli_alert_warning("error loading existing database for comparison: {e$message}")
-      return(list())
-    })
-
-    # Find changes between existing and new database
-    changes <- find_changes(existing_db, db)
-
-    # Prepare change summary
-    has_changes <- length(changes$added) > 0 || length(changes$removed) > 0 || length(changes$modified) > 0
-
-    if (has_changes) {
-      if (!quiet) {
-        if (length(changes$added) > 0) {
-          cli_alert_info("{length(changes$added)} new entries will be added:")
-          for (entry in changes$added) {
-            cli_alert_info("  + {entry}")
-          }
-        }
-
-        if (length(changes$modified) > 0) {
-          cli_alert_info("{length(changes$modified)} existing entries will be modified:")
-          for (entry in changes$modified) {
-            cli_alert_info("  ~ {entry}")
-          }
-        }
-
-        if (length(changes$removed) > 0) {
-          cli_alert_warning("{length(changes$removed)} entries will be removed:")
-          for (entry in changes$removed) {
-            cli_alert_warning("  - {entry}")
-          }
-        }
-      }
-
-      # Ask for confirmation with changes
-      if (entry_level_confirm) {
-        proceed <- ask_yes_no(paste0("Save ", category, " database with these changes?"))
-        if (!proceed) {
-          if (!quiet) cli_alert_info("{category} database save cancelled by user")
-          return(invisible(NULL))
-        }
-      }
-    } else {
-      if (!quiet) cli_alert_info("no changes detected in {category} database")
-    }
-
-    # File-level confirmation
-    if (confirm && !entry_level_confirm) {
-      proceed <- ask_yes_no(paste0("Save ", category, " database? This will overwrite: ", file_path))
-      if (!proceed) {
-        if (!quiet) cli_alert_info("{category} database save cancelled by user")
-        return(invisible(NULL))
-      }
-    }
-
-    # Create backup if requested
-    if (create_backup && has_changes) {
-      backup_path <- create_db_backup(file_path, quiet)
-    }
-  } else if (file.exists(file_path) && confirm) {
-    # Simple file-level confirmation without entry detection
-    proceed <- ask_yes_no(paste0("Save ", category, " database? This will overwrite: ", file_path))
-    if (!proceed) {
-      if (!quiet) cli_alert_info("{category} database save cancelled by user")
-      return(invisible(NULL))
-    }
-  }
-
-  # save the database
-  if (!quiet) cli_alert_info("saving {category} database to {file_path}")
-  saveRDS(db, file = file_path)
-  if (!quiet) cli_alert_success("saved {category} database")
-
-  return(invisible(file_path))
-}
-
-#' Export Database Elements to a File
-#'
-#' This function exports a database (fully or partially) to new files
-#' without modifying the original database. For unified databases,
-#' it automatically saves each category to its own file.
-#'
-#' @param db List. The database to export from. Can be a single category database
-#'   or a unified database with multiple categories.
-#' @param output_file Character. Name of the output file prefix for single files,
-#'   or ignored for unified databases (which automatically save by category).
-#' @param select_elements Character vector. Optional paths to select in dot notation.
-#'   Use "*" for wildcard selection (e.g., "measures.*" selects all measures).
-#'   If NULL or empty (default), exports the entire database.
-#' @param data_path Character. Base path for data directory.
-#'   If NULL (default), uses here::here("boilerplate", "data").
-#' @param confirm Logical. If TRUE, asks for confirmation before overwriting. Default is TRUE.
-#' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
-#' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
-#' @param save_by_category Logical. If TRUE and db is unified, saves each category
-#'   to separate files (e.g., measures_db.rds, methods_db.rds). If FALSE, saves
-#'   to a single unified file. Default is TRUE.
-#'
-#' @return Invisibly returns the path(s) to the saved file(s) if successful, or NULL if cancelled.
+#' @return Invisible TRUE if successful.
 #'
 #' @examples
-#' \dontrun{
-#' # Export the entire unified database by category (creates separate files)
-#' unified_db <- boilerplate_import()
-#' boilerplate_export(
-#'   unified_db,
-#'   data_path = "path/to/export/"
+#' # Create a temporary directory and initialise databases
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_export_example", "data")
+#'
+#' # Initialise and import databases
+#' boilerplate_init(
+#'   categories = c("methods", "measures"),
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
 #' )
 #'
-#' # Export selected elements by category
-#' unified_db <- boilerplate_import()
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+#'
+#' # Export entire database
+#' export_path <- file.path(temp_dir, "export")
 #' boilerplate_export(
-#'   unified_db,
-#'   data_path = "path/to/export/",
-#'   select_elements = c("measures.*", "methods.statistical.*")
+#'   db = unified_db,
+#'   data_path = export_path,
+#'   create_dirs = TRUE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
 #' )
 #'
-#' # Export to a single unified file instead
-#' unified_db <- boilerplate_import()
+#' # Export selected elements
 #' boilerplate_export(
-#'   unified_db,
-#'   output_file = "unified_backup.rds",
-#'   data_path = "path/to/export/",
-#'   save_by_category = FALSE
+#'   db = unified_db,
+#'   select_elements = "methods.*",
+#'   output_file = "methods_only.rds",
+#'   data_path = export_path,
+#'   confirm = FALSE,
+#'   quiet = TRUE
 #' )
-#' }
+#'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_export_example"), recursive = TRUE)
 #'
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
+#' @importFrom here here
 #' @export
 boilerplate_export <- function(
     db,
     output_file = NULL,
     select_elements = NULL,
     data_path = NULL,
+    format = "rds",
     confirm = TRUE,
     create_dirs = FALSE,
     quiet = FALSE,
+    pretty = TRUE,
     save_by_category = TRUE
 ) {
   if (!is.list(db)) {
@@ -817,21 +365,45 @@ boilerplate_export <- function(
     saved_files <- character()
 
     for (cat in names(selected_db)) {
-      cat_file <- file.path(data_path, paste0(cat, "_db.rds"))
+      base_name <- paste0(cat, "_db")
 
-      # Check for overwrite
-      proceed <- TRUE
-      if (confirm && file.exists(cat_file)) {
-        proceed <- ask_yes_no(paste0("overwrite existing file: ", cat_file, "?"))
+      # Save in requested format(s)
+      if (format %in% c("rds", "both")) {
+        cat_file <- file.path(data_path, paste0(base_name, ".rds"))
+
+        # Check for overwrite
+        proceed <- TRUE
+        if (confirm && file.exists(cat_file)) {
+          proceed <- ask_yes_no(paste0("overwrite existing file: ", cat_file, "?"))
+        }
+
+        if (proceed) {
+          if (!quiet) cli_alert_info("saving {cat} to {cat_file}")
+          write_boilerplate_db(selected_db[[cat]], cat_file, format = "rds")
+          saved_files <- c(saved_files, cat_file)
+          if (!quiet) cli_alert_success("saved {cat} database (RDS)")
+        } else {
+          if (!quiet) cli_alert_info("save cancelled for {cat}")
+        }
       }
 
-      if (proceed) {
-        if (!quiet) cli_alert_info("saving {cat} to {cat_file}")
-        saveRDS(selected_db[[cat]], file = cat_file)
-        saved_files <- c(saved_files, cat_file)
-        if (!quiet) cli_alert_success("saved {cat} database")
-      } else {
-        if (!quiet) cli_alert_info("save cancelled for {cat}")
+      if (format %in% c("json", "both")) {
+        cat_file <- file.path(data_path, paste0(base_name, ".json"))
+
+        # Check for overwrite
+        proceed <- TRUE
+        if (confirm && file.exists(cat_file)) {
+          proceed <- ask_yes_no(paste0("overwrite existing file: ", cat_file, "?"))
+        }
+
+        if (proceed) {
+          if (!quiet) cli_alert_info("saving {cat} to {cat_file}")
+          write_boilerplate_db(selected_db[[cat]], cat_file, format = "json", pretty = pretty)
+          saved_files <- c(saved_files, cat_file)
+          if (!quiet) cli_alert_success("saved {cat} database (JSON)")
+        } else {
+          if (!quiet) cli_alert_info("save cancelled for {cat}")
+        }
       }
     }
 
@@ -844,31 +416,71 @@ boilerplate_export <- function(
     }
   } else {
     # Save as a single file
-    if (is.null(output_file)) {
-      if (is_unified) {
-        output_file <- "unified_db.rds"
-      } else {
-        output_file <- "exported_db.rds"
+    saved_files <- character()
+
+    # Determine base name and extension from output_file if provided
+    if (!is.null(output_file)) {
+      # Extract base name and extension
+      ext <- tools::file_ext(output_file)
+      base_name <- tools::file_path_sans_ext(basename(output_file))
+
+      # If extension provided, override format
+      if (ext %in% c("rds", "json")) {
+        format <- ext
       }
-      if (!quiet) cli_alert_info("using default output file: {output_file}")
-    }
-
-    output_path <- file.path(data_path, output_file)
-
-    # Check for overwrite
-    proceed <- TRUE
-    if (confirm && file.exists(output_path)) {
-      proceed <- ask_yes_no(paste0("save to output file? this will overwrite: ", output_path))
-    }
-
-    if (proceed) {
-      if (!quiet) cli_alert_info("saving selected elements to {output_path}")
-      saveRDS(selected_db, file = output_path)
-      if (!quiet) cli_alert_success("saved selected elements to {output_path}")
-      return(invisible(output_path))
     } else {
-      if (!quiet) cli_alert_info("save cancelled by user")
+      # Use default naming
+      if (is_unified) {
+        base_name <- "unified_db"
+      } else {
+        base_name <- "exported_db"
+      }
+    }
+
+    # Save in requested format(s)
+    if (format %in% c("rds", "both")) {
+      output_path <- file.path(data_path, paste0(base_name, ".rds"))
+
+      # Check for overwrite
+      proceed <- TRUE
+      if (confirm && file.exists(output_path)) {
+        proceed <- ask_yes_no(paste0("save to output file? this will overwrite: ", output_path))
+      }
+
+      if (proceed) {
+        if (!quiet) cli_alert_info("saving selected elements to {output_path}")
+        write_boilerplate_db(selected_db, output_path, format = "rds")
+        saved_files <- c(saved_files, output_path)
+        if (!quiet) cli_alert_success("saved selected elements to {output_path}")
+      } else {
+        if (!quiet) cli_alert_info("save cancelled by user")
+      }
+    }
+
+    if (format %in% c("json", "both")) {
+      output_path <- file.path(data_path, paste0(base_name, ".json"))
+
+      # Check for overwrite
+      proceed <- TRUE
+      if (confirm && file.exists(output_path)) {
+        proceed <- ask_yes_no(paste0("save to output file? this will overwrite: ", output_path))
+      }
+
+      if (proceed) {
+        if (!quiet) cli_alert_info("saving selected elements to {output_path}")
+        write_boilerplate_db(selected_db, output_path, format = "json", pretty = pretty)
+        saved_files <- c(saved_files, output_path)
+        if (!quiet) cli_alert_success("saved selected elements to {output_path}")
+      } else {
+        if (!quiet) cli_alert_info("save cancelled by user")
+      }
+    }
+
+    if (length(saved_files) > 0) {
+      return(invisible(saved_files))
+    } else {
       return(invisible(NULL))
     }
   }
 }
+

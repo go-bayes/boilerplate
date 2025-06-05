@@ -1,24 +1,29 @@
 Package: boilerplate
 Title: Tools for Managing and Compiling Manuscript Templates
-Version: 1.0.45
+Version: 1.1.0
 Authors@R: 
     person("Joseph", "Bulbulia", email = "joseph.bulbulia@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5861-2056"))
-Description: The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.
-License: The MIT License
+Author: Joseph Bulbulia [aut, cre] (<https://orcid.org/0000-0002-5861-2056>)
+Maintainer: Joseph Bulbulia <joseph.bulbulia@gmail.com>
+Description: Provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. The package supports both RDS and JSON database formats, enabling version control and cross-language compatibility.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: 
     R (>= 4.1)
 Imports:
     cli,
-    glue,
     here,
-    janitor,
-    stringr,
+    jsonlite,
+    jsonvalidate,
     tools,
     utils
 Suggests:
-    here
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 URL: https://go-bayes.github.io/boilerplate/, https://github.com/go-bayes/boilerplate
+BugReports: https://github.com/go-bayes/boilerplate/issues

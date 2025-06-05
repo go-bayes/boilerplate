@@ -18,7 +18,9 @@ boilerplate_generate_text(
   custom_headings = list(),
   quiet = FALSE,
   create_dirs = FALSE,
-  confirm = TRUE
+  confirm = TRUE,
+  copy_bibliography = FALSE,
+  bibliography_path = "."
 )
 }
 \arguments{
@@ -51,6 +53,10 @@ If NULL (default), uses here::here("boilerplate", "data").}
 \item{create_dirs}{Logical. If TRUE, creates directories that don't exist. Default is FALSE.}
 
 \item{confirm}{Logical. If TRUE, asks for confirmation before creating directories. Default is TRUE.}
+
+\item{copy_bibliography}{Logical. If TRUE, copies bibliography file to the project. Default is FALSE.}
+
+\item{bibliography_path}{Character. Directory to copy bibliography file to. Default is "." (current directory).}
 }
 \value{
 Character. The combined text with optional headings.
@@ -62,30 +68,51 @@ customisation through overrides. Supports arbitrarily nested section paths
 using dot notation.
 }
 \examples{
-# Import unified database
-unified_db <- boilerplate_import()
+# Create a temporary directory and initialise databases
+temp_dir <- tempdir()
+data_path <- file.path(temp_dir, "boilerplate_text_example", "data")
+
+# Initialise with default content
+boilerplate_init(
+  categories = c("methods", "results"),
+  data_path = data_path,
+  create_dirs = TRUE,
+  create_empty = FALSE,
+  confirm = FALSE,
+  quiet = TRUE
+)
+
+# Import the databases
+unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 
 # Basic usage with methods sections
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = c("sample", "causal_assumptions.identification"),
+  sections = c("sample"),
   global_vars = list(
     exposure_var = "political_conservative",
     population = "university students"
   ),
-  db = unified_db  # Pass the unified database
+  db = unified_db,
+  quiet = TRUE
 )
 
-# Using just the methods database
-methods_db <- boilerplate_import("methods")
+# Check the output
+cat(substr(methods_text, 1, 100), "...\n")
+
+# Using just the methods database with headings
+methods_db <- boilerplate_import("methods", data_path = data_path, quiet = TRUE)
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = c(
-    "sample",
-    "statistical.longitudinal.lmtp"
-  ),
+  sections = c("sample"),
   global_vars = list(exposure_var = "treatment"),
-  db = methods_db  # Pass just the methods database
+  db = methods_db,
+  add_headings = TRUE,
+  heading_level = "##",
+  quiet = TRUE
 )
+
+# Clean up
+unlink(file.path(temp_dir, "boilerplate_text_example"), recursive = TRUE)
 
 }

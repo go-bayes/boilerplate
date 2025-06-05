@@ -1,0 +1,83 @@
+{
+  "measures": {
+    "demographics": {
+      "age": {
+        "name": "age",
+        "description": "Age in years",
+        "type": "continuous",
+        "range": [18, 100],
+        "unit": "years",
+        "keywords": ["demographic", "age"],
+        "reference": "Standard demographic measure"
+      },
+      "gender": {
+        "name": "gender",
+        "description": "Self-reported gender identity",
+        "type": "categorical",
+        "values": ["Male", "Female", "Non-binary", "Prefer not to say"],
+        "keywords": ["demographic", "gender", "identity"],
+        "reference": "WHO guidelines 2023"
+      },
+      "ethnicity": {
+        "name": "ethnicity",
+        "description": "Self-identified ethnicity",
+        "type": "categorical",
+        "values": ["NZ European", "Māori", "Pacific", "Asian", "Other"],
+        "keywords": ["demographic", "ethnicity", "culture"],
+        "reference": "Stats NZ 2023"
+      }
+    },
+    "psychological": {
+      "anxiety": {
+        "gad7": {
+          "name": "gad7",
+          "description": "Generalized Anxiety Disorder 7-item scale",
+          "type": "ordinal",
+          "items": 7,
+          "values": [0, 1, 2, 3],
+          "value_labels": ["Not at all", "Several days", "More than half the days", "Nearly every day"],
+          "range": [0, 21],
+          "cutoffs": {
+            "mild": 5,
+            "moderate": 10,
+            "severe": 15
+          },
+          "keywords": ["anxiety", "GAD-7", "mental health"],
+          "reference": "Spitzer et al. 2006",
+          "waves": [1, 2, 3]
+        },
+        "phq9": {
+          "name": "phq9",
+          "description": "Patient Health Questionnaire 9-item scale",
+          "type": "ordinal",
+          "items": 9,
+          "values": [0, 1, 2, 3],
+          "value_labels": ["Not at all", "Several days", "More than half the days", "Nearly every day"],
+          "range": [0, 27],
+          "cutoffs": {
+            "mild": 5,
+            "moderate": 10,
+            "moderately_severe": 15,
+            "severe": 20
+          },
+          "keywords": ["depression", "PHQ-9", "mental health"],
+          "reference": "Kroenke et al. 2001",
+          "waves": [1, 2, 3]
+        }
+      }
+    },
+    "behavioral": {
+      "physical_activity": {
+        "ipaq_short": {
+          "name": "ipaq_short",
+          "description": "International Physical Activity Questionnaire - Short Form",
+          "type": "continuous",
+          "unit": "MET-minutes/week",
+          "keywords": ["physical activity", "exercise", "IPAQ"],
+          "reference": "Craig et al. 2003",
+          "waves": [1, 3]
+        }
+      }
+    }
+  }
+}

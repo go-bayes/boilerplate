@@ -20,7 +20,8 @@ boilerplate_batch_edit(
 )
 }
 \arguments{
-\item{db}{List. The database to edit (can be a single category or unified database).}
+\item{db}{List or character. The database to edit (can be a single category or unified database),
+or a file path to a JSON/RDS database file which will be loaded automatically.}
 
 \item{field}{Character. The field to edit (e.g., "reference", "description").}
 
@@ -62,55 +63,60 @@ in a boilerplate database. It supports pattern matching, explicit lists, and
 various editing operations.
 }
 \examples{
-\dontrun{
+# Create a temporary directory and initialise database
+temp_dir <- tempdir()
+data_path <- file.path(temp_dir, "boilerplate_batch_edit_example", "data")
+
+# Initialise database with default content
+boilerplate_init(
+  categories = "measures",
+  data_path = data_path,
+  create_dirs = TRUE,
+  create_empty = FALSE,
+  confirm = FALSE,
+  quiet = TRUE
+)
+
 # Load database
-unified_db <- boilerplate_import()
+unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 
-# Example 1: Change specific references to "sibley2021"
+# Example 1: Change specific references
 unified_db <- boilerplate_batch_edit(
   db = unified_db,
   field = "reference",
-  new_value = "sibley2021",
-  target_entries = c("ban_hate_speech", "born_nz"),
-  category = "measures"
+  new_value = "example2024",
+  target_entries = c("anxiety", "depression"),
+  category = "measures",
+  confirm = FALSE,
+  quiet = TRUE
 )
 
-# Example 2: Update all references containing "NZAVS"
-unified_db <- boilerplate_batch_edit(
-  db = unified_db,
-  field = "reference",
-  new_value = "sibley2021",
-  match_pattern = "NZAVS",
-  category = "measures"
-)
+# Check the changes
+unified_db$measures$anxiety$reference
 
-# Example 3: Preview changes before applying
+# Example 2: Preview changes before applying
 boilerplate_batch_edit(
   db = unified_db,
-  field = "reference",
-  new_value = "sibley2021",
-  target_entries = c("ban_hate_speech", "born_nz"),
-  category = "measures",
-  preview = TRUE
-)
-
-# Example 4: Update all entries with a specific reference value
-unified_db <- boilerplate_batch_edit(
-  db = unified_db,
-  field = "reference",
-  new_value = "sibley2024",
-  match_values = c("dore2022boundaries", "string_is Developed for the NZAVS."),
-  category = "measures"
-)
-
-# Example 5: Batch edit waves information
-unified_db <- boilerplate_batch_edit(
-  db = unified_db,
   field = "waves",
-  new_value = "1-15",
+  new_value = "1-5",
   target_entries = "anxiety*",  # All entries starting with "anxiety"
-  category = "measures"
+  category = "measures",
+  preview = TRUE,
+  quiet = TRUE
+)
+
+# Example 3: Load database directly from file
+\dontrun{
+db <- boilerplate_batch_edit(
+  db = "boilerplate_unified.json",  # File path instead of database object
+  field = "description",
+  new_value = "Updated description",
+  target_entries = "methods.*",
+  confirm = FALSE
 )
 }
+
+# Clean up
+unlink(file.path(temp_dir, "boilerplate_batch_edit_example"), recursive = TRUE)
 
 }

@@ -15,44 +15,10 @@ extract_selected_elements(db, select_paths, quiet = FALSE)
 }
 \value{
 A \code{list} containing only the matching branches.
-
-A \code{list} containing only the matching branches.
 }
 \description{
 This helper walks a nested list and returns only
 those branches whose dot-notation paths match the user patterns.
 It understands \code{*} as a wildcard for one whole segment.
 }
-\keyword{Extract}
-\keyword{It}
-\keyword{This}
-\keyword{\code{*}}
-\keyword{a}
-\keyword{and}
-\keyword{as}
-\keyword{branches}
-\keyword{database}
-\keyword{dot-notation}
-\keyword{elements}
-\keyword{for}
-\keyword{from}
-\keyword{helper}
 \keyword{internal}
-\keyword{list}
-\keyword{match}
-\keyword{nested}
-\keyword{one}
-\keyword{only}
-\keyword{paths}
-\keyword{patterns.}
-\keyword{returns}
-\keyword{segment.}
-\keyword{selected}
-\keyword{the}
-\keyword{those}
-\keyword{understands}
-\keyword{user}
-\keyword{walks}
-\keyword{whole}
-\keyword{whose}
-\keyword{wildcard}

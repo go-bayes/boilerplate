@@ -23,25 +23,47 @@
 #' @return Character string with formatted text describing the measures.
 #'
 #' @examples
-#' \dontrun{
+#' # Create a temporary directory and initialise databases
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_measures_example", "data")
+#'
+#' # Initialise measures database with default content
+#' boilerplate_init(
+#'   categories = "measures",
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
+#' # Import the measures database
+#' measures_db <- boilerplate_import("measures", data_path = data_path, quiet = TRUE)
+#'
 #' # Generate with sample items only
 #' exposure_text <- boilerplate_generate_measures(
 #'   variable_heading = "Exposure Variable",
-#'   variables = "political_conservative",
-#'   db = unified_db,
-#'   sample_items = 3  # Show only first 3 items
+#'   variables = "anxiety",
+#'   db = measures_db,
+#'   sample_items = 2,  # Show only first 2 items
+#'   quiet = TRUE
 #' )
 #'
-#' # Generate with table format
+#' # Check the output
+#' cat(substr(exposure_text, 1, 150), "...\n")
+#'
+#' # Generate with table format for multiple variables
 #' outcome_text <- boilerplate_generate_measures(
 #'   variable_heading = "Outcome Variables",
-#'   variables = c("anxiety_gad7", "depression_phq9"),
+#'   variables = c("anxiety", "depression"),
 #'   db = measures_db,
-#'   table_format = TRUE
+#'   table_format = TRUE,
+#'   quiet = TRUE
 #' )
-#' }
 #'
-#' @importFrom janitor make_clean_names
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_measures_example"), recursive = TRUE)
+#'
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
 #' @export
 boilerplate_generate_measures <- function(
@@ -116,7 +138,7 @@ boilerplate_generate_measures <- function(
     if (is.null(measure_info)) {
       # handle missing measures
       if (!quiet) cli_alert_warning("no information available for variable: {var}")
-      title <- janitor::make_clean_names(var_display, case = "title")
+      title <- make_clean_title(var_display)
       var_text <- paste0(subheading_marker, " ", title, "\n\n",
                          "No information available for this variable.\n\n")
     } else {
@@ -128,9 +150,9 @@ boilerplate_generate_measures <- function(
         } else {
           measure_info$name
         }
-        janitor::make_clean_names(name_display, case = "title")
+        make_clean_title(name_display)
       } else {
-        janitor::make_clean_names(var_display, case = "title")
+        make_clean_title(var_display)
       }
 
       # extract scale information if present in description

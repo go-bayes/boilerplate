@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boilerplate Measures Editor</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+        .sidebar {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .main {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .measure-item {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .measure-item:hover {
+            background: #f0f0f0;
+            border-color: #007bff;
+        }
+        .measure-item.selected {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+        .category-header {
+            font-weight: bold;
+            color: #333;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        label {
+            font-weight: 500;
+            color: #555;
+            display: block;
+            margin-top: 10px;
+        }
+        .field-group {
+            margin-bottom: 15px;
+        }
+        .array-input {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+        .array-input input {
+            flex: 1;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        .actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        #jsonOutput {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre;
+        }
+        .search-box {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Boilerplate Measures Editor</h1>
+    <p>Edit measures database in a user-friendly interface. Changes are reflected in real-time JSON.</p>
+    
+    <div class="container">
+        <div class="sidebar">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search measures...">
+            <div id="measuresList"></div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="addNewMeasure()">
+                + Add New Measure
+            </button>
+        </div>
+        
+        <div class="main">
+            <h2 id="measureTitle">Select a measure to edit</h2>
+            <form id="measureForm" style="display: none;">
+                <div class="field-group">
+                    <label>Name (ID)</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="field-group">
+                    <label>Description</label>
+                    <textarea id="description" rows="3" required></textarea>
+                </div>
+                
+                <div class="field-group">
+                    <label>Type</label>
+                    <select id="type" required>
+                        <option value="continuous">Continuous</option>
+                        <option value="categorical">Categorical</option>
+                        <option value="ordinal">Ordinal</option>
+                        <option value="binary">Binary</option>
+                    </select>
+                </div>
+                
+                <div class="field-group">
+                    <label>Reference</label>
+                    <input type="text" id="reference">
+                </div>
+                
+                <div class="field-group">
+                    <label>Keywords (comma-separated)</label>
+                    <input type="text" id="keywords" placeholder="e.g., anxiety, mental health, validated">
+                </div>
+                
+                <div class="field-group" id="valuesGroup">
+                    <label>Values</label>
+                    <div id="valuesContainer"></div>
+                    <button type="button" class="btn btn-secondary btn-small" onclick="addValue()">+ Add Value</button>
+                </div>
+                
+                <div class="field-group">
+                    <label>Items (for scales)</label>
+                    <input type="number" id="items" min="1">
+                </div>
+                
+                <div class="field-group">
+                    <label>Waves (comma-separated numbers)</label>
+                    <input type="text" id="waves" placeholder="e.g., 1, 2, 3">
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteMeasure()">Delete Measure</button>
+                </div>
+            </form>
+            
+            <div style="margin-top: 30px;">
+                <h3>JSON Output</h3>
+                <div id="jsonOutput"></div>
+                <button class="btn btn-primary" onclick="downloadJSON()">Download JSON</button>
+                <button class="btn btn-secondary" onclick="copyJSON()">Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample measures database
+        let measuresDB = {
+            "demographics": {
+                "age": {
+                    "name": "age",
+                    "description": "Age in years",
+                    "type": "continuous",
+                    "range": [18, 100],
+                    "unit": "years",
+                    "keywords": ["demographic", "age"],
+                    "reference": "Standard demographic measure"
+                },
+                "gender": {
+                    "name": "gender",
+                    "description": "Self-reported gender identity",
+                    "type": "categorical",
+                    "values": ["Male", "Female", "Non-binary", "Prefer not to say"],
+                    "keywords": ["demographic", "gender", "identity"],
+                    "reference": "WHO guidelines 2023"
+                }
+            },
+            "psychological": {
+                "gad7": {
+                    "name": "gad7",
+                    "description": "Generalized Anxiety Disorder 7-item scale",
+                    "type": "ordinal",
+                    "items": 7,
+                    "values": [0, 1, 2, 3],
+                    "keywords": ["anxiety", "GAD-7", "mental health"],
+                    "reference": "Spitzer et al. 2006",
+                    "waves": [1, 2, 3]
+                }
+            }
+        };
+
+        let currentMeasure = null;
+        let currentCategory = null;
+
+        function renderMeasuresList() {
+            const container = document.getElementById('measuresList');
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            container.innerHTML = '';
+            
+            Object.entries(measuresDB).forEach(([category, measures]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category-header';
+                categoryDiv.textContent = category;
+                container.appendChild(categoryDiv);
+                
+                Object.entries(measures).forEach(([key, measure]) => {
+                    if (searchTerm && !key.toLowerCase().includes(searchTerm) && 
+                        !measure.description.toLowerCase().includes(searchTerm)) {
+                        return;
+                    }
+                    
+                    const item = document.createElement('div');
+                    item.className = 'measure-item';
+                    item.textContent = `${key} - ${measure.description.substring(0, 50)}...`;
+                    item.onclick = () => selectMeasure(category, key);
+                    
+                    if (currentMeasure === key && currentCategory === category) {
+                        item.classList.add('selected');
+                    }
+                    
+                    container.appendChild(item);
+                });
+            });
+            
+            updateJSONOutput();
+        }
+
+        function selectMeasure(category, measureKey) {
+            currentCategory = category;
+            currentMeasure = measureKey;
+            const measure = measuresDB[category][measureKey];
+            
+            document.getElementById('measureTitle').textContent = `Editing: ${measureKey}`;
+            document.getElementById('measureForm').style.display = 'block';
+            
+            // Populate form
+            document.getElementById('name').value = measure.name || measureKey;
+            document.getElementById('description').value = measure.description || '';
+            document.getElementById('type').value = measure.type || 'continuous';
+            document.getElementById('reference').value = measure.reference || '';
+            document.getElementById('keywords').value = (measure.keywords || []).join(', ');
+            document.getElementById('items').value = measure.items || '';
+            document.getElementById('waves').value = (measure.waves || []).join(', ');
+            
+            // Handle values
+            renderValues(measure.values || []);
+            
+            renderMeasuresList();
+        }
+
+        function renderValues(values) {
+            const container = document.getElementById('valuesContainer');
+            container.innerHTML = '';
+            
+            values.forEach((value, index) => {
+                const div = document.createElement('div');
+                div.className = 'array-input';
+                div.innerHTML = `
+                    <input type="text" value="${value}" onchange="updateValue(${index}, this.value)">
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeValue(${index})">×</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addValue() {
+            const measure = measuresDB[currentCategory][currentMeasure];
+            if (!measure.values) measure.values = [];
+            measure.values.push('');
+            renderValues(measure.values);
+        }
+
+        function updateValue(index, value) {
+            measuresDB[currentCategory][currentMeasure].values[index] = value;
+            updateJSONOutput();
+        }
+
+        function removeValue(index) {
+            measuresDB[currentCategory][currentMeasure].values.splice(index, 1);
+            renderValues(measuresDB[currentCategory][currentMeasure].values);
+            updateJSONOutput();
+        }
+
+        function updateJSONOutput() {
+            document.getElementById('jsonOutput').textContent = JSON.stringify(measuresDB, null, 2);
+        }
+
+        function addNewMeasure() {
+            const name = prompt('Enter measure ID (e.g., phq9):');
+            if (!name) return;
+            
+            const category = prompt('Enter category (demographics/psychological/behavioral):') || 'psychological';
+            
+            if (!measuresDB[category]) {
+                measuresDB[category] = {};
+            }
+            
+            measuresDB[category][name] = {
+                name: name,
+                description: 'New measure',
+                type: 'continuous',
+                keywords: [],
+                reference: ''
+            };
+            
+            renderMeasuresList();
+            selectMeasure(category, name);
+        }
+
+        function deleteMeasure() {
+            if (!confirm(`Delete measure ${currentMeasure}?`)) return;
+            
+            delete measuresDB[currentCategory][currentMeasure];
+            currentMeasure = null;
+            currentCategory = null;
+            
+            document.getElementById('measureForm').style.display = 'none';
+            document.getElementById('measureTitle').textContent = 'Select a measure to edit';
+            
+            renderMeasuresList();
+        }
+
+        function downloadJSON() {
+            const dataStr = JSON.stringify(measuresDB, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'measures_db.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        function copyJSON() {
+            const json = JSON.stringify(measuresDB, null, 2);
+            navigator.clipboard.writeText(json).then(() => {
+                alert('JSON copied to clipboard!');
+            });
+        }
+
+        // Form submission
+        document.getElementById('measureForm').onsubmit = (e) => {
+            e.preventDefault();
+            
+            const measure = measuresDB[currentCategory][currentMeasure];
+            
+            measure.name = document.getElementById('name').value;
+            measure.description = document.getElementById('description').value;
+            measure.type = document.getElementById('type').value;
+            measure.reference = document.getElementById('reference').value;
+            
+            const keywords = document.getElementById('keywords').value;
+            measure.keywords = keywords ? keywords.split(',').map(k => k.trim()) : [];
+            
+            const items = document.getElementById('items').value;
+            if (items) measure.items = parseInt(items);
+            
+            const waves = document.getElementById('waves').value;
+            measure.waves = waves ? waves.split(',').map(w => parseInt(w.trim())) : [];
+            
+            renderMeasuresList();
+            alert('Changes saved!');
+        };
+
+        // Search functionality
+        document.getElementById('searchBox').oninput = renderMeasuresList;
+
+        // Initial render
+        renderMeasuresList();
+    </script>
+</body>
+</html>

@@ -9,14 +9,36 @@
 #' @return List or character. The requested methods database or specific method
 #'
 #' @examples
+#' # Create a temporary directory and initialise database
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_methods_example", "data")
+#'
+#' # Initialise with default methods content
+#' boilerplate_init(
+#'   categories = "methods",
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
 #' # Import all databases
-#' unified_db <- boilerplate_import()
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 #'
 #' # Get all methods
 #' methods_db <- boilerplate_methods(unified_db)
+#' names(methods_db)
 #'
-#' # Get a specific method using dot notation
-#' lmtp_method <- boilerplate_methods(unified_db, "statistical.longitudinal.lmtp")
+#' # Get a specific method using dot notation (if it exists)
+#' if ("statistical" %in% names(methods_db) &&
+#'     "longitudinal" %in% names(methods_db$statistical) &&
+#'     "lmtp" %in% names(methods_db$statistical$longitudinal)) {
+#'   lmtp_method <- boilerplate_methods(unified_db, "statistical.longitudinal.lmtp")
+#' }
+#'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_methods_example"), recursive = TRUE)
 #'
 #' @export
 boilerplate_methods <- function(unified_db, name = NULL) {
@@ -46,117 +68,53 @@ boilerplate_methods <- function(unified_db, name = NULL) {
   }
 }
 
-#' Access Measures from Unified Database
-#'
-#' This function extracts and returns the measures portion of a unified database,
-#' optionally retrieving a specific measure by name.
-#'
-#' @param unified_db List. The unified boilerplate database
-#' @param name Character. Optional specific measure to retrieve
-#'
-#' @return List. The requested measures database or specific measure
-#'
-#’ @examples
-#’ \dontrun{
-#’ # import all databases
-#’ unified_db <- boilerplate_import()
-#’
-#’ # get all measures
-#’ measures_db <- boilerplate_measures(unified_db)
-#’
-#’ # get a specific measure
-#’ anxiety_measure <- boilerplate_measures(unified_db, "anxiety_gad7")
-#’ }
-#' @export
-boilerplate_measures <- function(unified_db, name = NULL) {
-  # check if the database contains a measures element
-  if (!is.list(unified_db) || !"measures" %in% names(unified_db)) {
-    stop("unified_db must contain a 'measures' element")
-  }
-
-  measures_db <- unified_db$measures
-
-  if (is.null(name)) {
-    return(measures_db)
-  } else {
-    if (!(name %in% names(measures_db))) {
-      stop("measure '", name, "' not found")
-    }
-    return(measures_db[[name]])
-  }
-}
-
-#' Access Results from Unified Database
-#'
-#' This function extracts and returns the results portion of a unified database,
-#' optionally retrieving a specific result by name using dot notation.
-#'
-#' @param unified_db List. The unified boilerplate database
-#' @param name Character. Optional specific result to retrieve using dot notation
-#'
-#' @return List or character. The requested results database or specific result
-#'
-#’ @examples
-#’ \dontrun{
-#’ # import all databases
-#’ unified_db <- boilerplate_import()
-#’
-#’ # get all results
-#’ results_db <- boilerplate_results(unified_db)
-#’
-#’ # get a specific result using dot notation
-#’ main_effect <- boilerplate_results(unified_db, "main_effect")
-#’ }
-#'
-#' @export
-boilerplate_results <- function(unified_db, name = NULL) {
-  # check if the database contains a results element
-  if (!is.list(unified_db) || !"results" %in% names(unified_db)) {
-    stop("unified_db must contain a 'results' element")
-  }
-
-  results_db <- unified_db$results
-
-  if (is.null(name)) {
-    return(results_db)
-  } else {
-    # split by dots to handle nested paths
-    path_parts <- strsplit(name, "\\.")[[1]]
-
-    # navigate through nested structure
-    current_item <- results_db
-    for (part in path_parts) {
-      if (!is.list(current_item) || !(part %in% names(current_item))) {
-        stop("path component '", part, "' not found")
-      }
-      current_item <- current_item[[part]]
-    }
-
-    return(current_item)
-  }
-}
-
 #' Access Discussion from Unified Database
 #'
-#' This function extracts and returns the discussion portion of a unified database,
+#' @title Access Discussion Content
+#' @description This function extracts and returns the discussion portion of a unified database,
 #' optionally retrieving a specific discussion section by name using dot notation.
 #'
-#' @param unified_db List. The unified boilerplate database
+#' @param unified_db List. The unified boilerplate database containing discussion content
 #' @param name Character. Optional specific discussion section to retrieve using dot notation
+#'   (e.g., "limitations.statistical" for nested content)
 #'
-#' @return List or character. The requested discussion database or specific section
+#' @return List or character. The requested discussion database or specific section.
+#'   If name is NULL, returns the entire discussion database. If name is specified,
+#'   returns the content at that path.
 #'
 #' @examples
-#' \dontrun{
-#' # import all databases
-#' unified_db <- boilerplate_import()
+#' # Create a temporary directory and initialise database
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_discussion_example", "data")
 #'
-#' # get all discussion sections
+#' # Initialise with default discussion content
+#' boilerplate_init(
+#'   categories = "discussion",
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
+#' # Import all databases
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+#'
+#' # Get all discussion sections
 #' discussion_db <- boilerplate_discussion(unified_db)
+#' names(discussion_db)
 #'
-#' # get a specific discussion section using dot notation
-#' limitations <- boilerplate_discussion(unified_db, "limitations")
+#' # Get a specific discussion section (if it exists)
+#' if ("discussion" %in% names(unified_db) && length(unified_db$discussion) > 0) {
+#'   section_names <- names(unified_db$discussion)
+#'   if (length(section_names) > 0) {
+#'     first_section <- boilerplate_discussion(unified_db, section_names[1])
+#'   }
 #' }
+#'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_discussion_example"), recursive = TRUE)
+#'
 #' @export
 boilerplate_discussion <- function(unified_db, name = NULL) {
   # check if the database contains a discussion element
@@ -187,25 +145,51 @@ boilerplate_discussion <- function(unified_db, name = NULL) {
 
 #' Access Appendix from Unified Database
 #'
-#' This function extracts and returns the appendix portion of a unified database,
+#' @title Access Appendix Content
+#' @description This function extracts and returns the appendix portion of a unified database,
 #' optionally retrieving a specific appendix section by name using dot notation.
 #'
-#' @param unified_db List. The unified boilerplate database
+#' @param unified_db List. The unified boilerplate database containing appendix content
 #' @param name Character. Optional specific appendix section to retrieve using dot notation
+#'   (e.g., "supplementary.tables" for nested content)
 #'
-#' @return List or character. The requested appendix database or specific section
+#' @return List or character. The requested appendix database or specific section.
+#'   If name is NULL, returns the entire appendix database. If name is specified,
+#'   returns the content at that path.
 #'
 #' @examples
-#' \dontrun{
+#' # Create a temporary directory and initialise database
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_appendix_example", "data")
+#'
+#' # Initialise with default appendix content
+#' boilerplate_init(
+#'   categories = "appendix",
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
 #' # Import all databases
-#' unified_db <- boilerplate_import()
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 #'
-#' # Get all templates
-#' template_db <- boilerplate_template(unified_db)
+#' # Get all appendix sections
+#' appendix_db <- boilerplate_appendix(unified_db)
+#' names(appendix_db)
 #'
-#' # Get a specific template
-#' journal_template <- boilerplate_template(unified_db, "journal_article")
+#' # Get a specific appendix section (if it exists)
+#' if ("appendix" %in% names(unified_db) && length(unified_db$appendix) > 0) {
+#'   section_names <- names(unified_db$appendix)
+#'   if (length(section_names) > 0) {
+#'     first_section <- boilerplate_appendix(unified_db, section_names[1])
+#'   }
 #' }
+#'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_appendix_example"), recursive = TRUE)
+#'
 #' @export
 boilerplate_appendix <- function(unified_db, name = NULL) {
   # check if the database contains a appendix element
@@ -236,25 +220,50 @@ boilerplate_appendix <- function(unified_db, name = NULL) {
 
 #' Access Templates from Unified Database
 #'
-#' This function extracts and returns the template portion of a unified database,
+#' @title Access Template Content
+#' @description This function extracts and returns the template portion of a unified database,
 #' optionally retrieving a specific template by name.
 #'
-#' @param unified_db List. The unified boilerplate database
-#' @param name Character. Optional specific template to retrieve
+#' @param unified_db List. The unified boilerplate database containing template content
+#' @param name Character. Optional specific template to retrieve by name
 #'
-#' @return List or character. The requested template database or specific template
+#' @return List or character. The requested template database or specific template.
+#'   If name is NULL, returns the entire template database. If name is specified,
+#'   returns the template with that name.
 #'
 #' @examples
-#' \dontrun{
+#' # Create a temporary directory and initialise database
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_template_example", "data")
+#'
+#' # Initialise with default template content
+#' boilerplate_init(
+#'   categories = "template",
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
 #' # Import all databases
-#' unified_db <- boilerplate_import()
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 #'
 #' # Get all templates
 #' template_db <- boilerplate_template(unified_db)
+#' names(template_db)
 #'
-#' # Get a specific template
-#' journal_template <- boilerplate_template(unified_db, "journal_article")
+#' # Get a specific template (if it exists)
+#' if ("template" %in% names(unified_db) && length(unified_db$template) > 0) {
+#'   template_names <- names(unified_db$template)
+#'   if (length(template_names) > 0) {
+#'     first_template <- boilerplate_template(unified_db, template_names[1])
+#'   }
 #' }
+#'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_template_example"), recursive = TRUE)
+#'
 #' @export
 boilerplate_template <- function(unified_db, name = NULL) {
   # check if the database contains a template element

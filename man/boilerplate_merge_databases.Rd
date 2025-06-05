@@ -46,18 +46,32 @@ If recursive is TRUE, the function will recursively merge nested folders/categor
 If sort_results is TRUE, the function will sort the merged database alphabetically at each level.
 }
 \examples{
+# Create example databases
+db1 <- list(
+  anxiety = list(
+    description = "Anxiety measure from study 1",
+    items = 10
+  ),
+  depression = list(
+    description = "Depression scale",
+    items = 15
+  )
+)
+
+db2 <- list(
+  anxiety = list(
+    description = "Anxiety measure from study 2",
+    items = 12
+  ),
+  stress = list(
+    description = "Stress scale",
+    items = 8
+  )
+)
+
 \dontrun{
-# Merge two flat databases with default names
-merged_db <- boilerplate_merge_databases(test_a, test_b)
-
-# Merge two hierarchical databases with custom names
-merged_db <- boilerplate_merge_databases(test_a, test_b, "NZAVS 2009", "NZAVS 2020")
-
-# Merge but do not process nested structures recursively
-merged_db <- boilerplate_merge_databases(test_a, test_b, recursive = FALSE)
-
-# Merge but do not sort the result
-merged_db <- boilerplate_merge_databases(test_a, test_b, sort_results = FALSE)
+# Merge databases interactively
+merged <- boilerplate_merge_databases(db1, db2, "Study 1", "Study 2")
 }
 
 }

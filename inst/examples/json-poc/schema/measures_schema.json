@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Boilerplate Measures Database Schema",
+  "type": "object",
+  "patternProperties": {
+    "^[a-zA-Z_][a-zA-Z0-9_]*$": {
+      "oneOf": [
+        { "$ref": "#/definitions/measure" },
+        { "$ref": "#/definitions/category" }
+      ]
+    }
+  },
+  "definitions": {
+    "measure": {
+      "type": "object",
+      "required": ["name", "description", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique identifier for the measure",
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the measure",
+          "minLength": 10
+        },
+        "type": {
+          "type": "string",
+          "enum": ["continuous", "categorical", "ordinal", "binary"],
+          "description": "Data type of the measure"
+        },
+        "values": {
+          "type": "array",
+          "description": "Possible values for categorical/ordinal measures",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" }
+            ]
+          }
+        },
+        "value_labels": {
+          "type": "array",
+          "description": "Labels corresponding to values",
+          "items": { "type": "string" }
+        },
+        "range": {
+          "type": "array",
+          "description": "Min and max values for continuous measures",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "unit": {
+          "type": "string",
+          "description": "Unit of measurement"
+        },
+        "items": {
+          "type": "integer",
+          "description": "Number of items in a scale",
+          "minimum": 1
+        },
+        "reference": {
+          "type": "string",
+          "description": "Citation for the measure"
+        },
+        "keywords": {
+          "type": "array",
+          "description": "Keywords for searching",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "waves": {
+          "type": "array",
+          "description": "Data collection waves where measure was used",
+          "items": { "type": "integer" },
+          "uniqueItems": true
+        },
+        "cutoffs": {
+          "type": "object",
+          "description": "Clinical or meaningful cutoff values",
+          "patternProperties": {
+            "^[a-zA-Z_]+$": { "type": "number" }
+          }
+        },
+        "scoring": {
+          "type": "object",
+          "description": "Scoring instructions",
+          "properties": {
+            "type": { "type": "string" },
+            "reverse_items": {
+              "type": "array",
+              "items": { "type": "integer" }
+            },
+            "interpretation": { "type": "object" }
+          }
+        },
+        "subscales": {
+          "type": "object",
+          "description": "Subscales within the measure",
+          "patternProperties": {
+            "^[a-zA-Z_]+$": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": { "type": "integer" }
+                },
+                "description": { "type": "string" }
+              }
+            }
+          }
+        },
+        "_meta": {
+          "type": "object",
+          "description": "Metadata not displayed to users",
+          "properties": {
+            "created": { "type": "string", "format": "date-time" },
+            "modified": { "type": "string", "format": "date-time" },
+            "version": { "type": "string" },
+            "validated": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "category": {
+      "type": "object",
+      "description": "A category containing measures or subcategories",
+      "patternProperties": {
+        "^[a-zA-Z_][a-zA-Z0-9_]*$": {
+          "oneOf": [
+            { "$ref": "#/definitions/measure" },
+            { "$ref": "#/definitions/category" }
+          ]
+        }
+      },
+      "not": {
+        "required": ["name", "description", "type"]
+      }
+    }
+  }
+}

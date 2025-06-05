@@ -2,7 +2,7 @@
 % Please edit documentation in R/init-functions.R
 \name{boilerplate_init_category}
 \alias{boilerplate_init_category}
-\title{Initialize a Specific Boilerplate Database Category}
+\title{Initialise a Specific Boilerplate Database Category}
 \usage{
 boilerplate_init_category(
   category,
@@ -16,7 +16,7 @@ boilerplate_init_category(
 )
 }
 \arguments{
-\item{category}{Character. Category to initialize.
+\item{category}{Character. Category to initialise.
 Options include "measures", "methods", "results", "discussion", "appendix", "template".}
 
 \item{merge_strategy}{Character. How to merge with existing database: "keep_existing", "merge_recursive", or "overwrite_all".}
@@ -39,20 +39,43 @@ Default is TRUE. Set to FALSE to use default content.}
 Logical. TRUE if initialization was successful, FALSE if canceled.
 }
 \description{
-This function initializes or updates a specific boilerplate database category with default values.
+This function initialises or updates a specific boilerplate database category with default values.
 }
 \examples{
-\dontrun{
-# initialize the methods database with empty structure
-boilerplate_init_category("methods", create_dirs = TRUE, create_empty = TRUE)
+# Create a temporary directory for examples
+temp_dir <- tempdir()
+data_path <- file.path(temp_dir, "boilerplate_category_example", "data")
 
-# initialize measures database with recursive merging and default content
+# Initialise the methods database with empty structure
+boilerplate_init_category(
+  "methods",
+  data_path = data_path,
+  create_dirs = TRUE,
+  create_empty = TRUE,
+  confirm = FALSE,
+  quiet = TRUE
+)
+
+# Check the created file
+methods_file <- file.path(data_path, "methods_db.rds")
+file.exists(methods_file)
+
+# Initialise measures database with default content
 boilerplate_init_category(
   category = "measures",
   merge_strategy = "merge_recursive",
+  data_path = data_path,
   create_dirs = TRUE,
-  create_empty = FALSE
+  create_empty = FALSE,
+  confirm = FALSE,
+  quiet = TRUE
 )
-}
+
+# Load and inspect the measures database
+measures_db <- readRDS(file.path(data_path, "measures_db.rds"))
+names(measures_db)
+
+# Clean up
+unlink(file.path(temp_dir, "boilerplate_category_example"), recursive = TRUE)
 
 }

@@ -12,6 +12,7 @@ boilerplate_standardise_measures(
   clean_descriptions = TRUE,
   ensure_structure = TRUE,
   standardise_references = TRUE,
+  json_compatible = FALSE,
   verbose = FALSE,
   quiet = FALSE
 )
@@ -31,6 +32,9 @@ boilerplate_standardise_measures(
 
 \item{standardise_references}{Logical. Standardise reference format. Default is TRUE.}
 
+\item{json_compatible}{Logical. Ensure JSON-compatible structure by converting vectors to lists
+and removing NULL values. Default is FALSE.}
+
 \item{verbose}{Logical. Show detailed progress information. Default is FALSE.}
 
 \item{quiet}{Logical. Suppress all messages. Default is FALSE.}
@@ -43,20 +47,47 @@ This function standardises measure entries by extracting scale information,
 identifying reversed items, cleaning descriptions, and ensuring consistent structure.
 }
 \examples{
-\dontrun{
+# Create a temporary directory and initialise database
+temp_dir <- tempdir()
+data_path <- file.path(temp_dir, "boilerplate_standardise_example", "data")
+
+# Initialise database
+boilerplate_init(
+  categories = "measures",
+  data_path = data_path,
+  create_dirs = TRUE,
+  create_empty = FALSE,
+  confirm = FALSE,
+  quiet = TRUE
+)
+
+# Import database
+unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+
 # Standardise all measures in database
-unified_db$measures <- boilerplate_standardise_measures(unified_db$measures)
+unified_db$measures <- boilerplate_standardise_measures(
+  unified_db$measures,
+  quiet = TRUE
+)
+
+# Standardise with JSON compatibility
+unified_db$measures <- boilerplate_standardise_measures(
+  unified_db$measures,
+  json_compatible = TRUE,
+  quiet = TRUE
+)
+
+# Check that standardisation worked
+names(unified_db$measures$anxiety)
 
 # Standardise specific measures only
 unified_db$measures <- boilerplate_standardise_measures(
   unified_db$measures,
-  measure_names = c("sdo", "rwa", "self_control")
+  measure_names = c("anxiety", "depression"),
+  quiet = TRUE
 )
 
-# Standardise a single measure
-unified_db$measures$sdo <- boilerplate_standardise_measures(
-  unified_db$measures$sdo
-)
-}
+# Clean up
+unlink(file.path(temp_dir, "boilerplate_standardise_example"), recursive = TRUE)
 
 }

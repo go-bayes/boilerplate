@@ -299,7 +299,6 @@ merge_recursive_lists <- function(x, y) {
 #'
 #' @return Character. The text with variables substituted.
 #'
-#' @importFrom glue glue
 #' @noRd
 apply_template_vars <- function(text, template_vars = list(), warn_missing = TRUE) {
   # return early for non-character text or empty variables
@@ -325,67 +324,63 @@ apply_template_vars <- function(text, template_vars = list(), warn_missing = TRU
     }
   }
 
-  # prepare the environment for glue
-  env <- list2env(template_vars_processed, parent = emptyenv())
-
-  # try to use glue for substitution
-  tryCatch({
-    # convert {{var}} syntax to glue's {var} syntax
-    glue_ready_text <- gsub("\\{\\{([^\\}]+)\\}\\}", "{\\1}", text)
-
-    # check for empty variable names after conversion
-    if (grepl("\\{\\s*\\}", glue_ready_text)) {
-      stop("attempt to use zero-length variable name, check for malformed template variables")
+  # perform substitution with base R
+  for (var_name in names(template_vars_processed)) {
+    if (var_name == "") {
+      next  # skip empty variable names
     }
-
-    result <- glue::glue(glue_ready_text, .envir = env)
-    return(as.character(result))
-  }, error = function(e) {
-    # if error contains "zero-length variable", re-throw it
-    if (grepl("zero-length", e$message)) {
-      stop(e$message)
+    var_value <- template_vars_processed[[var_name]]
+    if (is.character(var_value) || is.numeric(var_value)) {
+      # use fixed = TRUE for exact string matching to avoid regex issues
+      pattern <- paste0("{{", var_name, "}}")
+      text <- gsub(pattern, as.character(var_value), text, fixed = TRUE)
     }
+  }
 
-    # fallback to manual substitution if glue fails with other errors
-    for (var_name in names(template_vars_processed)) {
-      if (var_name == "") {
-        next  # skip empty variable names
-      }
-      var_value <- template_vars_processed[[var_name]]
-      if (is.character(var_value) || is.numeric(var_value)) {
-        text <- gsub(
-          paste0("\\{\\{", var_name, "\\}\\}"),
-          as.character(var_value),
-          text,
-          fixed = FALSE
-        )
+  # issue a warning for unresolved variables if requested
+  if (warn_missing) {
+    # look for any remaining {{variable}} patterns
+    var_pattern <- "\\{\\{([^\\}]+)\\}\\}"
+    if (grepl(var_pattern, text)) {
+      # extract unresolved variables using base R
+      matches <- regmatches(text, gregexpr(var_pattern, text))[[1]]
+      if (length(matches) > 0) {
+        remaining_vars <- unique(gsub("\\{\\{|\\}\\}", "", matches))
+        warning(paste("unresolved template variables:", paste(remaining_vars, collapse = ", ")))
       }
     }
+  }
 
-    # issue a warning for unresolved variables if requested
-    if (warn_missing) {
-      # look for any remaining {{variable}} patterns
-      var_pattern <- "\\{\\{([^\\}]+)\\}\\}"
-      if (requireNamespace("stringr", quietly = TRUE)) {
-        # use stringr if available
-        remaining_vars <- stringr::str_extract_all(text, var_pattern)
-        if (length(remaining_vars[[1]]) > 0) {
-          remaining_vars <- unique(gsub("\\{\\{|\\}\\}", "", remaining_vars[[1]]))
-          warning(paste("unresolved template variables:", paste(remaining_vars, collapse = ", ")))
-        }
-      } else {
-        # fallback to base R
-        if (grepl(var_pattern, text)) {
-          matches <- gregexpr(var_pattern, text)
-          if (matches[[1]][1] != -1) {
-            warning("unresolved template variables present. consider installing the 'stringr' package for detailed information.")
-          }
-        }
-      }
-    }
+  return(text)
+}
 
-    return(text)
-  })
+
+#' Convert String to Title Case
+#'
+#' Replaces janitor::make_clean_names functionality for title case conversion.
+#' Cleans and converts strings to title case.
+#'
+#' @param x Character. String to convert.
+#' @param case Character. Case type (only "title" is implemented).
+#'
+#' @return Character. Cleaned title case string.
+#'
+#' @noRd
+make_clean_title <- function(x, case = "title") {
+  if (case != "title") {
+    stop("Only 'title' case is currently implemented")
+  }
+
+  # replace underscores and hyphens with spaces
+  x <- gsub("[_-]", " ", x)
+
+  # remove extra whitespace
+  x <- gsub("\\s+", " ", trimws(x))
+
+  # convert to title case
+  x <- tools::toTitleCase(x)
+
+  return(x)
 }
 
 

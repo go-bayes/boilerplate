@@ -4,7 +4,8 @@
 #' in a boilerplate database. It supports pattern matching, explicit lists, and
 #' various editing operations.
 #'
-#' @param db List. The database to edit (can be a single category or unified database).
+#' @param db List or character. The database to edit (can be a single category or unified database),
+#'   or a file path to a JSON/RDS database file which will be loaded automatically.
 #' @param field Character. The field to edit (e.g., "reference", "description").
 #' @param new_value Character. The new value to set for the field.
 #' @param target_entries Character vector. Entries to edit. Can be:
@@ -27,60 +28,65 @@
 #' @return The modified database (invisibly if preview=TRUE).
 #'
 #' @examples
-#' \dontrun{
+#' # Create a temporary directory and initialise database
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_batch_edit_example", "data")
+#'
+#' # Initialise database with default content
+#' boilerplate_init(
+#'   categories = "measures",
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
 #' # Load database
-#' unified_db <- boilerplate_import()
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 #'
-#' # Example 1: Change specific references to "sibley2021"
+#' # Example 1: Change specific references
 #' unified_db <- boilerplate_batch_edit(
 #'   db = unified_db,
 #'   field = "reference",
-#'   new_value = "sibley2021",
-#'   target_entries = c("ban_hate_speech", "born_nz"),
-#'   category = "measures"
+#'   new_value = "example2024",
+#'   target_entries = c("anxiety", "depression"),
+#'   category = "measures",
+#'   confirm = FALSE,
+#'   quiet = TRUE
 #' )
 #'
-#' # Example 2: Update all references containing "NZAVS"
-#' unified_db <- boilerplate_batch_edit(
-#'   db = unified_db,
-#'   field = "reference",
-#'   new_value = "sibley2021",
-#'   match_pattern = "NZAVS",
-#'   category = "measures"
-#' )
+#' # Check the changes
+#' unified_db$measures$anxiety$reference
 #'
-#' # Example 3: Preview changes before applying
+#' # Example 2: Preview changes before applying
 #' boilerplate_batch_edit(
 #'   db = unified_db,
-#'   field = "reference",
-#'   new_value = "sibley2021",
-#'   target_entries = c("ban_hate_speech", "born_nz"),
-#'   category = "measures",
-#'   preview = TRUE
-#' )
-#'
-#' # Example 4: Update all entries with a specific reference value
-#' unified_db <- boilerplate_batch_edit(
-#'   db = unified_db,
-#'   field = "reference",
-#'   new_value = "sibley2024",
-#'   match_values = c("dore2022boundaries", "string_is Developed for the NZAVS."),
-#'   category = "measures"
-#' )
-#'
-#' # Example 5: Batch edit waves information
-#' unified_db <- boilerplate_batch_edit(
-#'   db = unified_db,
 #'   field = "waves",
-#'   new_value = "1-15",
+#'   new_value = "1-5",
 #'   target_entries = "anxiety*",  # All entries starting with "anxiety"
-#'   category = "measures"
+#'   category = "measures",
+#'   preview = TRUE,
+#'   quiet = TRUE
+#' )
+#'
+#' # Example 3: Load database directly from file
+#' \dontrun{
+#' db <- boilerplate_batch_edit(
+#'   db = "boilerplate_unified.json",  # File path instead of database object
+#'   field = "description",
+#'   new_value = "Updated description",
+#'   target_entries = "methods.*",
+#'   confirm = FALSE
 #' )
 #' }
 #'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_batch_edit_example"), recursive = TRUE)
+#'
 #' @export
 boilerplate_batch_edit <- function(
-    db,
+  db,
     field,
     new_value,
     target_entries = NULL,
@@ -97,6 +103,13 @@ boilerplate_batch_edit <- function(
   # Load required functions from cli
   if (!requireNamespace("cli", quietly = TRUE)) {
     stop("Package 'cli' is required. Please install it.")
+  }
+
+  # If db is a file path, load it using the internal function
+  if (is.character(db) && length(db) == 1 && file.exists(db)) {
+    # Get the format parameter value or default to "auto"
+    format <- "auto"
+    db <- read_boilerplate_db(db, format = format)
   }
 
   # Input validation
@@ -126,11 +139,11 @@ boilerplate_batch_edit <- function(
     is_unified <- FALSE
   }
 
-  # Initialize tracking variables
+  # initialise tracking variables
   changes_made <- list()
   entries_checked <- 0
 
-  # Helper function to check if entry should be edited
+  # helper function to check if entry should be edited
   should_edit_entry <- function(entry_name, entry_data) {
     # Check if entry has the field
     if (!is.list(entry_data) || !(field %in% names(entry_data))) {
@@ -316,7 +329,7 @@ boilerplate_batch_edit <- function(
 #'
 #' @export
 boilerplate_batch_edit_multi <- function(
-    db,
+  db,
     edits,
     category = NULL,
     preview = FALSE,
@@ -367,7 +380,7 @@ boilerplate_batch_edit_multi <- function(
 #'
 #' @param db List. The database to clean (can be a single category or unified database).
 #' @param field Character. The field to clean (e.g., "reference", "description").
-#' @param remove_chars Character vector. Characters to remove (e.g., c("@", "[", "]")).
+#' @param remove_chars Character vector. Characters to remove from text fields.
 #' @param replace_pairs List. Named list for replacements (e.g., list(" " = "_")).
 #' @param trim_whitespace Logical. Whether to trim leading/trailing whitespace.
 #' @param collapse_spaces Logical. Whether to collapse multiple spaces to single space.
@@ -447,7 +460,7 @@ boilerplate_batch_edit_multi <- function(
 #'
 #' @export
 boilerplate_batch_clean <- function(
-    db,
+  db,
     field,
     remove_chars = NULL,
     replace_pairs = NULL,
@@ -497,7 +510,7 @@ boilerplate_batch_clean <- function(
     is_unified <- FALSE
   }
 
-  # Initialize tracking
+  # Initialise tracking
   changes_made <- list()
   entries_checked <- 0
 

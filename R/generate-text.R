@@ -21,35 +21,58 @@
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
 #' @param confirm Logical. If TRUE, asks for confirmation before creating directories. Default is TRUE.
+#' @param copy_bibliography Logical. If TRUE, copies bibliography file to the project. Default is FALSE.
+#' @param bibliography_path Character. Directory to copy bibliography file to. Default is "." (current directory).
 #'
 #' @return Character. The combined text with optional headings.
 #'
 #' @examples
-#' # Import unified database
-#' unified_db <- boilerplate_import()
+#' # Create a temporary directory and initialise databases
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_text_example", "data")
+#'
+#' # Initialise with default content
+#' boilerplate_init(
+#'   categories = c("methods", "results"),
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
+#' # Import the databases
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 #'
 #' # Basic usage with methods sections
 #' methods_text <- boilerplate_generate_text(
 #'   category = "methods",
-#'   sections = c("sample", "causal_assumptions.identification"),
+#'   sections = c("sample"),
 #'   global_vars = list(
 #'     exposure_var = "political_conservative",
 #'     population = "university students"
 #'   ),
-#'   db = unified_db  # Pass the unified database
+#'   db = unified_db,
+#'   quiet = TRUE
 #' )
 #'
-#' # Using just the methods database
-#' methods_db <- boilerplate_import("methods")
+#' # Check the output
+#' cat(substr(methods_text, 1, 100), "...\n")
+#'
+#' # Using just the methods database with headings
+#' methods_db <- boilerplate_import("methods", data_path = data_path, quiet = TRUE)
 #' methods_text <- boilerplate_generate_text(
 #'   category = "methods",
-#'   sections = c(
-#'     "sample",
-#'     "statistical.longitudinal.lmtp"
-#'   ),
+#'   sections = c("sample"),
 #'   global_vars = list(exposure_var = "treatment"),
-#'   db = methods_db  # Pass just the methods database
+#'   db = methods_db,
+#'   add_headings = TRUE,
+#'   heading_level = "##",
+#'   quiet = TRUE
 #' )
+#'
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_text_example"), recursive = TRUE)
 #'
 #' @importFrom tools toTitleCase
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
@@ -68,7 +91,9 @@ boilerplate_generate_text <- function(
     custom_headings = list(),
     quiet = FALSE,
     create_dirs = FALSE,
-    confirm = TRUE
+    confirm = TRUE,
+    copy_bibliography = FALSE,
+    bibliography_path = "."
 ) {
   # input validation
   category <- match.arg(category)
@@ -133,7 +158,8 @@ boilerplate_generate_text <- function(
     vars <- global_vars
     if (section %in% names(section_vars)) {
       if (!quiet) cli_alert_info("applying section-specific variables for {section}")
-      vars <- c(vars, section_vars[[section]])
+      # use modifyList to ensure section-specific variables override global ones
+      vars <- utils::modifyList(vars, section_vars[[section]])
     }
 
     # attempt to retrieve text
@@ -202,6 +228,32 @@ boilerplate_generate_text <- function(
   # combine all sections and report success
   if (length(result) > 0) {
     if (!quiet) cli_alert_success("successfully generated {category} text with {length(result)} section(s)")
+
+    # Copy bibliography if requested
+    if (copy_bibliography && !is.null(db)) {
+      # Need to ensure we have the full database
+      full_db <- if (category %in% names(db)) {
+        # db was the category-specific database, need to wrap it
+        temp_db <- list()
+        temp_db[[category]] <- db
+        temp_db
+      } else {
+        # db is already the full unified database
+        db
+      }
+
+      # Copy bibliography
+      bib_result <- boilerplate_copy_bibliography(
+        full_db,
+        target_dir = bibliography_path,
+        quiet = quiet
+      )
+
+      if (!is.null(bib_result) && !quiet) {
+        cli_alert_info("Bibliography available at: {bib_result}")
+      }
+    }
+
     return(paste(result, collapse = "\n\n"))
   } else {
     if (!quiet) cli_alert_warning("no text was generated - all sections were missing or invalid")

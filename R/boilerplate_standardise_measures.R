@@ -10,38 +10,68 @@
 #' @param clean_descriptions Logical. Clean up description text. Default is TRUE.
 #' @param ensure_structure Logical. Ensure all measures have standard fields. Default is TRUE.
 #' @param standardise_references Logical. Standardise reference format. Default is TRUE.
+#' @param json_compatible Logical. Ensure JSON-compatible structure by converting vectors to lists
+#'   and removing NULL values. Default is FALSE.
 #' @param verbose Logical. Show detailed progress information. Default is FALSE.
 #' @param quiet Logical. Suppress all messages. Default is FALSE.
 #'
 #' @return List. The standardised measure(s) or database.
 #'
 #' @examples
-#' \dontrun{
+#' # Create a temporary directory and initialise database
+#' temp_dir <- tempdir()
+#' data_path <- file.path(temp_dir, "boilerplate_standardise_example", "data")
+#'
+#' # Initialise database
+#' boilerplate_init(
+#'   categories = "measures",
+#'   data_path = data_path,
+#'   create_dirs = TRUE,
+#'   create_empty = FALSE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
+#' # Import database
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+#'
 #' # Standardise all measures in database
-#' unified_db$measures <- boilerplate_standardise_measures(unified_db$measures)
+#' unified_db$measures <- boilerplate_standardise_measures(
+#'   unified_db$measures,
+#'   quiet = TRUE
+#' )
+#'
+#' # Standardise with JSON compatibility
+#' unified_db$measures <- boilerplate_standardise_measures(
+#'   unified_db$measures,
+#'   json_compatible = TRUE,
+#'   quiet = TRUE
+#' )
+#'
+#' # Check that standardisation worked
+#' names(unified_db$measures$anxiety)
 #'
 #' # Standardise specific measures only
 #' unified_db$measures <- boilerplate_standardise_measures(
 #'   unified_db$measures,
-#'   measure_names = c("sdo", "rwa", "self_control")
+#'   measure_names = c("anxiety", "depression"),
+#'   quiet = TRUE
 #' )
 #'
-#' # Standardise a single measure
-#' unified_db$measures$sdo <- boilerplate_standardise_measures(
-#'   unified_db$measures$sdo
-#' )
-#' }
+#' # Clean up
+#' unlink(file.path(temp_dir, "boilerplate_standardise_example"), recursive = TRUE)
 #'
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning
 #' @export
 boilerplate_standardise_measures <- function(
-    db,
+  db,
     measure_names = NULL,
     extract_scale = TRUE,
     identify_reversed = TRUE,
     clean_descriptions = TRUE,
     ensure_structure = TRUE,
     standardise_references = TRUE,
+    json_compatible = FALSE,
     verbose = FALSE,
     quiet = FALSE
 ) {
@@ -78,7 +108,7 @@ boilerplate_standardise_measures <- function(
       scale_patterns <- list(
         ordinal = "(?i)(ordinal response|ordinal scale|scale)\\s*:?\\s*\\(([^)]+)\\)",
         response = "(?i)(response format|response options?|response scale)\\s*:?\\s*\\(([^)]+)\\)",
-        likert = "(?i)(\\d+)\\s*[-–]\\s*point\\s+(likert\\s+)?scale",
+        likert = "(?i)(\\d+)\\s*[-]\\s*point\\s+(likert\\s+)?scale",
         range = "(?i)\\((\\d+)\\s*=\\s*[^,]+,?\\s*\\.+\\s*(\\d+)\\s*=\\s*[^)]+\\)"
       )
 
@@ -211,6 +241,26 @@ boilerplate_standardise_measures <- function(
     # Add metadata about standardisation
     measure$standardised <- TRUE
     measure$standardised_date <- Sys.Date()
+
+    # Ensure JSON compatibility if requested
+    if (json_compatible) {
+      # Convert vectors to lists for JSON arrays
+      if (!is.null(measure$values) && !is.list(measure$values)) {
+        measure$values <- as.list(measure$values)
+      }
+      if (!is.null(measure$keywords) && !is.list(measure$keywords)) {
+        measure$keywords <- as.list(measure$keywords)
+      }
+      if (!is.null(measure$waves) && !is.list(measure$waves)) {
+        measure$waves <- as.list(measure$waves)
+      }
+      if (!is.null(measure$reversed_items) && !is.list(measure$reversed_items)) {
+        measure$reversed_items <- as.list(measure$reversed_items)
+      }
+      
+      # Remove NULL values if needed for cleaner JSON
+      measure <- measure[!sapply(measure, is.null)]
+    }
 
     return(measure)
   }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/init-functions.R
 \name{boilerplate_init_measures}
 \alias{boilerplate_init_measures}
-\title{Initialize Boilerplate Measures Database (Deprecated)}
+\title{Initialise Boilerplate Measures Database (Deprecated)}
 \usage{
 boilerplate_init_measures(
   merge_strategy = c("keep_existing", "merge_recursive", "overwrite_all"),
@@ -33,7 +33,7 @@ boilerplate_init_measures(
 \item{confirm}{Logical. If TRUE, asks for confirmation before making changes.}
 }
 \value{
-Invisibly returns a logical value indicating if the measures database was successfully initialized.
+Invisibly returns a logical value indicating if the measures database was successfully initialised.
 }
 \description{
 This function is deprecated. Please use boilerplate_init("measures") instead.

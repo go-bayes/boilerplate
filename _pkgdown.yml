@@ -1,4 +1,9 @@
 url: https://go-bayes.github.io/boilerplate/
+
+# ---logo -----------------------------------------------------------
+logo: man/figures/logo-new.png
+# -------------------------------------------------------------------
+
 template:
   bootstrap: 5
   bslib:
@@ -10,7 +15,7 @@ template:
     code_font: {google: "Fira Code"}
 
     # adjust the overall font size scale
-    font_scale: 0.75  # makes the font smaller; 1 is the default size
+    font_scale: 0.7  # makes the font smaller; 1 is the default size
     bg: "#ffffff"      # white background
     fg: "#333333"      # dark gray font color for better readability
     primary: "#007bff" # primary blue theme color for links, buttons, etc.
@@ -29,6 +34,23 @@ development:
   version_label: default
   version_tooltip: "Version"
 vignette_engine: quarto
+articles:
+  - title: "Getting Started"
+    contents:
+    - boilerplate-getting-started
+    - boilerplate-intro
+    - boilerplate-intro-enhanced
+  - title: "Core Workflows"
+    contents:
+    - boilerplate-bibliography-workflow
+    - boilerplate-measures-workflow
+    - boilerplate-json-workflow
+    - boilerplate-quarto-workflow
+  - title: "Developer Documentation"
+    contents:
+    - boilerplate-architecture
+    - boilerplate-internals
+    - boilerplate-json-schema
 reference:
   - title: "Core Database Functions"
     contents:
@@ -61,17 +83,27 @@ reference:
     - boilerplate_sort_db
     - boilerplate_path_exists
     - boilerplate_list_paths
+  - title: "Bibliography Functions"
+    contents:
+    - boilerplate_add_bibliography
+    - boilerplate_update_bibliography
+    - boilerplate_copy_bibliography
+    - boilerplate_validate_references
   - title: "Utilities"
     contents:
     - boilerplate_find_chars
-    - boilerplate_manage_measures
-    - boilerplate_manage_text
     - boilerplate_measures_report
     - boilerplate_merge_category
     - boilerplate_merge_unified
     - boilerplate_standardise_measures
     - boilerplate_update_from_external
-  - title: "Legecy Functions"
+  - title: "JSON Support Functions"
+    contents:
+    - boilerplate_migrate_to_json
+    - boilerplate_rds_to_json
+    - compare_rds_json
+    - validate_json_database
+  - title: "Legacy Functions"
     contents:
     - boilerplate_init_text
     - boilerplate_init_measures
