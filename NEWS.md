@@ -6,6 +6,7 @@
 * Added complete "Getting Started" tutorial with real-world workflow examples
 * Created enhanced introduction vignette with practical multi-study scenarios
 * Updated all examples to use current API (removed references to deprecated functions)
+* Enhanced vignettes to showcase new variable documentation and database health features
 
 ## Major improvements
 
@@ -31,6 +32,23 @@
 * `boilerplate_rds_to_json()` - Convert individual RDS files to JSON
 * `compare_rds_json()` - Compare RDS and JSON databases for migration validation
 * `validate_json_database()` - Validate JSON structure against schemas
+
+### Template variable documentation
+* `boilerplate_add_entry_enhanced()` - Add entries with documented template variables
+* `boilerplate_update_entry_enhanced()` - Update entries while preserving variable documentation
+* `boilerplate_get_variables()` - Retrieve variable documentation for a specific path
+* `boilerplate_list_variables()` - List all template variables across database with documentation status
+* `extract_template_variables()` - Extract variables from template strings
+
+### Database health checking
+* `boilerplate_check_health()` - Comprehensive database health checks including:
+  - Empty or NULL entries detection
+  - Orphaned template variables identification
+  - Duplicate content detection
+  - Measure structure consistency checks
+  - Path naming convention validation
+* `boilerplate_health_report()` - Generate detailed health reports for documentation
+* `print.boilerplate_health()` - Formatted output for health check results
 
 ### Bibliography support
 * `boilerplate_add_bibliography()` - Add bibliography information to database

@@ -83,6 +83,16 @@ reference:
     - boilerplate_sort_db
     - boilerplate_path_exists
     - boilerplate_list_paths
+  - title: "Enhanced Entry Functions"
+    contents:
+    - boilerplate_add_entry_enhanced
+    - boilerplate_update_entry_enhanced
+    - boilerplate_get_variables
+    - boilerplate_list_variables
+  - title: "Database Health Functions"
+    contents:
+    - boilerplate_check_health
+    - boilerplate_health_report
   - title: "Bibliography Functions"
     contents:
     - boilerplate_add_bibliography

@@ -183,11 +183,13 @@ political attitudes and well-being. You want to:</p>
 <h2 id="step-3-customize-for-your-study">Step 3: Customize for Your Study<a class="anchor" aria-label="anchor" href="#step-3-customize-for-your-study"></a>
 </h2>
 <div class="section level3">
-<h3 id="add-study-specific-methods">Add Study-Specific Methods<a class="anchor" aria-label="anchor" href="#add-study-specific-methods"></a>
+<h3 id="add-study-specific-methods-with-variable-documentation">Add Study-Specific Methods with Variable Documentation<a class="anchor" aria-label="anchor" href="#add-study-specific-methods-with-variable-documentation"></a>
 </h3>
+<p>The new enhanced functions let you document what each template
+variable means:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Add your sampling method</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="co"># Add your sampling method WITH variable documentation</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"methods.sample.nz_national"</span>,</span>
 <span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
@@ -196,11 +198,40 @@ political attitudes and well-being. You want to:</p>
 <span>    <span class="st">"For this study, we analysed data from Wave {{wave}} ({{year}}), which included "</span>,</span>
 <span>    <span class="st">"{{n_total}} participants ({{pct_female}}% female, {{pct_maori}}% Māori, "</span>,</span>
 <span>    <span class="st">"Mage = {{m_age}}, SD = {{sd_age}})."</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    wave <span class="op">=</span> <span class="st">"NZAVS wave number (e.g., 13)"</span>,</span>
+<span>    year <span class="op">=</span> <span class="st">"Data collection year(s) (e.g., '2021-2022')"</span>,</span>
+<span>    n_total <span class="op">=</span> <span class="st">"Total sample size"</span>,</span>
+<span>    pct_female <span class="op">=</span> <span class="st">"Percentage of female participants"</span>,</span>
+<span>    pct_maori <span class="op">=</span> <span class="st">"Percentage of Māori participants"</span>, </span>
+<span>    m_age <span class="op">=</span> <span class="st">"Mean age of participants"</span>,</span>
+<span>    sd_age <span class="op">=</span> <span class="st">"Standard deviation of age"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Add your analysis approach</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
+<span><span class="co"># Check what variables are needed</span></span>
+<span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_get_variables.html">boilerplate_get_variables</a></span><span class="op">(</span><span class="va">db</span>, <span class="st">"methods.sample.nz_national"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $template</span></span>
+<span><span class="co">#&gt; [1] "Data were collected as part of the New Zealand Attitudes..."</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $found_in_template</span></span>
+<span><span class="co">#&gt; [1] "wave" "year" "n_total" "pct_female" "pct_maori" "m_age" "sd_age"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $documented</span></span>
+<span><span class="co">#&gt; [1] "wave" "year" "n_total" "pct_female" "pct_maori" "m_age" "sd_age"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $variables</span></span>
+<span><span class="co">#&gt; $variables$wave</span></span>
+<span><span class="co">#&gt; [1] "NZAVS wave number (e.g., 13)"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $variables$year</span></span>
+<span><span class="co">#&gt; [1] "Data collection year(s) (e.g., '2021-2022')"</span></span>
+<span><span class="co">#&gt; # ... [truncated]</span></span>
+<span></span>
+<span><span class="co"># Add your analysis approach WITH documentation</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"methods.analysis.political_wellbeing"</span>,</span>
 <span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
@@ -210,6 +241,13 @@ political attitudes and well-being. You want to:</p>
 <span>    <span class="st">"{{wellbeing_measure}}. We controlled for {{covariates}} in all analyses. "</span>,</span>
 <span>    <span class="st">"All analyses were conducted in R version {{r_version}} using the "</span>,</span>
 <span>    <span class="st">"{{packages}} packages."</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    analysis_type <span class="op">=</span> <span class="st">"Type of analysis (e.g., 'multilevel regression models')"</span>,</span>
+<span>    wellbeing_measure <span class="op">=</span> <span class="st">"Name of well-being measure used"</span>,</span>
+<span>    covariates <span class="op">=</span> <span class="st">"List of control variables"</span>,</span>
+<span>    r_version <span class="op">=</span> <span class="st">"R version used for analysis"</span>,</span>
+<span>    packages <span class="op">=</span> <span class="st">"R packages used (e.g., 'lme4 and marginaleffects')"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -348,9 +386,58 @@ We generated 20 imputed datasets and pooled results using Rubin's rules.</code><
 <h2 id="step-7-validate-your-work">Step 7: Validate Your Work<a class="anchor" aria-label="anchor" href="#step-7-validate-your-work"></a>
 </h2>
 <div class="section level3">
+<h3 id="check-database-health">Check Database Health<a class="anchor" aria-label="anchor" href="#check-database-health"></a>
+</h3>
+<p>Use the new health check feature to ensure your database is
+well-structured:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Run comprehensive health check</span></span>
+<span><span class="va">health</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_check_health.html">boilerplate_check_health</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">health</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Database Health Report</span></span>
+<span><span class="co">#&gt; ======================</span></span>
+<span><span class="co">#&gt; Checked at: 2024-01-20 10:30:15</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Summary</span></span>
+<span><span class="co">#&gt; -------</span></span>
+<span><span class="co">#&gt; Status: ⚠ ISSUES FOUND</span></span>
+<span><span class="co">#&gt; Total entries: 15</span></span>
+<span><span class="co">#&gt; Categories: 3</span></span>
+<span><span class="co">#&gt; Template variables: 25</span></span>
+<span><span class="co">#&gt; Documented variables: 12 (48.0%)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Issues Found</span></span>
+<span><span class="co">#&gt; ------------</span></span>
+<span><span class="co">#&gt; info: Orphaned Variables (13)</span></span>
+<span><span class="co">#&gt;   Template variables without documentation</span></span>
+<span><span class="co">#&gt;     methods.analysis.regression: effect_size</span></span>
+<span><span class="co">#&gt;     methods.missing.listwise: n_missing</span></span>
+<span><span class="co">#&gt;     ... and 3 more paths</span></span>
+<span></span>
+<span><span class="co"># Get detailed report on variable documentation</span></span>
+<span><span class="va">all_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_variables.html">boilerplate_list_variables</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span>
+<span><span class="va">undocumented</span> <span class="op">&lt;-</span> <span class="va">all_vars</span><span class="op">[</span><span class="op">!</span><span class="va">all_vars</span><span class="op">$</span><span class="va">documented</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">undocumented</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nUndocumented variables found:\n"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">undocumented</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"path"</span>, <span class="st">"variable"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Generate a detailed health report file</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_health_report.html">boilerplate_health_report</a></span><span class="op">(</span><span class="va">health</span>, file <span class="op">=</span> <span class="st">"database_health_report.txt"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ✔ Health report saved to database_health_report.txt</span></span>
+<span></span>
+<span><span class="co"># Fix issues if needed</span></span>
+<span><span class="va">health_fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_check_health.html">boilerplate_check_health</a></span><span class="op">(</span><span class="va">db</span>, fix <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="va">health_fixed</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">issues_fixed</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">health_fixed</span>, <span class="st">"fixed_db"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n✔ Fixed"</span>, <span class="va">health_fixed</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">issues_fixed</span>, <span class="st">"issues\n"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="check-references">Check References<a class="anchor" aria-label="anchor" href="#check-references"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ensure all citations are in your bibliography</span></span>
 <span><span class="va">validation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_validate_references.html">boilerplate_validate_references</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span>
 <span></span>
@@ -364,7 +451,7 @@ We generated 20 imputed datasets and pooled results using Rubin's rules.</code><
 <div class="section level3">
 <h3 id="export-for-version-control">Export for Version Control<a class="anchor" aria-label="anchor" href="#export-for-version-control"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Export your complete database for version control</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_export.html">boilerplate_export</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
@@ -382,16 +469,16 @@ We generated 20 imputed datasets and pooled results using Rubin's rules.</code><
 <h3 id="quarto-document-example">Quarto Document Example<a class="anchor" aria-label="anchor" href="#quarto-document-example"></a>
 </h3>
 <p>Create a file <code>manuscript.qmd</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Political Orientation and Well-being: A National Study"</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Your Name"</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="an">bibliography:</span><span class="co"> references.bib</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">  pdf:</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">    keep-tex: true</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="fu"># Method</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Political Orientation and Well-being: A National Study"</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Your Name"</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="an">bibliography:</span><span class="co"> references.bib</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">  pdf:</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">    keep-tex: true</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="fu"># Method</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="measures">Measures<a class="anchor" aria-label="anchor" href="#measures"></a>
@@ -429,27 +516,42 @@ team_db &lt;- boilerplate_import("~/Dropbox/TeamProject/shared_boilerplate.json"
 <div class="section level3">
 <h3 id="multiple-papers-from-same-dataset">2. Multiple Papers from Same Dataset<a class="anchor" aria-label="anchor" href="#multiple-papers-from-same-dataset"></a>
 </h3>
-<p>Create variants for different papers:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<p>Create variants for different papers with proper variable
+documentation:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Paper 1: Focus on political orientation</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"methods.sample.paper1"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"We analysed data from {{n_conservatives}} conservative and {{n_liberals}} liberal participants..."</span></span>
+<span>  value <span class="op">=</span> <span class="st">"We analysed data from {{n_conservatives}} conservative and {{n_liberals}} liberal participants..."</span>,</span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    n_conservatives <span class="op">=</span> <span class="st">"Number of conservative participants (political orientation &gt;= 5)"</span>,</span>
+<span>    n_liberals <span class="op">=</span> <span class="st">"Number of liberal participants (political orientation &lt;= 3)"</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Paper 2: Focus on well-being</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
+<span><span class="co"># Paper 2: Focus on well-being with documentation</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"methods.sample.paper2"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"We examined well-being trajectories among {{n_high_wellbeing}} high and {{n_low_wellbeing}} low well-being participants..."</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>  value <span class="op">=</span> <span class="st">"We examined well-being trajectories among {{n_high_wellbeing}} high and {{n_low_wellbeing}} low well-being participants..."</span>,</span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    n_high_wellbeing <span class="op">=</span> <span class="st">"Number of participants with well-being score &gt;= 7"</span>,</span>
+<span>    n_low_wellbeing <span class="op">=</span> <span class="st">"Number of participants with well-being score &lt;= 4"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># List all variables across papers to ensure consistency</span></span>
+<span><span class="va">vars_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_variables.html">boilerplate_list_variables</a></span><span class="op">(</span><span class="va">db</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">vars_summary</span><span class="op">$</span><span class="va">documented</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  FALSE  TRUE </span></span>
+<span><span class="co">#&gt;      5    22</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="batch-updates">3. Batch Updates<a class="anchor" aria-label="anchor" href="#batch-updates"></a>
 </h3>
 <p>Update multiple entries at once:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Update all methods to include ethics statement</span></span>
 <span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_batch_edit.html">boilerplate_batch_edit</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
@@ -462,12 +564,14 @@ team_db &lt;- boilerplate_import("~/Dropbox/TeamProject/shared_boilerplate.json"
 <div class="section level3">
 <h3 id="quality-control">4. Quality Control<a class="anchor" aria-label="anchor" href="#quality-control"></a>
 </h3>
-<p>Create a reporting function for your team:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<p>Create a comprehensive reporting function for your team:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">check_manuscript_ready</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">db</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Manuscript Checklist:\n"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"==================\n\n"</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="co"># Check all sections exist</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Required Sections:\n"</span><span class="op">)</span></span>
 <span>  <span class="va">required_sections</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"methods.sample"</span>, <span class="st">"methods.design"</span>, </span>
 <span>    <span class="st">"methods.analysis"</span>, <span class="st">"methods.missing"</span></span>
@@ -480,17 +584,61 @@ team_db &lt;- boilerplate_import("~/Dropbox/TeamProject/shared_boilerplate.json"
 <span>  <span class="op">}</span></span>
 <span>  </span>
 <span>  <span class="co"># Check references</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nReferences:\n"</span><span class="op">)</span></span>
 <span>  <span class="va">validation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_validate_references.html">boilerplate_validate_references</a></span><span class="op">(</span><span class="va">db</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="va">ref_status</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">validation</span><span class="op">$</span><span class="va">valid</span><span class="op">)</span> <span class="st">"✓"</span> <span class="kw">else</span> <span class="st">"✗"</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s All references validated\n"</span>, <span class="va">ref_status</span><span class="op">)</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="co"># Check measures</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nMeasures:\n"</span><span class="op">)</span></span>
 <span>  <span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_measures.html">boilerplate_measures</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"✓ %d measures documented\n"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">measures_db</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Check variable documentation</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nVariable Documentation:\n"</span><span class="op">)</span></span>
+<span>  <span class="va">all_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_variables.html">boilerplate_list_variables</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span>
+<span>  <span class="va">doc_pct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">all_vars</span><span class="op">$</span><span class="va">documented</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">all_vars</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="va">status</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">doc_pct</span> <span class="op">&gt;=</span> <span class="fl">80</span><span class="op">)</span> <span class="st">"✓"</span> <span class="kw">else</span> <span class="st">"⚠"</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s %.1f%% of variables documented\n"</span>, <span class="va">status</span>, <span class="va">doc_pct</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Run health check</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nDatabase Health:\n"</span><span class="op">)</span></span>
+<span>  <span class="va">health</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_check_health.html">boilerplate_check_health</a></span><span class="op">(</span><span class="va">db</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">health_status</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">health</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">healthy</span><span class="op">)</span> <span class="st">"✓"</span> <span class="kw">else</span> <span class="st">"⚠"</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s Database health: %d issues found\n"</span>, </span>
+<span>              <span class="va">health_status</span>, <span class="va">health</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">total_issues</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    sections_ok <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">required_sections</span>, </span>
+<span>                             <span class="kw">function</span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_path_exists</a></span><span class="op">(</span><span class="va">db</span>, <span class="va">s</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    references_ok <span class="op">=</span> <span class="va">validation</span><span class="op">$</span><span class="va">valid</span>,</span>
+<span>    documentation_pct <span class="op">=</span> <span class="va">doc_pct</span>,</span>
+<span>    health <span class="op">=</span> <span class="va">health</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Run the check</span></span>
-<span><span class="fu">check_manuscript_ready</span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">readiness</span> <span class="op">&lt;-</span> <span class="fu">check_manuscript_ready</span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Manuscript Checklist:</span></span>
+<span><span class="co">#&gt; ==================</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Required Sections:</span></span>
+<span><span class="co">#&gt; ✓ methods.sample</span></span>
+<span><span class="co">#&gt; ✓ methods.design</span></span>
+<span><span class="co">#&gt; ✓ methods.analysis</span></span>
+<span><span class="co">#&gt; ✓ methods.missing</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; References:</span></span>
+<span><span class="co">#&gt; ✓ All references validated</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Measures:</span></span>
+<span><span class="co">#&gt; ✓ 5 measures documented</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable Documentation:</span></span>
+<span><span class="co">#&gt; ⚠ 68.0% of variables documented</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Database Health:</span></span>
+<span><span class="co">#&gt; ⚠ Database health: 2 issues found</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

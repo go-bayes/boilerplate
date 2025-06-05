@@ -26,6 +26,7 @@ The `boilerplate` package now supports JSON format for all database operations. 
 - **Version control friendly**: Changes are easily tracked in Git
 - **Language agnostic**: JSON files can be read by any programming language
 - **Web-friendly**: JSON is the standard format for web applications
+- **Variable documentation**: The new enhanced functions allow documenting template variables
 
 ## Basic JSON Operations
 
@@ -37,21 +38,37 @@ temp_dir <- tempdir()
 json_path <- file.path(temp_dir, "json_example")
 dir.create(json_path, showWarnings = FALSE)
 
-# Create a sample database
-sample_db <- list(
-  methods = list(
-    sampling = "Participants were randomly selected from {{population}}.",
-    analysis = list(
-      regression = "We conducted linear regression using {{software}}."
-    )
-  ),
-  measures = list(
-    age = list(
-      name = "Age",
-      description = "Participant age in years",
-      type = "continuous",
-      range = c(18, 65)
-    )
+# Create a sample database with enhanced entries
+sample_db <- list()
+
+# Add methods with variable documentation
+sample_db <- boilerplate_add_entry_enhanced(
+  sample_db,
+  path = "methods.sampling",
+  value = "Participants were randomly selected from {{population}}.",
+  variables = list(
+    population = "Target population description (e.g., 'university students')"
+  )
+)
+
+sample_db <- boilerplate_add_entry_enhanced(
+  sample_db,
+  path = "methods.analysis.regression",
+  value = "We conducted linear regression using {{software}}.",
+  variables = list(
+    software = "Statistical software used (e.g., 'R version 4.3.0')"
+  )
+)
+
+# Add measures
+sample_db <- boilerplate_add_entry(
+  sample_db,
+  path = "measures.age",
+  value = list(
+    name = "Age",
+    description = "Participant age in years",
+    type = "continuous",
+    range = c(18, 65)
   )
 )
 
@@ -207,9 +224,11 @@ standardised <- boilerplate_standardise_measures(
 str(standardised$anxiety_scale)
 ```
 
-## Validating JSON Structure
+## Validating JSON Structure and Health
 
-The package can validate JSON databases against predefined schemas:
+The package provides multiple ways to validate your JSON databases:
+
+### Schema Validation
 
 ```{r validate, eval=FALSE}
 # Save a JSON database
@@ -234,6 +253,27 @@ if (length(validation_errors) == 0) {
 } else {
   message("Validation errors found:")
   print(validation_errors)
+}
+```
+
+### Database Health Check
+
+```{r health-check}
+# Check database health including variable documentation
+health <- boilerplate_check_health(sample_db)
+print(health)
+
+# List all variables and their documentation status
+vars <- boilerplate_list_variables(sample_db)
+print(vars)
+
+# Fix issues automatically if needed
+if (!health$summary$healthy) {
+  health_fixed <- boilerplate_check_health(sample_db, fix = TRUE, quiet = TRUE)
+  if (!is.null(health_fixed$summary$issues_fixed) && health_fixed$summary$issues_fixed > 0) {
+    sample_db <- attr(health_fixed, "fixed_db")
+    message("Fixed ", health_fixed$summary$issues_fixed, " issues")
+  }
 }
 ```
 
@@ -282,13 +322,31 @@ cat(measures_text)
 
 2. **Version control**: JSON files work great with Git - commit them to track changes
 
-3. **Validation**: Always validate JSON structure after manual edits
+3. **Document your variables**: Use the enhanced functions to document what each template variable means:
+   ```r
+   db <- boilerplate_add_entry_enhanced(
+     db,
+     path = "methods.power",
+     value = "Power analysis indicated {{n_required}} participants needed for {{power}}% power.",
+     variables = list(
+       n_required = "Required sample size from power analysis",
+       power = "Statistical power percentage (typically 80)"
+     )
+   )
+   ```
 
-4. **Backup before migration**: Use the `backup = TRUE` option when migrating
+4. **Regular health checks**: Run `boilerplate_check_health()` periodically to ensure database quality
 
-5. **Choose appropriate format**:
+5. **Backup before migration**: Use the `backup = TRUE` option when migrating
+
+6. **Choose appropriate format**:
    - Use unified format for complete databases
    - Use separate files for modular management
+
+7. **Export health reports**: Generate health reports for documentation:
+   ```r
+   boilerplate_health_report(health, file = "db_health_report.txt")
+   ```
 
 ## Conclusion
 

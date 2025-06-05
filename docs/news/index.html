@@ -40,6 +40,7 @@
 <li>Added complete “Getting Started” tutorial with real-world workflow examples</li>
 <li>Created enhanced introduction vignette with practical multi-study scenarios</li>
 <li>Updated all examples to use current API (removed references to deprecated functions)</li>
+<li>Enhanced vignettes to showcase new variable documentation and database health features</li>
 </ul></div>
 <div class="section level3">
 <h3 id="major-improvements-1-1-0">Major improvements<a class="anchor" aria-label="anchor" href="#major-improvements-1-1-0"></a></h3>
@@ -83,6 +84,34 @@
 <code><a href="../reference/compare_rds_json.html">compare_rds_json()</a></code> - Compare RDS and JSON databases for migration validation</li>
 <li>
 <code><a href="../reference/validate_json_database.html">validate_json_database()</a></code> - Validate JSON structure against schemas</li>
+</ul></div>
+<div class="section level4">
+<h4 id="template-variable-documentation-1-1-0">Template variable documentation<a class="anchor" aria-label="anchor" href="#template-variable-documentation-1-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced()</a></code> - Add entries with documented template variables</li>
+<li>
+<code><a href="../reference/boilerplate_update_entry_enhanced.html">boilerplate_update_entry_enhanced()</a></code> - Update entries while preserving variable documentation</li>
+<li>
+<code><a href="../reference/boilerplate_get_variables.html">boilerplate_get_variables()</a></code> - Retrieve variable documentation for a specific path</li>
+<li>
+<code><a href="../reference/boilerplate_list_variables.html">boilerplate_list_variables()</a></code> - List all template variables across database with documentation status</li>
+<li>
+<code><a href="../reference/extract_template_variables.html">extract_template_variables()</a></code> - Extract variables from template strings</li>
+</ul></div>
+<div class="section level4">
+<h4 id="database-health-checking-1-1-0">Database health checking<a class="anchor" aria-label="anchor" href="#database-health-checking-1-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/boilerplate_check_health.html">boilerplate_check_health()</a></code> - Comprehensive database health checks including:
+<ul><li>Empty or NULL entries detection</li>
+<li>Orphaned template variables identification</li>
+<li>Duplicate content detection</li>
+<li>Measure structure consistency checks</li>
+<li>Path naming convention validation</li>
+</ul></li>
+<li>
+<code><a href="../reference/boilerplate_health_report.html">boilerplate_health_report()</a></code> - Generate detailed health reports for documentation</li>
+<li>
+<code><a href="../reference/print.boilerplate_health.html">print.boilerplate_health()</a></code> - Formatted output for health check results</li>
 </ul></div>
 <div class="section level4">
 <h4 id="bibliography-support-1-1-0">Bibliography support<a class="anchor" aria-label="anchor" href="#bibliography-support-1-1-0"></a></h4>
