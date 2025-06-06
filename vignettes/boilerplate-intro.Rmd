@@ -249,6 +249,60 @@ merged_db <- boilerplate_merge_databases(
 )
 ```
 
+## Managing Database Versions
+
+The boilerplate package includes version management features to help you track and restore different versions of your databases.
+
+### Listing Available Versions
+
+```{r list-versions, eval=FALSE}
+# List all database files
+files <- boilerplate_list_files()
+print(files)
+
+# List files for a specific category
+methods_files <- boilerplate_list_files(category = "methods")
+
+# Filter by date pattern
+jan_files <- boilerplate_list_files(pattern = "202401")
+```
+
+### Working with Timestamped Versions
+
+```{r timestamps, eval=FALSE}
+# Save with timestamp
+boilerplate_save(
+  db = unified_db,
+  timestamp = TRUE  # Creates boilerplate_unified_20240115_143022.rds
+)
+
+# Import a specific timestamped version
+old_version <- boilerplate_import(
+  data_path = "boilerplate/data/boilerplate_unified_20240110_120000.rds"
+)
+```
+
+### Backup and Restore
+
+```{r backup-restore, eval=FALSE}
+# View latest backup without restoring
+backup_db <- boilerplate_restore_backup(category = "methods")
+
+# Restore backup as current version
+boilerplate_restore_backup(
+  category = "methods",
+  restore = TRUE,
+  confirm = TRUE
+)
+
+# Restore specific backup by timestamp
+boilerplate_restore_backup(
+  category = "methods",
+  backup_version = "20240110_120000",
+  restore = TRUE
+)
+```
+
 ## Getting Help
 
 For more information and examples, see:

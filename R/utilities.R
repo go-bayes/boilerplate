@@ -438,3 +438,42 @@ get_empty_measures_db_structure <- function() {
   )
 }
 
+#' Extract Template Variables from Text
+#'
+#' Extracts all template variable names from text using {{variable}} syntax.
+#' Returns unique variable names found in the text.
+#'
+#' @param text Character. The text containing template variables.
+#'
+#' @return Character vector of unique variable names found in the text.
+#'
+#' @noRd
+extract_template_variables <- function(text) {
+  if (!is.character(text) || length(text) == 0) {
+    return(character(0))
+  }
+  
+  # Pattern to match {{variable_name}} with optional spaces
+  var_pattern <- "\\{\\{\\s*([^\\}]+?)\\s*\\}\\}"
+  
+  # Extract all matches
+  matches <- gregexpr(var_pattern, text, perl = TRUE)
+  
+  if (matches[[1]][1] == -1) {
+    return(character(0))
+  }
+  
+  # Extract the variable names from the matches
+  match_starts <- as.vector(matches[[1]])
+  match_lengths <- attr(matches[[1]], "match.length")
+  
+  # Get the full matches
+  full_matches <- substring(text, match_starts, match_starts + match_lengths - 1)
+  
+  # Extract just the variable names (remove {{ and }} and trim whitespace)
+  var_names <- gsub("^\\{\\{\\s*|\\s*\\}\\}$", "", full_matches)
+  
+  # Return unique variable names
+  unique(var_names)
+}
+

@@ -45,7 +45,7 @@
 <div class="section level3">
 <h3 id="major-improvements-1-1-0">Major improvements<a class="anchor" aria-label="anchor" href="#major-improvements-1-1-0"></a></h3>
 <ul><li>
-<strong>Lighter package</strong>: Reduced dependencies from 9 to 6 by removing glue, janitor, and stringr - replaced with base R equivalents</li>
+<strong>Lighter package</strong>: Reduced dependencies from 9 to 6 by removing <code>glue</code>, <code>janitor</code>, and <code>stringr</code> - replaced with base R equivalents</li>
 <li>
 <strong>Cleaner codebase</strong>: Removed deprecated backward compatibility functions (<code>boilerplate_manage_text()</code> and <code>boilerplate_manage_measures()</code>) - saving 625+ lines of code</li>
 <li>
@@ -88,15 +88,15 @@
 <div class="section level4">
 <h4 id="template-variable-documentation-1-1-0">Template variable documentation<a class="anchor" aria-label="anchor" href="#template-variable-documentation-1-1-0"></a></h4>
 <ul><li>
-<code><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced()</a></code> - Add entries with documented template variables</li>
+<code>boilerplate_add_entry_enhanced()</code> - Add entries with documented template variables</li>
 <li>
-<code><a href="../reference/boilerplate_update_entry_enhanced.html">boilerplate_update_entry_enhanced()</a></code> - Update entries while preserving variable documentation</li>
+<code>boilerplate_update_entry_enhanced()</code> - Update entries while preserving variable documentation</li>
 <li>
-<code><a href="../reference/boilerplate_get_variables.html">boilerplate_get_variables()</a></code> - Retrieve variable documentation for a specific path</li>
+<code>boilerplate_get_variables()</code> - Retrieve variable documentation for a specific path</li>
 <li>
-<code><a href="../reference/boilerplate_list_variables.html">boilerplate_list_variables()</a></code> - List all template variables across database with documentation status</li>
+<code>boilerplate_list_variables()</code> - List all template variables across database with documentation status</li>
 <li>
-<code><a href="../reference/extract_template_variables.html">extract_template_variables()</a></code> - Extract variables from template strings</li>
+<code>extract_template_variables()</code> - Extract variables from template strings</li>
 </ul></div>
 <div class="section level4">
 <h4 id="database-health-checking-1-1-0">Database health checking<a class="anchor" aria-label="anchor" href="#database-health-checking-1-1-0"></a></h4>
@@ -108,8 +108,16 @@
 <li>Measure structure consistency checks</li>
 <li>Path naming convention validation</li>
 </ul></li>
+<li>Enhanced <code><a href="../reference/boilerplate_check_health.html">boilerplate_check_health()</a></code> - Now includes integrated report generation with <code>report</code> parameter</li>
+</ul></div>
+<div class="section level4">
+<h4 id="version-management-1-1-0">Version management<a class="anchor" aria-label="anchor" href="#version-management-1-1-0"></a></h4>
+<ul><li>Enhanced <code><a href="../reference/boilerplate_import.html">boilerplate_import()</a></code> - Can now import database files directly by path (both timestamped and backup files)</li>
 <li>
-<code><a href="../reference/boilerplate_health_report.html">boilerplate_health_report()</a></code> - Generate detailed health reports for documentation</li>
+<code><a href="../reference/boilerplate_list_files.html">boilerplate_list_files()</a></code> - List and organise all database files (standard, timestamped, backups)</li>
+<li>
+<code><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup()</a></code> - Convenient function to restore from backup files</li>
+<li>Improved file organisation - Clearly distinguishes between standard files, timestamped versions, and backups</li>
 <li>
 <code><a href="../reference/print.boilerplate_health.html">print.boilerplate_health()</a></code> - Formatted output for health check results</li>
 </ul></div>

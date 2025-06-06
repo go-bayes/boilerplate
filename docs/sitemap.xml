@@ -2,10 +2,14 @@
 <url><loc>https://go-bayes.github.io/boilerplate/404.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/CLAUDE.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/CONTRIBUTING.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/DOCUMENTATION_UPDATES.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/EXAMPLES_UPDATE_SUMMARY.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/JSON_REFACTOR_TODO.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/LICENSE-text.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/LICENSE.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/README_VERSION_MANAGEMENT.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/TODO_VERSION_MANAGEMENT.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/VERSION_MANAGEMENT_SUMMARY.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-architecture.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-bibliography-workflow.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-getting-started.html</loc></url>
@@ -17,6 +21,7 @@
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-measures-workflow.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-quarto-workflow.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/index.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/articles/version-management-section.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/authors.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/index.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/news/index.html</loc></url>
@@ -43,6 +48,7 @@
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_init_category.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_init_measures.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_init_text.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_list_files.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_list_variables.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_manage_measures.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_manage_text.html</loc></url>
@@ -70,6 +76,7 @@
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_report_statistical_estimator.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_report_target_population.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_report_variables.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_restore_backup.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_results.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_results_text.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_save.html</loc></url>
@@ -86,6 +93,7 @@
 <url><loc>https://go-bayes.github.io/boilerplate/reference/extract_template_variables.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/get_default_data_path.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/index.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/print.boilerplate_files.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/print.boilerplate_health.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/print.boilerplate_variables.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/validate_json_database.html</loc></url>

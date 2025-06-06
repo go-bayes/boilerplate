@@ -89,8 +89,8 @@ programming language</li>
 <strong>Web-friendly</strong>: JSON is the standard format for web
 applications</li>
 <li>
-<strong>Variable documentation</strong>: The new enhanced functions
-allow documenting template variables</li>
+<strong>Template variables</strong>: Support for
+<code>{{variable}}</code> placeholders in your text</li>
 </ul>
 </div>
 <div class="section level2">
@@ -105,26 +105,20 @@ allow documenting template variables</li>
 <span><span class="va">json_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">temp_dir</span>, <span class="st">"json_example"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">json_path</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create a sample database with enhanced entries</span></span>
+<span><span class="co"># Create a sample database</span></span>
 <span><span class="va">sample_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Add methods with variable documentation</span></span>
-<span><span class="va">sample_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced</a></span><span class="op">(</span></span>
+<span><span class="co"># Add methods entries</span></span>
+<span><span class="va">sample_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
 <span>  <span class="va">sample_db</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"methods.sampling"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"Participants were randomly selected from {{population}}."</span>,</span>
-<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    population <span class="op">=</span> <span class="st">"Target population description (e.g., 'university students')"</span></span>
-<span>  <span class="op">)</span></span>
+<span>  value <span class="op">=</span> <span class="st">"Participants were randomly selected from {{population}}."</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sample_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced</a></span><span class="op">(</span></span>
+<span><span class="va">sample_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
 <span>  <span class="va">sample_db</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"methods.analysis.regression"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"We conducted linear regression using {{software}}."</span>,</span>
-<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    software <span class="op">=</span> <span class="st">"Statistical software used (e.g., 'R version 4.3.0')"</span></span>
-<span>  <span class="op">)</span></span>
+<span>  value <span class="op">=</span> <span class="st">"We conducted linear regression using {{software}}."</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add measures</span></span>
@@ -217,7 +211,7 @@ JSON format:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Migrating 2 RDS files to JSON</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating backup in /var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpoZDsKI/migrated_json/backup_20250606_010706</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating backup in /var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpC1b1UU/migrated_json/backup_20250607_003246</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing measures_db.rds</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing methods_db.rds</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Saving unified database to boilerplate_unified.json</span></span>
@@ -228,8 +222,8 @@ JSON format:</p>
 <span></span>
 <span><span class="co"># Check migration results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">migrated</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpoZDsKI/rds_example/measures_db.rds"</span></span>
-<span><span class="co">#&gt; [2] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpoZDsKI/rds_example/methods_db.rds"</span></span>
+<span><span class="co">#&gt; [1] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpC1b1UU/rds_example/measures_db.rds"</span></span>
+<span><span class="co">#&gt; [2] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpC1b1UU/rds_example/methods_db.rds"</span></span>
 <span></span>
 <span><span class="co"># Verify the migrated data  </span></span>
 <span><span class="va">migrated_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span></span>
@@ -315,7 +309,7 @@ JSON format:</p>
 <span><span class="co">#&gt;   ..$ : chr "Feeling nervous or on edge"</span></span>
 <span><span class="co">#&gt;   ..$ : chr "Not being able to stop worrying"</span></span>
 <span><span class="co">#&gt;  $ standardised     : logi TRUE</span></span>
-<span><span class="co">#&gt;  $ standardised_date: Date[1:1], format: "2025-06-06"</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ standardised_date: Date[1:1], format: "2025-06-07"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="validating-json-structure-and-health">Validating JSON Structure and Health<a class="anchor" aria-label="anchor" href="#validating-json-structure-and-health"></a>
@@ -351,63 +345,30 @@ databases:</p>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="database-health-check">Database Health Check<a class="anchor" aria-label="anchor" href="#database-health-check"></a>
+<h3 id="database-validation">Database Validation<a class="anchor" aria-label="anchor" href="#database-validation"></a>
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Check database health including variable documentation</span></span>
-<span><span class="va">health</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_check_health.html">boilerplate_check_health</a></span><span class="op">(</span><span class="va">sample_db</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Checking database health...</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Found 2 issues (0 warnings, 2 info)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">health</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Database Health Report</span></span>
-<span><span class="co">#&gt; ======================</span></span>
-<span><span class="co">#&gt; Checked at: 2025-06-06 01:07:06 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Summary</span></span>
-<span><span class="co">#&gt; -------</span></span>
-<span><span class="co">#&gt; Status: ⚠ ISSUES FOUND </span></span>
-<span><span class="co">#&gt; Total entries: 24 </span></span>
-<span><span class="co">#&gt; Categories: 2 </span></span>
-<span><span class="co">#&gt; Template variables: 4 </span></span>
-<span><span class="co">#&gt; Documented variables: 2 (50.0%) </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Issues Found</span></span>
-<span><span class="co">#&gt; ------------</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; info: Orphaned Variables (2)</span></span>
-<span><span class="co">#&gt;   Template variables without documentation</span></span>
-<span><span class="co">#&gt;     methods.analysis.regression.text: software</span></span>
-<span><span class="co">#&gt;     methods.sampling.text: population</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; info: Duplicate Content (3)</span></span>
-<span><span class="co">#&gt;   Duplicate content found across paths</span></span>
-<span><span class="co">#&gt;     Group 1: measures.age, measures.age.description</span></span>
-<span><span class="co">#&gt;     Group 2: methods.analysis.regression, methods.analysis.regression.text</span></span>
-<span><span class="co">#&gt;     Group 3: methods.sampling, methods.sampling.text</span></span>
-<span></span>
-<span><span class="co"># List all variables and their documentation status</span></span>
-<span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_variables.html">boilerplate_list_variables</a></span><span class="op">(</span><span class="va">sample_db</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                               path   variable documented</span></span>
-<span><span class="co">#&gt; 3                 methods.sampling population       TRUE</span></span>
-<span><span class="co">#&gt; 4            methods.sampling.text population      FALSE</span></span>
-<span><span class="co">#&gt; 1      methods.analysis.regression   software       TRUE</span></span>
-<span><span class="co">#&gt; 2 methods.analysis.regression.text   software      FALSE</span></span>
-<span><span class="co">#&gt;                                                   description</span></span>
-<span><span class="co">#&gt; 3 Target population description (e.g., 'university students')</span></span>
-<span><span class="co">#&gt; 4                                                        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 1         Statistical software used (e.g., 'R version 4.3.0')</span></span>
-<span><span class="co">#&gt; 2                                                        &lt;NA&gt;</span></span>
-<span></span>
-<span><span class="co"># Fix issues automatically if needed</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">health</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">healthy</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">health_fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_check_health.html">boilerplate_check_health</a></span><span class="op">(</span><span class="va">sample_db</span>, fix <span class="op">=</span> <span class="cn">TRUE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">health_fixed</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">issues_fixed</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">health_fixed</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">issues_fixed</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">sample_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">health_fixed</span>, <span class="st">"fixed_db"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Fixed "</span>, <span class="va">health_fixed</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">issues_fixed</span>, <span class="st">" issues"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Validate the saved JSON file</span></span>
+<span><span class="va">json_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">json_path</span>, <span class="st">"boilerplate_unified.json"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">json_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">validation_errors</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_json_database.html">validate_json_database</a></span><span class="op">(</span><span class="va">json_file</span>, type <span class="op">=</span> <span class="st">"unified"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">validation_errors</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"JSON database structure is valid!"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="st">"Database validation found issues:"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">validation_errors</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Check that paths exist</span></span>
+<span><span class="va">methods_paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_list_paths</a></span><span class="op">(</span><span class="fu"><a href="../reference/boilerplate_methods.html">boilerplate_methods</a></span><span class="op">(</span><span class="va">sample_db</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Methods entries:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">methods_paths</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Methods entries: 3</span></span>
+<span></span>
+<span><span class="va">measures_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/boilerplate_measures.html">boilerplate_measures</a></span><span class="op">(</span><span class="va">sample_db</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Measures entries:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">measures_names</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Measures entries: 1</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -478,22 +439,19 @@ descriptively (e.g., <code>study1_methods.json</code>)</p></li>
 <li><p><strong>Version control</strong>: JSON files work great with Git
 - commit them to track changes</p></li>
 <li>
-<p><strong>Document your variables</strong>: Use the enhanced
-functions to document what each template variable means:</p>
+<p><strong>Use template variables</strong>: Include
+<code>{{variable}}</code> placeholders in your text for dynamic
+content:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_add_entry_enhanced.html">boilerplate_add_entry_enhanced</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"methods.power"</span>,</span>
-<span>  value <span class="op">=</span> <span class="st">"Power analysis indicated {{n_required}} participants needed for {{power}}% power."</span>,</span>
-<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    n_required <span class="op">=</span> <span class="st">"Required sample size from power analysis"</span>,</span>
-<span>    power <span class="op">=</span> <span class="st">"Statistical power percentage (typically 80)"</span></span>
-<span>  <span class="op">)</span></span>
+<span>  value <span class="op">=</span> <span class="st">"Power analysis indicated {{n_required}} participants needed for {{power}}% power."</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </li>
-<li><p><strong>Regular health checks</strong>: Run
-<code><a href="../reference/boilerplate_check_health.html">boilerplate_check_health()</a></code> periodically to ensure database
-quality</p></li>
+<li><p><strong>Regular validation</strong>: Use
+<code><a href="../reference/validate_json_database.html">validate_json_database()</a></code> to ensure database structure is
+correct</p></li>
 <li><p><strong>Backup before migration</strong>: Use the
 <code>backup = TRUE</code> option when migrating</p></li>
 <li>
@@ -504,10 +462,12 @@ quality</p></li>
 </ul>
 </li>
 <li>
-<p><strong>Export health reports</strong>: Generate health reports
-for documentation:</p>
+<p><strong>Track database contents</strong>: Regularly check
+database contents:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/boilerplate_health_report.html">boilerplate_health_report</a></span><span class="op">(</span><span class="va">health</span>, file <span class="op">=</span> <span class="st">"db_health_report.txt"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># List all paths</span></span>
+<span><span class="va">methods_paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_list_paths</a></span><span class="op">(</span><span class="fu"><a href="../reference/boilerplate_methods.html">boilerplate_methods</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">measures_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/boilerplate_measures.html">boilerplate_measures</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </li>
 </ol>
 </div>

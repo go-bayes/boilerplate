@@ -27,3 +27,7 @@
 ^Meta$
 ^inst/examples/example-usage\.R$
 ^inst/examples/json-poc$
+^DOCUMENTATION_UPDATES\.md$
+^README_VERSION_MANAGEMENT\.md$
+^TODO_VERSION_MANAGEMENT\.md$
+^VERSION_MANAGEMENT_SUMMARY\.md$

@@ -4,33 +4,45 @@
 \alias{boilerplate_check_health}
 \title{Check Database Health}
 \usage{
-boilerplate_check_health(db, fix = FALSE, quiet = FALSE)
+boilerplate_check_health(db, fix = FALSE, report = NULL, quiet = FALSE)
 }
 \arguments{
 \item{db}{List. The database to check (can be unified or single category).}
 
 \item{fix}{Logical. If TRUE, attempts to fix issues where possible. Default FALSE.}
 
+\item{report}{Character or NULL. If a file path is provided, saves a detailed report.
+If "text", returns the report as a character string. If NULL (default), returns
+the health check object.}
+
 \item{quiet}{Logical. If TRUE, suppresses non-critical messages. Default FALSE.}
 }
 \value{
-A list with class "boilerplate_health" containing:
+Depends on the \code{report} parameter:
 \itemize{
-\item \code{summary}: Overall health summary
-\item \code{issues}: Detailed list of issues found
-\item \code{stats}: Database statistics
-\item \code{fixed}: If fix=TRUE, what was fixed
+\item If \code{report = NULL}: A list with class "boilerplate_health" containing summary,
+issues, stats, and fixed items
+\item If \code{report = "text"}: A character string containing the detailed report
+\item If \code{report} is a file path: Invisibly returns the file path after saving report
 }
 }
 \description{
 Performs comprehensive health checks on a boilerplate database to identify
 potential issues such as orphaned variables, empty entries, and structural problems.
+Can optionally generate a detailed report.
 }
 \examples{
 \dontrun{
 # Check database health
 health <- boilerplate_check_health(db)
 print(health)
+
+# Generate text report
+report_text <- boilerplate_check_health(db, report = "text")
+cat(report_text)
+
+# Save report to file
+boilerplate_check_health(db, report = "health_report.txt")
 
 # Check and fix issues
 health <- boilerplate_check_health(db, fix = TRUE)

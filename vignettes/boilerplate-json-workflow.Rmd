@@ -26,7 +26,7 @@ The `boilerplate` package now supports JSON format for all database operations. 
 - **Version control friendly**: Changes are easily tracked in Git
 - **Language agnostic**: JSON files can be read by any programming language
 - **Web-friendly**: JSON is the standard format for web applications
-- **Variable documentation**: The new enhanced functions allow documenting template variables
+- **Template variables**: Support for `{{variable}}` placeholders in your text
 
 ## Basic JSON Operations
 
@@ -38,26 +38,20 @@ temp_dir <- tempdir()
 json_path <- file.path(temp_dir, "json_example")
 dir.create(json_path, showWarnings = FALSE)
 
-# Create a sample database with enhanced entries
+# Create a sample database
 sample_db <- list()
 
-# Add methods with variable documentation
-sample_db <- boilerplate_add_entry_enhanced(
+# Add methods entries
+sample_db <- boilerplate_add_entry(
   sample_db,
   path = "methods.sampling",
-  value = "Participants were randomly selected from {{population}}.",
-  variables = list(
-    population = "Target population description (e.g., 'university students')"
-  )
+  value = "Participants were randomly selected from {{population}}."
 )
 
-sample_db <- boilerplate_add_entry_enhanced(
+sample_db <- boilerplate_add_entry(
   sample_db,
   path = "methods.analysis.regression",
-  value = "We conducted linear regression using {{software}}.",
-  variables = list(
-    software = "Statistical software used (e.g., 'R version 4.3.0')"
-  )
+  value = "We conducted linear regression using {{software}}."
 )
 
 # Add measures
@@ -256,25 +250,28 @@ if (length(validation_errors) == 0) {
 }
 ```
 
-### Database Health Check
+### Database Validation
 
-```{r health-check}
-# Check database health including variable documentation
-health <- boilerplate_check_health(sample_db)
-print(health)
-
-# List all variables and their documentation status
-vars <- boilerplate_list_variables(sample_db)
-print(vars)
-
-# Fix issues automatically if needed
-if (!health$summary$healthy) {
-  health_fixed <- boilerplate_check_health(sample_db, fix = TRUE, quiet = TRUE)
-  if (!is.null(health_fixed$summary$issues_fixed) && health_fixed$summary$issues_fixed > 0) {
-    sample_db <- attr(health_fixed, "fixed_db")
-    message("Fixed ", health_fixed$summary$issues_fixed, " issues")
+```{r validation}
+# Validate the saved JSON file
+json_file <- file.path(json_path, "boilerplate_unified.json")
+if (file.exists(json_file)) {
+  validation_errors <- validate_json_database(json_file, type = "unified")
+  
+  if (length(validation_errors) == 0) {
+    message("JSON database structure is valid!")
+  } else {
+    warning("Database validation found issues:")
+    print(validation_errors)
   }
 }
+
+# Check that paths exist
+methods_paths <- boilerplate_list_paths(boilerplate_methods(sample_db))
+cat("Methods entries:", length(methods_paths), "\n")
+
+measures_names <- names(boilerplate_measures(sample_db))
+cat("Measures entries:", length(measures_names), "\n")
 ```
 
 ## Integration with Existing Workflow
@@ -322,20 +319,16 @@ cat(measures_text)
 
 2. **Version control**: JSON files work great with Git - commit them to track changes
 
-3. **Document your variables**: Use the enhanced functions to document what each template variable means:
+3. **Use template variables**: Include `{{variable}}` placeholders in your text for dynamic content:
    ```r
-   db <- boilerplate_add_entry_enhanced(
+   db <- boilerplate_add_entry(
      db,
      path = "methods.power",
-     value = "Power analysis indicated {{n_required}} participants needed for {{power}}% power.",
-     variables = list(
-       n_required = "Required sample size from power analysis",
-       power = "Statistical power percentage (typically 80)"
-     )
+     value = "Power analysis indicated {{n_required}} participants needed for {{power}}% power."
    )
    ```
 
-4. **Regular health checks**: Run `boilerplate_check_health()` periodically to ensure database quality
+4. **Regular validation**: Use `validate_json_database()` to ensure database structure is correct
 
 5. **Backup before migration**: Use the `backup = TRUE` option when migrating
 
@@ -343,9 +336,11 @@ cat(measures_text)
    - Use unified format for complete databases
    - Use separate files for modular management
 
-7. **Export health reports**: Generate health reports for documentation:
+7. **Track database contents**: Regularly check database contents:
    ```r
-   boilerplate_health_report(health, file = "db_health_report.txt")
+   # List all paths
+   methods_paths <- boilerplate_list_paths(boilerplate_methods(db))
+   measures_names <- names(boilerplate_measures(db))
    ```
 
 ## Conclusion

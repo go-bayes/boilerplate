@@ -10,7 +10,7 @@
 
 ## Major improvements
 
-* **Lighter package**: Reduced dependencies from 9 to 6 by removing glue, janitor, and stringr - replaced with base R equivalents
+* **Lighter package**: Reduced dependencies from 9 to 6 by removing `glue`, `janitor`, and `stringr` - replaced with base R equivalents
 * **Cleaner codebase**: Removed deprecated backward compatibility functions (`boilerplate_manage_text()` and `boilerplate_manage_measures()`) - saving 625+ lines of code
 * **Streamlined JSON support**: Consolidated JSON functionality into existing functions rather than separate `_json` variants
 * **Enhanced base functions**: `boilerplate_import()`, `boilerplate_save()`, and `boilerplate_export()` now auto-detect and handle both JSON and RDS formats seamlessly
@@ -47,7 +47,13 @@
   - Duplicate content detection
   - Measure structure consistency checks
   - Path naming convention validation
-* `boilerplate_health_report()` - Generate detailed health reports for documentation
+* Enhanced `boilerplate_check_health()` - Now includes integrated report generation with `report` parameter
+
+### Version management
+* Enhanced `boilerplate_import()` - Can now import database files directly by path (both timestamped and backup files)
+* `boilerplate_list_files()` - List and organise all database files (standard, timestamped, backups)
+* `boilerplate_restore_backup()` - Convenient function to restore from backup files
+* Improved file organisation - Clearly distinguishes between standard files, timestamped versions, and backups
 * `print.boilerplate_health()` - Formatted output for health check results
 
 ### Bibliography support

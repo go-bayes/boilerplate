@@ -118,15 +118,13 @@ measures_db$political_orientation
 #> [1] "1-7"
 ```
 
-# Step 3: Customize for Your Study
+# Step 3: Customise for Your Study
 
-## Add Study-Specific Methods with Variable Documentation
-
-The new enhanced functions let you document what each template variable means:
+## Add Study-Specific Methods
 
 ```{r add-custom-methods}
-# Add your sampling method WITH variable documentation
-db <- boilerplate_add_entry_enhanced(
+# Add your sampling method
+db <- boilerplate_add_entry(
   db,
   path = "methods.sample.nz_national",
   value = paste0(
@@ -135,40 +133,11 @@ db <- boilerplate_add_entry_enhanced(
     "For this study, we analysed data from Wave {{wave}} ({{year}}), which included ",
     "{{n_total}} participants ({{pct_female}}% female, {{pct_maori}}% Māori, ",
     "Mage = {{m_age}}, SD = {{sd_age}})."
-  ),
-  variables = list(
-    wave = "NZAVS wave number (e.g., 13)",
-    year = "Data collection year(s) (e.g., '2021-2022')",
-    n_total = "Total sample size",
-    pct_female = "Percentage of female participants",
-    pct_maori = "Percentage of Māori participants", 
-    m_age = "Mean age of participants",
-    sd_age = "Standard deviation of age"
   )
 )
 
-# Check what variables are needed
-vars <- boilerplate_get_variables(db, "methods.sample.nz_national")
-print(vars)
-#> $template
-#> [1] "Data were collected as part of the New Zealand Attitudes..."
-#> 
-#> $found_in_template
-#> [1] "wave" "year" "n_total" "pct_female" "pct_maori" "m_age" "sd_age"
-#> 
-#> $documented
-#> [1] "wave" "year" "n_total" "pct_female" "pct_maori" "m_age" "sd_age"
-#> 
-#> $variables
-#> $variables$wave
-#> [1] "NZAVS wave number (e.g., 13)"
-#> 
-#> $variables$year
-#> [1] "Data collection year(s) (e.g., '2021-2022')"
-#> # ... [truncated]
-
-# Add your analysis approach WITH documentation
-db <- boilerplate_add_entry_enhanced(
+# Add your analysis approach
+db <- boilerplate_add_entry(
   db,
   path = "methods.analysis.political_wellbeing",
   value = paste0(
@@ -178,13 +147,6 @@ db <- boilerplate_add_entry_enhanced(
     "{{wellbeing_measure}}. We controlled for {{covariates}} in all analyses. ",
     "All analyses were conducted in R version {{r_version}} using the ",
     "{{packages}} packages."
-  ),
-  variables = list(
-    analysis_type = "Type of analysis (e.g., 'multilevel regression models')",
-    wellbeing_measure = "Name of well-being measure used",
-    covariates = "List of control variables",
-    r_version = "R version used for analysis",
-    packages = "R packages used (e.g., 'lme4 and marginaleffects')"
   )
 )
 
@@ -322,53 +284,32 @@ cat(measures_text)
 
 # Step 7: Validate Your Work
 
-## Check Database Health
+## Check Database Structure
 
-Use the new health check feature to ensure your database is well-structured:
+Ensure your database is properly structured:
 
-```{r check-health}
-# Run comprehensive health check
-health <- boilerplate_check_health(db)
-print(health)
-#> Database Health Report
-#> ======================
-#> Checked at: 2024-01-20 10:30:15
-#> 
-#> Summary
-#> -------
-#> Status: ⚠ ISSUES FOUND
-#> Total entries: 15
-#> Categories: 3
-#> Template variables: 25
-#> Documented variables: 12 (48.0%)
-#> 
-#> Issues Found
-#> ------------
-#> info: Orphaned Variables (13)
-#>   Template variables without documentation
-#>     methods.analysis.regression: effect_size
-#>     methods.missing.listwise: n_missing
-#>     ... and 3 more paths
+```{r check-structure}
+# Check that all paths exist
+required_paths <- c(
+  "methods.sample.nz_national",
+  "methods.analysis.political_wellbeing",
+  "measures.wellbeing_index"
+)
 
-# Get detailed report on variable documentation
-all_vars <- boilerplate_list_variables(db)
-undocumented <- all_vars[!all_vars$documented, ]
-
-if (nrow(undocumented) > 0) {
-  cat("\nUndocumented variables found:\n")
-  print(undocumented[, c("path", "variable")])
+for (path in required_paths) {
+  exists <- boilerplate_path_exists(db, path)
+  cat(sprintf("%s: %s\n", path, ifelse(exists, "✓", "✗")))
 }
 
-# Generate a detailed health report file
-boilerplate_health_report(health, file = "database_health_report.txt")
-#> ✔ Health report saved to database_health_report.txt
+# List all available methods paths
+methods_db <- boilerplate_methods(db)
+cat("\nAvailable methods paths:\n")
+print(boilerplate_list_paths(methods_db))
 
-# Fix issues if needed
-health_fixed <- boilerplate_check_health(db, fix = TRUE)
-if (health_fixed$summary$issues_fixed > 0) {
-  db <- attr(health_fixed, "fixed_db")
-  cat("\n✔ Fixed", health_fixed$summary$issues_fixed, "issues\n")
-}
+# List all measures
+measures_db <- boilerplate_measures(db)
+cat("\nAvailable measures:\n")
+print(names(measures_db))
 ```
 
 ## Check References
@@ -476,36 +417,28 @@ team_db <- boilerplate_import("~/Dropbox/TeamProject/shared_boilerplate.json")
 
 ## 2. Multiple Papers from Same Dataset
 
-Create variants for different papers with proper variable documentation:
+Create variants for different papers:
 
 ```{r multiple-papers}
 # Paper 1: Focus on political orientation
-db <- boilerplate_add_entry_enhanced(
+db <- boilerplate_add_entry(
   db,
   path = "methods.sample.paper1",
-  value = "We analysed data from {{n_conservatives}} conservative and {{n_liberals}} liberal participants...",
-  variables = list(
-    n_conservatives = "Number of conservative participants (political orientation >= 5)",
-    n_liberals = "Number of liberal participants (political orientation <= 3)"
-  )
+  value = "We analysed data from {{n_conservatives}} conservative and {{n_liberals}} liberal participants..."
 )
 
-# Paper 2: Focus on well-being with documentation
-db <- boilerplate_add_entry_enhanced(
+# Paper 2: Focus on well-being
+db <- boilerplate_add_entry(
   db,
   path = "methods.sample.paper2",
-  value = "We examined well-being trajectories among {{n_high_wellbeing}} high and {{n_low_wellbeing}} low well-being participants...",
-  variables = list(
-    n_high_wellbeing = "Number of participants with well-being score >= 7",
-    n_low_wellbeing = "Number of participants with well-being score <= 4"
-  )
+  value = "We examined well-being trajectories among {{n_high_wellbeing}} high and {{n_low_wellbeing}} low well-being participants..."
 )
 
-# List all variables across papers to ensure consistency
-vars_summary <- boilerplate_list_variables(db, category = "methods")
-print(table(vars_summary$documented))
-#>  FALSE  TRUE 
-#>      5    22
+# Check all methods entries
+methods_db <- boilerplate_methods(db)
+cat("Available sample methods:\n")
+sample_paths <- grep("^sample\\.", boilerplate_list_paths(methods_db), value = TRUE)
+print(sample_paths)
 ```
 
 ## 3. Batch Updates
@@ -556,26 +489,19 @@ check_manuscript_ready <- function(db) {
   measures_db <- boilerplate_measures(db)
   cat(sprintf("✓ %d measures documented\n", length(measures_db)))
   
-  # Check variable documentation
-  cat("\nVariable Documentation:\n")
-  all_vars <- boilerplate_list_variables(db)
-  doc_pct <- round(100 * sum(all_vars$documented) / nrow(all_vars), 1)
-  status <- if (doc_pct >= 80) "✓" else "⚠"
-  cat(sprintf("%s %.1f%% of variables documented\n", status, doc_pct))
-  
-  # Run health check
-  cat("\nDatabase Health:\n")
-  health <- boilerplate_check_health(db, quiet = TRUE)
-  health_status <- if (health$summary$healthy) "✓" else "⚠"
-  cat(sprintf("%s Database health: %d issues found\n", 
-              health_status, health$summary$total_issues))
+  # Count total entries
+  cat("\nDatabase Summary:\n")
+  methods_count <- length(boilerplate_list_paths(boilerplate_methods(db)))
+  measures_count <- length(boilerplate_measures(db))
+  cat(sprintf("✓ %d methods entries\n", methods_count))
+  cat(sprintf("✓ %d measures entries\n", measures_count))
   
   invisible(list(
     sections_ok = all(sapply(required_sections, 
                              function(s) boilerplate_path_exists(db, s))),
     references_ok = validation$valid,
-    documentation_pct = doc_pct,
-    health = health
+    methods_count = methods_count,
+    measures_count = measures_count
   ))
 }
 
@@ -596,11 +522,9 @@ readiness <- check_manuscript_ready(db)
 #> Measures:
 #> ✓ 5 measures documented
 #> 
-#> Variable Documentation:
-#> ⚠ 68.0% of variables documented
-#> 
-#> Database Health:
-#> ⚠ Database health: 2 issues found
+#> Database Summary:
+#> ✓ 15 methods entries
+#> ✓ 5 measures entries
 ```
 
 # Summary

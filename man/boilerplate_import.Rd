@@ -9,10 +9,15 @@ boilerplate_import(category = NULL, data_path = NULL, quiet = FALSE)
 \arguments{
 \item{category}{Character or character vector. Category of database to import.
 Options include "measures", "methods", "results", "discussion", "appendix", "template".
-If NULL (default), imports all available categories as a unified database.}
+If NULL (default), imports all available categories as a unified database.
+Ignored if data_path points to a specific file.}
 
-\item{data_path}{Character. Base path for data directory.
-If NULL (default), uses here::here("boilerplate", "data").}
+\item{data_path}{Character. Can be either:
+\itemize{
+\item A directory path containing database files (original behaviour)
+\item A specific file path to import (e.g., "data/methods_db_20240115_143022.rds")
+If NULL (default), uses here::here("boilerplate", "data").
+}}
 
 \item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
 }
@@ -23,7 +28,8 @@ unified database with each category as a named element.
 }
 \description{
 This function imports one or more boilerplate databases from disk. It automatically
-detects the file format (RDS or JSON) based on file extension.
+detects the file format (RDS or JSON) based on file extension. The function can
+import from a directory (original behaviour) or from a specific file path (new).
 }
 \examples{
 # Create a temporary directory and initialise databases
@@ -47,6 +53,33 @@ names(methods_db)
 # Import all available databases as unified
 all_dbs <- boilerplate_import(data_path = data_path, quiet = TRUE)
 names(all_dbs)
+
+# Import from a specific file (e.g., timestamped or backup)
+# First, save with timestamp to create a timestamped file
+boilerplate_save(
+  methods_db,
+  category = "methods",
+  data_path = data_path,
+  timestamp = TRUE,
+  confirm = FALSE,
+  quiet = TRUE
+)
+
+# List files to see what's available
+list.files(data_path, pattern = "methods.*\\\\.rds")
+
+# Import the timestamped file directly
+timestamped_file <- list.files(
+  data_path, 
+  pattern = "methods.*_\\\\d{8}_\\\\d{6}\\\\.rds", 
+  full.names = TRUE
+)[1]
+if (length(timestamped_file) > 0 && file.exists(timestamped_file)) {
+  methods_timestamped <- boilerplate_import(
+    data_path = timestamped_file, 
+    quiet = TRUE
+  )
+}
 
 # Clean up
 unlink(file.path(temp_dir, "boilerplate_import_example"), recursive = TRUE)

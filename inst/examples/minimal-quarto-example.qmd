@@ -276,7 +276,7 @@ if (!validation$valid) {
 The `boilerplate` package streamlines scientific writing in Quarto by:
 
 - Centralizing reusable text templates
-- Enabling variable substitution for customization
+- Enabling variable substitution for customisation
 - Supporting hierarchical organization of content
 - Providing batch operations for maintenance
 - Integrating seamlessly with Quarto's workflow

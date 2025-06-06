@@ -1,12 +1,16 @@
 #' Import Boilerplate Database(s)
 #'
 #' This function imports one or more boilerplate databases from disk. It automatically
-#' detects the file format (RDS or JSON) based on file extension.
+#' detects the file format (RDS or JSON) based on file extension. The function can
+#' import from a directory (original behaviour) or from a specific file path (new).
 #'
 #' @param category Character or character vector. Category of database to import.
 #'   Options include "measures", "methods", "results", "discussion", "appendix", "template".
 #'   If NULL (default), imports all available categories as a unified database.
-#' @param data_path Character. Base path for data directory.
+#'   Ignored if data_path points to a specific file.
+#' @param data_path Character. Can be either:
+#'   - A directory path containing database files (original behaviour)
+#'   - A specific file path to import (e.g., "data/methods_db_20240115_143022.rds")
 #'   If NULL (default), uses here::here("boilerplate", "data").
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
 #'
@@ -37,6 +41,33 @@
 #' all_dbs <- boilerplate_import(data_path = data_path, quiet = TRUE)
 #' names(all_dbs)
 #'
+#' # Import from a specific file (e.g., timestamped or backup)
+#' # First, save with timestamp to create a timestamped file
+#' boilerplate_save(
+#'   methods_db,
+#'   category = "methods",
+#'   data_path = data_path,
+#'   timestamp = TRUE,
+#'   confirm = FALSE,
+#'   quiet = TRUE
+#' )
+#'
+#' # List files to see what's available
+#' list.files(data_path, pattern = "methods.*\\.rds")
+#'
+#' # Import the timestamped file directly
+#' timestamped_file <- list.files(
+#'   data_path, 
+#'   pattern = "methods.*_\\d{8}_\\d{6}\\.rds", 
+#'   full.names = TRUE
+#' )[1]
+#' if (length(timestamped_file) > 0 && file.exists(timestamped_file)) {
+#'   methods_timestamped <- boilerplate_import(
+#'     data_path = timestamped_file, 
+#'     quiet = TRUE
+#'   )
+#' }
+#'
 #' # Clean up
 #' unlink(file.path(temp_dir, "boilerplate_import_example"), recursive = TRUE)
 #'
@@ -49,7 +80,38 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE)
     data_path <- here::here("boilerplate", "data")
   }
 
-  # Check if data path exists
+  # Check if data_path is a file (new functionality)
+  if (file.exists(data_path) && !dir.exists(data_path)) {
+    # Direct file import
+    if (!quiet) cli_alert_info("Importing from file: {basename(data_path)}")
+    
+    # Check file extension
+    if (!grepl("\\.(rds|json)$", data_path, ignore.case = TRUE)) {
+      stop("File must have .rds or .json extension: ", data_path)
+    }
+    
+    # Read the file
+    db <- read_boilerplate_db(data_path)
+    
+    # Try to determine what type of database this is
+    if (is.list(db)) {
+      db_names <- names(db)
+      categories <- c("measures", "methods", "results", "discussion", "appendix", "template")
+      
+      # Check if it's a unified database
+      if (any(categories %in% db_names)) {
+        if (!quiet) cli_alert_success("Imported unified database from {basename(data_path)}")
+      } else {
+        # Single category database
+        category_name <- gsub("_db.*$", "", basename(data_path))
+        if (!quiet) cli_alert_success("Imported {category_name} database from {basename(data_path)}")
+      }
+    }
+    
+    return(db)
+  }
+
+  # Original behaviour: data_path is a directory
   if (!dir.exists(data_path)) {
     stop("Data path does not exist: ", data_path)
   }

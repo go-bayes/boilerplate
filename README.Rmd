@@ -320,6 +320,105 @@ boilerplate_save(db, data_path = ".boilerplate-data", format = "json")
 # - Submit a pull request with your improvements
 ```
 
+## Managing Database Versions
+
+The boilerplate package now supports version management for your databases. When you save databases with timestamps or when backups are created, you can easily manage and restore these versions.
+
+### Listing Available Versions
+
+Use `boilerplate_list_files()` to see all available database files:
+
+```{r}
+# List all database files in your data directory
+files <- boilerplate_list_files()
+print(files)
+
+# List only methods database files
+files <- boilerplate_list_files(category = "methods")
+
+# List files from a specific period
+files <- boilerplate_list_files(pattern = "202401")  # January 2024 files
+```
+
+The function organises files into:
+- **Standard files**: Current working versions (e.g., `methods_db.rds`)
+- **Timestamped versions**: Saved with timestamps (e.g., `methods_db_20240115_143022.rds`)
+- **Backup files**: Automatic backups (e.g., `methods_db_backup_20240115_140000.rds`)
+
+### Importing Specific Versions
+
+The enhanced `boilerplate_import()` function can now import any database file directly:
+
+```{r}
+# Import the current standard version (default behaviour)
+db <- boilerplate_import("methods")
+
+# Import a specific timestamped version
+db <- boilerplate_import(data_path = "boilerplate/data/methods_db_20240115_143022.rds")
+
+# Import a backup file
+db <- boilerplate_import(data_path = "boilerplate/data/methods_db_backup_20240115_140000.rds")
+```
+
+### Restoring from Backups
+
+Use `boilerplate_restore_backup()` for convenient backup restoration:
+
+```{r}
+# View the latest backup without restoring
+backup_db <- boilerplate_restore_backup("methods")
+
+# Restore the latest backup as the current version
+db <- boilerplate_restore_backup(
+  category = "methods",
+  restore = TRUE,
+  confirm = TRUE  # Will ask for confirmation
+)
+
+# Restore a specific backup by timestamp
+db <- boilerplate_restore_backup(
+  category = "methods",
+  backup_version = "20240110_120000",
+  restore = TRUE
+)
+```
+
+### Version Management Workflow
+
+Here's a typical workflow for managing versions:
+
+```{r}
+# 1. Check what versions are available
+files <- boilerplate_list_files("methods")
+
+# 2. Save current work with timestamp
+boilerplate_save(
+  db = methods_db,
+  category = "methods",
+  timestamp = TRUE  # Creates methods_db_20240115_150000.rds
+)
+
+# 3. If you need to revert changes, restore from backup
+boilerplate_restore_backup("methods", restore = TRUE)
+
+# 4. Compare versions before deciding
+current_db <- boilerplate_import("methods")
+old_db <- boilerplate_import(
+  data_path = "boilerplate/data/methods_db_20240110_120000.rds"
+)
+
+# 5. Import and merge specific versions if needed
+v1 <- boilerplate_import(data_path = files$timestamped$path[1])
+v2 <- boilerplate_import(data_path = files$timestamped$path[2])
+```
+
+### Best Practices
+
+1. **Regular timestamped saves**: Save important milestones with timestamps
+2. **Keep recent backups**: The package automatically creates backups, but consider archiving important versions
+3. **Document version changes**: Use meaningful commit messages when saving versions
+4. **Clean up old files**: Periodically review and remove unnecessary old versions
+
 ### Embedding in Analysis Documents
 
 Rather than creating separate `.qmd` files, you can embed boilerplate directly in your analysis code chunks:
