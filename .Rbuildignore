@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
+^README\.html$
 ^docs$
 ^_temp$
 ^development($|/)
@@ -31,3 +32,5 @@
 ^README_VERSION_MANAGEMENT\.md$
 ^TODO_VERSION_MANAGEMENT\.md$
 ^VERSION_MANAGEMENT_SUMMARY\.md$
+^MIGRATION_SUMMARY\.md$
+^JSON_REFACTOR_TODO\.md$

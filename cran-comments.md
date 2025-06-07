@@ -25,15 +25,17 @@ documents in scientific writing.
 * **Minimal dependencies**: Only 6 imports (cli, here, jsonlite, jsonvalidate, tools, utils)
   - Reduced from 9 in development by replacing glue, janitor, and stringr with base R
   - All remaining dependencies serve essential, distinct purposes
-* **Clean codebase**: Removed deprecated backward compatibility functions
-* **Comprehensive testing**: 554 tests pass with >95% coverage
+* **Simplified API**: Single unified database format with JSON as default
+  - Removed deprecated functions (boilerplate_init_text, boilerplate_init_measures, boilerplate_init_category)
+  - Streamlined initialization with just boilerplate_init()
+* **Comprehensive testing**: 500+ tests pass with >95% coverage
 * **Extensive documentation**: 
-  - 7 vignettes covering different workflows
-  - All 42 exported functions have complete documentation with examples
+  - 11 vignettes covering different workflows
+  - All 39 exported functions have complete documentation with examples
   - Examples use tempdir() exclusively for file operations
-* **Dual format support**: Seamless handling of both RDS and JSON formats
-  - JSON for version control and cross-language compatibility
-  - RDS for R-specific workflows and performance
+* **Modern format**: JSON as default for better portability and version control
+  - Still supports RDS for backward compatibility
+  - Automatic format detection on import
 * **Safety features**: 
   - Confirmation prompts before overwriting files
   - Automatic backups in interactive sessions
