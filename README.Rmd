@@ -24,8 +24,6 @@ knitr::opts_chunk$set(
 
 The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. 
 
-**New in v1.1.0**: The package now uses a single unified JSON database by default, simplifying database management and improving version control compatibility.
-
 ## Installation
 
 You can install the development version of boilerplate from GitHub with:
@@ -89,7 +87,7 @@ if (!require(boilerplate, quietly = TRUE)) {
   devtools::install_github("go-bayes/boilerplate")
 }
 
-# initialise unified database (new default: single JSON file)
+# initialise unified database (default: single JSON file)
 boilerplate_init(create_dirs = TRUE, confirm = TRUE)
 
 # import the unified database
