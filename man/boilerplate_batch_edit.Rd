@@ -2,7 +2,7 @@
 % Please edit documentation in R/boilerplate_batch_edit_functions.R
 \name{boilerplate_batch_edit}
 \alias{boilerplate_batch_edit}
-\title{Batch Edit Fields in Boilerplate Database}
+\title{Batch Edit Fields in boilerplate Database}
 \usage{
 boilerplate_batch_edit(
   db,

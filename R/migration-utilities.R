@@ -2,7 +2,7 @@
 #'
 #' Functions to help migrate from individual RDS files to unified JSON structure
 
-#' Migrate Boilerplate Database from RDS to JSON
+#' Migrate boilerplate Database from RDS to JSON
 #'
 #' Comprehensive migration tool that converts existing RDS-based boilerplate
 #' databases to JSON format. Supports both unified (single file) and separate

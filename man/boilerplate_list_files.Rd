@@ -2,7 +2,7 @@
 % Please edit documentation in R/version-management.R
 \name{boilerplate_list_files}
 \alias{boilerplate_list_files}
-\title{List Available Boilerplate Database Files}
+\title{List Available boilerplate Database Files}
 \usage{
 boilerplate_list_files(data_path = NULL, pattern = NULL, category = NULL)
 }

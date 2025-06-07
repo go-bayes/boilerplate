@@ -2,7 +2,7 @@
 % Please edit documentation in R/import-functions.R
 \name{boilerplate_import}
 \alias{boilerplate_import}
-\title{Import Boilerplate Database(s)}
+\title{Import boilerplate Database(s)}
 \usage{
 boilerplate_import(category = NULL, data_path = NULL, quiet = FALSE)
 }

@@ -187,7 +187,7 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 }
 
 # Note: The import function is defined in import-functions.R
-#' Export Boilerplate Database
+#' Export boilerplate Database
 #'
 #' This function exports a boilerplate database or selected elements to disk.
 #' It supports exporting entire databases, specific categories, or selected

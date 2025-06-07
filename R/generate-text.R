@@ -1,4 +1,4 @@
-#' Generate Text from Boilerplate
+#' Generate Text from boilerplate
 #'
 #' This function generates text by retrieving and combining text from
 #' a boilerplate database. It allows for template variable substitution and

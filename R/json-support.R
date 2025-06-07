@@ -1,9 +1,9 @@
-#' JSON Support Functions for Boilerplate Package
+#' JSON Support Functions for boilerplate Package
 #'
 #' These functions add JSON support to the boilerplate package while maintaining
 #' backward compatibility with RDS format.
 
-#' Read Boilerplate Database from JSON or RDS
+#' Read boilerplate Database from JSON or RDS
 #'
 #' Internal function to read database files in either JSON or RDS format.
 #' Automatically detects the format based on file extension when format="auto".
@@ -39,7 +39,7 @@ read_boilerplate_db <- function(file_path, format = "auto") {
   return(db)
 }
 
-#' Write Boilerplate Database to JSON or RDS
+#' Write boilerplate Database to JSON or RDS
 #'
 #' Internal function to write database files in JSON and/or RDS format.
 #' Can write to both formats simultaneously for compatibility.

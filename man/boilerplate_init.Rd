@@ -2,7 +2,7 @@
 % Please edit documentation in R/init-functions.R
 \name{boilerplate_init}
 \alias{boilerplate_init}
-\title{Initialise Boilerplate Database}
+\title{Initialise boilerplate Database}
 \usage{
 boilerplate_init(
   categories = c("measures", "methods", "results", "discussion", "appendix", "template"),

@@ -2,7 +2,7 @@
 % Please edit documentation in R/bibliography-support.R
 \name{boilerplate_validate_references}
 \alias{boilerplate_validate_references}
-\title{Validate References in Boilerplate Database}
+\title{Validate References in boilerplate Database}
 \usage{
 boilerplate_validate_references(
   db,

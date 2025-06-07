@@ -52,7 +52,7 @@ get_empty_measures_db_structure <- function() {
   )
 }
 
-#' Initialise Boilerplate Database
+#' Initialise boilerplate Database
 #'
 #' This function initialises a boilerplate database. By default, it creates a single
 #' unified JSON database containing all categories. Legacy support for separate RDS

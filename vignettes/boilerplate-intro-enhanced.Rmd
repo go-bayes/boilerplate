@@ -1,8 +1,8 @@
 ---
-title: "Introduction to Boilerplate: Practical Examples"
+title: "Introduction to boilerplate: Practical Examples"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to Boilerplate: Practical Examples}
+  %\VignetteIndexEntry{Introduction to boilerplate: Practical Examples}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

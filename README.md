@@ -15,10 +15,6 @@ standardised text for methods and results sections of scientific
 reports. It handles template variable substitution and supports
 hierarchical organisation of text through dot-separated paths.
 
-**New in v1.1.0**: The package now uses a single unified JSON database
-by default, simplifying database management and improving version
-control compatibility.
-
 ## Installation
 
 You can install the development version of boilerplate from GitHub with:
@@ -116,7 +112,7 @@ if (!require(boilerplate, quietly = TRUE)) {
   devtools::install_github("go-bayes/boilerplate")
 }
 
-# initialise unified database (new default: single JSON file)
+# initialise unified database (default: single JSON file)
 boilerplate_init(create_dirs = TRUE, confirm = TRUE)
 
 # import the unified database
@@ -1242,7 +1238,7 @@ study_params <- list(
 
 # define section contents
 section_contents <- list(
-  abstract = "This study investigates the causal relationship between political orientation and social wellbeing using data from the New Zealand Attitudes and Values Study.",
+  abstract = "This study investigates the causal effect of political orientation and social wellbeing using data from the New Zealand Attitudes and Values Study.",
   introduction = "Understanding the relationship between political beliefs and wellbeing has important implications for social policy and public health...",
   methods_sample = "Participants were recruited from university students during 2020-2021.",
   methods_measures = "Political orientation was measured using a 7-point scale...",

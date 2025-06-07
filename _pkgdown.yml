@@ -8,14 +8,14 @@ template:
   bootstrap: 5
   bslib:
     # set the base font family using a Google Font
-    base_font: {google: "Fira Code"}
+   # base_font: {google: "Fira Code"}
     # set the font for headings
     heading_font: {google: "Fira Sans"}
     # set the font for code elements
     code_font: {google: "Fira Code"}
 
     # adjust the overall font size scale
-    font_scale: 0.7  # makes the font smaller; 1 is the default size
+    font_scale: 0.5  # makes the font smaller; 1 is the default size
     bg: "#ffffff"      # white background
     fg: "#333333"      # dark gray font color for better readability
     primary: "#007bff" # primary blue theme color for links, buttons, etc.

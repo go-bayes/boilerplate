@@ -259,7 +259,7 @@ extract_all_text <- function(db) {
   return(text_content)
 }
 
-#' Validate References in Boilerplate Database
+#' Validate References in boilerplate Database
 #'
 #' Checks that all citations in the boilerplate text exist in the bibliography file.
 #'

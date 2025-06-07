@@ -1,4 +1,4 @@
-#' List Available Boilerplate Database Files
+#' List Available boilerplate Database Files
 #'
 #' Lists all boilerplate database files in a directory, organised by type
 #' (standard, timestamped, or backup).
@@ -173,7 +173,7 @@ boilerplate_list_files <- function(data_path = NULL, pattern = NULL, category = 
 #'
 #' @export
 print.boilerplate_files <- function(x, ...) {
-  cat("\nBoilerplate Database Files\n")
+  cat("\nboilerplate Database Files\n")
   cat("==========================\n\n")
   
   # Standard files

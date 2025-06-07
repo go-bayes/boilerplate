@@ -1,8 +1,8 @@
 ---
-title: "Getting Started with Boilerplate: A Complete Workflow"
+title: "Getting Started with boilerplate: A Complete Workflow"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with Boilerplate: A Complete Workflow}
+  %\VignetteIndexEntry{Getting Started with boilerplate: A Complete Workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

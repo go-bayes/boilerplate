@@ -2,7 +2,7 @@
 % Please edit documentation in R/import-functions.R
 \name{boilerplate_save}
 \alias{boilerplate_save}
-\title{Save Boilerplate Database}
+\title{Save boilerplate Database}
 \usage{
 boilerplate_save(
   db,

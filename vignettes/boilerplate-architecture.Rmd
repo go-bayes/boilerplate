@@ -1,8 +1,8 @@
 ---
-title: "Boilerplate Package Architecture"
+title: "boilerplate Package Architecture"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Boilerplate Package Architecture}
+  %\VignetteIndexEntry{boilerplate Package Architecture}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

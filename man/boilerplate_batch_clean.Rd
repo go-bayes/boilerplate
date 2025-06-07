@@ -2,7 +2,7 @@
 % Please edit documentation in R/boilerplate_batch_edit_functions.R
 \name{boilerplate_batch_clean}
 \alias{boilerplate_batch_clean}
-\title{Batch Clean Fields in Boilerplate Database}
+\title{Batch Clean Fields in boilerplate Database}
 \usage{
 boilerplate_batch_clean(
   db,

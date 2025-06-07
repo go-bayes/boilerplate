@@ -1,4 +1,4 @@
-#' Shared Utility Functions for the Boilerplate Package
+#' Shared Utility Functions for the boilerplate Package
 #'
 #' This file contains helper functions used by multiple parts of the package.
 #' Moving these functions to a shared utilities file reduces code duplication.

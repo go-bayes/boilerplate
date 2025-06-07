@@ -1,4 +1,4 @@
-#' Batch Edit Fields in Boilerplate Database
+#' Batch Edit Fields in boilerplate Database
 #'
 #' This function allows batch editing of specific fields across multiple entries
 #' in a boilerplate database. It supports pattern matching, explicit lists, and
@@ -373,7 +373,7 @@ boilerplate_batch_edit_multi <- function(
 }
 
 
-#' Batch Clean Fields in Boilerplate Database
+#' Batch Clean Fields in boilerplate Database
 #'
 #' This function allows batch cleaning of text fields by removing or replacing
 #' specific characters or patterns across multiple entries in a boilerplate database.

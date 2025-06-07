@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate-text.R
 \name{boilerplate_generate_text}
 \alias{boilerplate_generate_text}
-\title{Generate Text from Boilerplate}
+\title{Generate Text from boilerplate}
 \usage{
 boilerplate_generate_text(
   category = c("measures", "methods", "results", "discussion", "appendix", "template"),

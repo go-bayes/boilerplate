@@ -37,7 +37,7 @@ List with migration results containing:
 }
 \description{
 Functions to help migrate from individual RDS files to unified JSON structure
-Migrate Boilerplate Database from RDS to JSON
+Migrate boilerplate Database from RDS to JSON
 }
 \details{
 Comprehensive migration tool that converts existing RDS-based boilerplate

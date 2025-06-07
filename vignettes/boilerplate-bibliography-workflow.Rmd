@@ -1,8 +1,8 @@
 ---
-title: "Bibliography Management with Boilerplate"
+title: "Bibliography Management with boilerplate"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Bibliography Management with Boilerplate}
+  %\VignetteIndexEntry{Bibliography Management with boilerplate}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

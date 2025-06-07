@@ -2,7 +2,7 @@
 % Please edit documentation in R/import-export-functions.R
 \name{boilerplate_export}
 \alias{boilerplate_export}
-\title{Export Boilerplate Database}
+\title{Export boilerplate Database}
 \usage{
 boilerplate_export(
   db,

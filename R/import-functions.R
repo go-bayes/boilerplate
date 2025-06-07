@@ -1,4 +1,4 @@
-#' Import Boilerplate Database(s)
+#' Import boilerplate Database(s)
 #'
 #' This function imports one or more boilerplate databases from disk. It automatically
 #' detects the file format (RDS or JSON) based on file extension. The function can
@@ -229,7 +229,7 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE)
 }
 
 
-#' Save Boilerplate Database
+#' Save boilerplate Database
 #'
 #' This function saves a boilerplate database to disk in RDS, JSON, or both formats.
 #'

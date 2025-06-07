@@ -62,7 +62,6 @@
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>The <code>boilerplate</code> package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.</p>
-<p><strong>New in v1.1.0</strong>: The package now uses a single unified JSON database by default, simplifying database management and improving version control compatibility.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -173,7 +172,7 @@
 <span>  <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"go-bayes/boilerplate"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># initialise unified database (new default: single JSON file)</span></span>
+<span><span class="co"># initialise unified database (default: single JSON file)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import the unified database</span></span>
@@ -1208,7 +1207,7 @@
 <span></span>
 <span><span class="co"># define section contents</span></span>
 <span><span class="va">section_contents</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  abstract <span class="op">=</span> <span class="st">"This study investigates the causal relationship between political orientation and social wellbeing using data from the New Zealand Attitudes and Values Study."</span>,</span>
+<span>  abstract <span class="op">=</span> <span class="st">"This study investigates the causal effect of political orientation and social wellbeing using data from the New Zealand Attitudes and Values Study."</span>,</span>
 <span>  introduction <span class="op">=</span> <span class="st">"Understanding the relationship between political beliefs and wellbeing has important implications for social policy and public health..."</span>,</span>
 <span>  methods_sample <span class="op">=</span> <span class="st">"Participants were recruited from university students during 2020-2021."</span>,</span>
 <span>  methods_measures <span class="op">=</span> <span class="st">"Political orientation was measured using a 7-point scale..."</span>,</span>
