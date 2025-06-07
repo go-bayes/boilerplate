@@ -6,6 +6,9 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/go-bayes/boilerplate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/go-bayes/boilerplate/actions/workflows/R-CMD-check.yaml)
+[![R-hub](https://github.com/go-bayes/boilerplate/actions/workflows/rhub.yaml/badge.svg)](https://github.com/go-bayes/boilerplate/actions/workflows/rhub.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/go-bayes/boilerplate/graph/badge.svg)](https://app.codecov.io/gh/go-bayes/boilerplate)
 <!-- badges: end -->
 
 ## Overview
@@ -1238,13 +1241,13 @@ study_params <- list(
 
 # define section contents
 section_contents <- list(
-  abstract = "This study investigates the causal effect of political orientation and social wellbeing using data from the New Zealand Attitudes and Values Study.",
-  introduction = "Understanding the relationship between political beliefs and wellbeing has important implications for social policy and public health...",
+  abstract = "This study investigates the causal effects of political orientation on social wellbeing using data from the New Zealand Attitudes and Values Study.",
+  introduction = "Understanding the causal effects of political orientation on wellbeing has important implications for social policy and public health...",
   methods_sample = "Participants were recruited from university students during 2020-2021.",
   methods_measures = "Political orientation was measured using a 7-point scale...",
   methods_statistical = "We used the LMTP estimator to address confounding...",
-  results = "Our analysis revealed significant effects of political conservatism on social wellbeing...",
-  discussion = "These findings suggest that political orientation may causally influence wellbeing through several pathways..."
+  results = "Our analysis revealed reliable causal effects of political conservatism on social wellbeing...",
+  discussion = "These findings suggest that political orientation may causally influence wellbeing along the following dimensions..."
 )
 
 # generate the document
