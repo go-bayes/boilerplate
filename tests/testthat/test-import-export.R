@@ -164,9 +164,10 @@ test_that("boilerplate_save works correctly", {
     timestamp = FALSE
   )
   
-  expect_true(file.exists(file.path(data_dir, "boilerplate_unified.rds")))
+  # Default format is now JSON
+  expect_true(file.exists(file.path(data_dir, "boilerplate_unified.json")))
   
-  # Save specific category
+  # Save specific category (also JSON by default)
   boilerplate_save(
     db = test_db$methods,
     data_path = data_dir,
@@ -177,7 +178,19 @@ test_that("boilerplate_save works correctly", {
     timestamp = FALSE
   )
   
-  expect_true(file.exists(file.path(data_dir, "methods_db.rds")))
+  expect_true(file.exists(file.path(data_dir, "methods_db.json")))
+  
+  # Test saving as RDS explicitly
+  boilerplate_save(
+    db = test_db,
+    data_path = data_dir,
+    format = "rds",
+    confirm = FALSE,
+    quiet = TRUE,
+    timestamp = FALSE
+  )
+  
+  expect_true(file.exists(file.path(data_dir, "boilerplate_unified.rds")))
   
   # Clean up is handled by on.exit
 })
@@ -328,8 +341,8 @@ test_that("boilerplate_save handles different save modes", {
     timestamp = FALSE
   )
   
-  # Check file was created
-  expect_true(file.exists(file.path(output_dir, "boilerplate_unified.rds")))
+  # Check file was created (JSON by default)
+  expect_true(file.exists(file.path(output_dir, "boilerplate_unified.json")))
   
   # Test save individual category
   boilerplate_save(
@@ -341,11 +354,23 @@ test_that("boilerplate_save handles different save modes", {
     timestamp = FALSE
   )
   
-  expect_true(file.exists(file.path(output_dir, "methods_db.rds")))
+  expect_true(file.exists(file.path(output_dir, "methods_db.json")))
   
   # Verify saved content
-  saved_methods <- readRDS(file.path(output_dir, "methods_db.rds"))
+  saved_methods <- read_boilerplate_db(file.path(output_dir, "methods_db.json"))
   expect_equal(saved_methods$test$description, "Test method")
+  
+  # Test RDS format explicitly
+  boilerplate_save(
+    db = test_db,
+    data_path = output_dir,
+    format = "rds",
+    confirm = FALSE,
+    quiet = TRUE,
+    timestamp = FALSE
+  )
+  
+  expect_true(file.exists(file.path(output_dir, "boilerplate_unified.rds")))
 })
 
 test_that("import/export functions handle errors gracefully", {

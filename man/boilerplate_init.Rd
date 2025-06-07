@@ -2,7 +2,7 @@
 % Please edit documentation in R/init-functions.R
 \name{boilerplate_init}
 \alias{boilerplate_init}
-\title{Initialise All Boilerplate Databases}
+\title{Initialise Boilerplate Database}
 \usage{
 boilerplate_init(
   categories = c("measures", "methods", "results", "discussion", "appendix", "template"),
@@ -12,11 +12,12 @@ boilerplate_init(
   dry_run = FALSE,
   create_dirs = FALSE,
   confirm = TRUE,
-  create_empty = TRUE
+  create_empty = TRUE,
+  format = "json"
 )
 }
 \arguments{
-\item{categories}{Character vector. Categories to initialise.
+\item{categories}{Character vector. Categories to include in the database.
 Default is all categories: "measures", "methods", "results", "discussion", "appendix", "template".}
 
 \item{merge_strategy}{Character. How to merge with existing databases: "keep_existing", "merge_recursive", or "overwrite_all".}
@@ -34,23 +35,23 @@ If NULL (default), uses here::here("boilerplate", "data").}
 
 \item{create_empty}{Logical. If TRUE, creates empty database structures with just the template headings.
 Default is TRUE. Set to FALSE to use default content.}
+
+\item{format}{Character. Format to save: "json" (default), "rds", or "both".}
 }
 \value{
-Invisibly returns a logical vector indicating which categories were successfully initialised.
+Invisibly returns TRUE if successful.
 }
 \description{
-This function initialises or updates all boilerplate databases with default values.
-It's a convenience wrapper around boilerplate_init_category() for all categories.
+This function initialises a boilerplate database. By default, it creates a single
+unified JSON database containing all categories. Legacy support for separate RDS
+files is maintained through the unified parameter.
 }
 \examples{
 # Create a temporary directory for examples
 temp_dir <- tempdir()
 data_path <- file.path(temp_dir, "boilerplate_example", "data")
 
-# Run in dry-run mode first to see what would happen
-boilerplate_init(data_path = data_path, dry_run = TRUE, quiet = TRUE, create_dirs = TRUE)
-
-# Initialise all databases with empty structures
+# Initialise unified JSON database (new default)
 boilerplate_init(
   data_path = data_path,
   create_dirs = TRUE,
@@ -59,16 +60,14 @@ boilerplate_init(
   quiet = TRUE
 )
 
-# Check that files were created
+# Check that unified JSON file was created
 list.files(data_path)
 
-# Initialise specific categories only with default content
+# Initialise with default content in both formats
 boilerplate_init(
-  categories = c("methods", "measures"),
   data_path = data_path,
-  create_dirs = TRUE,
   create_empty = FALSE,
-  merge_strategy = "overwrite_all",
+  format = "both",
   confirm = FALSE,
   quiet = TRUE
 )

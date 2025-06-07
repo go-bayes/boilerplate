@@ -150,7 +150,17 @@ applications</li>
 <span></span>
 <span><span class="co"># Check structure</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">imported_db</span>, max.level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  list()</span></span></code></pre></div>
+<span><span class="co">#&gt; List of 2</span></span>
+<span><span class="co">#&gt;  $ measures:List of 1</span></span>
+<span><span class="co">#&gt;   ..$ age:List of 4</span></span>
+<span><span class="co">#&gt;   .. ..$ name       : chr "Age"</span></span>
+<span><span class="co">#&gt;   .. ..$ description: chr "Participant age in years"</span></span>
+<span><span class="co">#&gt;   .. ..$ type       : chr "continuous"</span></span>
+<span><span class="co">#&gt;   .. ..$ range      :List of 2</span></span>
+<span><span class="co">#&gt;  $ methods :List of 2</span></span>
+<span><span class="co">#&gt;   ..$ analysis:List of 1</span></span>
+<span><span class="co">#&gt;   .. ..$ regression: chr "We conducted linear regression using {{software}}."</span></span>
+<span><span class="co">#&gt;   ..$ sampling: chr "Participants were randomly selected from {{population}}."</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="working-with-category-specific-json-files">Working with Category-Specific JSON Files<a class="anchor" aria-label="anchor" href="#working-with-category-specific-json-files"></a>
@@ -211,7 +221,7 @@ JSON format:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Migrating 2 RDS files to JSON</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating backup in /var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpC1b1UU/migrated_json/backup_20250607_003246</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating backup in /var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpO2UFCX/migrated_json/backup_20250607_221202</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing measures_db.rds</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing methods_db.rds</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Saving unified database to boilerplate_unified.json</span></span>
@@ -222,8 +232,8 @@ JSON format:</p>
 <span></span>
 <span><span class="co"># Check migration results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">migrated</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpC1b1UU/rds_example/measures_db.rds"</span></span>
-<span><span class="co">#&gt; [2] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpC1b1UU/rds_example/methods_db.rds"</span></span>
+<span><span class="co">#&gt; [1] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpO2UFCX/rds_example/measures_db.rds"</span></span>
+<span><span class="co">#&gt; [2] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpO2UFCX/rds_example/methods_db.rds"</span></span>
 <span></span>
 <span><span class="co"># Verify the migrated data  </span></span>
 <span><span class="va">migrated_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span></span>
@@ -360,6 +370,8 @@ databases:</p>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">validation_errors</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span>
+<span><span class="co">#&gt; Warning: Database validation found issues:</span></span>
+<span><span class="co">#&gt; [1] "Schema not found for type: unified"</span></span>
 <span></span>
 <span><span class="co"># Check that paths exist</span></span>
 <span><span class="va">methods_paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_list_paths</a></span><span class="op">(</span><span class="fu"><a href="../reference/boilerplate_methods.html">boilerplate_methods</a></span><span class="op">(</span><span class="va">sample_db</span><span class="op">)</span><span class="op">)</span></span>
@@ -387,12 +399,13 @@ functions:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> generating methods text with 1 sections</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using methods from unified database</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> processing section: sampling</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> error retrieving section sampling: path component sampling not found</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> no text found for section sampling</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> no text was generated - all sections were missing or invalid</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying template variables to sampling</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> successfully generated methods text with 1 section(s)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Participants were randomly selected from university students.</span></span>
 <span></span>
 <span><span class="co"># Generate text from nested path</span></span>
 <span><span class="va">analysis_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -404,12 +417,13 @@ functions:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> generating methods text with 1 sections</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using methods from unified database</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> processing section: analysis.regression</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> error retrieving section analysis.regression: path component analysis not found</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> no text found for section analysis.regression</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> no text was generated - all sections were missing or invalid</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> applying template variables to analysis.regression</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> successfully generated methods text with 1 section(s)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">analysis_text</span><span class="op">)</span></span>
+<span><span class="co">#&gt; We conducted linear regression using R version 4.3.0.</span></span>
 <span></span>
 <span><span class="co"># Generate measures text</span></span>
 <span><span class="va">measures_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
@@ -417,10 +431,11 @@ functions:</p>
 <span>  variables <span class="op">=</span> <span class="st">"age"</span>,</span>
 <span>  db <span class="op">=</span> <span class="va">imported_db</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using measures from unified database</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> generating formatted text for 1 Demographics</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> using heading level 3 and subheading level 4</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> processing variable: age</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> no information available for variable: age</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> adding description for age</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> successfully generated formatted text for Demographics</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">measures_text</span><span class="op">)</span></span>
@@ -428,7 +443,7 @@ functions:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; #### Age</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; No information available for this variable.</span></span></code></pre></div>
+<span><span class="co">#&gt; Participant age in years.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="best-practices">Best Practices<a class="anchor" aria-label="anchor" href="#best-practices"></a>

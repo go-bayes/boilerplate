@@ -53,17 +53,15 @@ project_dir <- "~/Documents/my_wellbeing_study"
 dir.create(project_dir, showWarnings = FALSE)
 setwd(project_dir)
 
-# Initialise boilerplate with all components
+# Initialise unified database (new default)
 boilerplate_init(
   data_path = "data/boilerplate",
-  categories = c("methods", "measures", "results"),
   create_dirs = TRUE,
   create_empty = FALSE  # Start with example content
 )
 #> ✔ Created directory: data/boilerplate
-#> ✔ Initialised methods database
-#> ✔ Initialised measures database  
-#> ✔ Initialised results database
+#> ✔ Initialising unified database with 6 categories
+#> ✔ Saved unified database to data/boilerplate/boilerplate_unified.json
 ```
 
 # Step 2: Explore the Default Content

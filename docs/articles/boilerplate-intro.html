@@ -77,15 +77,17 @@ generating standardised text for methods and results sections of
 scientific reports. It uses a unified database system with template
 variable substitution, making it easy to maintain consistent language
 across projects while allowing for customisation.</p>
+<p><strong>New in v1.1.0</strong>: The package now defaults to a single
+unified JSON database, simplifying database management and improving
+version control integration.</p>
 </div>
 <div class="section level2">
 <h2 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
 </h2>
 <ul>
 <li>
-<strong>Unified Database System</strong>: Manage all content types
-(methods, results, discussion, measures, appendices, templates) through
-a single interface</li>
+<strong>Single JSON Database</strong>: All content types in one
+human-readable JSON file by default</li>
 <li>
 <strong>Template Variable Substitution</strong>: Use
 <code>{{variable}}</code> placeholders for dynamic content</li>
@@ -99,9 +101,8 @@ once</li>
 <strong>Safety Features</strong>: Confirmation prompts and backup
 creation</li>
 <li>
-<strong>JSON Support</strong>: Human-readable JSON format as an
-alternative to RDS (see
-<code><a href="../articles/boilerplate-json-workflow.html">vignette("boilerplate-json-workflow")</a></code>)</li>
+<strong>Version Control Friendly</strong>: JSON format makes Git
+diffs meaningful and merges easier</li>
 </ul>
 </div>
 <div class="section level2">
@@ -112,7 +113,8 @@ alternative to RDS (see
 </h3>
 <p>First, create and initialise your boilerplate databases:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Initialise all databases with default content</span></span>
+<code class="sourceCode R"><span><span class="co"># Initialise unified database with default content</span></span>
+<span><span class="co"># Creates a single boilerplate_unified.json file</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Use FALSE to get example content</span></span>

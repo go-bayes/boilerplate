@@ -37,8 +37,9 @@
 #'   quiet = TRUE
 #' )
 #'
-#' # Import the measures database
-#' measures_db <- boilerplate_import("measures", data_path = data_path, quiet = TRUE)
+#' # Import the unified database
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+#' measures_db <- unified_db$measures
 #'
 #' # Generate with sample items only
 #' exposure_text <- boilerplate_generate_measures(

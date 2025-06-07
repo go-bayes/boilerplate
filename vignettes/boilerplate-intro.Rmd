@@ -22,14 +22,16 @@ library(boilerplate)
 
 The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It uses a unified database system with template variable substitution, making it easy to maintain consistent language across projects while allowing for customisation.
 
+**New in v1.1.0**: The package now defaults to a single unified JSON database, simplifying database management and improving version control integration.
+
 ## Key Features
 
-- **Unified Database System**: Manage all content types (methods, results, discussion, measures, appendices, templates) through a single interface
+- **Single JSON Database**: All content types in one human-readable JSON file by default
 - **Template Variable Substitution**: Use `{{variable}}` placeholders for dynamic content
 - **Hierarchical Organization**: Organize content using dot notation (e.g., `methods.statistical.longitudinal`)
 - **Batch Operations**: Edit multiple entries at once
 - **Safety Features**: Confirmation prompts and backup creation
-- **JSON Support**: Human-readable JSON format as an alternative to RDS (see `vignette("boilerplate-json-workflow")`)
+- **Version Control Friendly**: JSON format makes Git diffs meaningful and merges easier
 
 ## Quick Start
 
@@ -38,7 +40,8 @@ The `boilerplate` package provides tools for managing and generating standardise
 First, create and initialise your boilerplate databases:
 
 ```{r init, eval=FALSE}
-# Initialise all databases with default content
+# Initialise unified database with default content
+# Creates a single boilerplate_unified.json file
 boilerplate_init(
   create_dirs = TRUE,
   create_empty = FALSE,  # Use FALSE to get example content

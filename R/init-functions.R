@@ -52,12 +52,13 @@ get_empty_measures_db_structure <- function() {
   )
 }
 
-#' Initialise All Boilerplate Databases
+#' Initialise Boilerplate Database
 #'
-#' This function initialises or updates all boilerplate databases with default values.
-#' It's a convenience wrapper around boilerplate_init_category() for all categories.
+#' This function initialises a boilerplate database. By default, it creates a single
+#' unified JSON database containing all categories. Legacy support for separate RDS
+#' files is maintained through the unified parameter.
 #'
-#' @param categories Character vector. Categories to initialise.
+#' @param categories Character vector. Categories to include in the database.
 #'   Default is all categories: "measures", "methods", "results", "discussion", "appendix", "template".
 #' @param merge_strategy Character. How to merge with existing databases: "keep_existing", "merge_recursive", or "overwrite_all".
 #' @param data_path Character. Base path for data directory.
@@ -68,18 +69,16 @@ get_empty_measures_db_structure <- function() {
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.
 #' @param create_empty Logical. If TRUE, creates empty database structures with just the template headings.
 #'   Default is TRUE. Set to FALSE to use default content.
+#' @param format Character. Format to save: "json" (default), "rds", or "both".
 #'
-#' @return Invisibly returns a logical vector indicating which categories were successfully initialised.
+#' @return Invisibly returns TRUE if successful.
 #'
 #' @examples
 #' # Create a temporary directory for examples
 #' temp_dir <- tempdir()
 #' data_path <- file.path(temp_dir, "boilerplate_example", "data")
 #'
-#' # Run in dry-run mode first to see what would happen
-#' boilerplate_init(data_path = data_path, dry_run = TRUE, quiet = TRUE, create_dirs = TRUE)
-#'
-#' # Initialise all databases with empty structures
+#' # Initialise unified JSON database (new default)
 #' boilerplate_init(
 #'   data_path = data_path,
 #'   create_dirs = TRUE,
@@ -88,16 +87,14 @@ get_empty_measures_db_structure <- function() {
 #'   quiet = TRUE
 #' )
 #'
-#' # Check that files were created
+#' # Check that unified JSON file was created
 #' list.files(data_path)
 #'
-#' # Initialise specific categories only with default content
+#' # Initialise with default content in both formats
 #' boilerplate_init(
-#'   categories = c("methods", "measures"),
 #'   data_path = data_path,
-#'   create_dirs = TRUE,
 #'   create_empty = FALSE,
-#'   merge_strategy = "overwrite_all",
+#'   format = "both",
 #'   confirm = FALSE,
 #'   quiet = TRUE
 #' )
@@ -115,146 +112,13 @@ boilerplate_init <- function(
     dry_run = FALSE,
     create_dirs = FALSE,
     confirm = TRUE,
-    create_empty = TRUE
+    create_empty = TRUE,
+    format = "json"
 ) {
   merge_strategy <- match.arg(merge_strategy)
-
-  if (!quiet) cli_alert_info("initializing {length(categories)} databases with strategy: {merge_strategy}")
-  if (create_empty && !quiet) cli_alert_info("creating empty database structures")
-
-  # track initialization status for each category
-  initialization_status <- logical(length(categories))
-  names(initialization_status) <- categories
-
-  for (i in seq_along(categories)) {
-    category <- categories[i]
-    if (!quiet) cli_alert_info("initializing {category} database")
-
-    # call boilerplate_init_category and capture result
-    initialization_status[i] <- boilerplate_init_category(
-      category = category,
-      merge_strategy = merge_strategy,
-      data_path = data_path,
-      quiet = quiet,
-      dry_run = dry_run,
-      create_dirs = create_dirs,
-      confirm = confirm,
-      create_empty = create_empty
-    )
-  }
-
-  # count successful initializations
-  successful <- sum(initialization_status)
-  canceled <- length(categories) - successful
-
-  if (!quiet) {
-    if (dry_run) {
-      cli_alert_success("dry run completed for all {length(categories)} categories")
-    } else if (canceled == 0) {
-      cli_alert_success("initialization complete for all {length(categories)} categories")
-    } else if (successful == 0) {
-      cli_alert_info("initialization canceled for all {length(categories)} categories")
-    } else {
-      successful_cats <- names(initialization_status)[initialization_status]
-      canceled_cats <- names(initialization_status)[!initialization_status]
-
-      cli_alert_info("initialization complete for {successful}/{length(categories)} categories")
-      if (!quiet && successful > 0) {
-        cli_alert_info("completed: {paste(successful_cats, collapse = ', ')}")
-      }
-      if (!quiet && canceled > 0) {
-        cli_alert_info("canceled: {paste(canceled_cats, collapse = ', ')}")
-      }
-    }
-  }
-
-  # return invisible status
-  invisible(initialization_status)
-}
-
-
-#' Initialise a Specific Boilerplate Database Category
-#'
-#' This function initialises or updates a specific boilerplate database category with default values.
-#'
-#' @param category Character. Category to initialise.
-#'   Options include "measures", "methods", "results", "discussion", "appendix", "template".
-#' @param merge_strategy Character. How to merge with existing database: "keep_existing", "merge_recursive", or "overwrite_all".
-#' @param data_path Character. Base path for data directory.
-#'   If NULL (default), uses here::here("boilerplate", "data").
-#' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
-#' @param dry_run Logical. If TRUE, simulates the operation without writing files. Default is FALSE.
-#' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
-#' @param confirm Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.
-#' @param create_empty Logical. If TRUE, creates empty database structures with just the template headings.
-#'   Default is TRUE. Set to FALSE to use default content.
-#'
-#' @return Logical. TRUE if initialization was successful, FALSE if canceled.
-#'
-#' @examples
-#' # Create a temporary directory for examples
-#' temp_dir <- tempdir()
-#' data_path <- file.path(temp_dir, "boilerplate_category_example", "data")
-#'
-#' # Initialise the methods database with empty structure
-#' boilerplate_init_category(
-#'   "methods",
-#'   data_path = data_path,
-#'   create_dirs = TRUE,
-#'   create_empty = TRUE,
-#'   confirm = FALSE,
-#'   quiet = TRUE
-#' )
-#'
-#' # Check the created file
-#' methods_file <- file.path(data_path, "methods_db.rds")
-#' file.exists(methods_file)
-#'
-#' # Initialise measures database with default content
-#' boilerplate_init_category(
-#'   category = "measures",
-#'   merge_strategy = "merge_recursive",
-#'   data_path = data_path,
-#'   create_dirs = TRUE,
-#'   create_empty = FALSE,
-#'   confirm = FALSE,
-#'   quiet = TRUE
-#' )
-#'
-#' # Load and inspect the measures database
-#' measures_db <- readRDS(file.path(data_path, "measures_db.rds"))
-#' names(measures_db)
-#'
-#' # Clean up
-#' unlink(file.path(temp_dir, "boilerplate_category_example"), recursive = TRUE)
-#'
-#' @importFrom utils modifyList
-#' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
-#' @export
-boilerplate_init_category <- function(
-    category,
-    merge_strategy = c("keep_existing", "merge_recursive", "overwrite_all"),
-    data_path = NULL,
-    quiet = FALSE,
-    dry_run = FALSE,
-    create_dirs = FALSE,
-    confirm = TRUE,
-    create_empty = TRUE
-) {
-  # validate category
-  all_categories <- c("measures", "methods", "results", "discussion", "appendix", "template")
-  if (!category %in% all_categories) {
-    if (!quiet) cli_alert_danger("invalid category: {category}")
-    stop("Invalid category: ", category, ". Must be one of: ", paste(all_categories, collapse = ", "))
-  }
-
-  merge_strategy <- match.arg(merge_strategy)
-
-  if (!quiet) cli_alert_info("initializing {category} database with strategy: {merge_strategy}")
-  if (create_empty && !quiet) cli_alert_info("creating empty database structure")
-  if (dry_run && !quiet) cli_alert_info("dry run mode: no files will be written")
-
-  # set default path if not provided
+  format <- match.arg(format, c("json", "rds", "both"))
+  
+  # Set default path if not provided
   if (is.null(data_path)) {
     if (!requireNamespace("here", quietly = TRUE)) {
       if (!quiet) cli_alert_danger("package 'here' is required for default path resolution")
@@ -263,20 +127,20 @@ boilerplate_init_category <- function(
     data_path <- here::here("boilerplate", "data")
     if (!quiet) cli_alert_info("using default path: {data_path}")
   }
-
-  # check if directory exists and handle creation
+  
+  # Check if directory exists and handle creation
   if (!dir.exists(data_path)) {
     if (!create_dirs) {
       if (!quiet) cli_alert_danger("directory does not exist: {data_path}")
       stop("Directory does not exist: ", data_path, ". Set create_dirs=TRUE to create it.")
     }
-
-    # ask for confirmation if needed
+    
+    # Ask for confirmation if needed
     proceed <- TRUE
     if (confirm && !dry_run) {
       proceed <- ask_yes_no(paste0("directory does not exist: ", data_path, ". create it?"))
     }
-
+    
     if (proceed && !dry_run) {
       tryCatch({
         dir.create(data_path, recursive = TRUE)
@@ -293,250 +157,118 @@ boilerplate_init_category <- function(
       if (!quiet) cli_alert_info("would create directory: {data_path}")
     }
   }
-
-  # get file path
-  file_path <- file.path(data_path, paste0(category, "_db.rds"))
-
-  # get default database for the category (either full or empty)
-  if (!quiet) {
+  
+  # Create single unified database
+  if (!quiet) cli_alert_info("initialising unified database with {length(categories)} categories")
+  if (create_empty && !quiet) cli_alert_info("creating empty database structures")
+  
+  # Build unified database
+  unified_db <- list()
+  
+  for (category in categories) {
+    if (!quiet && !dry_run) cli_alert_info("processing {category} category")
+    
+    # Get appropriate database based on create_empty flag
     if (create_empty) {
-      cli_alert_info("loading empty {category} database structure")
+      if (category == "measures") {
+        unified_db[[category]] <- get_empty_measures_db_structure()
+      } else {
+        unified_db[[category]] <- get_empty_db_structure(category)
+      }
     } else {
-      cli_alert_info("loading default {category} database")
+      if (category == "measures") {
+        unified_db[[category]] <- get_default_measures_db()
+      } else {
+        unified_db[[category]] <- get_default_db(category)
+      }
     }
   }
-
-  # get appropriate database based on create_empty flag
-  if (create_empty) {
-    if (category == "measures") {
-      default_db <- get_empty_measures_db_structure()
-    } else {
-      default_db <- get_empty_db_structure(category)
-    }
-  } else {
-    if (category == "measures") {
-      default_db <- get_default_measures_db()
-    } else {
-      default_db <- get_default_db(category)
-    }
+  
+  if (dry_run) {
+    if (!quiet) cli_alert_info("would save unified database as {format} format")
+    if (!quiet) cli_alert_success("dry run completed")
+    return(invisible(TRUE))
   }
-
-  # check if file exists and determine operation type
-  file_exists <- file.exists(file_path)
-
-  # handle existing file according to merge strategy
-  if (file_exists && merge_strategy != "overwrite_all") {
-    if (dry_run) {
-      if (!quiet) cli_alert_info("would load and merge existing {category} database from {file_path}")
-      if (!quiet) cli_alert_success("dry run completed for {category}")
-      return(TRUE) # consider dry runs as successful
-    }
-
-    # ask for confirmation BEFORE showing merging message
+  
+  # Check for existing unified database and handle merge strategy
+  existing_files <- c(
+    file.path(data_path, "boilerplate_unified.json"),
+    file.path(data_path, "boilerplate_unified.rds")
+  )
+  existing_file <- existing_files[file.exists(existing_files)][1]
+  
+  if (!is.na(existing_file) && merge_strategy != "overwrite_all") {
+    # Ask for confirmation BEFORE loading
     proceed <- TRUE
     if (confirm) {
-      if (merge_strategy == "keep_existing") {
-        action_desc <- "update existing file (keeping existing entries)"
-      } else if (merge_strategy == "merge_recursive") {
-        action_desc <- "recursively merge with existing file"
+      action_desc <- if (merge_strategy == "keep_existing") {
+        "update existing unified database (keeping existing entries)"
       } else {
-        action_desc <- "modify existing file"
+        "recursively merge with existing unified database"
       }
-      proceed <- ask_yes_no(paste0(action_desc, ": ", file_path, "?"))
+      proceed <- ask_yes_no(paste0(action_desc, ": ", existing_file, "?"))
     }
-
+    
     if (!proceed) {
-      if (!quiet) cli_alert_info("{category} database update cancelled by user")
-      return(FALSE) # return FALSE to indicate cancellation
+      if (!quiet) cli_alert_info("unified database update cancelled by user")
+      return(invisible(FALSE))
     }
-
-    # Now that user has confirmed, show the action message
-    if (!quiet) cli_alert_info("loading existing {category} database from {file_path}")
-
-    # load existing database
-    existing_db <- tryCatch({
-      readRDS(file_path)
-    }, error = function(e) {
-      if (!quiet) cli_alert_danger("error loading existing {category} database: {e$message}")
-      return(list())
-    })
-
-    # apply selected merge strategy
+    
+    # Load existing database
+    if (!quiet) cli_alert_info("loading existing unified database")
+    existing_db <- read_boilerplate_db(existing_file)
+    
+    # Apply merge strategy
     if (merge_strategy == "keep_existing") {
-      # only add new keys, never modify existing ones
-      merged_db <- utils::modifyList(default_db, existing_db, keep.null = TRUE)
-      if (!quiet) cli_alert_success("merged {category} database (keeping existing entries)")
+      # Only add new keys, never modify existing ones
+      for (cat in names(unified_db)) {
+        if (cat %in% names(existing_db)) {
+          unified_db[[cat]] <- utils::modifyList(unified_db[[cat]], existing_db[[cat]], keep.null = TRUE)
+        }
+      }
+      if (!quiet) cli_alert_success("merged unified database (keeping existing entries)")
     } else if (merge_strategy == "merge_recursive") {
-      # deep recursive merge, combining nested structures
-      merged_db <- merge_recursive_lists(default_db, existing_db)
-      if (!quiet) cli_alert_success("recursively merged {category} database")
+      # Deep recursive merge
+      for (cat in names(unified_db)) {
+        if (cat %in% names(existing_db)) {
+          unified_db[[cat]] <- merge_recursive_lists(unified_db[[cat]], existing_db[[cat]])
+        }
+      }
+      if (!quiet) cli_alert_success("recursively merged unified database")
     }
-
-    # save merged database
-    if (!quiet) cli_alert_info("saving merged {category} database")
-    saveRDS(merged_db, file = file_path)
-    if (!quiet) cli_alert_success("updated {category} database at: {file_path}")
-  } else {
-    # handle overwrite all or new file creation
-    if (dry_run) {
-      action <- if (file_exists) "would overwrite" else "would create new"
-      if (!quiet) cli_alert_info("{action} {category} database at: {file_path}")
-      if (!quiet) cli_alert_success("dry run completed for {category}")
-      return(TRUE) # consider dry runs as successful
-    }
-
-    # ask for confirmation if needed and file exists
+  } else if (!is.na(existing_file) && merge_strategy == "overwrite_all") {
+    # Ask for confirmation before overwriting
     proceed <- TRUE
-    if (confirm && file_exists && merge_strategy == "overwrite_all") {
-      proceed <- ask_yes_no(paste0("overwrite existing file: ", file_path, "?"))
+    if (confirm) {
+      proceed <- ask_yes_no(paste0("overwrite existing unified database: ", existing_file, "?"))
     }
-
+    
     if (!proceed) {
-      if (!quiet) cli_alert_info("{category} database creation/overwrite cancelled by user")
-      return(FALSE) # return FALSE to indicate cancellation
+      if (!quiet) cli_alert_info("unified database creation cancelled by user")
+      return(invisible(FALSE))
     }
-
-    # Now that user has confirmed, show the action message
-    action <- if (file_exists) "overwriting" else "creating new"
-    if (!quiet) cli_alert_info("{action} {category} database at: {file_path}")
-
-    # save default database
-    saveRDS(default_db, file = file_path)
-    action <- if (file_exists) "overwrote" else "created new"
-    if (!quiet) cli_alert_success("{action} {category} database at: {file_path}")
   }
-
-  if (!quiet) cli_alert_success("{category} initialization complete")
-  return(TRUE) # return TRUE to indicate successful initialization
-}
-#' Initialise Boilerplate Text Databases (Deprecated)
-#'
-#' This function is deprecated. Please use boilerplate_init() instead.
-#'
-#' @param categories Character vector. Categories to initialise.
-#' @param merge_strategy Character. How to merge with existing databases.
-#' @param text_path Character. Path to the directory where text database files are stored.
-#' @param overwrite Logical. Whether to overwrite existing entries (deprecated).
-#' @param quiet Logical. If TRUE, suppresses all CLI alerts.
-#' @param dry_run Logical. If TRUE, simulates the operation without writing files.
-#' @param create_dirs Logical. If TRUE, creates directories that don't exist.
-#' @param confirm Logical. If TRUE, asks for confirmation before making changes.
-#'
-#' @return Invisibly returns a logical vector indicating which categories were successfully initialised.
-#'
-#' @importFrom cli cli_alert_warning cli_alert_info
-#' @export
-boilerplate_init_text <- function(
-    categories = c("methods", "results", "discussion", "appendix", "template"),
-    merge_strategy = c("keep_existing", "merge_recursive", "overwrite_all"),
-    text_path = NULL,
-    overwrite = FALSE,
-    quiet = FALSE,
-    dry_run = FALSE,
-    create_dirs = FALSE,
-    confirm = TRUE
-) {
-  # issue deprecation warning
-  warning(
-    "boilerplate_init_text() is deprecated. ",
-    "Please use boilerplate_init() instead.",
-    call. = FALSE
-  )
-
-  # forward to new function
-  merge_strategy <- match.arg(merge_strategy)
-
-  # handle deprecated overwrite parameter
-  if (overwrite && merge_strategy == "keep_existing") {
-    merge_strategy <- "overwrite_all"
-    if (!quiet) cli_alert_warning("the 'overwrite' parameter is deprecated. please use merge_strategy='overwrite_all' instead.")
-  }
-
-  # check if 'measures' is in categories and warn
-  if ("measures" %in% categories) {
-    if (!quiet) cli_alert_warning("'measures' category should be initialised using boilerplate_init_measures() or the new boilerplate_init()")
-    categories <- setdiff(categories, "measures")
-    if (!quiet) cli_alert_info("'measures' category removed from initialization list")
-  }
-
-  # call new function and return its result
-  result <- boilerplate_init(
-    categories = categories,
-    merge_strategy = merge_strategy,
-    data_path = text_path,
+  
+  # Save unified database
+  if (!quiet) cli_alert_info("saving unified database")
+  
+  boilerplate_save(
+    db = unified_db,
+    data_path = data_path,
+    format = format,
+    confirm = FALSE,  # Already confirmed above
     quiet = quiet,
-    dry_run = dry_run,
-    create_dirs = create_dirs,
-    confirm = confirm
+    timestamp = FALSE  # Don't timestamp init files
   )
-
-  return(invisible(result))
-}
-
-#' Initialise Boilerplate Measures Database (Deprecated)
-#'
-#' This function is deprecated. Please use boilerplate_init("measures") instead.
-#'
-#' @param merge_strategy Character. How to merge with existing database.
-#' @param measures_path Character. Path to the directory where measures database files are stored.
-#' @param file_name Character. Name of the file to save or load (without path).
-#' @param overwrite Logical. Whether to overwrite existing entries (deprecated).
-#' @param quiet Logical. If TRUE, suppresses all CLI alerts.
-#' @param dry_run Logical. If TRUE, simulates the operation without writing files.
-#' @param create_dirs Logical. If TRUE, creates directories that don't exist.
-#' @param confirm Logical. If TRUE, asks for confirmation before making changes.
-#'
-#' @return Invisibly returns a logical value indicating if the measures database was successfully initialised.
-#'
-#' @importFrom cli cli_alert_warning
-#' @export
-boilerplate_init_measures <- function(
-    merge_strategy = c("keep_existing", "merge_recursive", "overwrite_all"),
-    measures_path = NULL,
-    file_name = NULL,
-    overwrite = FALSE,
-    quiet = FALSE,
-    dry_run = FALSE,
-    create_dirs = FALSE,
-    confirm = TRUE
-) {
-  # issue deprecation warning
-  warning(
-    "boilerplate_init_measures() is deprecated. ",
-    "Please use boilerplate_init(\"measures\") instead.",
-    call. = FALSE
-  )
-
-  # forward to new function
-  merge_strategy <- match.arg(merge_strategy)
-
-  # handle deprecated overwrite parameter
-  if (overwrite && merge_strategy == "keep_existing") {
-    merge_strategy <- "overwrite_all"
-    if (!quiet) cli_alert_warning("the 'overwrite' parameter is deprecated. please use merge_strategy='overwrite_all' instead.")
-  }
-
-  # if custom file_name is specified, warn
-  if (!is.null(file_name)) {
-    if (!quiet) cli_alert_warning("custom file_name is not supported in the new unified system")
-  }
-
-  # call new function and get result
-  result <- boilerplate_init(
-    categories = "measures",
-    merge_strategy = merge_strategy,
-    data_path = measures_path,
-    quiet = quiet,
-    dry_run = dry_run,
-    create_dirs = create_dirs,
-    confirm = confirm
-  )
-
-  # return just the measures result (first element of the vector)
-  return(invisible(result["measures"]))
+  
+  if (!quiet) cli_alert_success("unified database initialisation complete")
+  
+  return(invisible(TRUE))
 }
 
 
+# Internal helper functions only - not exported
 
-
+# The deprecated init functions have been removed entirely
+# Use boilerplate_init() for all initialization needs
 

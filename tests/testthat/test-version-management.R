@@ -21,12 +21,13 @@ test_that("boilerplate_import can import from file path", {
     analysis = list(default = "Test analysis text")
   )
   
-  # Save with timestamp
+  # Save with timestamp (explicitly as RDS for this test)
   boilerplate_save(
     db = test_db,
     category = "methods",
     data_path = data_path,
     timestamp = TRUE,
+    format = "rds",
     confirm = FALSE,
     quiet = TRUE
   )

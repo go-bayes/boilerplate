@@ -91,7 +91,8 @@ methods_text <- boilerplate_generate_text(
   sections = c("sample"),
   global_vars = list(
     exposure_var = "political_conservative",
-    population = "university students"
+    population = "university students",
+    timeframe = "2023-2024"
   ),
   db = unified_db,
   quiet = TRUE
@@ -100,13 +101,15 @@ methods_text <- boilerplate_generate_text(
 # Check the output
 cat(substr(methods_text, 1, 100), "...\n")
 
-# Using just the methods database with headings
-methods_db <- boilerplate_import("methods", data_path = data_path, quiet = TRUE)
+# Using with headings
 methods_text <- boilerplate_generate_text(
   category = "methods",
   sections = c("sample"),
-  global_vars = list(exposure_var = "treatment"),
-  db = methods_db,
+  global_vars = list(
+    exposure_var = "treatment",
+    timeframe = "2023-2024"
+  ),
+  db = unified_db,
   add_headings = TRUE,
   heading_level = "##",
   quiet = TRUE

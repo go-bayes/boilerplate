@@ -61,7 +61,8 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The <code>boilerplate</code> package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. The package features a unified database approach that simplifies workflows and provides consistent management of all content types.</p>
+<p>The <code>boilerplate</code> package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths.</p>
+<p><strong>New in v1.1.0</strong>: The package now uses a single unified JSON database by default, simplifying database management and improving version control compatibility.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -80,7 +81,7 @@
 </h3>
 <ul>
 <li>
-<strong>Unified Database System</strong>: Work with all content types through a consistent interface</li>
+<strong>Single Unified Database</strong>: All content types in one JSON file by default (simplified workflow)</li>
 <li>
 <strong>Multiple Categories</strong>: Support for methods, results, discussion, measures, appendices and document templates</li>
 <li>
@@ -90,7 +91,7 @@
 <li>
 <strong>Quarto/R Markdown Integration</strong>: Generate sections for scientific reports</li>
 <li>
-<strong>JSON and RDS Support</strong>: Choose between human-readable JSON or R’s native RDS format</li>
+<strong>JSON Default Format</strong>: Human-readable JSON as default, with RDS support for legacy workflows</li>
 </ul>
 </div>
 <div class="section level3">
@@ -172,17 +173,16 @@
 <span>  <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"go-bayes/boilerplate"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># initialise all databases with a single function </span></span>
-<span><span class="co"># (this creates database files in the "boilerplate/data" folder relative to your project root)</span></span>
+<span><span class="co"># initialise unified database (new default: single JSON file)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># import all databases into a unified structure</span></span>
+<span><span class="co"># import the unified database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add a new method entry directly to the unified database</span></span>
 <span><span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">sample_selection</span> <span class="op">&lt;-</span> <span class="st">"Participants were selected from {{population}} during {{timeframe}}."</span></span>
 <span></span>
-<span><span class="co"># save all changes at once</span></span>
+<span><span class="co"># save all changes at once (JSON by default)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate text with variable substitution</span></span>
@@ -598,7 +598,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># export selected elements (specific methods and results)</span></span>
-<span><span class="co"># useful for sharing specialised subsets with collaborators</span></span>
+<span><span class="co"># useful for sharing specialized subsets with collaborators</span></span>
 <span><span class="fu"><a href="reference/boilerplate_export.html">boilerplate_export</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  output_file <span class="op">=</span> <span class="st">"causal_methods_subset.rds"</span>,</span>

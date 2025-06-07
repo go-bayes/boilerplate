@@ -43,12 +43,12 @@
 <span>  <span class="va">db</span>,</span>
 <span>  category <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  format <span class="op">=</span> <span class="st">"rds"</span>,</span>
+<span>  format <span class="op">=</span> <span class="st">"json"</span>,</span>
 <span>  confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  pretty <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  timestamp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  timestamp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  entry_level_confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  create_backup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  select_elements <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -75,7 +75,7 @@ If NULL (default), uses here::here("boilerplate", "data").</p></dd>
 
 
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
-<dd><p>Character. Format to save: "rds" (default), "json", or "both".</p></dd>
+<dd><p>Character. Format to save: "json" (default), "rds", or "both".</p></dd>
 
 
 <dt id="arg-confirm">confirm<a class="anchor" aria-label="anchor" href="#arg-confirm"></a></dt>
@@ -95,7 +95,7 @@ If NULL (default), uses here::here("boilerplate", "data").</p></dd>
 
 
 <dt id="arg-timestamp">timestamp<a class="anchor" aria-label="anchor" href="#arg-timestamp"></a></dt>
-<dd><p>Logical. If TRUE (default), add timestamp to filename.</p></dd>
+<dd><p>Logical. If TRUE, add timestamp to filename. Default is FALSE.</p></dd>
 
 
 <dt id="arg-entry-level-confirm">entry_level_confirm<a class="anchor" aria-label="anchor" href="#arg-entry-level-confirm"></a></dt>

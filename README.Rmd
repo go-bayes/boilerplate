@@ -22,7 +22,9 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. The package features a unified database approach that simplifies workflows and provides consistent management of all content types.
+The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. 
+
+**New in v1.1.0**: The package now uses a single unified JSON database by default, simplifying database management and improving version control compatibility.
 
 ## Installation
 
@@ -37,12 +39,12 @@ devtools::install_github("go-bayes/boilerplate")
 ## Features
 
 ### Core Features
-- **Unified Database System**: Work with all content types through a consistent interface
+- **Single Unified Database**: All content types in one JSON file by default (simplified workflow)
 - **Multiple Categories**: Support for methods, results, discussion, measures, appendices and document templates
 - **Hierarchical Organisation**: Organise content in nested categories using dot notation (e.g., `statistical.longitudinal.lmtp`)
 - **Default Content**: Comes with pre-loaded defaults for common methods sections
 - **Quarto/R Markdown Integration**: Generate sections for scientific reports
-- **JSON and RDS Support**: Choose between human-readable JSON or R's native RDS format
+- **JSON Default Format**: Human-readable JSON as default, with RDS support for legacy workflows
 
 ### Text and Document Features
 - **Text Template Management**: Create, update, and retrieve reusable text templates
@@ -87,17 +89,16 @@ if (!require(boilerplate, quietly = TRUE)) {
   devtools::install_github("go-bayes/boilerplate")
 }
 
-# initialise all databases with a single function 
-# (this creates database files in the "boilerplate/data" folder relative to your project root)
+# initialise unified database (new default: single JSON file)
 boilerplate_init(create_dirs = TRUE, confirm = TRUE)
 
-# import all databases into a unified structure
+# import the unified database
 unified_db <- boilerplate_import()
 
 # add a new method entry directly to the unified database
 unified_db$methods$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
 
-# save all changes at once
+# save all changes at once (JSON by default)
 boilerplate_save(unified_db)
 
 # generate text with variable substitution

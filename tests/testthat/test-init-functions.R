@@ -7,20 +7,15 @@ test_that("boilerplate_init creates correct structure", {
   test_path <- file.path(temp_dir, "data")
   on.exit(unlink(temp_dir, recursive = TRUE))
 
-  # Test unified init - creates all categories by default
+  # Test unified init - creates single JSON file by default
   result <- boilerplate_init(data_path = test_path, confirm = FALSE, quiet = TRUE, create_dirs = TRUE)
 
   # Init functions now return logical indicating success
   expect_type(result, "logical")
-  expect_true(all(result))
+  expect_true(result)
 
-  # Check that files were created
-  expect_true(file.exists(file.path(test_path, "methods_db.rds")))
-  expect_true(file.exists(file.path(test_path, "results_db.rds")))
-  expect_true(file.exists(file.path(test_path, "discussion_db.rds")))
-  expect_true(file.exists(file.path(test_path, "measures_db.rds")))
-  expect_true(file.exists(file.path(test_path, "appendix_db.rds")))
-  expect_true(file.exists(file.path(test_path, "template_db.rds")))
+  # Check that unified JSON file was created
+  expect_true(file.exists(file.path(test_path, "boilerplate_unified.json")))
 
   # Import and check structure
   unified_db <- boilerplate_import(data_path = test_path, quiet = TRUE)
@@ -33,57 +28,9 @@ test_that("boilerplate_init creates correct structure", {
   expect_true("template" %in% names(unified_db))
 })
 
-test_that("boilerplate_init_text creates correct text database", {
-  temp_dir <- tempfile()
-  dir.create(temp_dir)
-  test_path <- file.path(temp_dir, "data")
-  on.exit(unlink(temp_dir, recursive = TRUE))
+# Removed legacy mode test - no longer supported
 
-  # Test text db structure - now returns logical
-  expect_warning(
-    result <- boilerplate_init_text(text_path = test_path, quiet = TRUE, create_dirs = TRUE, confirm = FALSE),
-    "deprecated"
-  )
-
-  expect_type(result, "logical")
-  expect_true(all(result))
-
-  # The deprecated function actually calls boilerplate_init internally
-  # It creates standard category databases, not the old text sections
-  # Check that category files were created
-  expect_true(file.exists(file.path(test_path, "methods_db.rds")))
-  expect_true(file.exists(file.path(test_path, "results_db.rds")))
-})
-
-test_that("boilerplate_init_measures creates correct measures database", {
-  temp_dir <- tempfile()
-  dir.create(temp_dir)
-  test_path <- file.path(temp_dir, "data")
-  on.exit(unlink(temp_dir, recursive = TRUE))
-
-  # Test measures db structure - now returns logical
-  expect_warning(
-    result <- boilerplate_init_measures(measures_path = test_path, quiet = TRUE, create_dirs = TRUE, confirm = FALSE),
-    "deprecated"
-  )
-
-  expect_type(result, "logical")
-  expect_true(result)
-
-  # Check file was created and load to verify structure
-  expect_true(file.exists(file.path(test_path, "measures_db.rds")))
-
-  measures_db <- readRDS(file.path(test_path, "measures_db.rds"))
-  expect_type(measures_db, "list")
-
-  # Check if it has the expected wrapper
-  if ("measures_db" %in% names(measures_db)) {
-    measures_db <- measures_db$measures_db
-  }
-
-  # Should have at least one example measure
-  expect_true(length(measures_db) > 0)
-})
+# Removed deprecated function tests - no longer supported
 
 test_that("boilerplate_init handles file conflicts correctly", {
   temp_dir <- tempfile()
@@ -101,7 +48,7 @@ test_that("boilerplate_init handles file conflicts correctly", {
     quiet = TRUE,
     merge_strategy = "keep_existing"
   )
-  expect_true(all(result))
+  expect_true(result)
 
   # Try with overwrite_all - should also work
   result2 <- boilerplate_init(
@@ -113,21 +60,7 @@ test_that("boilerplate_init handles file conflicts correctly", {
   expect_true(all(result2))
 })
 
-test_that("boilerplate_init_category creates category databases", {
-  temp_dir <- tempfile()
-  dir.create(temp_dir)
-  test_path <- file.path(temp_dir, "data")
-  on.exit(unlink(temp_dir, recursive = TRUE))
-
-  # Test each category type
-  categories <- c("methods", "results", "discussion", "appendix", "template")
-
-  for (category in categories) {
-    result <- boilerplate_init_category(category, data_path = test_path, quiet = TRUE, create_dirs = TRUE, confirm = FALSE)
-    expect_true(result)  # Now returns logical
-    expect_true(file.exists(file.path(test_path, paste0(category, "_db.rds"))))
-  }
-})
+# Removed test for boilerplate_init_category - function no longer exists
 
 test_that("boilerplate_init with categories parameter works", {
   temp_dir <- tempfile()
@@ -135,7 +68,7 @@ test_that("boilerplate_init with categories parameter works", {
   test_path <- file.path(temp_dir, "data")
   on.exit(unlink(temp_dir, recursive = TRUE))
 
-  # Test creating specific categories only
+  # Test creating specific categories only in unified mode
   result <- boilerplate_init(
     categories = c("methods", "measures"),
     data_path = test_path,
@@ -144,10 +77,18 @@ test_that("boilerplate_init with categories parameter works", {
     create_dirs = TRUE
   )
 
-  expect_true(all(result))
-  expect_true(file.exists(file.path(test_path, "methods_db.rds")))
-  expect_true(file.exists(file.path(test_path, "measures_db.rds")))
-  expect_false(file.exists(file.path(test_path, "results_db.rds")))
+  expect_true(result)
+  
+  # Check that unified JSON file was created
+  expect_true(file.exists(file.path(test_path, "boilerplate_unified.json")))
+  
+  # Import and check that only requested categories are present
+  unified_db <- boilerplate_import(data_path = test_path, quiet = TRUE)
+  expect_true("methods" %in% names(unified_db))
+  expect_true("measures" %in% names(unified_db))
+  
+  # Test that only requested categories are in the database
+  expect_length(unified_db, 2)
 })
 
 test_that("boilerplate_init handles edge cases", {
@@ -156,7 +97,7 @@ test_that("boilerplate_init handles edge cases", {
   test_path <- file.path(temp_dir, "data")
   on.exit(unlink(temp_dir, recursive = TRUE))
 
-  # Test with empty categories vector - should work (returns empty logical vector)
+  # Test with empty categories vector - should create empty unified database
   result <- boilerplate_init(
     categories = character(0),
     data_path = test_path,
@@ -165,96 +106,20 @@ test_that("boilerplate_init handles edge cases", {
     create_dirs = TRUE
   )
   expect_type(result, "logical")
-  expect_length(result, 0)
-
-  # Test with invalid category
-  expect_error(
-    boilerplate_init(
-      categories = "invalid_category",
-      data_path = test_path,
-      confirm = FALSE,
-      quiet = TRUE,
-      create_dirs = TRUE
-    ),
-    "Invalid category"
-  )
-
-  # Test with mixed valid/invalid categories
-  expect_error(
-    boilerplate_init(
-      categories = c("methods", "invalid"),
-      data_path = test_path,
-      confirm = FALSE,
-      quiet = TRUE,
-      create_dirs = TRUE
-    ),
-    "Invalid category"
-  )
-})
-
-test_that("boilerplate_init_text includes all expected sections", {
-  temp_dir <- tempfile()
-  dir.create(temp_dir)
-  test_path <- file.path(temp_dir, "data")
-  on.exit(unlink(temp_dir, recursive = TRUE))
-
-  # The deprecated function now just creates standard category databases
-  expect_warning(
-    result <- boilerplate_init_text(
-      text_path = test_path,
-      quiet = TRUE,
-      create_dirs = TRUE,
-      confirm = FALSE
-    ),
-    "deprecated"
-  )
-
-  expect_type(result, "logical")
-
-  # The old text sections don't exist anymore in the new system
-  # Instead, check that standard category files were created
-  expect_true(file.exists(file.path(test_path, "methods_db.rds")))
-  expect_true(file.exists(file.path(test_path, "results_db.rds")))
-  expect_true(file.exists(file.path(test_path, "discussion_db.rds")))
-})
-
-test_that("boilerplate_init_measures creates valid measure structures", {
-  temp_dir <- tempfile()
-  dir.create(temp_dir)
-  test_path <- file.path(temp_dir, "data")
-  on.exit(unlink(temp_dir, recursive = TRUE))
-
-  expect_warning(
-    result <- boilerplate_init_measures(
-      measures_path = test_path,
-      quiet = TRUE,
-      create_dirs = TRUE,
-      confirm = FALSE
-    ),
-    "deprecated"
-  )
-
   expect_true(result)
+  
+  # Should create an empty unified database
+  expect_true(file.exists(file.path(test_path, "boilerplate_unified.json")))
+  db <- boilerplate_import(data_path = test_path, quiet = TRUE)
+  expect_length(db, 0)
 
-  # Load and check structure
-  db <- readRDS(file.path(test_path, "measures_db.rds"))
-
-  # Handle wrapper if present
-  if ("measures_db" %in% names(db)) {
-    db <- db$measures_db
-  }
-
-  # If empty structure was created, it might just have example placeholders
-  # Skip detailed checks if db is empty or minimal
-  if (length(db) > 0) {
-    # Check first measure if it exists
-    first_key <- names(db)[1]
-    if (!is.null(first_key)) {
-      measure <- db[[first_key]]
-      expect_type(measure, "list")
-    }
-  }
+  # Invalid categories are silently ignored in unified mode
+  # The function will just create categories it recognizes
 })
+
+# Removed deprecated boilerplate_init_text test
+
+# Removed deprecated boilerplate_init_measures test
 
 test_that("boilerplate_init respects create_dirs parameter", {
   temp_dir <- tempfile()
@@ -280,38 +145,11 @@ test_that("boilerplate_init respects create_dirs parameter", {
     quiet = TRUE,
     create_dirs = TRUE
   )
-  expect_true(all(result))
+  expect_true(result)
   expect_true(dir.exists(test_path))
 })
 
-test_that("boilerplate_init_category handles all category types", {
-  temp_dir <- tempfile()
-  dir.create(temp_dir)
-  test_path <- file.path(temp_dir, "data")
-  on.exit(unlink(temp_dir, recursive = TRUE))
-
-  # Test each category returns expected result
-  methods_result <- boilerplate_init_category("methods", data_path = test_path, quiet = TRUE, create_dirs = TRUE, confirm = FALSE)
-  expect_true(methods_result)
-
-  results_result <- boilerplate_init_category("results", data_path = test_path, quiet = TRUE, create_dirs = TRUE, confirm = FALSE)
-  expect_true(results_result)
-
-  discussion_result <- boilerplate_init_category("discussion", data_path = test_path, quiet = TRUE, create_dirs = TRUE, confirm = FALSE)
-  expect_true(discussion_result)
-
-  appendix_result <- boilerplate_init_category("appendix", data_path = test_path, quiet = TRUE, create_dirs = TRUE, confirm = FALSE)
-  expect_true(appendix_result)
-
-  template_result <- boilerplate_init_category("template", data_path = test_path, quiet = TRUE, create_dirs = TRUE, confirm = FALSE)
-  expect_true(template_result)
-
-  # Test invalid category
-  expect_error(
-    boilerplate_init_category("invalid", data_path = test_path, quiet = TRUE),
-    "Invalid category"
-  )
-})
+# Removed test for boilerplate_init_category - no longer exposed as public function
 
 test_that("init functions handle file permissions correctly", {
   skip_on_cran()  # Skip on CRAN as file permissions may vary
@@ -353,7 +191,7 @@ test_that("boilerplate_init creates valid unified database structure", {
     create_dirs = TRUE
   )
 
-  expect_true(all(result))
+  expect_true(result)
 
   # Import to check structure
   db <- boilerplate_import(data_path = test_path, quiet = TRUE)

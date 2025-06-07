@@ -33,13 +33,13 @@
 #'   quiet = TRUE
 #' )
 #'
-#' # Import just the methods database
-#' methods_db <- boilerplate_import("methods", data_path = data_path, quiet = TRUE)
-#' names(methods_db)
+#' # Import all databases as unified (new default)
+#' unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+#' names(unified_db)
 #'
-#' # Import all available databases as unified
-#' all_dbs <- boilerplate_import(data_path = data_path, quiet = TRUE)
-#' names(all_dbs)
+#' # Access specific category
+#' methods_db <- unified_db$methods
+#' names(methods_db)
 #'
 #' # Import from a specific file (e.g., timestamped or backup)
 #' # First, save with timestamp to create a timestamped file
@@ -152,44 +152,78 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE)
     return(unified_db)
   }
 
-  # Import specific category/categories
-  if (length(category) == 1) {
-    # Single category
-    rds_path <- file.path(data_path, paste0(category, "_db.rds"))
-    json_path <- file.path(data_path, paste0(category, "_db.json"))
-
-    if (file.exists(rds_path)) {
-      if (!quiet) cli_alert_info("importing {category} database (RDS)")
-      db <- read_boilerplate_db(rds_path)
-    } else if (file.exists(json_path)) {
-      if (!quiet) cli_alert_info("importing {category} database (JSON)")
-      db <- read_boilerplate_db(json_path)
-    } else {
-      stop("Database file not found: ", category, "_db.rds or ", category, "_db.json in ", data_path)
-    }
-
-    if (!quiet) cli_alert_success("imported {category} database")
-    return(db)
+  # Import specific category/categories from unified database
+  # First check for unified database
+  unified_rds <- file.path(data_path, "boilerplate_unified.rds")
+  unified_json <- file.path(data_path, "boilerplate_unified.json")
+  
+  if (file.exists(unified_json)) {
+    if (!quiet) cli_alert_info("loading unified database (JSON)")
+    full_db <- read_boilerplate_db(unified_json)
+  } else if (file.exists(unified_rds)) {
+    if (!quiet) cli_alert_info("loading unified database (RDS)")
+    full_db <- read_boilerplate_db(unified_rds)
   } else {
-    # Multiple categories
-    result <- list()
-
-    for (cat in category) {
-      rds_path <- file.path(data_path, paste0(cat, "_db.rds"))
-      json_path <- file.path(data_path, paste0(cat, "_db.json"))
+    # Fall back to individual files for backward compatibility
+    if (length(category) == 1) {
+      # Single category
+      rds_path <- file.path(data_path, paste0(category, "_db.rds"))
+      json_path <- file.path(data_path, paste0(category, "_db.json"))
 
       if (file.exists(rds_path)) {
-        if (!quiet) cli_alert_info("importing {cat} database (RDS)")
-        result[[cat]] <- read_boilerplate_db(rds_path)
+        if (!quiet) cli_alert_info("importing {category} database (RDS)")
+        db <- read_boilerplate_db(rds_path)
       } else if (file.exists(json_path)) {
-        if (!quiet) cli_alert_info("importing {cat} database (JSON)")
-        result[[cat]] <- read_boilerplate_db(json_path)
+        if (!quiet) cli_alert_info("importing {category} database (JSON)")
+        db <- read_boilerplate_db(json_path)
       } else {
-        if (!quiet) cli_alert_warning("{cat} database not found")
+        stop("Database file not found: boilerplate_unified.json/rds or ", category, "_db.json/rds in ", data_path)
+      }
+
+      if (!quiet) cli_alert_success("imported {category} database")
+      return(db)
+    } else {
+      # Multiple categories
+      result <- list()
+
+      for (cat in category) {
+        rds_path <- file.path(data_path, paste0(cat, "_db.rds"))
+        json_path <- file.path(data_path, paste0(cat, "_db.json"))
+
+        if (file.exists(rds_path)) {
+          if (!quiet) cli_alert_info("importing {cat} database (RDS)")
+          result[[cat]] <- read_boilerplate_db(rds_path)
+        } else if (file.exists(json_path)) {
+          if (!quiet) cli_alert_info("importing {cat} database (JSON)")
+          result[[cat]] <- read_boilerplate_db(json_path)
+        } else {
+          if (!quiet) cli_alert_warning("{cat} database not found")
+        }
+      }
+
+      if (!quiet) cli_alert_success("imported {length(result)} database(s)")
+      return(result)
+    }
+  }
+  
+  # Extract requested categories from unified database
+  if (length(category) == 1) {
+    if (category %in% names(full_db)) {
+      if (!quiet) cli_alert_success("extracted {category} from unified database")
+      return(full_db[[category]])
+    } else {
+      stop("Category '", category, "' not found in unified database")
+    }
+  } else {
+    result <- list()
+    for (cat in category) {
+      if (cat %in% names(full_db)) {
+        result[[cat]] <- full_db[[cat]]
+      } else {
+        if (!quiet) cli_alert_warning("{cat} not found in unified database")
       }
     }
-
-    if (!quiet) cli_alert_success("imported {length(result)} database(s)")
+    if (!quiet) cli_alert_success("extracted {length(result)} categories from unified database")
     return(result)
   }
 }
@@ -204,12 +238,12 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE)
 #'   If NULL and db contains multiple categories, saves as unified database.
 #' @param data_path Character. Base path for data directory.
 #'   If NULL (default), uses here::here("boilerplate", "data").
-#' @param format Character. Format to save: "rds" (default), "json", or "both".
+#' @param format Character. Format to save: "json" (default), "rds", or "both".
 #' @param confirm Logical. If TRUE, asks for confirmation. Default is TRUE.
 #' @param create_dirs Logical. If TRUE, creates directories if they don't exist. Default is FALSE.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
 #' @param pretty Logical. If TRUE (default), pretty-print JSON for readability.
-#' @param timestamp Logical. If TRUE (default), add timestamp to filename.
+#' @param timestamp Logical. If TRUE, add timestamp to filename. Default is FALSE.
 #' @param entry_level_confirm Logical. Not used, kept for backward compatibility.
 #' @param create_backup Logical. If TRUE, creates a backup before saving. Default is TRUE unless running examples or in a temporary directory.
 #' @param select_elements Character vector. Not used, kept for backward compatibility.
@@ -263,12 +297,12 @@ boilerplate_save <- function(
     db,
     category = NULL,
     data_path = NULL,
-    format = "rds",
+    format = "json",
     confirm = TRUE,
     create_dirs = FALSE,
     quiet = FALSE,
     pretty = TRUE,
-    timestamp = TRUE,
+    timestamp = FALSE,
     entry_level_confirm = TRUE,
     create_backup = NULL,
     select_elements = NULL,
@@ -303,8 +337,8 @@ boilerplate_save <- function(
     # Check if db looks like a unified database
     db_names <- names(db)
     categories <- c("measures", "methods", "results", "discussion", "appendix", "template")
-    is_unified <- any(categories %in% db_names)
-
+    is_unified <- any(categories %in% db_names) || length(db) == 0  # Empty db is also unified
+    
     if (is_unified) {
       # Save as unified database
       base_name <- "boilerplate_unified"

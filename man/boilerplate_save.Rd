@@ -8,12 +8,12 @@ boilerplate_save(
   db,
   category = NULL,
   data_path = NULL,
-  format = "rds",
+  format = "json",
   confirm = TRUE,
   create_dirs = FALSE,
   quiet = FALSE,
   pretty = TRUE,
-  timestamp = TRUE,
+  timestamp = FALSE,
   entry_level_confirm = TRUE,
   create_backup = NULL,
   select_elements = NULL,
@@ -29,7 +29,7 @@ If NULL and db contains multiple categories, saves as unified database.}
 \item{data_path}{Character. Base path for data directory.
 If NULL (default), uses here::here("boilerplate", "data").}
 
-\item{format}{Character. Format to save: "rds" (default), "json", or "both".}
+\item{format}{Character. Format to save: "json" (default), "rds", or "both".}
 
 \item{confirm}{Logical. If TRUE, asks for confirmation. Default is TRUE.}
 
@@ -39,7 +39,7 @@ If NULL (default), uses here::here("boilerplate", "data").}
 
 \item{pretty}{Logical. If TRUE (default), pretty-print JSON for readability.}
 
-\item{timestamp}{Logical. If TRUE (default), add timestamp to filename.}
+\item{timestamp}{Logical. If TRUE, add timestamp to filename. Default is FALSE.}
 
 \item{entry_level_confirm}{Logical. Not used, kept for backward compatibility.}
 

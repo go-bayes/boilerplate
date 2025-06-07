@@ -147,8 +147,8 @@ test_that("file path utilities work correctly", {
   # Save unified database - boilerplate_save should detect it's unified
   boilerplate_save(db, data_path = temp_dir, confirm = FALSE, quiet = TRUE)
 
-  # Check file was created with correct naming
-  files <- list.files(temp_dir, pattern = "\\.rds$")
+  # Check file was created with correct naming (JSON by default)
+  files <- list.files(temp_dir, pattern = "\\.json$")
   expect_true(any(grepl("boilerplate_unified", files)))
 
   # Save single category database
@@ -161,7 +161,7 @@ test_that("file path utilities work correctly", {
   )
 
   # Check category file was created
-  files <- list.files(temp_dir, pattern = "methods_db.*\\.rds$")
+  files <- list.files(temp_dir, pattern = "methods_db.*\\.json$")
   expect_true(length(files) > 0)
 })
 
