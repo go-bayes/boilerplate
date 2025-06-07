@@ -54,8 +54,7 @@ files is maintained through the unified parameter.</p>
 <span>  create_dirs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  create_empty <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  format <span class="op">=</span> <span class="st">"json"</span>,</span>
-<span>  unified <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  format <span class="op">=</span> <span class="st">"json"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -101,11 +100,6 @@ Default is TRUE. Set to FALSE to use default content.</p></dd>
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
 <dd><p>Character. Format to save: "json" (default), "rds", or "both".</p></dd>
 
-
-<dt id="arg-unified">unified<a class="anchor" aria-label="anchor" href="#arg-unified"></a></dt>
-<dd><p>Logical. If TRUE (default), creates a single unified database file.
-If FALSE, creates separate files for each category (legacy behaviour).</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -136,16 +130,6 @@ If FALSE, creates separate files for each category (legacy behaviour).</p></dd>
 <span class="r-in"><span>  data_path <span class="op">=</span> <span class="va">data_path</span>,</span></span>
 <span class="r-in"><span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  format <span class="op">=</span> <span class="st">"both"</span>,</span></span>
-<span class="r-in"><span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Legacy: Create separate files for each category</span></span></span>
-<span class="r-in"><span><span class="fu">boilerplate_init</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"methods"</span>, <span class="st">"measures"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  data_path <span class="op">=</span> <span class="va">data_path</span>,</span></span>
-<span class="r-in"><span>  unified <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>  format <span class="op">=</span> <span class="st">"rds"</span>,</span></span>
 <span class="r-in"><span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>

@@ -46,13 +46,13 @@ boilerplate_init(
   quiet = TRUE
 )
 
-# Import just the methods database
-methods_db <- boilerplate_import("methods", data_path = data_path, quiet = TRUE)
-names(methods_db)
+# Import all databases as unified (new default)
+unified_db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+names(unified_db)
 
-# Import all available databases as unified
-all_dbs <- boilerplate_import(data_path = data_path, quiet = TRUE)
-names(all_dbs)
+# Access specific category
+methods_db <- unified_db$methods
+names(methods_db)
 
 # Import from a specific file (e.g., timestamped or backup)
 # First, save with timestamp to create a timestamped file

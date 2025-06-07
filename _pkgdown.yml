@@ -59,7 +59,6 @@ reference:
     - boilerplate_import
     - boilerplate_save
     - boilerplate_init
-    - boilerplate_init_category
   - title: "Category accessor functions"
     contents:
     - boilerplate_methods
@@ -98,12 +97,15 @@ reference:
     - boilerplate_update_bibliography
     - boilerplate_copy_bibliography
     - boilerplate_validate_references
+  - title: "Database Merging Functions"
+    contents:
+    - boilerplate_merge_unified
+    - boilerplate_merge_category
+    - boilerplate_merge_databases
   - title: "Utilities"
     contents:
     - boilerplate_find_chars
     - boilerplate_measures_report
-    - boilerplate_merge_category
-    - boilerplate_merge_unified
     - boilerplate_standardise_measures
     - boilerplate_update_from_external
   - title: "JSON Support Functions"
@@ -112,8 +114,3 @@ reference:
     - boilerplate_rds_to_json
     - compare_rds_json
     - validate_json_database
-  - title: "Legacy Functions"
-    contents:
-    - boilerplate_init_text
-    - boilerplate_init_measures
-    - boilerplate_merge_databases
