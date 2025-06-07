@@ -194,7 +194,7 @@ test_that("print.boilerplate_files produces correct output", {
   output <- capture.output(print(files))
   
   # Check output contains expected sections
-  expect_true(any(grepl("Boilerplate Database Files", output)))
+  expect_true(any(grepl("boilerplate Database Files", output)))
   expect_true(any(grepl("Standard files:", output)))
   expect_true(any(grepl("methods_db.rds", output)))
   
