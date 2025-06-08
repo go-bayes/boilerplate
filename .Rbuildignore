@@ -35,3 +35,4 @@
 ^MIGRATION_SUMMARY\.md$
 ^JSON_REFACTOR_TODO\.md$
 ^codecov\.yml$
+^CRAN-SUBMISSION$
