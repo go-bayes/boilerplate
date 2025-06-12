@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,8 @@
 <span>  entry_level_confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  create_backup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  select_elements <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  output_file <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  output_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  project <span class="op">=</span> <span class="st">"default"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -112,6 +113,12 @@ If NULL (default), uses here::here("boilerplate", "data").</p></dd>
 
 <dt id="arg-output-file">output_file<a class="anchor" aria-label="anchor" href="#arg-output-file"></a></dt>
 <dd><p>Character. Not used, kept for backward compatibility.</p></dd>
+
+
+<dt id="arg-project">project<a class="anchor" aria-label="anchor" href="#arg-project"></a></dt>
+<dd><p>Character. Project name for organizing databases. Default is "default".
+Projects are stored in separate subdirectories to allow multiple independent
+boilerplate collections.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -240,16 +240,23 @@ unified_db$measures <- boilerplate_standardise_measures(
 boilerplate_measures_report(unified_db$measures)
 ```
 
-### Database Merging
+### Cross-Project Workflows
 
-```{r merge, eval=FALSE}
-# Merge databases from different sources
-merged_db <- boilerplate_merge_databases(
-  db1 = project1_db,
-  db2 = project2_db,
-  db1_name = "Project 1",
-  db2_name = "Project 2"
+```{r projects, eval=FALSE}
+# Work with multiple projects
+# Create a project for shared content
+boilerplate_init(project = "shared", confirm = FALSE)
+
+# Copy content between projects
+boilerplate_copy_from_project(
+  from_project = "shared",
+  to_project = "default",
+  paths = c("methods.statistical", "measures.anxiety"),
+  confirm = FALSE
 )
+
+# List available projects
+projects <- boilerplate_list_projects(details = TRUE)
 ```
 
 ## Managing Database Versions

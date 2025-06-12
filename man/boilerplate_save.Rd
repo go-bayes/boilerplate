@@ -17,7 +17,8 @@ boilerplate_save(
   entry_level_confirm = TRUE,
   create_backup = NULL,
   select_elements = NULL,
-  output_file = NULL
+  output_file = NULL,
+  project = "default"
 )
 }
 \arguments{
@@ -48,6 +49,10 @@ If NULL (default), uses here::here("boilerplate", "data").}
 \item{select_elements}{Character vector. Not used, kept for backward compatibility.}
 
 \item{output_file}{Character. Not used, kept for backward compatibility.}
+
+\item{project}{Character. Project name for organizing databases. Default is "default".
+Projects are stored in separate subdirectories to allow multiple independent
+boilerplate collections.}
 }
 \value{
 Invisible TRUE if successful, with saved file paths as an attribute.

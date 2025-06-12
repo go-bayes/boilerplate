@@ -34,15 +34,29 @@ more portable JSON format. JSON files are human-readable, work well with
 version control, and can be used across different programming languages.
 }
 \examples{
-\dontrun{
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Create sample RDS file
+sample_db <- list(methods = list(sampling = "Random sampling"))
+saveRDS(sample_db, file.path(temp_dir, "methods_db.rds"))
+
 # Convert single file
-boilerplate_rds_to_json("methods_db.rds")
+boilerplate_rds_to_json(file.path(temp_dir, "methods_db.rds"))
 
 # Convert all RDS files in directory
-boilerplate_rds_to_json("boilerplate/data/")
+boilerplate_rds_to_json(temp_dir)
 
 # Convert to different location
-boilerplate_rds_to_json("old_data/", output_path = "new_data/")
+output_dir <- tempfile()
+dir.create(output_dir)
+boilerplate_rds_to_json(temp_dir, output_path = output_dir)
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
+unlink(output_dir, recursive = TRUE)
 }
 
 }

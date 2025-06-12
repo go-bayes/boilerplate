@@ -31,9 +31,20 @@ Copies the bibliography file from cache to a specified directory,
 typically for use with Quarto documents.
 }
 \examples{
-\dontrun{
-db <- boilerplate_import()
-boilerplate_copy_bibliography(db, ".")
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Initialize and import
+boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+
+# Copy bibliography
+boilerplate_copy_bibliography(db, temp_dir)
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

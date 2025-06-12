@@ -28,12 +28,23 @@ List with validation results including used keys, available keys, and missing ke
 Checks that all citations in the boilerplate text exist in the bibliography file.
 }
 \examples{
-\dontrun{
-db <- boilerplate_import()
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Initialize and import
+boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+
+# Validate references
 validation <- boilerplate_validate_references(db)
 if (length(validation$missing) > 0) {
   warning("Missing references: ", paste(validation$missing, collapse = ", "))
 }
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

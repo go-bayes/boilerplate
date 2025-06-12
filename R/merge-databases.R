@@ -1,5 +1,7 @@
-#' Merge Two Measure Databases
+#' Merge Two Measure Databases (Deprecated)
 #'
+#' This function is deprecated. Use \code{\link{boilerplate_copy_from_project}} instead for better project-based workflow.
+#' 
 #' This function merges two measure databases, allowing the user to resolve conflicts
 #' when the same measure exists in both databases with different content. It supports
 #' both flat and hierarchical database structures.
@@ -25,41 +27,23 @@
 #' If sort_results is TRUE, the function will sort the merged database alphabetically at each level.
 #'
 #' @examples
-#' # Create example databases
-#' db1 <- list(
-#'   anxiety = list(
-#'     description = "Anxiety measure from study 1",
-#'     items = 10
-#'   ),
-#'   depression = list(
-#'     description = "Depression scale",
-#'     items = 15
-#'   )
-#' )
-#'
-#' db2 <- list(
-#'   anxiety = list(
-#'     description = "Anxiety measure from study 2",
-#'     items = 12
-#'   ),
-#'   stress = list(
-#'     description = "Stress scale",
-#'     items = 8
-#'   )
-#' )
-#'
-#' \dontrun{
-#' # Merge databases interactively
-#' merged <- boilerplate_merge_databases(db1, db2, "Study 1", "Study 2")
+#' \donttest{
+#' # This function is deprecated. Use boilerplate_copy_from_project() instead.
+#' # Example usage (for reference only):
+#' # merged <- boilerplate_merge_databases(db1, db2, "Study 1", "Study 2")
 #' }
 #'
 #' @importFrom cli cli_h1 cli_h2 cli_text cli_code cli_progress_bar cli_progress_update
 #' @importFrom cli cli_progress_done cli_alert_success cli_alert_info
 #' @importFrom utils capture.output
 #'
+#' @keywords internal
 #' @export
 boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_name = "Database 2",
                                         recursive = TRUE, sort_results = TRUE) {
+  .Deprecated("boilerplate_copy_from_project",
+              msg = "boilerplate_merge_databases() is deprecated. Use boilerplate_copy_from_project() for better project-based workflow.")
+  
   merged_db <- list()
 
   # Helper function to get user choice
@@ -175,8 +159,10 @@ boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_n
   return(merged_db)
 }
 
-#' Merge Unified Databases
+#' Merge Unified Databases (Deprecated)
 #'
+#' This function is deprecated. Use \code{\link{boilerplate_copy_from_project}} instead for better project-based workflow.
+#' 
 #' This function merges two unified databases, allowing the user to resolve conflicts
 #' when the same entry exists in both databases with different content. It supports
 #' both flat and hierarchical database structures across all categories.
@@ -205,25 +191,14 @@ boilerplate_merge_databases <- function(db1, db2, db1_name = "Database 1", db2_n
 #' If sort_results is TRUE, the function will sort the merged database alphabetically at each level.
 #'
 #' @examples
-#' \dontrun{
-#' # Import two unified databases from different locations
-#' db1 <- boilerplate_import()
-#' db2 <- boilerplate_import(data_path = "path/to/other/project/data")
-#'
-#' # Merge all common categories with custom names
-#' merged_db <- boilerplate_merge_unified(db1, db2,
-#'                                       db1_name = "Project A",
-#'                                       db2_name = "Project B")
-#'
-#' # Merge only specific categories
-#' merged_db <- boilerplate_merge_unified(db1, db2,
-#'                                       categories = c("measures", "methods"))
-#'
-#' # Save the merged database
-#' boilerplate_save(merged_db)
+#' \donttest{
+#' # This function is deprecated. Use boilerplate_copy_from_project() instead.
+#' # Example usage (for reference only):
+#' # merged_db <- boilerplate_merge_unified(db1, db2)
 #' }
 #'
 #' @importFrom cli cli_h1 cli_h2 cli_alert_info cli_alert_success
+#' @keywords internal
 #' @export
 boilerplate_merge_unified <- function(
     db1,
@@ -235,6 +210,9 @@ boilerplate_merge_unified <- function(
     sort_results = TRUE,
     quiet = FALSE
 ) {
+  .Deprecated("boilerplate_copy_from_project",
+              msg = "boilerplate_merge_unified() is deprecated. Use boilerplate_copy_from_project() for better project-based workflow.")
+  
   # validate inputs
   if (!is.list(db1) || !is.list(db2)) {
     stop("Both db1 and db2 must be lists (unified databases)")
@@ -291,7 +269,9 @@ boilerplate_merge_unified <- function(
   return(result)
 }
 
-#' Merge Selected Category Between Two Unified Databases
+#' Merge Selected Category Between Two Unified Databases (Deprecated)
+#'
+#' This function is deprecated. Use \code{\link{boilerplate_copy_from_project}} instead for better project-based workflow.
 #'
 #' This function extracts a specific category from two unified databases, merges them,
 #' and returns the updated first database with the merged category.
@@ -308,19 +288,14 @@ boilerplate_merge_unified <- function(
 #' @return A list representing the first database with the updated merged category.
 #'
 #' @examples
-#' \dontrun{
-#' # Import two unified databases
-#' db1 <- boilerplate_import()
-#' db2 <- boilerplate_import(data_path = "path/to/other/project/data")
-#'
-#' # Merge just the measures category
-#' db1 <- boilerplate_merge_category(db1, db2, "measures")
-#'
-#' # Save the updated database
-#' boilerplate_save(db1)
+#' \donttest{
+#' # This function is deprecated. Use boilerplate_copy_from_project() instead.
+#' # Example usage (for reference only):
+#' # db1 <- boilerplate_merge_category(db1, db2, "measures")
 #' }
 #'
 #' @importFrom cli cli_alert_info cli_alert_success
+#' @keywords internal
 #' @export
 boilerplate_merge_category <- function(
     db1,
@@ -332,6 +307,9 @@ boilerplate_merge_category <- function(
     sort_results = TRUE,
     quiet = FALSE
 ) {
+  .Deprecated("boilerplate_copy_from_project",
+              msg = "boilerplate_merge_category() is deprecated. Use boilerplate_copy_from_project() for better project-based workflow.")
+  
   # validate inputs
   if (!is.list(db1) || !is.list(db2)) {
     stop("Both db1 and db2 must be lists (unified databases)")
@@ -358,7 +336,9 @@ boilerplate_merge_category <- function(
   return(db1)
 }
 
-#' Update Category from External Database
+#' Update Category from External Database (Deprecated)
+#'
+#' This function is deprecated. Use \code{\link{boilerplate_copy_from_project}} instead for better project-based workflow.
 #'
 #' This function imports a specific category from an external database and
 #' updates the corresponding category in a unified database.
@@ -375,22 +355,14 @@ boilerplate_merge_category <- function(
 #' @return A list representing the updated unified database.
 #'
 #' @examples
-#' \dontrun{
-#' # Import current unified database
-#' unified_db <- boilerplate_import()
-#'
-#' # Update methods from an external source
-#' unified_db <- boilerplate_update_from_external(
-#'   unified_db = unified_db,
-#'   category = "methods",
-#'   external_path = "path/to/external/data"
-#' )
-#'
-#' # Save the updated database
-#' boilerplate_save(unified_db)
+#' \donttest{
+#' # This function is deprecated. Use boilerplate_copy_from_project() instead.
+#' # Example usage (for reference only):
+#' # unified_db <- boilerplate_update_from_external(unified_db, "methods", "path/to/external/data")
 #' }
 #'
 #' @importFrom cli cli_alert_info cli_alert_success
+#' @keywords internal
 #' @export
 boilerplate_update_from_external <- function(
     unified_db,
@@ -402,6 +374,9 @@ boilerplate_update_from_external <- function(
     sort_results = TRUE,
     quiet = FALSE
 ) {
+  .Deprecated("boilerplate_copy_from_project",
+              msg = "boilerplate_update_from_external() is deprecated. Use boilerplate_copy_from_project() for better project-based workflow.")
+  
   # validate inputs
   if (!is.list(unified_db)) {
     stop("unified_db must be a list")

@@ -28,9 +28,20 @@ Path to the local bibliography file, or NULL if no bibliography specified
 Downloads and caches a bibliography file from a remote URL specified in the database.
 }
 \examples{
-\dontrun{
-db <- boilerplate_import()
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Initialize and import
+boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+
+# Update bibliography
 bib_file <- boilerplate_update_bibliography(db)
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

@@ -106,13 +106,20 @@ boilerplate_batch_edit(
 )
 
 # Example 3: Load database directly from file
-\dontrun{
+\donttest{
+# First save the database to a JSON file
+json_file <- file.path(temp_dir, "boilerplate_unified.json")
+boilerplate_save(unified_db, format = "json", data_path = temp_dir, quiet = TRUE)
+
+# Now edit directly from the file
 db <- boilerplate_batch_edit(
-  db = "boilerplate_unified.json",  # File path instead of database object
+  db = json_file,  # File path instead of database object
   field = "description",
   new_value = "Updated description",
-  target_entries = "methods.*",
-  confirm = FALSE
+  target_entries = "anxiety",
+  category = "measures",
+  confirm = FALSE,
+  quiet = TRUE
 )
 }
 

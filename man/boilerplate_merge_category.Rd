@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge-databases.R
 \name{boilerplate_merge_category}
 \alias{boilerplate_merge_category}
-\title{Merge Selected Category Between Two Unified Databases}
+\title{Merge Selected Category Between Two Unified Databases (Deprecated)}
 \usage{
 boilerplate_merge_category(
   db1,
@@ -36,20 +36,18 @@ boilerplate_merge_category(
 A list representing the first database with the updated merged category.
 }
 \description{
+This function is deprecated. Use \code{\link{boilerplate_copy_from_project}} instead for better project-based workflow.
+}
+\details{
 This function extracts a specific category from two unified databases, merges them,
 and returns the updated first database with the merged category.
 }
 \examples{
-\dontrun{
-# Import two unified databases
-db1 <- boilerplate_import()
-db2 <- boilerplate_import(data_path = "path/to/other/project/data")
-
-# Merge just the measures category
-db1 <- boilerplate_merge_category(db1, db2, "measures")
-
-# Save the updated database
-boilerplate_save(db1)
+\donttest{
+# This function is deprecated. Use boilerplate_copy_from_project() instead.
+# Example usage (for reference only):
+# db1 <- boilerplate_merge_category(db1, db2, "measures")
 }
 
 }
+\keyword{internal}

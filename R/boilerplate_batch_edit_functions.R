@@ -71,13 +71,20 @@
 #' )
 #'
 #' # Example 3: Load database directly from file
-#' \dontrun{
+#' \donttest{
+#' # First save the database to a JSON file
+#' json_file <- file.path(temp_dir, "boilerplate_unified.json")
+#' boilerplate_save(unified_db, format = "json", data_path = temp_dir, quiet = TRUE)
+#' 
+#' # Now edit directly from the file
 #' db <- boilerplate_batch_edit(
-#'   db = "boilerplate_unified.json",  # File path instead of database object
+#'   db = json_file,  # File path instead of database object
 #'   field = "description",
 #'   new_value = "Updated description",
-#'   target_entries = "methods.*",
-#'   confirm = FALSE
+#'   target_entries = "anxiety",
+#'   category = "measures",
+#'   confirm = FALSE,
+#'   quiet = TRUE
 #' )
 #' }
 #'
@@ -305,9 +312,18 @@ boilerplate_batch_edit <- function(
 #' @param preview Logical. If TRUE, shows what would be changed.
 #' @param confirm Logical. If TRUE, asks for confirmation.
 #' @param quiet Logical. If TRUE, suppresses messages.
+#' @return List. The modified database with the batch edits applied.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' # First create a sample database
+#' unified_db <- list(
+#'   measures = list(
+#'     ban_hate_speech = list(reference = "old_ref", waves = "1-10"),
+#'     born_nz = list(reference = "old_ref", waves = "1-10")
+#'   )
+#' )
+#' 
 #' # Update multiple fields for specific entries
 #' unified_db <- boilerplate_batch_edit_multi(
 #'   db = unified_db,
@@ -400,7 +416,15 @@ boilerplate_batch_edit_multi <- function(
 #' @return The modified database.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' # First create a sample database
+#' unified_db <- list(
+#'   measures = list(
+#'     test1 = list(reference = "@Smith2023[p.45]"),
+#'     test2 = list(reference = "Jones[2022]")
+#'   )
+#' )
+#' 
 #' # Remove @, [, and ] from all references
 #' unified_db <- boilerplate_batch_clean(
 #'   db = unified_db,
@@ -716,7 +740,16 @@ boilerplate_batch_clean <- function(
 #' @return A named list of entries containing the specified characters.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' # First create a sample database
+#' unified_db <- list(
+#'   measures = list(
+#'     test1 = list(reference = "@Smith2023[p.45]"),
+#'     test2 = list(reference = "Jones (2022)"),
+#'     test3 = list(reference = "Brown[2021]")
+#'   )
+#' )
+#' 
 #' # Find all entries with @, [, or ] in references
 #' entries_to_clean <- boilerplate_find_chars(
 #'   db = unified_db,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge-databases.R
 \name{boilerplate_merge_unified}
 \alias{boilerplate_merge_unified}
-\title{Merge Unified Databases}
+\title{Merge Unified Databases (Deprecated)}
 \usage{
 boilerplate_merge_unified(
   db1,
@@ -37,11 +37,13 @@ If NULL (default), merges all common categories.}
 A list representing the merged unified database.
 }
 \description{
+This function is deprecated. Use \code{\link{boilerplate_copy_from_project}} instead for better project-based workflow.
+}
+\details{
 This function merges two unified databases, allowing the user to resolve conflicts
 when the same entry exists in both databases with different content. It supports
 both flat and hierarchical database structures across all categories.
-}
-\details{
+
 The function iterates through all entries in the specified categories of both databases.
 When an entry exists in both databases:
 \itemize{
@@ -53,22 +55,11 @@ If recursive is TRUE, the function will recursively merge nested folders/categor
 If sort_results is TRUE, the function will sort the merged database alphabetically at each level.
 }
 \examples{
-\dontrun{
-# Import two unified databases from different locations
-db1 <- boilerplate_import()
-db2 <- boilerplate_import(data_path = "path/to/other/project/data")
-
-# Merge all common categories with custom names
-merged_db <- boilerplate_merge_unified(db1, db2,
-                                      db1_name = "Project A",
-                                      db2_name = "Project B")
-
-# Merge only specific categories
-merged_db <- boilerplate_merge_unified(db1, db2,
-                                      categories = c("measures", "methods"))
-
-# Save the merged database
-boilerplate_save(merged_db)
+\donttest{
+# This function is deprecated. Use boilerplate_copy_from_project() instead.
+# Example usage (for reference only):
+# merged_db <- boilerplate_merge_unified(db1, db2)
 }
 
 }
+\keyword{internal}

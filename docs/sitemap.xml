@@ -20,6 +20,7 @@
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-json-schema.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-json-workflow.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-measures-workflow.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-projects.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/boilerplate-quarto-workflow.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/index.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/articles/version-management-section.html</loc></url>
@@ -36,6 +37,7 @@
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_batch_edit_multi.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_check_health.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_copy_bibliography.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_copy_from_project.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_discussion.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_export.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_find_chars.html</loc></url>
@@ -50,6 +52,7 @@
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_init_measures.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_init_text.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_list_files.html</loc></url>
+<url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_list_projects.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_list_variables.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_manage_measures.html</loc></url>
 <url><loc>https://go-bayes.github.io/boilerplate/reference/boilerplate_manage_text.html</loc></url>

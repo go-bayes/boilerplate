@@ -11,7 +11,7 @@ Can optionally generate a detailed report."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,26 +80,90 @@ issues, stats, and fixed items</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Create temporary directory for example</span></span></span>
+<span class="r-in"><span><span class="va">temp_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">temp_dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Initialize and import database</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_dir</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
+<span class="r-in"><span>                 confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_dir</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Check database health</span></span></span>
 <span class="r-in"><span><span class="va">health</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_check_health</span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking database health...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Found 1 issue (1 warning, 0 info)</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">health</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Database Health Report</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ======================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Checked at: 2025-06-13 00:59:04 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Status: ⚠ ISSUES FOUND </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total entries: 17 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Categories: 6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Template variables: 0 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Documented variables: 0 (0.0%) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Issues Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> warning: Empty Entries (12)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Empty or NULL entries found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate text report</span></span></span>
 <span class="r-in"><span><span class="va">report_text</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_check_health</span><span class="op">(</span><span class="va">db</span>, report <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking database health...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Found 1 issue (1 warning, 0 info)</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">report_text</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Database Health Report</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ======================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Checked at: 2025-06-13 00:59:04 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Status: ⚠ ISSUES FOUND </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total entries: 17 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Categories: 6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Template variables: 0 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Documented variables: 0 (0.0%) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Issues Found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> warning: Empty Entries (12)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Empty or NULL entries found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Detailed Issue Information</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> =========================</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Save report to file</span></span></span>
-<span class="r-in"><span><span class="fu">boilerplate_check_health</span><span class="op">(</span><span class="va">db</span>, report <span class="op">=</span> <span class="st">"health_report.txt"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">report_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">temp_dir</span>, <span class="st">"health_report.txt"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">boilerplate_check_health</span><span class="op">(</span><span class="va">db</span>, report <span class="op">=</span> <span class="va">report_file</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking database health...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Found 1 issue (1 warning, 0 info)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Health report saved to /var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpQkKyJP/file301b49465855/health_report.txt</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Check and fix issues</span></span></span>
 <span class="r-in"><span><span class="va">health</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_check_health</span><span class="op">(</span><span class="va">db</span>, fix <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking database health...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fixed 12 issues</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Found 2 issues (2 warnings, 0 info)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get the fixed database</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="va">health</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">issues_fixed</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">health</span>, <span class="st">"fixed_db"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Clean up</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

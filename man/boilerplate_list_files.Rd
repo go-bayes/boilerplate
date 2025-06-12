@@ -31,16 +31,32 @@ Lists all boilerplate database files in a directory, organised by type
 (standard, timestamped, or backup).
 }
 \examples{
-\dontrun{
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Initialize with some content
+boilerplate_init(data_path = temp_dir, categories = "methods",
+                 create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+
+# Save with timestamp to create some files
+db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+boilerplate_save(db, data_path = temp_dir, timestamp = TRUE, 
+                 confirm = FALSE, quiet = TRUE)
+
 # List all database files
-files <- boilerplate_list_files()
+files <- boilerplate_list_files(data_path = temp_dir)
 print(files)
 
 # List only methods files
-files <- boilerplate_list_files(category = "methods")
+files <- boilerplate_list_files(data_path = temp_dir, category = "methods")
 
 # List files matching a pattern
-files <- boilerplate_list_files(pattern = "2024")
+files <- boilerplate_list_files(data_path = temp_dir, pattern = "202")
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

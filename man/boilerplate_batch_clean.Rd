@@ -62,7 +62,15 @@ This function allows batch cleaning of text fields by removing or replacing
 specific characters or patterns across multiple entries in a boilerplate database.
 }
 \examples{
-\dontrun{
+\donttest{
+# First create a sample database
+unified_db <- list(
+  measures = list(
+    test1 = list(reference = "@Smith2023[p.45]"),
+    test2 = list(reference = "Jones[2022]")
+  )
+)
+
 # Remove @, [, and ] from all references
 unified_db <- boilerplate_batch_clean(
   db = unified_db,

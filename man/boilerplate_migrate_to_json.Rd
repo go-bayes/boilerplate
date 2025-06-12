@@ -57,13 +57,27 @@ The "unified" format creates a single JSON file containing all categories,
 which is recommended for version control and collaborative workflows.
 }
 \examples{
-\dontrun{
-# Migrate from GitHub templates structure
+\donttest{
+# Create temporary directories for example
+source_dir <- tempfile()
+output_dir <- tempfile()
+dir.create(source_dir)
+dir.create(output_dir)
+
+# Create sample RDS file
+sample_db <- list(
+  name = "Example Measure",
+  description = "An example for migration",
+  items = c("item1", "item2")
+)
+saveRDS(sample_db, file.path(source_dir, "measures_db.rds"))
+
+# Migrate from RDS to JSON
 results <- boilerplate_migrate_to_json(
-  source_path = "~/templates/boilerplate_data",
-  output_path = "~/my_project/boilerplate/data",
+  source_path = source_dir,
+  output_path = output_dir,
   format = "unified",
-  validate = TRUE
+  validate = FALSE
 )
 
 # Check results
@@ -72,6 +86,10 @@ if (length(results$errors) == 0) {
 } else {
   print(results$errors)
 }
+
+# Clean up
+unlink(source_dir, recursive = TRUE)
+unlink(output_dir, recursive = TRUE)
 }
 
 }

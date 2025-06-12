@@ -11,9 +11,10 @@ articles:
   boilerplate-json-schema: boilerplate-json-schema.html
   boilerplate-json-workflow: boilerplate-json-workflow.html
   boilerplate-measures-workflow: boilerplate-measures-workflow.html
+  boilerplate-projects: boilerplate-projects.html
   boilerplate-quarto-workflow: boilerplate-quarto-workflow.html
   version-management-section: version-management-section.html
-last_built: 2025-06-07T14:12Z
+last_built: 2025-06-12T12:58Z
 urls:
   reference: https://go-bayes.github.io/boilerplate/reference
   article: https://go-bayes.github.io/boilerplate/articles

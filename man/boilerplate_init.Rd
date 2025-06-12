@@ -13,7 +13,8 @@ boilerplate_init(
   create_dirs = FALSE,
   confirm = TRUE,
   create_empty = TRUE,
-  format = "json"
+  format = "json",
+  project = "default"
 )
 }
 \arguments{
@@ -37,6 +38,10 @@ If NULL (default), uses here::here("boilerplate", "data").}
 Default is TRUE. Set to FALSE to use default content.}
 
 \item{format}{Character. Format to save: "json" (default), "rds", or "both".}
+
+\item{project}{Character. Project name for organizing databases. Default is "default".
+Projects are stored in separate subdirectories to allow multiple independent
+boilerplate collections.}
 }
 \value{
 Invisibly returns TRUE if successful.

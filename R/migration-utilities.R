@@ -37,13 +37,27 @@
 #' which is recommended for version control and collaborative workflows.
 #'
 #' @examples
-#' \dontrun{
-#' # Migrate from GitHub templates structure
+#' \donttest{
+#' # Create temporary directories for example
+#' source_dir <- tempfile()
+#' output_dir <- tempfile()
+#' dir.create(source_dir)
+#' dir.create(output_dir)
+#' 
+#' # Create sample RDS file
+#' sample_db <- list(
+#'   name = "Example Measure",
+#'   description = "An example for migration",
+#'   items = c("item1", "item2")
+#' )
+#' saveRDS(sample_db, file.path(source_dir, "measures_db.rds"))
+#' 
+#' # Migrate from RDS to JSON
 #' results <- boilerplate_migrate_to_json(
-#'   source_path = "~/templates/boilerplate_data",
-#'   output_path = "~/my_project/boilerplate/data",
+#'   source_path = source_dir,
+#'   output_path = output_dir,
 #'   format = "unified",
-#'   validate = TRUE
+#'   validate = FALSE
 #' )
 #'
 #' # Check results
@@ -52,6 +66,10 @@
 #' } else {
 #'   print(results$errors)
 #' }
+#' 
+#' # Clean up
+#' unlink(source_dir, recursive = TRUE)
+#' unlink(output_dir, recursive = TRUE)
 #' }
 #'
 #' @seealso \code{\link{boilerplate_rds_to_json}}, \code{\link{validate_json_database}}
@@ -329,17 +347,32 @@ prepare_for_json <- function(db) {
 #' If jsonvalidate is not installed, validation is skipped with a message.
 #'
 #' @examples
-#' \dontrun{
-#' # Validate a measures database
-#' errors <- validate_json_database("measures_db.json", "measures")
-#' if (length(errors) == 0) {
-#'   message("Database is valid!")
-#' } else {
-#'   cat("Validation errors:\n", paste(errors, collapse = "\n"))
+#' \donttest{
+#' # Create temporary directory for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
+#' 
+#' # Create sample JSON database
+#' sample_db <- list(
+#'   measures = list(
+#'     anxiety = list(name = "Anxiety Scale", items = 10)
+#'   )
+#' )
+#' json_path <- file.path(temp_dir, "measures_db.json")
+#' if (requireNamespace("jsonlite", quietly = TRUE)) {
+#'   jsonlite::write_json(sample_db, json_path)
+#'   
+#'   # Validate a measures database
+#'   errors <- validate_json_database(json_path, "measures")
+#'   if (length(errors) == 0) {
+#'     message("Database is valid!")
+#'   } else {
+#'     cat("Validation errors:\n", paste(errors, collapse = "\n"))
+#'   }
 #' }
-#'
-#' # Validate unified database
-#' errors <- validate_json_database("boilerplate_unified.json")
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @seealso \code{\link{boilerplate_migrate_to_json}}
@@ -455,12 +488,27 @@ merge_unified_dbs <- function(db1, db2) {
 #' and structure correctly.
 #'
 #' @examples
-#' \dontrun{
-#' # Compare original and migrated databases
-#' differences <- compare_rds_json(
-#'   "original/methods_db.rds",
-#'   "migrated/methods_db.json"
+#' \donttest{
+#' # Create temporary directories for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
+#' 
+#' # Create sample RDS database
+#' sample_db <- list(
+#'   methods = list(
+#'     sampling = "Random sampling",
+#'     analysis = "Regression analysis"
+#'   )
 #' )
+#' rds_path <- file.path(temp_dir, "methods_db.rds")
+#' saveRDS(sample_db, rds_path)
+#' 
+#' # Convert to JSON
+#' json_path <- file.path(temp_dir, "methods_db.json")
+#' boilerplate_rds_to_json(rds_path, quiet = TRUE)
+#' 
+#' # Compare original and migrated databases
+#' differences <- compare_rds_json(rds_path, json_path)
 #'
 #' if (length(differences) == 0) {
 #'   message("Migration successful - databases are equivalent!")
@@ -470,6 +518,9 @@ merge_unified_dbs <- function(db1, db2) {
 #'     cat(sprintf("Difference at %s: %s\n", diff$path, diff$type))
 #'   }
 #' }
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @seealso \code{\link{boilerplate_migrate_to_json}},

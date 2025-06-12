@@ -22,14 +22,27 @@ Updated database object
 Adds or updates bibliography information in a boilerplate database.
 }
 \examples{
-\dontrun{
-db <- boilerplate_import()
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Initialize and import
+boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+
+# Add bibliography
 db <- boilerplate_add_bibliography(
   db,
   url = "https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib",
   local_path = "references.bib"
 )
-boilerplate_save(db)
+
+# Save the updated database
+boilerplate_save(db, data_path = temp_dir, confirm = FALSE, quiet = TRUE)
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

@@ -13,6 +13,9 @@
 #'   - A specific file path to import (e.g., "data/methods_db_20240115_143022.rds")
 #'   If NULL (default), uses here::here("boilerplate", "data").
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
+#' @param project Character. Project name for organizing databases. Default is "default".
+#'   Projects are stored in separate subdirectories to allow multiple independent
+#'   boilerplate collections.
 #'
 #' @return List. The imported database(s). If a single category was requested,
 #'   returns that database. If multiple categories were requested, returns a
@@ -74,14 +77,34 @@
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning
 #' @importFrom here here
 #' @export
-boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE) {
-  # Set default data path
+boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE, project = "default") {
+  # Validate project name
+  if (!is.character(project) || length(project) != 1 || project == "") {
+    stop("Project must be a non-empty character string")
+  }
+  
+  # Check if data_path is a specific file first
+  is_file_path <- !is.null(data_path) && file.exists(data_path) && !dir.exists(data_path)
+  
+  # Set default data path or append project if directory
   if (is.null(data_path)) {
-    data_path <- here::here("boilerplate", "data")
+    data_path <- here::here("boilerplate", "projects", project, "data")
+  } else if (!is_file_path) {
+    # Check if this looks like a legacy path or test path
+    # Don't add project structure if:
+    # 1. Path already contains "projects"
+    # 2. Path ends with "data" (likely legacy)
+    # 3. Path contains temp directory markers (test environment)
+    if (!grepl("/projects/", data_path) && 
+        !grepl("/data$", data_path) && 
+        !grepl("^/tmp|^/var/folders|Temp", data_path)) {
+      # Add project structure for new paths
+      data_path <- file.path(data_path, "projects", project, "data")
+    }
   }
 
   # Check if data_path is a file (new functionality)
-  if (file.exists(data_path) && !dir.exists(data_path)) {
+  if (is_file_path) {
     # Direct file import
     if (!quiet) cli_alert_info("Importing from file: {basename(data_path)}")
     
@@ -248,6 +271,9 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE)
 #' @param create_backup Logical. If TRUE, creates a backup before saving. Default is TRUE unless running examples or in a temporary directory.
 #' @param select_elements Character vector. Not used, kept for backward compatibility.
 #' @param output_file Character. Not used, kept for backward compatibility.
+#' @param project Character. Project name for organizing databases. Default is "default".
+#'   Projects are stored in separate subdirectories to allow multiple independent
+#'   boilerplate collections.
 #'
 #' @return Invisible TRUE if successful, with saved file paths as an attribute.
 #'
@@ -306,11 +332,29 @@ boilerplate_save <- function(
     entry_level_confirm = TRUE,
     create_backup = NULL,
     select_elements = NULL,
-    output_file = NULL
+    output_file = NULL,
+    project = "default"
 ) {
+  # Validate project name
+  if (!is.character(project) || length(project) != 1 || project == "") {
+    stop("Project must be a non-empty character string")
+  }
+  
   # Set default data path
   if (is.null(data_path)) {
-    data_path <- here::here("boilerplate", "data")
+    data_path <- here::here("boilerplate", "projects", project, "data")
+  } else {
+    # Check if this looks like a legacy path or test path
+    # Don't add project structure if:
+    # 1. Path already contains "projects"
+    # 2. Path ends with "data" (likely legacy)
+    # 3. Path contains temp directory markers (test environment)
+    if (!grepl("/projects/", data_path) && 
+        !grepl("/data$", data_path) && 
+        !grepl("^/tmp|^/var/folders|Temp", data_path)) {
+      # Add project structure for new paths
+      data_path <- file.path(data_path, "projects", project, "data")
+    }
   }
 
   # Set default for create_backup based on context

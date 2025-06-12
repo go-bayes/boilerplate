@@ -4,7 +4,12 @@
 \alias{boilerplate_import}
 \title{Import boilerplate Database(s)}
 \usage{
-boilerplate_import(category = NULL, data_path = NULL, quiet = FALSE)
+boilerplate_import(
+  category = NULL,
+  data_path = NULL,
+  quiet = FALSE,
+  project = "default"
+)
 }
 \arguments{
 \item{category}{Character or character vector. Category of database to import.
@@ -20,6 +25,10 @@ If NULL (default), uses here::here("boilerplate", "data").
 }}
 
 \item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
+
+\item{project}{Character. Project name for organizing databases. Default is "default".
+Projects are stored in separate subdirectories to allow multiple independent
+boilerplate collections.}
 }
 \value{
 List. The imported database(s). If a single category was requested,

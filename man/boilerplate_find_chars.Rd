@@ -31,7 +31,16 @@ This helper function finds all entries containing specific characters in a field
 Useful for identifying which entries need cleaning.
 }
 \examples{
-\dontrun{
+\donttest{
+# First create a sample database
+unified_db <- list(
+  measures = list(
+    test1 = list(reference = "@Smith2023[p.45]"),
+    test2 = list(reference = "Jones (2022)"),
+    test3 = list(reference = "Brown[2021]")
+  )
+)
+
 # Find all entries with @, [, or ] in references
 entries_to_clean <- boilerplate_find_chars(
   db = unified_db,
