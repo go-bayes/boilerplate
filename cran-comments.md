@@ -16,7 +16,13 @@
 
 ## Resubmission
 
-This is a resubmission of the boilerplate package (version 1.2.0). In this version, I have addressed all feedback from the CRAN reviewer:
+This is a resubmission of the boilerplate package (version 1.2.0). Since the initial submission, we have:
+
+* Fixed merge conflicts that occurred during the submission process
+* Corrected YAML syntax errors in GitHub Actions workflows
+* Ensured clean package state for resubmission
+
+In this version, I have addressed all feedback from the CRAN reviewer:
 
 * Removed redundant "Tools for" from the package title (addressed in v1.1.0)
 * Removed redundant "Provides tools for" from the package description (addressed in v1.1.0)
