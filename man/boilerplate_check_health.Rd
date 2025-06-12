@@ -32,7 +32,16 @@ potential issues such as orphaned variables, empty entries, and structural probl
 Can optionally generate a detailed report.
 }
 \examples{
-\dontrun{
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Initialize and import database
+boilerplate_init(data_path = temp_dir, create_dirs = TRUE, 
+                 confirm = FALSE, quiet = TRUE)
+db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+
 # Check database health
 health <- boilerplate_check_health(db)
 print(health)
@@ -42,7 +51,8 @@ report_text <- boilerplate_check_health(db, report = "text")
 cat(report_text)
 
 # Save report to file
-boilerplate_check_health(db, report = "health_report.txt")
+report_file <- file.path(temp_dir, "health_report.txt")
+boilerplate_check_health(db, report = report_file)
 
 # Check and fix issues
 health <- boilerplate_check_health(db, fix = TRUE)
@@ -51,6 +61,9 @@ health <- boilerplate_check_health(db, fix = TRUE)
 if (health$summary$issues_fixed > 0) {
   db <- attr(health, "fixed_db")
 }
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

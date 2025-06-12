@@ -11,9 +11,20 @@
 #' @return Path to the local bibliography file, or NULL if no bibliography specified
 #'
 #' @examples
-#' \dontrun{
-#' db <- boilerplate_import()
+#' \donttest{
+#' # Create temporary directory for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
+#' 
+#' # Initialize and import
+#' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+#' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+#' 
+#' # Update bibliography
 #' bib_file <- boilerplate_update_bibliography(db)
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @importFrom utils download.file
@@ -100,9 +111,20 @@ boilerplate_update_bibliography <- function(
 #' @return Path to the copied bibliography file, or NULL if operation failed
 #'
 #' @examples
-#' \dontrun{
-#' db <- boilerplate_import()
-#' boilerplate_copy_bibliography(db, ".")
+#' \donttest{
+#' # Create temporary directory for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
+#' 
+#' # Initialize and import
+#' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+#' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+#' 
+#' # Copy bibliography
+#' boilerplate_copy_bibliography(db, temp_dir)
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @export
@@ -272,12 +294,23 @@ extract_all_text <- function(db) {
 #' @return List with validation results including used keys, available keys, and missing keys
 #'
 #' @examples
-#' \dontrun{
-#' db <- boilerplate_import()
+#' \donttest{
+#' # Create temporary directory for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
+#' 
+#' # Initialize and import
+#' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+#' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+#' 
+#' # Validate references
 #' validation <- boilerplate_validate_references(db)
 #' if (length(validation$missing) > 0) {
 #'   warning("Missing references: ", paste(validation$missing, collapse = ", "))
 #' }
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @export
@@ -362,14 +395,27 @@ boilerplate_validate_references <- function(
 #' @return Updated database object
 #'
 #' @examples
-#' \dontrun{
-#' db <- boilerplate_import()
+#' \donttest{
+#' # Create temporary directory for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
+#' 
+#' # Initialize and import
+#' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+#' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+#' 
+#' # Add bibliography
 #' db <- boilerplate_add_bibliography(
 #'   db,
 #'   url = "https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib",
 #'   local_path = "references.bib"
 #' )
-#' boilerplate_save(db)
+#' 
+#' # Save the updated database
+#' boilerplate_save(db, data_path = temp_dir, confirm = FALSE, quiet = TRUE)
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @export

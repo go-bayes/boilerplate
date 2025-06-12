@@ -28,17 +28,32 @@ catch errors early.
 If jsonvalidate is not installed, validation is skipped with a message.
 }
 \examples{
-\dontrun{
-# Validate a measures database
-errors <- validate_json_database("measures_db.json", "measures")
-if (length(errors) == 0) {
-  message("Database is valid!")
-} else {
-  cat("Validation errors:\n", paste(errors, collapse = "\n"))
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Create sample JSON database
+sample_db <- list(
+  measures = list(
+    anxiety = list(name = "Anxiety Scale", items = 10)
+  )
+)
+json_path <- file.path(temp_dir, "measures_db.json")
+if (requireNamespace("jsonlite", quietly = TRUE)) {
+  jsonlite::write_json(sample_db, json_path)
+  
+  # Validate a measures database
+  errors <- validate_json_database(json_path, "measures")
+  if (length(errors) == 0) {
+    message("Database is valid!")
+  } else {
+    cat("Validation errors:\n", paste(errors, collapse = "\n"))
+  }
 }
 
-# Validate unified database
-errors <- validate_json_database("boilerplate_unified.json")
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

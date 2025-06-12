@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/go-bayes/boilerplate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/go-bayes/boilerplate/actions/workflows/R-CMD-check.yaml)
 [![R-hub](https://github.com/go-bayes/boilerplate/actions/workflows/rhub.yaml/badge.svg)](https://github.com/go-bayes/boilerplate/actions/workflows/rhub.yaml)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
 ## Overview
@@ -261,20 +263,76 @@ boilerplate_save(
 )
 ```
 
-### Multiple Projects
+### Project Management (New in v1.2.0)
 
-You can easily work with multiple distinct sets of boilerplate databases by using different paths:
+The boilerplate package now supports **projects** - isolated namespaces that keep different boilerplate collections separate. This is ideal for:
+
+- Managing personal vs. shared boilerplate content
+- Working with multiple research projects simultaneously  
+- Collaborating with colleagues who have their own collections
+- Experimenting without affecting your main database
+
+#### Using Projects
+
+All core functions now accept a `project` parameter:
 
 ```{r}
-# project A
-project_a_db <- boilerplate_import(data_path = "projects/project_a/data")
+# Create a new project for shared lab content
+boilerplate_init(
+  project = "lab_shared",
+  categories = c("methods", "measures"),
+  create_dirs = TRUE,
+  confirm = FALSE
+)
 
-# broject B
-project_b_db <- boilerplate_import(data_path = "projects/project_b/data")
+# Import from a specific project
+lab_db <- boilerplate_import(project = "lab_shared")
 
-# make changes specific to Project A
-project_a_db$methods$sample <- "Participants for Project A were recruited from..."
-boilerplate_save(project_a_db, data_path = "projects/project_a/data")
+# Add content to the lab project
+lab_db$methods$ethics <- "This study was approved by {{institution}} ethics committee (ref: {{ethics_ref}})."
+
+# Save to the specific project
+boilerplate_save(lab_db, project = "lab_shared")
+```
+
+#### Working with Multiple Projects
+
+```{r}
+# List all available projects
+projects <- boilerplate_list_projects()
+print(projects)
+
+# Create personal and shared projects
+boilerplate_init(project = "my_analysis", create_dirs = TRUE, confirm = FALSE)
+boilerplate_init(project = "team_templates", create_dirs = TRUE, confirm = FALSE)
+
+# Each project maintains its own isolated namespace
+my_db <- boilerplate_import(project = "my_analysis")
+team_db <- boilerplate_import(project = "team_templates")
+```
+
+#### Cross-Project Operations
+
+Copy content between projects with conflict handling:
+
+```{r}
+# Copy specific content from team templates to your project
+boilerplate_copy_from_project(
+  from_project = "team_templates",
+  to_project = "my_analysis",
+  paths = c("methods.statistical", "measures.demographics"),
+  merge_strategy = "skip",  # skip, overwrite, or rename
+  confirm = FALSE
+)
+
+# Copy with a prefix to avoid naming conflicts
+boilerplate_copy_from_project(
+  from_project = "colleague_jane",
+  to_project = "my_analysis", 
+  paths = "measures.anxiety",
+  prefix = "jane_",  # results in "jane_anxiety"
+  confirm = FALSE
+)
 ```
 
 ### Relative vs. Absolute Paths
@@ -1337,7 +1395,7 @@ cat(exposure_text)
 
 To cite the boilerplate package in publications, please use:
 
-Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 1.1.0 https://doi.org/10.5281/zenodo.13370825
+Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 1.2.0 https://doi.org/10.5281/zenodo.13370825
 
 A BibTeX entry for LaTeX users:
 
@@ -1348,7 +1406,7 @@ A BibTeX entry for LaTeX users:
                    Standardised Text for Scientific Reports}},
   year         = 2025,
   publisher    = {Zenodo},
-  version      = {1.0.45},
+  version      = {1.2.0},
   doi          = {10.5281/zenodo.13370825},
   url          = {https://github.com/go-bayes/boilerplate}
 }
@@ -1371,3 +1429,43 @@ The package includes example files in the `inst/` directory:
 - **Quarto example**: `system.file("examples", "minimal-quarto-example.qmd", package = "boilerplate")`
 - **JSON workflows**: See files in `system.file("examples/json-examples", package = "boilerplate")`
 - **Example data**: CSV and JSON examples in `system.file("extdata", package = "boilerplate")`
+
+## Development Roadmap
+
+The `boilerplate` package is under active development. Here's our planned roadmap for upcoming features:
+
+### 🚀 Near Term
+**Enhanced Type Safety (v1.2.1)**
+- Implementation of S3 classes for all database objects
+- Improved validation and error messages
+- Better IDE support with autocompletion
+- Zero breaking changes - full backward compatibility
+
+### 📋 Medium Term  
+**Extended S3 Methods (v1.3.x)**
+- Custom print methods for cleaner output
+- Validation methods for database integrity
+- Safe subsetting and extraction operators
+- Enhanced merge capabilities with type checking
+
+### 🔮 Long Term
+**Modern R Infrastructure (v2.0)**
+- Migration to S7 object system (once stable)
+- Performance optimizations
+- Extended validation framework
+- Advanced project management features
+
+### 🎯 Design Principles
+Our development follows these principles:
+- **Backward compatibility**: No breaking changes without major version bump
+- **User-first design**: Features driven by real research needs
+- **Type safety**: Progressive enhancement of type checking
+- **Modern R practices**: Adoption of new standards as they mature
+
+### 📊 Current State
+- **Version**: 1.2.0 (CRAN submission pending)
+- **Code coverage**: 63.54%
+- **Dependencies**: Minimal (6 packages)
+- **Test suite**: 130 tests across 16 files
+
+We welcome feedback and contributions! Please see our [contribution guidelines](https://github.com/go-bayes/boilerplate/blob/main/.github/CONTRIBUTING.md) for more information.

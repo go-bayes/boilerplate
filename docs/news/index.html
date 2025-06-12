@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,58 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="boilerplate-110-2025-06-06">boilerplate 1.1.0 [2025-06-06]<a class="anchor" aria-label="anchor" href="#boilerplate-110-2025-06-06"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.2.0" id="boilerplate-120-2025-06-13">boilerplate 1.2.0 [2025-06-13]<a class="anchor" aria-label="anchor" href="#boilerplate-120-2025-06-13"></a></h2>
 <div class="section level3">
-<h3 id="documentation-improvements-1-1-0">Documentation improvements<a class="anchor" aria-label="anchor" href="#documentation-improvements-1-1-0"></a></h3>
+<h3 id="cran-resubmission-1-2-0">CRAN resubmission<a class="anchor" aria-label="anchor" href="#cran-resubmission-1-2-0"></a></h3>
+<ul><li>Addressed all CRAN reviewer feedback from version 1.1.0</li>
+<li>Fixed all examples to pass R CMD check –run-donttest</li>
+<li>All exported functions have tags</li>
+<li>All  replaced with </li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-and-quality-1-2-0">Testing and quality<a class="anchor" aria-label="anchor" href="#testing-and-quality-1-2-0"></a></h3>
+<ul><li>
+<strong>Code coverage</strong>: 63.54% (1,352 of 2,367 lines covered)</li>
+<li>
+<strong>Test suite</strong>: 130 tests across 16 test files</li>
+<li>All examples now properly initialize databases and clean up temporary files</li>
+<li>Examples are self-contained and run without errors</li>
+</ul></div>
+<div class="section level3">
+<h3 id="project-support-new-1-2-0">Project support (NEW)<a class="anchor" aria-label="anchor" href="#project-support-new-1-2-0"></a></h3>
+<ul><li>
+<strong>Project-based organization</strong>: Added project support to keep different boilerplate collections separate
+<ul><li>All core functions (<code><a href="../reference/boilerplate_init.html">boilerplate_init()</a></code>, <code><a href="../reference/boilerplate_import.html">boilerplate_import()</a></code>, <code><a href="../reference/boilerplate_save.html">boilerplate_save()</a></code>, <code><a href="../reference/boilerplate_export.html">boilerplate_export()</a></code>) now accept a <code>project</code> parameter</li>
+<li>Default project is “default” for backward compatibility</li>
+<li>Projects are stored in separate subdirectories under <code>boilerplate/projects/</code>
+</li>
+</ul></li>
+<li>
+<strong>Cross-project operations</strong>: New functions for managing multiple projects
+<ul><li>
+<code><a href="../reference/boilerplate_copy_from_project.html">boilerplate_copy_from_project()</a></code> - Selectively copy content between projects with conflict handling</li>
+<li>
+<code><a href="../reference/boilerplate_list_projects.html">boilerplate_list_projects()</a></code> - List all available projects</li>
+<li>Support for prefixing copied entries to avoid naming conflicts</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="deprecated-functions-1-2-0">Deprecated functions<a class="anchor" aria-label="anchor" href="#deprecated-functions-1-2-0"></a></h3>
+<ul><li>
+<strong>Merge functions deprecated</strong>: All merge functions are now deprecated in favor of project-based workflow
+<ul><li>
+<code><a href="../reference/boilerplate_merge_databases.html">boilerplate_merge_databases()</a></code> - Use <code><a href="../reference/boilerplate_copy_from_project.html">boilerplate_copy_from_project()</a></code> instead</li>
+<li>
+<code><a href="../reference/boilerplate_merge_unified.html">boilerplate_merge_unified()</a></code> - Use <code><a href="../reference/boilerplate_copy_from_project.html">boilerplate_copy_from_project()</a></code> instead</li>
+<li>
+<code><a href="../reference/boilerplate_merge_category.html">boilerplate_merge_category()</a></code> - Use <code><a href="../reference/boilerplate_copy_from_project.html">boilerplate_copy_from_project()</a></code> instead</li>
+<li>
+<code><a href="../reference/boilerplate_update_from_external.html">boilerplate_update_from_external()</a></code> - Use <code><a href="../reference/boilerplate_copy_from_project.html">boilerplate_copy_from_project()</a></code> instead</li>
+<li>The new project-based workflow is cleaner and more flexible</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-improvements-1-2-0">Documentation improvements<a class="anchor" aria-label="anchor" href="#documentation-improvements-1-2-0"></a></h3>
 <ul><li>Added comprehensive bibliography management vignette showing how to use centralised BibTeX files</li>
 <li>Added complete “Getting Started” tutorial with real-world workflow examples</li>
 <li>Created enhanced introduction vignette with practical multi-study scenarios</li>
@@ -43,7 +92,7 @@
 <li>Enhanced vignettes to showcase new variable documentation and database health features</li>
 </ul></div>
 <div class="section level3">
-<h3 id="major-improvements-1-1-0">Major improvements<a class="anchor" aria-label="anchor" href="#major-improvements-1-1-0"></a></h3>
+<h3 id="major-improvements-1-2-0">Major improvements<a class="anchor" aria-label="anchor" href="#major-improvements-1-2-0"></a></h3>
 <ul><li>
 <strong>Lighter package</strong>: Reduced dependencies from 9 to 6 by removing <code>glue</code>, <code>janitor</code>, and <code>stringr</code> - replaced with base R equivalents</li>
 <li>
@@ -60,9 +109,9 @@
 <strong>Cleaner directory structure</strong>: Removed confusing nested directory structure</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
+<h3 id="new-features-1-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-2-0"></a></h3>
 <div class="section level4">
-<h4 id="enhanced-core-functions-1-1-0">Enhanced core functions<a class="anchor" aria-label="anchor" href="#enhanced-core-functions-1-1-0"></a></h4>
+<h4 id="enhanced-core-functions-1-2-0">Enhanced core functions<a class="anchor" aria-label="anchor" href="#enhanced-core-functions-1-2-0"></a></h4>
 <ul><li>
 <code><a href="../reference/boilerplate_import.html">boilerplate_import()</a></code> - Now auto-detects JSON or RDS format based on file extensions</li>
 <li>
@@ -75,7 +124,7 @@
 <code><a href="../reference/boilerplate_standardise_measures.html">boilerplate_standardise_measures()</a></code> - Added <code>json_compatible</code> parameter for JSON-specific formatting</li>
 </ul></div>
 <div class="section level4">
-<h4 id="json-utilities-1-1-0">JSON utilities<a class="anchor" aria-label="anchor" href="#json-utilities-1-1-0"></a></h4>
+<h4 id="json-utilities-1-2-0">JSON utilities<a class="anchor" aria-label="anchor" href="#json-utilities-1-2-0"></a></h4>
 <ul><li>
 <code><a href="../reference/boilerplate_migrate_to_json.html">boilerplate_migrate_to_json()</a></code> - Migrate RDS databases to JSON format</li>
 <li>
@@ -86,7 +135,7 @@
 <code><a href="../reference/validate_json_database.html">validate_json_database()</a></code> - Validate JSON structure against schemas</li>
 </ul></div>
 <div class="section level4">
-<h4 id="template-variable-documentation-1-1-0">Template variable documentation<a class="anchor" aria-label="anchor" href="#template-variable-documentation-1-1-0"></a></h4>
+<h4 id="template-variable-documentation-1-2-0">Template variable documentation<a class="anchor" aria-label="anchor" href="#template-variable-documentation-1-2-0"></a></h4>
 <ul><li>
 <code>boilerplate_add_entry_enhanced()</code> - Add entries with documented template variables</li>
 <li>
@@ -99,7 +148,7 @@
 <code>extract_template_variables()</code> - Extract variables from template strings</li>
 </ul></div>
 <div class="section level4">
-<h4 id="database-health-checking-1-1-0">Database health checking<a class="anchor" aria-label="anchor" href="#database-health-checking-1-1-0"></a></h4>
+<h4 id="database-health-checking-1-2-0">Database health checking<a class="anchor" aria-label="anchor" href="#database-health-checking-1-2-0"></a></h4>
 <ul><li>
 <code><a href="../reference/boilerplate_check_health.html">boilerplate_check_health()</a></code> - Comprehensive database health checks including:
 <ul><li>Empty or NULL entries detection</li>
@@ -111,7 +160,7 @@
 <li>Enhanced <code><a href="../reference/boilerplate_check_health.html">boilerplate_check_health()</a></code> - Now includes integrated report generation with <code>report</code> parameter</li>
 </ul></div>
 <div class="section level4">
-<h4 id="version-management-1-1-0">Version management<a class="anchor" aria-label="anchor" href="#version-management-1-1-0"></a></h4>
+<h4 id="version-management-1-2-0">Version management<a class="anchor" aria-label="anchor" href="#version-management-1-2-0"></a></h4>
 <ul><li>Enhanced <code><a href="../reference/boilerplate_import.html">boilerplate_import()</a></code> - Can now import database files directly by path (both timestamped and backup files)</li>
 <li>
 <code><a href="../reference/boilerplate_list_files.html">boilerplate_list_files()</a></code> - List and organise all database files (standard, timestamped, backups)</li>
@@ -122,7 +171,7 @@
 <code><a href="../reference/print.boilerplate_health.html">print.boilerplate_health()</a></code> - Formatted output for health check results</li>
 </ul></div>
 <div class="section level4">
-<h4 id="bibliography-support-1-1-0">Bibliography support<a class="anchor" aria-label="anchor" href="#bibliography-support-1-1-0"></a></h4>
+<h4 id="bibliography-support-1-2-0">Bibliography support<a class="anchor" aria-label="anchor" href="#bibliography-support-1-2-0"></a></h4>
 <ul><li>
 <code><a href="../reference/boilerplate_add_bibliography.html">boilerplate_add_bibliography()</a></code> - Add bibliography information to database</li>
 <li>
@@ -135,7 +184,7 @@
 <code><a href="../reference/boilerplate_generate_text.html">boilerplate_generate_text()</a></code> - Now supports automatic bibliography copying with <code>copy_bibliography</code> parameter</li>
 </ul></div>
 <div class="section level4">
-<h4 id="measures-enhancements-1-1-0">Measures enhancements<a class="anchor" aria-label="anchor" href="#measures-enhancements-1-1-0"></a></h4>
+<h4 id="measures-enhancements-1-2-0">Measures enhancements<a class="anchor" aria-label="anchor" href="#measures-enhancements-1-2-0"></a></h4>
 <ul><li>
 <code><a href="../reference/boilerplate_generate_measures.html">boilerplate_generate_measures()</a></code> - Now fully replaces deprecated <code>boilerplate_measures_text()</code>
 </li>
@@ -146,7 +195,7 @@
 </ul></div>
 </div>
 <div class="section level3">
-<h3 id="breaking-changes-1-1-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-1-0"></a></h3>
+<h3 id="breaking-changes-1-2-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-2-0"></a></h3>
 <ul><li>Removed <code>boilerplate_import_json()</code> - use <code><a href="../reference/boilerplate_import.html">boilerplate_import()</a></code> instead (auto-detects format)</li>
 <li>Removed <code>boilerplate_save_json()</code> - use <code>boilerplate_save(..., format = "json")</code> instead</li>
 <li>Removed <code>boilerplate_batch_edit_json()</code> - use <code><a href="../reference/boilerplate_batch_edit.html">boilerplate_batch_edit()</a></code> instead (accepts file paths)</li>
@@ -154,7 +203,7 @@
 <li>Removed <code>boilerplate_manage_text()</code> and <code>boilerplate_manage_measures()</code> - deprecated functions no longer needed</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-improvements-1-1-0">Minor improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-1-1-0"></a></h3>
+<h3 id="minor-improvements-1-2-0">Minor improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-1-2-0"></a></h3>
 <ul><li>Updated package examples with Quarto-focused workflows</li>
 <li>Fixed Rd line width issues in documentation</li>
 <li>Improved example code in export function</li>

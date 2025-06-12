@@ -40,6 +40,7 @@ articles:
     - boilerplate-getting-started
     - boilerplate-intro
     - boilerplate-intro-enhanced
+    - boilerplate-projects
   - title: "Core Workflows"
     contents:
     - boilerplate-bibliography-workflow
@@ -59,6 +60,10 @@ reference:
     - boilerplate_import
     - boilerplate_save
     - boilerplate_init
+  - title: "Project Management Functions"
+    contents:
+    - boilerplate_copy_from_project
+    - boilerplate_list_projects
   - title: "Category accessor functions"
     contents:
     - boilerplate_methods
@@ -97,17 +102,11 @@ reference:
     - boilerplate_update_bibliography
     - boilerplate_copy_bibliography
     - boilerplate_validate_references
-  - title: "Database Merging Functions"
-    contents:
-    - boilerplate_merge_unified
-    - boilerplate_merge_category
-    - boilerplate_merge_databases
   - title: "Utilities"
     contents:
     - boilerplate_find_chars
     - boilerplate_measures_report
     - boilerplate_standardise_measures
-    - boilerplate_update_from_external
   - title: "JSON Support Functions"
     contents:
     - boilerplate_migrate_to_json

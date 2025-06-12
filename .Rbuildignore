@@ -36,3 +36,4 @@
 ^JSON_REFACTOR_TODO\.md$
 ^codecov\.yml$
 ^CRAN-SUBMISSION$
+^inst/ROADMAP_S3_CLASSES\.md$

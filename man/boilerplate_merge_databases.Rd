@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge-databases.R
 \name{boilerplate_merge_databases}
 \alias{boilerplate_merge_databases}
-\title{Merge Two Measure Databases}
+\title{Merge Two Measure Databases (Deprecated)}
 \usage{
 boilerplate_merge_databases(
   db1,
@@ -30,11 +30,13 @@ boilerplate_merge_databases(
 A list representing the merged measure database.
 }
 \description{
+This function is deprecated. Use \code{\link{boilerplate_copy_from_project}} instead for better project-based workflow.
+}
+\details{
 This function merges two measure databases, allowing the user to resolve conflicts
 when the same measure exists in both databases with different content. It supports
 both flat and hierarchical database structures.
-}
-\details{
+
 The function iterates through all measures in both databases. When a measure exists
 in both databases:
 \itemize{
@@ -46,32 +48,11 @@ If recursive is TRUE, the function will recursively merge nested folders/categor
 If sort_results is TRUE, the function will sort the merged database alphabetically at each level.
 }
 \examples{
-# Create example databases
-db1 <- list(
-  anxiety = list(
-    description = "Anxiety measure from study 1",
-    items = 10
-  ),
-  depression = list(
-    description = "Depression scale",
-    items = 15
-  )
-)
-
-db2 <- list(
-  anxiety = list(
-    description = "Anxiety measure from study 2",
-    items = 12
-  ),
-  stress = list(
-    description = "Stress scale",
-    items = 8
-  )
-)
-
-\dontrun{
-# Merge databases interactively
-merged <- boilerplate_merge_databases(db1, db2, "Study 1", "Study 2")
+\donttest{
+# This function is deprecated. Use boilerplate_copy_from_project() instead.
+# Example usage (for reference only):
+# merged <- boilerplate_merge_databases(db1, db2, "Study 1", "Study 2")
 }
 
 }
+\keyword{internal}

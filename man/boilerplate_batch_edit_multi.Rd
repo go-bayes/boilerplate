@@ -33,11 +33,22 @@ boilerplate_batch_edit_multi(
 
 \item{quiet}{Logical. If TRUE, suppresses messages.}
 }
+\value{
+List. The modified database with the batch edits applied.
+}
 \description{
 This function allows editing multiple fields across multiple entries in a single operation.
 }
 \examples{
-\dontrun{
+\donttest{
+# First create a sample database
+unified_db <- list(
+  measures = list(
+    ban_hate_speech = list(reference = "old_ref", waves = "1-10"),
+    born_nz = list(reference = "old_ref", waves = "1-10")
+  )
+)
+
 # Update multiple fields for specific entries
 unified_db <- boilerplate_batch_edit_multi(
   db = unified_db,

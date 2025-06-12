@@ -204,6 +204,9 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
 #' @param pretty Logical. If TRUE (default), pretty-print JSON for readability.
 #' @param save_by_category Logical. If TRUE (default), saves unified databases by category.
+#' @param project Character. Project name for organizing databases. Default is "default".
+#'   Projects are stored in separate subdirectories to allow multiple independent
+#'   boilerplate collections.
 #'
 #' @return Invisible TRUE if successful.
 #'
@@ -259,11 +262,17 @@ boilerplate_export <- function(
     create_dirs = FALSE,
     quiet = FALSE,
     pretty = TRUE,
-    save_by_category = TRUE
+    save_by_category = TRUE,
+    project = "default"
 ) {
   if (!is.list(db)) {
     if (!quiet) cli_alert_danger("db must be a list")
     stop("db must be a list")
+  }
+  
+  # Validate project name
+  if (!is.character(project) || length(project) != 1 || project == "") {
+    stop("Project must be a non-empty character string")
   }
 
   # Set default path if not provided
@@ -272,8 +281,20 @@ boilerplate_export <- function(
       if (!quiet) cli_alert_danger("package 'here' is required for default path resolution")
       stop("Package 'here' is required for default path resolution. Please install it or specify 'data_path' manually.")
     }
-    data_path <- here::here("boilerplate", "data")
-    if (!quiet) cli_alert_info("using default path: {data_path}")
+    data_path <- here::here("boilerplate", "projects", project, "data")
+    if (!quiet) cli_alert_info("using project '{project}' at path: {data_path}")
+  } else {
+    # Check if this looks like a legacy path or test path
+    # Don't add project structure if:
+    # 1. Path already contains "projects"
+    # 2. Path ends with "data" (likely legacy)
+    # 3. Path contains temp directory markers (test environment)
+    if (!grepl("/projects/", data_path) && 
+        !grepl("/data$", data_path) && 
+        !grepl("^/tmp|^/var/folders|Temp", data_path)) {
+      # Add project structure for new paths
+      data_path <- file.path(data_path, "projects", project, "data")
+    }
   }
 
   # Check if directory exists and handle creation

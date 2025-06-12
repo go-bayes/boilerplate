@@ -39,12 +39,27 @@ Useful for verifying that migration from RDS to JSON preserves all data
 and structure correctly.
 }
 \examples{
-\dontrun{
-# Compare original and migrated databases
-differences <- compare_rds_json(
-  "original/methods_db.rds",
-  "migrated/methods_db.json"
+\donttest{
+# Create temporary directories for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
+
+# Create sample RDS database
+sample_db <- list(
+  methods = list(
+    sampling = "Random sampling",
+    analysis = "Regression analysis"
+  )
 )
+rds_path <- file.path(temp_dir, "methods_db.rds")
+saveRDS(sample_db, rds_path)
+
+# Convert to JSON
+json_path <- file.path(temp_dir, "methods_db.json")
+boilerplate_rds_to_json(rds_path, quiet = TRUE)
+
+# Compare original and migrated databases
+differences <- compare_rds_json(rds_path, json_path)
 
 if (length(differences) == 0) {
   message("Migration successful - databases are equivalent!")
@@ -54,6 +69,9 @@ if (length(differences) == 0) {
     cat(sprintf("Difference at \%s: \%s\n", diff$path, diff$type))
   }
 }
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

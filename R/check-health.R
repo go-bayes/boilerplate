@@ -18,7 +18,16 @@
 #'   - If `report` is a file path: Invisibly returns the file path after saving report
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' # Create temporary directory for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
+#' 
+#' # Initialize and import database
+#' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, 
+#'                  confirm = FALSE, quiet = TRUE)
+#' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+#' 
 #' # Check database health
 #' health <- boilerplate_check_health(db)
 #' print(health)
@@ -28,7 +37,8 @@
 #' cat(report_text)
 #'
 #' # Save report to file
-#' boilerplate_check_health(db, report = "health_report.txt")
+#' report_file <- file.path(temp_dir, "health_report.txt")
+#' boilerplate_check_health(db, report = report_file)
 #'
 #' # Check and fix issues
 #' health <- boilerplate_check_health(db, fix = TRUE)
@@ -37,6 +47,9 @@
 #' if (health$summary$issues_fixed > 0) {
 #'   db <- attr(health, "fixed_db")
 #' }
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @export
@@ -342,6 +355,7 @@ boilerplate_check_health <- function(db, fix = FALSE, report = NULL, quiet = FAL
 #'
 #' @param x A boilerplate_health object
 #' @param ... Additional arguments (ignored)
+#' @return No return value, called for side effects. Prints the health check results to the console.
 #'
 #' @keywords internal
 #' @export

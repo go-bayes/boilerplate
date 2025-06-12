@@ -1,4 +1,36 @@
-# boilerplate 1.1.0 [2025-06-06]
+# boilerplate 1.2.0 [2025-06-13]
+
+## CRAN resubmission
+* Addressed all CRAN reviewer feedback from version 1.1.0
+* Fixed all examples to pass R CMD check --run-donttest
+* All exported functions have \value tags
+* All \dontrun{} replaced with \donttest{}
+
+## Testing and quality
+* **Code coverage**: 63.54% (1,352 of 2,367 lines covered)
+* **Test suite**: 130 tests across 16 test files
+* All examples now properly initialize databases and clean up temporary files
+* Examples are self-contained and run without errors
+
+## Project support (NEW)
+
+* **Project-based organization**: Added project support to keep different boilerplate collections separate
+  - All core functions (`boilerplate_init()`, `boilerplate_import()`, `boilerplate_save()`, `boilerplate_export()`) now accept a `project` parameter
+  - Default project is "default" for backward compatibility
+  - Projects are stored in separate subdirectories under `boilerplate/projects/`
+* **Cross-project operations**: New functions for managing multiple projects
+  - `boilerplate_copy_from_project()` - Selectively copy content between projects with conflict handling
+  - `boilerplate_list_projects()` - List all available projects
+  - Support for prefixing copied entries to avoid naming conflicts
+
+## Deprecated functions
+
+* **Merge functions deprecated**: All merge functions are now deprecated in favor of project-based workflow
+  - `boilerplate_merge_databases()` - Use `boilerplate_copy_from_project()` instead
+  - `boilerplate_merge_unified()` - Use `boilerplate_copy_from_project()` instead
+  - `boilerplate_merge_category()` - Use `boilerplate_copy_from_project()` instead
+  - `boilerplate_update_from_external()` - Use `boilerplate_copy_from_project()` instead
+  - The new project-based workflow is cleaner and more flexible
 
 ## Documentation improvements
 

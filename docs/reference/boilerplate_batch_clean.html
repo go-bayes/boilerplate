@@ -9,7 +9,7 @@ specific characters or patterns across multiple entries in a boilerplate databas
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,7 +127,15 @@ Can use specific names or wildcard patterns like target_entries</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># First create a sample database</span></span></span>
+<span class="r-in"><span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    test1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>reference <span class="op">=</span> <span class="st">"@Smith2023[p.45]"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    test2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>reference <span class="op">=</span> <span class="st">"Jones[2022]"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Remove @, [, and ] from all references</span></span></span>
 <span class="r-in"><span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_batch_clean</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span></span>
@@ -135,6 +143,15 @@ Can use specific names or wildcard patterns like target_entries</p></dd>
 <span class="r-in"><span>  remove_chars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"@"</span>, <span class="st">"["</span>, <span class="st">"]"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  category <span class="op">=</span> <span class="st">"measures"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Scanning database for fields to clean...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Changes made:</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">test1</span>: "<span style="color: #0000BB;">"@Smith2023[p.45]"</span>" -&gt; "<span style="color: #0000BB;">"Smith2023p.45"</span>"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">test2</span>: "<span style="color: #0000BB;">"Jones[2022]"</span>" -&gt; "<span style="color: #0000BB;">"Jones2022"</span>"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Cleaned 2 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Apply these 2 cleaning operations? [y/n]: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Changes cancelled by user</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Clean all entries EXCEPT specific ones</span></span></span>
 <span class="r-in"><span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_batch_clean</span><span class="op">(</span></span></span>
@@ -144,6 +161,15 @@ Can use specific names or wildcard patterns like target_entries</p></dd>
 <span class="r-in"><span>  exclude_entries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"forgiveness"</span>, <span class="st">"special_measure"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  category <span class="op">=</span> <span class="st">"measures"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Scanning database for fields to clean...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Changes made:</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">test1</span>: "<span style="color: #0000BB;">"@Smith2023[p.45]"</span>" -&gt; "<span style="color: #0000BB;">"Smith2023p.45"</span>"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">test2</span>: "<span style="color: #0000BB;">"Jones[2022]"</span>" -&gt; "<span style="color: #0000BB;">"Jones2022"</span>"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Cleaned 2 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Apply these 2 cleaning operations? [y/n]: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Changes cancelled by user</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Clean specific entries only</span></span></span>
 <span class="r-in"><span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_batch_clean</span><span class="op">(</span></span></span>
@@ -153,6 +179,8 @@ Can use specific names or wildcard patterns like target_entries</p></dd>
 <span class="r-in"><span>  target_entries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ban_hate_speech"</span>, <span class="st">"born_nz"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  category <span class="op">=</span> <span class="st">"measures"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Scanning database for fields to clean...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> No changes needed - all fields are already clean.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Clean all entries starting with "emp_" except "emp_special"</span></span></span>
 <span class="r-in"><span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_batch_clean</span><span class="op">(</span></span></span>
@@ -163,6 +191,8 @@ Can use specific names or wildcard patterns like target_entries</p></dd>
 <span class="r-in"><span>  exclude_entries <span class="op">=</span> <span class="st">"emp_special"</span>,</span></span>
 <span class="r-in"><span>  category <span class="op">=</span> <span class="st">"measures"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Scanning database for fields to clean...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> No changes needed - all fields are already clean.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Replace characters and clean</span></span></span>
 <span class="r-in"><span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu">boilerplate_batch_clean</span><span class="op">(</span></span></span>
@@ -173,6 +203,15 @@ Can use specific names or wildcard patterns like target_entries</p></dd>
 <span class="r-in"><span>  trim_whitespace <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  category <span class="op">=</span> <span class="st">"measures"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Scanning database for fields to clean...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Changes made:</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">test1</span>: "<span style="color: #0000BB;">"@Smith2023[p.45]"</span>" -&gt; "<span style="color: #0000BB;">"Smith2023p45"</span>"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">test2</span>: "<span style="color: #0000BB;">"Jones[2022]"</span>" -&gt; "<span style="color: #0000BB;">"Jones2022"</span>"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Cleaned 2 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Apply these 2 cleaning operations? [y/n]: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Changes cancelled by user</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Preview changes first</span></span></span>
 <span class="r-in"><span><span class="fu">boilerplate_batch_clean</span><span class="op">(</span></span></span>
@@ -183,7 +222,13 @@ Can use specific names or wildcard patterns like target_entries</p></dd>
 <span class="r-in"><span>  category <span class="op">=</span> <span class="st">"measures"</span>,</span></span>
 <span class="r-in"><span>  preview <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Preview of changes:</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">test1</span>: "<span style="color: #0000BB;">"@Smith2023[p.45]"</span>" -&gt; "<span style="color: #0000BB;">"Smith2023p.45"</span>"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">test2</span>: "<span style="color: #0000BB;">"Jones[2022]"</span>" -&gt; "<span style="color: #0000BB;">"Jones2022"</span>"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Would clean 2 fields</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

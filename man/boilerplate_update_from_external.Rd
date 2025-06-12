@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge-databases.R
 \name{boilerplate_update_from_external}
 \alias{boilerplate_update_from_external}
-\title{Update Category from External Database}
+\title{Update Category from External Database (Deprecated)}
 \usage{
 boilerplate_update_from_external(
   unified_db,
@@ -36,23 +36,18 @@ boilerplate_update_from_external(
 A list representing the updated unified database.
 }
 \description{
+This function is deprecated. Use \code{\link{boilerplate_copy_from_project}} instead for better project-based workflow.
+}
+\details{
 This function imports a specific category from an external database and
 updates the corresponding category in a unified database.
 }
 \examples{
-\dontrun{
-# Import current unified database
-unified_db <- boilerplate_import()
-
-# Update methods from an external source
-unified_db <- boilerplate_update_from_external(
-  unified_db = unified_db,
-  category = "methods",
-  external_path = "path/to/external/data"
-)
-
-# Save the updated database
-boilerplate_save(unified_db)
+\donttest{
+# This function is deprecated. Use boilerplate_copy_from_project() instead.
+# Example usage (for reference only):
+# unified_db <- boilerplate_update_from_external(unified_db, "methods", "path/to/external/data")
 }
 
 }
+\keyword{internal}

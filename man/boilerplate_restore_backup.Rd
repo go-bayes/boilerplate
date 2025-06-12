@@ -38,19 +38,37 @@ Convenience function to restore a database from backup files. Can either
 import the backup for inspection or restore it as the current database.
 }
 \examples{
-\dontrun{
-# View latest methods backup without restoring
-backup_db <- boilerplate_restore_backup("methods")
+\donttest{
+# Create temporary directory for example
+temp_dir <- tempfile()
+dir.create(temp_dir)
 
-# Restore specific backup and overwrite current
-db <- boilerplate_restore_backup(
-  category = "methods",
-  backup_version = "20240110_120000",
-  restore = TRUE
-)
+# Initialize and create some content
+boilerplate_init(data_path = temp_dir, categories = "methods",
+                 create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
 
-# Restore latest unified backup
-db <- boilerplate_restore_backup(restore = TRUE)
+# Create a backup by saving with timestamp
+boilerplate_save(db, data_path = temp_dir, timestamp = TRUE, 
+                 confirm = FALSE, quiet = TRUE)
+
+# List available files to see backup
+files <- boilerplate_list_files(data_path = temp_dir)
+
+# Create a proper backup by using create_backup parameter
+boilerplate_save(db, data_path = temp_dir, create_backup = TRUE,
+                 confirm = FALSE, quiet = TRUE)
+
+# Now list files again to see the backup
+files <- boilerplate_list_files(data_path = temp_dir)
+
+# View latest backup without restoring
+if (nrow(files$backups) > 0) {
+  backup_db <- boilerplate_restore_backup(data_path = temp_dir)
+}
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 }
 
 }

@@ -11,6 +11,9 @@
 
 \item{...}{Additional arguments (ignored)}
 }
+\value{
+No return value, called for side effects. Prints the health check results to the console.
+}
 \description{
 Print Method for Database Health Check
 }

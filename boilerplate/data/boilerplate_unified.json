@@ -1,0 +1,18 @@
+{
+  "methods": {
+    "sample": {
+      "default": "Test"
+    }
+  },
+  "measures": {
+    "test": {
+      "name": "test"
+    }
+  },
+  "bibliography": {
+    "url": "https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib",
+    "local_path": "references.bib",
+    "validate": true,
+    "last_updated": "2025-06-12 11:33:15"
+  }
+}

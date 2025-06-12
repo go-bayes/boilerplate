@@ -141,7 +141,7 @@ jobs:
     
     - name: Generate database documentation
       run: |
-        python -c '
+        python -c "
 import json
 import os
 from datetime import datetime
@@ -152,7 +152,7 @@ def generate_markdown_docs(json_path, output_path):
     with open(json_path, "r") as f:
         db = json.load(f)
     
-    md_content = f"# Boilerplate Database Documentation\n\n"
+    md_content = f'# Boilerplate Database Documentation\n\n'
     md_content += f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
     
     # Count entries
@@ -171,7 +171,7 @@ def generate_markdown_docs(json_path, output_path):
     for category, content in db.items():
         if not category.startswith("_"):
             entry_count = count_entries(content)
-            md_content += f"## {category.title()} ({entry_count} entries)\n\n"
+            md_content += f'## {category.title()} ({entry_count} entries)\n\n'
             
             # Generate structure tree
             def print_tree(obj, prefix="", is_last=True):
@@ -183,9 +183,9 @@ def generate_markdown_docs(json_path, output_path):
                         tree += prefix + ("└── " if is_last_item else "├── ") + key
                         
                         if "description" in value:
-                            tree += f" - {value['description'][:50]}..."
+                            tree += f' - {value["description"][:50]}...'
                         elif "text" in value:
-                            tree += f" - {value['text'][:50]}..."
+                            tree += f' - {value["text"][:50]}...'
                         tree += "\n"
                         
                         if isinstance(value, dict) and not any(k in value for k in ["name", "text", "default"]):
@@ -204,11 +204,11 @@ def generate_markdown_docs(json_path, output_path):
 for file in os.listdir("boilerplate/data"):
     if file.endswith(".json"):
         json_path = os.path.join("boilerplate/data", file)
-        output_path = os.path.join("docs", f"{file.replace('.json', '_structure.md')}")
+        output_path = os.path.join('docs', f'{file.replace(".json", "_structure.md")}')
         os.makedirs("docs", exist_ok=True)
         generate_markdown_docs(json_path, output_path)
-        print(f"Generated documentation for {file}")
-        '
+        print(f'Generated documentation for {file}')
+        "
     
     - name: Commit documentation
       run: |
@@ -245,7 +245,7 @@ def find_duplicates(json_path):
                 if key.startswith("_"):
                     continue
                     
-                current_path = f"{path}/{key}" if path else key
+                current_path = f'{path}/{key}' if path else key
                 
                 if isinstance(value, str) and len(value) > 20:
                     # Track substantial text content
@@ -259,12 +259,12 @@ def find_duplicates(json_path):
     duplicates = {text: paths for text, paths in text_map.items() if len(paths) > 1}
     
     if duplicates:
-        print(f"\nDuplicates found in {json_path}:")
+        print(f'\nDuplicates found in {json_path}:')
         for text, paths in duplicates.items():
-            print(f"\nText: {text[:100]}...")
-            print("Found in:")
+            print(f'\nText: {text[:100]}...')
+            print('Found in:')
             for path in paths:
-                print(f"  - {path}")
+                print(f'  - {path}')
         return True
     return False
 

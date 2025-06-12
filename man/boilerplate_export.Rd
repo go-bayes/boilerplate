@@ -14,7 +14,8 @@ boilerplate_export(
   create_dirs = FALSE,
   quiet = FALSE,
   pretty = TRUE,
-  save_by_category = TRUE
+  save_by_category = TRUE,
+  project = "default"
 )
 }
 \arguments{
@@ -38,6 +39,10 @@ If NULL (default), uses here::here("boilerplate", "data").}
 \item{pretty}{Logical. If TRUE (default), pretty-print JSON for readability.}
 
 \item{save_by_category}{Logical. If TRUE (default), saves unified databases by category.}
+
+\item{project}{Character. Project name for organizing databases. Default is "default".
+Projects are stored in separate subdirectories to allow multiple independent
+boilerplate collections.}
 }
 \value{
 Invisible TRUE if successful.

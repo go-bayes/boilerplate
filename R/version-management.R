@@ -20,16 +20,32 @@
 #'   base_name, timestamp, type, and category.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' # Create temporary directory for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
+#' 
+#' # Initialize with some content
+#' boilerplate_init(data_path = temp_dir, categories = "methods",
+#'                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+#' 
+#' # Save with timestamp to create some files
+#' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+#' boilerplate_save(db, data_path = temp_dir, timestamp = TRUE, 
+#'                  confirm = FALSE, quiet = TRUE)
+#' 
 #' # List all database files
-#' files <- boilerplate_list_files()
+#' files <- boilerplate_list_files(data_path = temp_dir)
 #' print(files)
 #' 
 #' # List only methods files
-#' files <- boilerplate_list_files(category = "methods")
+#' files <- boilerplate_list_files(data_path = temp_dir, category = "methods")
 #' 
 #' # List files matching a pattern
-#' files <- boilerplate_list_files(pattern = "2024")
+#' files <- boilerplate_list_files(data_path = temp_dir, pattern = "202")
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @seealso \code{\link{boilerplate_import}} for importing the listed files,
@@ -259,19 +275,37 @@ print.boilerplate_files <- function(x, ...) {
 #' @return The restored database (invisibly if restore = TRUE).
 #'
 #' @examples
-#' \dontrun{
-#' # View latest methods backup without restoring
-#' backup_db <- boilerplate_restore_backup("methods")
+#' \donttest{
+#' # Create temporary directory for example
+#' temp_dir <- tempfile()
+#' dir.create(temp_dir)
 #' 
-#' # Restore specific backup and overwrite current
-#' db <- boilerplate_restore_backup(
-#'   category = "methods",
-#'   backup_version = "20240110_120000",
-#'   restore = TRUE
-#' )
+#' # Initialize and create some content
+#' boilerplate_init(data_path = temp_dir, categories = "methods",
+#'                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+#' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
 #' 
-#' # Restore latest unified backup
-#' db <- boilerplate_restore_backup(restore = TRUE)
+#' # Create a backup by saving with timestamp
+#' boilerplate_save(db, data_path = temp_dir, timestamp = TRUE, 
+#'                  confirm = FALSE, quiet = TRUE)
+#' 
+#' # List available files to see backup
+#' files <- boilerplate_list_files(data_path = temp_dir)
+#' 
+#' # Create a proper backup by using create_backup parameter
+#' boilerplate_save(db, data_path = temp_dir, create_backup = TRUE,
+#'                  confirm = FALSE, quiet = TRUE)
+#' 
+#' # Now list files again to see the backup
+#' files <- boilerplate_list_files(data_path = temp_dir)
+#' 
+#' # View latest backup without restoring
+#' if (nrow(files$backups) > 0) {
+#'   backup_db <- boilerplate_restore_backup(data_path = temp_dir)
+#' }
+#' 
+#' # Clean up
+#' unlink(temp_dir, recursive = TRUE)
 #' }
 #'
 #' @seealso \code{\link{boilerplate_list_files}} to see available backups,
