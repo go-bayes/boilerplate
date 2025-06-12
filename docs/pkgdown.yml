@@ -14,7 +14,11 @@ articles:
   boilerplate-projects: boilerplate-projects.html
   boilerplate-quarto-workflow: boilerplate-quarto-workflow.html
   version-management-section: version-management-section.html
+<<<<<<< HEAD
 last_built: 2025-06-12T13:12Z
+=======
+last_built: 2025-06-12T12:58Z
+>>>>>>> origin/main
 urls:
   reference: https://go-bayes.github.io/boilerplate/reference
   article: https://go-bayes.github.io/boilerplate/articles
