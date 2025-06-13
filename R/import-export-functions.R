@@ -289,9 +289,10 @@ boilerplate_export <- function(
     # 1. Path already contains "projects"
     # 2. Path ends with "data" (likely legacy)
     # 3. Path contains temp directory markers (test environment)
-    if (!grepl("/projects/", data_path) && 
-        !grepl("/data$", data_path) && 
-        !grepl("^/tmp|^/var/folders|Temp", data_path)) {
+    # Use platform-agnostic checks
+    if (!grepl("projects", data_path, fixed = TRUE) && 
+        !grepl(file.path("", "data"), paste0(data_path, ""), fixed = TRUE) && 
+        !grepl("tmp|Temp|TEMP", data_path, ignore.case = TRUE)) {
       # Add project structure for new paths
       data_path <- file.path(data_path, "projects", project, "data")
     }

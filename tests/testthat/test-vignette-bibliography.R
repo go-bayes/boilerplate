@@ -3,6 +3,7 @@ library(testthat)
 
 test_that("bibliography-workflow vignette: setting up bibliography configuration works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize
@@ -41,6 +42,7 @@ test_that("bibliography-workflow vignette: bibliography caching works", {
   skip_on_cran()
   
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize with bibliography
@@ -90,6 +92,7 @@ test_that("bibliography-workflow vignette: copying bibliography to project works
 
 test_that("bibliography-workflow vignette: reference validation works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create test bibliography content
@@ -151,6 +154,7 @@ test_that("bibliography-workflow vignette: integration with text generation work
   skip_on_cran()
   
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize
@@ -222,6 +226,7 @@ test_that("bibliography-workflow vignette: cache management works", {
 
 test_that("bibliography-workflow vignette: handling missing references works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize
@@ -257,6 +262,7 @@ test_that("bibliography-workflow vignette: handling missing references works", {
 
 test_that("bibliography-workflow vignette: multi-author collaboration setup works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Team lead setup

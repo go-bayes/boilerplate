@@ -18,7 +18,7 @@ test_that("project parameter works in core functions", {
   
   # Check that database file exists (temp dirs use flat structure)
   # In temp dirs with projects, files are saved with project prefix
-  json_files <- list.files(temp_dir, pattern = "\\.json$", full.names = TRUE)
+  json_files <- list.files(temp_dir, pattern = "\\.json$", recursive = TRUE, full.names = TRUE)
   expect_true(length(json_files) > 0)
   
   # Test import with project
@@ -233,7 +233,7 @@ test_that("default project maintains backward compatibility", {
   )
   
   # In temp dirs, flat structure is used
-  json_files <- list.files(temp_dir, pattern = "\\.json$", full.names = TRUE)
+  json_files <- list.files(temp_dir, pattern = "\\.json$", recursive = TRUE, full.names = TRUE)
   expect_true(length(json_files) > 0)
   
   # Import without project should work

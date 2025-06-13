@@ -11,7 +11,7 @@ test_that("internal utilities work through public functions", {
   # - sort_db_recursive (through boilerplate_sort_db)
   # - get_nested_folder (through various path operations)
   # - modify_nested_entry (through boilerplate_add_entry, etc.)
-  # - merge_recursive_lists (through boilerplate_merge_databases)
+  # - merge_recursive_lists (through internal operations)
   # - apply_template_vars (through boilerplate_generate_text)
 
   # Test sort_db_recursive via boilerplate_sort_db
@@ -66,7 +66,7 @@ test_that("internal utilities work through public functions", {
     "Linear regression"
   )
 
-  # Test merge_recursive_lists via boilerplate_merge_databases
+  # Test merge_recursive_lists functionality
   db1 <- list(
     a = list(
       b = list(
@@ -148,7 +148,7 @@ test_that("file path utilities work correctly", {
   boilerplate_save(db, data_path = temp_dir, confirm = FALSE, quiet = TRUE, create_dirs = TRUE)
 
   # Check file was created with correct naming (JSON by default)
-  files <- list.files(temp_dir, pattern = "\\.json$")
+  files <- list.files(temp_dir, pattern = "\\.json$", recursive = TRUE)
   expect_true(any(grepl("boilerplate_unified", files)))
 
   # Save single category database
@@ -161,7 +161,7 @@ test_that("file path utilities work correctly", {
   )
 
   # Check category file was created
-  files <- list.files(temp_dir, pattern = "methods_db.*\\.json$")
+  files <- list.files(temp_dir, pattern = "methods_db.*\\.json$", recursive = TRUE)
   expect_true(length(files) > 0)
 })
 

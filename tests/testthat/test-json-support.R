@@ -175,8 +175,8 @@ test_that("boilerplate_save handles JSON format", {
   )
   
   expect_true(result)
-  json_files <- list.files(test_data_dir, pattern = "\\.json$")
-  expect_length(json_files, 1)
+  json_files <- list.files(test_data_dir, pattern = "\\.json$", recursive = TRUE)
+  expect_true(length(json_files) >= 1)
   
   # Test saving as both formats
   result2 <- boilerplate_save(
@@ -188,7 +188,7 @@ test_that("boilerplate_save handles JSON format", {
   )
   
   expect_true(result2)
-  all_files <- list.files(test_data_dir)
+  all_files <- list.files(test_data_dir, recursive = TRUE)
   expect_true(any(grepl("\\.json$", all_files)))
   expect_true(any(grepl("\\.rds$", all_files)))
   

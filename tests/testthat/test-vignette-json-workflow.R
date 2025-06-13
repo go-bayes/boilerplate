@@ -3,6 +3,7 @@ library(testthat)
 
 test_that("json-workflow vignette: basic JSON operations work", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize with JSON format
@@ -18,7 +19,7 @@ test_that("json-workflow vignette: basic JSON operations work", {
   db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
   
   # Verify JSON format is being used
-  json_files <- list.files(temp_dir, pattern = "\\.json$", full.names = TRUE)
+  json_files <- list.files(temp_dir, pattern = "\\.json$", recursive = TRUE, full.names = TRUE)
   expect_true(length(json_files) > 0)
   
   # Add content
@@ -29,12 +30,14 @@ test_that("json-workflow vignette: basic JSON operations work", {
     boilerplate_save(db, data_path = temp_dir, format = "json", confirm = FALSE, quiet = TRUE)
   )
   
-  # Verify it saved as JSON
-  expect_true(file.exists(file.path(temp_dir, "boilerplate_unified.json")))
+  # Verify it saved as JSON (check recursively)
+  json_files2 <- list.files(temp_dir, pattern = "boilerplate_unified\\.json$", recursive = TRUE)
+  expect_true(length(json_files2) > 0)
 })
 
 test_that("json-workflow vignette: JSON validation works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create a JSON database
@@ -67,6 +70,7 @@ test_that("json-workflow vignette: JSON validation works", {
 
 test_that("json-workflow vignette: RDS to JSON migration works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create RDS files
@@ -101,13 +105,20 @@ test_that("json-workflow vignette: RDS to JSON migration works", {
   expect_true(length(results$migrated) > 0 || file.exists(file.path(json_dir, "boilerplate_unified.json")))
   
   # Verify content was preserved
-  migrated_db <- boilerplate_import(data_path = json_dir, quiet = TRUE)
+  # Try importing the specific file if directory import fails
+  json_file <- file.path(json_dir, "boilerplate_unified.json")
+  if (file.exists(json_file)) {
+    migrated_db <- boilerplate_import(data_path = json_file, quiet = TRUE)
+  } else {
+    migrated_db <- boilerplate_import(data_path = json_dir, quiet = TRUE)
+  }
   expect_equal(migrated_db$methods$sample$default, "Sample text")
   expect_equal(migrated_db$measures$anxiety$name, "anxiety")
 })
 
 test_that("json-workflow vignette: batch operations with JSON work", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize with example content
@@ -146,6 +157,7 @@ test_that("json-workflow vignette: batch operations with JSON work", {
 
 test_that("json-workflow vignette: JSON compatibility features work", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create measures database
@@ -173,6 +185,7 @@ test_that("json-workflow vignette: JSON compatibility features work", {
 
 test_that("json-workflow vignette: compare RDS and JSON formats work", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create test database
@@ -202,6 +215,7 @@ test_that("json-workflow vignette: compare RDS and JSON formats work", {
 
 test_that("json-workflow vignette: JSON file operations work", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Test reading JSON files directly

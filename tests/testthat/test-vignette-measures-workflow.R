@@ -3,6 +3,7 @@ library(testthat)
 
 test_that("measures-workflow vignette: creating measures database works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize
@@ -57,6 +58,7 @@ test_that("measures-workflow vignette: creating measures database works", {
 
 test_that("measures-workflow vignette: standardizing measures works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create measures with inconsistent structure
@@ -90,6 +92,7 @@ test_that("measures-workflow vignette: standardizing measures works", {
 
 test_that("measures-workflow vignette: measures report generation works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize with example content
@@ -114,6 +117,7 @@ test_that("measures-workflow vignette: measures report generation works", {
 
 test_that("measures-workflow vignette: generating measures text works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize with example content
@@ -156,6 +160,7 @@ test_that("measures-workflow vignette: generating measures text works", {
 
 test_that("measures-workflow vignette: batch operations on measures work", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize with example content
@@ -208,6 +213,7 @@ test_that("measures-workflow vignette: batch operations on measures work", {
 
 test_that("measures-workflow vignette: exporting measures subset works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize with example content
@@ -246,6 +252,7 @@ test_that("measures-workflow vignette: exporting measures subset works", {
 
 test_that("measures-workflow vignette: integrating with analysis works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize

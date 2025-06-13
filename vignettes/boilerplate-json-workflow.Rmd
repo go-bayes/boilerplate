@@ -144,11 +144,22 @@ results <- boilerplate_migrate_to_json(
 print(results$migrated)
 
 # Verify the migrated data  
-migrated_db <- boilerplate_import(
-  data_path = migration_output,
-  quiet = TRUE
-)
-names(migrated_db)
+# The migrated file is in the output directory
+migrated_file <- file.path(migration_output, "boilerplate_unified.json")
+if (file.exists(migrated_file)) {
+  migrated_db <- boilerplate_import(
+    data_path = migrated_file,
+    quiet = TRUE
+  )
+  names(migrated_db)
+} else {
+  # Alternative: import from the directory
+  migrated_db <- boilerplate_import(
+    data_path = migration_output,
+    quiet = TRUE
+  )
+  names(migrated_db)
+}
 ```
 
 ## Batch Editing JSON Databases

@@ -95,9 +95,10 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
     # 1. Path already contains "projects"
     # 2. Path ends with "data" (likely legacy)
     # 3. Path contains temp directory markers (test environment)
-    if (!grepl("/projects/", data_path) && 
-        !grepl("/data$", data_path) && 
-        !grepl("^/tmp|^/var/folders|Temp", data_path)) {
+    # Use platform-agnostic checks
+    if (!grepl("projects", data_path, fixed = TRUE) && 
+        !grepl(file.path("", "data"), paste0(data_path, ""), fixed = TRUE) && 
+        !grepl("tmp|Temp|TEMP", data_path, ignore.case = TRUE)) {
       # Add project structure for new paths
       data_path <- file.path(data_path, "projects", project, "data")
     }
@@ -349,9 +350,10 @@ boilerplate_save <- function(
     # 1. Path already contains "projects"
     # 2. Path ends with "data" (likely legacy)
     # 3. Path contains temp directory markers (test environment)
-    if (!grepl("/projects/", data_path) && 
-        !grepl("/data$", data_path) && 
-        !grepl("^/tmp|^/var/folders|Temp", data_path)) {
+    # Use platform-agnostic checks
+    if (!grepl("projects", data_path, fixed = TRUE) && 
+        !grepl(file.path("", "data"), paste0(data_path, ""), fixed = TRUE) && 
+        !grepl("tmp|Temp|TEMP", data_path, ignore.case = TRUE)) {
       # Add project structure for new paths
       data_path <- file.path(data_path, "projects", project, "data")
     }
@@ -360,7 +362,7 @@ boilerplate_save <- function(
   # Set default for create_backup based on context
   if (is.null(create_backup)) {
     # Don't create backups in temp directories or during examples
-    create_backup <- !grepl("^/tmp|^/var/folders|Temp", data_path) && interactive()
+    create_backup <- !grepl("tmp|Temp|TEMP", data_path, ignore.case = TRUE) && interactive()
   }
 
   # Check if data path exists

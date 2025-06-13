@@ -7,7 +7,7 @@
 * All \dontrun{} replaced with \donttest{}
 
 ## Testing and quality
-* **Code coverage**: 67.49% overall
+* **Code coverage**: 71.20% overall
 * **Test suite**: 726 tests across 22 test files
 * All examples now properly initialize databases and clean up temporary files
 * Examples are self-contained and run without errors
@@ -24,9 +24,9 @@
   - `boilerplate_list_projects()` - List all available projects
   - Support for prefixing copied entries to avoid naming conflicts
 
-## Deprecated functions
+## Removed functions
 
-* **Merge functions deprecated**: All merge functions are now deprecated in favor of project-based workflow
+* **Merge functions removed**: All merge functions have been removed in favor of project-based workflow
   - `boilerplate_merge_databases()` - Use `boilerplate_copy_from_project()` instead
   - `boilerplate_merge_unified()` - Use `boilerplate_copy_from_project()` instead
   - `boilerplate_merge_category()` - Use `boilerplate_copy_from_project()` instead

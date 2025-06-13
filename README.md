@@ -1,7 +1,7 @@
 
 <!-- readme.md is generated from readme.rmd. please edit that file -->
 
-<img src="man/figures/logo.png" align="right" width="120" alt="boilerplate hex sticker"/>
+<img src="man/figures/logo-new.png" align="right" width="140" alt="boilerplate hex sticker"/>
 
 <!-- badges: start -->
 
@@ -1587,9 +1587,9 @@ standards as they mature
 ### 📊 Current State
 
 - **Version**: 1.2.0 (CRAN submission pending)
-- **Code coverage**: 63.54%
+- **Code coverage**: 67.49%
 - **Dependencies**: Minimal (6 packages)
-- **Test suite**: 130 tests across 16 files
+- **Test suite**: 726 tests across 22 files
 
 We welcome feedback and contributions! Please see our [contribution
 guidelines](https://github.com/go-bayes/boilerplate/blob/main/.github/CONTRIBUTING.md)

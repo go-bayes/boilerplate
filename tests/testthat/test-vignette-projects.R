@@ -3,6 +3,7 @@ library(testthat)
 
 test_that("projects vignette: default project basics work", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Test default project initialization
@@ -26,6 +27,7 @@ test_that("projects vignette: default project basics work", {
 
 test_that("projects vignette: creating new projects works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create lab shared project
@@ -58,6 +60,7 @@ test_that("projects vignette: creating new projects works", {
 
 test_that("projects vignette: working with specific projects works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Initialize lab project
@@ -122,6 +125,7 @@ test_that("projects vignette: working with specific projects works", {
 
 test_that("projects vignette: project organization structure works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create multiple projects
@@ -164,6 +168,7 @@ test_that("projects vignette: project organization structure works", {
 
 test_that("projects vignette: importing content between projects works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create source project
@@ -226,6 +231,7 @@ test_that("projects vignette: importing content between projects works", {
 
 test_that("projects vignette: listing available projects works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create several projects
@@ -256,6 +262,7 @@ test_that("projects vignette: listing available projects works", {
 
 test_that("projects vignette: project isolation works", {
   temp_dir <- tempfile()
+  dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create two independent projects

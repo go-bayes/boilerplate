@@ -178,7 +178,7 @@ test_that("README JSON operations work", {
   )
   
   # Check JSON file exists
-  json_files <- list.files(temp_dir, pattern = "\\.json$", full.names = TRUE)
+  json_files <- list.files(temp_dir, pattern = "\\.json$", recursive = TRUE, full.names = TRUE)
   expect_true(length(json_files) > 0)
   
   # Test that we can read it back
