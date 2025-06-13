@@ -273,7 +273,7 @@ db <- boilerplate_batch_edit(
   db,
   field = "exclusion_note",
   new_value = paste0(
-    " Participants were excluded if they: (a) failed more than {{n_attention}} ",
+    " Participants were excluded if **before randomisation** they: (a) failed more than {{n_attention}} ",
     "attention check items, (b) completed the survey in less than {{min_time}} ",
     "of the median completion time, or (c) provided nonsensical open-ended responses."
   ),
