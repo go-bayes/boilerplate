@@ -56,10 +56,11 @@ documents in scientific writing.
 * **Minimal dependencies**: Only 6 imports (cli, here, jsonlite, jsonvalidate, tools, utils)
   - Reduced from 9 in development by replacing glue, janitor, and stringr with base R
   - All remaining dependencies serve essential, distinct purposes
-* **Comprehensive testing**: 130 tests across 16 test files with 63.54% code coverage
+* **Comprehensive testing**: 173 tests across 22 test files with 63.58% code coverage
   - Core functionality has high coverage (>80%)
   - Interactive functions have appropriate skip conditions for non-interactive environments
   - New project functionality tested
+  - Vignette examples thoroughly tested
 * **Extensive documentation**: 
   - 12 vignettes covering different workflows
   - All 39 exported functions have complete documentation with examples
@@ -89,7 +90,7 @@ The package addresses a specific need in scientific writing:
   - Medium coverage (50-80%) for most modules: generate-text (78.26%), zzz (75.00%), batch edit (73.02%), migration utilities (72.03%), version management (68.03%), utilities (59.75%), import functions (57.49%), bibliography support (57.43%), init functions (56.12%), generate measures (51.98%)
   - Lower coverage for: project functions (46.98%), import-export functions (46.52%), category helpers (45.45%)
   - Zero coverage for deprecated merge-databases.R (0%) which is intentional as these functions are deprecated
-  - 130 tests across 16 test files ensure robust functionality
+  - 173 tests across 22 test files ensure robust functionality
 * All examples use \donttest{} instead of \dontrun{}
 * All examples now properly initialize databases and clean up after themselves
 * Consistent API design across all functions

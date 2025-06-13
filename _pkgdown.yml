@@ -6,27 +6,7 @@ logo: man/figures/logo-new.png
 
 template:
   bootstrap: 5
-  bslib:
-    # set the base font family using a Google Font
-   # base_font: {google: "Fira Code"}
-    # set the font for headings
-    heading_font: {google: "Fira Sans"}
-    # set the font for code elements
-    code_font: {google: "Fira Code"}
-
-    # adjust the overall font size scale
-    font_scale: 0.5  # makes the font smaller; 1 is the default size
-    bg: "#ffffff"      # white background
-    fg: "#333333"      # dark gray font color for better readability
-    primary: "#007bff" # primary blue theme color for links, buttons, etc.
-    secondary: "#6c757d" # secondary color (used for muted text, etc.)
-    # Additional color settings for a cohesive blue theme
-    info: "#17a2b8"    # info color (light blue)
-    success: "#28a745" # success color (green)
-    warning: "#ffc107" # warning color (yellow)
-    danger: "#dc3545"  # danger color (red)
-    light: "#f8f9fa"   # light color for contrasts
-    dark: "#343a40"    # dark color for contrasts
+  bootswatch: cosmo
 authors:
   Joseph A Bulbulia:
     href: https://github.com/go-bayes
