@@ -1,9 +1,0 @@
-bibentry(
-  bibtype = "Manual",
-  title = "boilerplate",
-  author = person("Joseph A", "Bulbulia"),
-  year = "2025",
-  note = "R package version 1.1.0",
-  url = "https://go-bayes.github.io/boilerplate/",
-  doi = "10.5281/zenodo.13370825"
-)
