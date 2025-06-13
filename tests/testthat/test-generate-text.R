@@ -180,17 +180,22 @@ test_that("boilerplate_generate_text handles complex template patterns", {
   )
 
   # Test nested braces and special characters
-  result <- boilerplate_generate_text(
-    category = "methods",
-    sections = "complex",
-    global_vars = list(
-      n = 100,
-      pct = 75.5,
-      nested = "special"
-    ),
-    db = test_db,
-    quiet = TRUE
-  )
+  # Suppress the expected warning about unresolved template variable "special"
+  # When {{{{nested}}}} is replaced with "special", it becomes {{special}}
+  # which is then treated as an unresolved template variable
+  suppressWarnings({
+    result <- boilerplate_generate_text(
+      category = "methods",
+      sections = "complex",
+      global_vars = list(
+        n = 100,
+        pct = 75.5,
+        nested = "special"
+      ),
+      db = test_db,
+      quiet = TRUE
+    )
+  })
 
   expect_true(grepl("100 participants", result))
   expect_true(grepl("75.5%", result))
