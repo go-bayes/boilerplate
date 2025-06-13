@@ -56,7 +56,8 @@ test_that("boilerplate_import and boilerplate_export work correctly", {
     output_file = "exported.rds",
     save_by_category = TRUE,
     quiet = TRUE,
-    confirm = FALSE
+    confirm = FALSE,
+    create_dirs = TRUE
   )
   
   # With save_by_category, should create separate files
@@ -90,7 +91,8 @@ test_that("boilerplate_export handles selective export", {
     data_path = export_dir,
     output_file = "boilerplate_export.rds",
     quiet = TRUE,
-    confirm = FALSE
+    confirm = FALSE,
+    create_dirs = TRUE
   )
   
   exported <- readRDS(file.path(export_dir, "boilerplate_export.rds"))
@@ -124,7 +126,8 @@ test_that("boilerplate_export handles wildcard selection", {
     data_path = export_dir,
     output_file = "boilerplate_export.rds",
     quiet = TRUE,
-    confirm = FALSE
+    confirm = FALSE,
+    create_dirs = TRUE
   )
   
   exported <- readRDS(file.path(export_dir, "boilerplate_export.rds"))
@@ -281,7 +284,8 @@ test_that("boilerplate_export handles complex selection patterns", {
     output_file = "multi_select.rds",
     save_by_category = FALSE,
     quiet = TRUE,
-    confirm = FALSE
+    confirm = FALSE,
+    create_dirs = TRUE
   )
   
   export_path <- file.path(temp_dir, "multi_select.rds")
@@ -338,7 +342,8 @@ test_that("boilerplate_save handles different save modes", {
     category = NULL,  # NULL saves as unified
     confirm = FALSE,
     quiet = TRUE,
-    timestamp = FALSE
+    timestamp = FALSE,
+    create_dirs = TRUE
   )
   
   # Check file was created (JSON by default)
@@ -387,6 +392,14 @@ test_that("import/export functions handle errors gracefully", {
   # Create a data directory with no files
   empty_data_dir <- file.path(temp_dir, "empty_data")
   dir.create(empty_data_dir)
+  
+  # Initialize to create proper structure
+  boilerplate_init(
+    data_path = empty_data_dir,
+    create_dirs = TRUE,
+    confirm = FALSE,
+    quiet = TRUE
+  )
   
   # Import should return empty list but succeed
   result <- boilerplate_import(data_path = empty_data_dir, quiet = TRUE)
@@ -448,7 +461,8 @@ test_that("boilerplate_export preserves database structure", {
     data_path = temp_dir,
     output_file = "preserved.rds",
     quiet = TRUE,
-    confirm = FALSE
+    confirm = FALSE,
+    create_dirs = TRUE
   )
   
   # Read back and verify structure

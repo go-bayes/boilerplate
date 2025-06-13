@@ -145,7 +145,7 @@ test_that("file path utilities work correctly", {
   )
 
   # Save unified database - boilerplate_save should detect it's unified
-  boilerplate_save(db, data_path = temp_dir, confirm = FALSE, quiet = TRUE)
+  boilerplate_save(db, data_path = temp_dir, confirm = FALSE, quiet = TRUE, create_dirs = TRUE)
 
   # Check file was created with correct naming (JSON by default)
   files <- list.files(temp_dir, pattern = "\\.json$")

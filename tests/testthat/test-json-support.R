@@ -84,6 +84,22 @@ test_that("boilerplate_import handles JSON files", {
   test_data_dir <- file.path(temp_dir, "test_json_import")
   dir.create(test_data_dir, showWarnings = FALSE)
   
+  # Initialize to create proper structure
+  boilerplate_init(
+    data_path = test_data_dir,
+    create_dirs = TRUE,
+    confirm = FALSE,
+    quiet = TRUE
+  )
+  
+  # Determine the actual data path where files should be placed
+  # For temp directories, the init function uses flat structure
+  actual_data_path <- if (grepl("^/tmp|^/var/folders|Temp", test_data_dir)) {
+    test_data_dir
+  } else {
+    file.path(test_data_dir, "projects", "default", "data")
+  }
+  
   # Create methods JSON
   methods_db <- list(
     sample = list(
@@ -93,7 +109,7 @@ test_that("boilerplate_import handles JSON files", {
   )
   jsonlite::write_json(
     methods_db, 
-    file.path(test_data_dir, "methods_db.json"),
+    file.path(actual_data_path, "methods_db.json"),
     auto_unbox = TRUE
   )
   
@@ -109,7 +125,7 @@ test_that("boilerplate_import handles JSON files", {
   )
   jsonlite::write_json(
     measures_db,
-    file.path(test_data_dir, "measures_db.json"),
+    file.path(actual_data_path, "measures_db.json"),
     auto_unbox = TRUE
   )
   
@@ -164,7 +180,8 @@ test_that("boilerplate_save handles JSON format", {
     category = "methods",
     format = "json",
     confirm = FALSE,
-    quiet = TRUE
+    quiet = TRUE,
+    create_dirs = TRUE
   )
   
   expect_true(result)
@@ -375,7 +392,8 @@ test_that("JSON databases maintain compatibility with RDS workflows", {
     data_path = test_path,
     format = "both",
     confirm = FALSE,
-    quiet = TRUE
+    quiet = TRUE,
+    create_dirs = TRUE
   )
   
   # Find the saved files

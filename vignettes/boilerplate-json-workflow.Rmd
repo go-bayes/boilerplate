@@ -72,7 +72,8 @@ boilerplate_save(
   data_path = json_path,
   format = "json",
   confirm = FALSE,
-  quiet = TRUE
+  quiet = TRUE,
+  create_dirs = TRUE
 )
 
 # Import JSON database (auto-detects format)
