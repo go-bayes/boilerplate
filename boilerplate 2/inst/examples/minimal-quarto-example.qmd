@@ -1,0 +1,284 @@
+---
+title: "Using boilerplate in Quarto: A Minimal Example"
+author: "Your Name"
+format: 
+  html:
+    toc: true
+execute:
+  echo: true
+  warning: false
+---
+
+## Introduction
+
+This document demonstrates how to use the `boilerplate` package in a Quarto document to manage reusable text templates for scientific writing.
+
+## Setup
+
+First, we'll load the package and initialise our databases in a project-specific directory:
+
+```{r setup}
+library(boilerplate)
+
+# Use a project-specific directory to avoid confusion
+data_path <- file.path(tempdir(), "boilerplate-example")
+
+# Initialise with clean setup (no backups for this example)
+boilerplate_init(
+  data_path = data_path,
+  create_dirs = TRUE,
+  quiet = TRUE
+)
+```
+
+## Adding Standard Methods Text
+
+Let's add some reusable methods text to our database:
+
+```{r add-methods}
+# Add participant recruitment text
+boilerplate_add_entry(
+  db_path = file.path(data_path, "boilerplate_methods.rds"),
+  category = "methods",
+  path = "participants.recruitment",
+  value = list(
+    description = "Standard participant recruitment text",
+    text = "We recruited {{n_participants}} participants from {{source}} between {{start_date}} and {{end_date}}. Participants were eligible if they {{eligibility}}. The final sample consisted of {{n_final}} participants ({{pct_female}}% female, mean age = {{mean_age}} years, SD = {{sd_age}})."
+  ),
+  confirm = FALSE,
+  quiet = TRUE
+)
+
+# Add data analysis text
+boilerplate_add_entry(
+  db_path = file.path(data_path, "boilerplate_methods.rds"),
+  category = "methods",
+  path = "analysis.primary",
+  value = list(
+    description = "Primary analysis approach",
+    text = "We conducted {{analysis_type}} using {{software}}. {{model_description}}. We set alpha at {{alpha}} and used {{correction}} for multiple comparisons."
+  ),
+  confirm = FALSE,
+  quiet = TRUE
+)
+```
+
+## Adding Measures
+
+Now let's add information about our measures:
+
+```{r add-measures}
+# Add a depression measure
+boilerplate_add_entry(
+  db_path = file.path(data_path, "boilerplate_measures.rds"),
+  category = "measures",
+  path = "phq9",
+  value = list(
+    name = "PHQ-9",
+    description = "Patient Health Questionnaire-9 for depression screening",
+    items = list(
+      "Little interest or pleasure in doing things",
+      "Feeling down, depressed, or hopeless",
+      "Trouble falling or staying asleep, or sleeping too much",
+      "Feeling tired or having little energy",
+      "Poor appetite or overeating",
+      "Feeling bad about yourself",
+      "Trouble concentrating on things",
+      "Moving or speaking slowly/being fidgety or restless",
+      "Thoughts that you would be better off dead"
+    ),
+    reference = "Kroenke et al., 2001",
+    scoring = "Sum of all items (0-27)",
+    reliability = "α = .86-.89"
+  ),
+  confirm = FALSE,
+  quiet = TRUE
+)
+```
+
+## Generating Methods Section
+
+Now we can generate our methods section with specific values:
+
+```{r generate-methods}
+# Import the database
+db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+
+# Generate participant section
+participant_text <- boilerplate_generate_text(
+  db_path = file.path(data_path, "boilerplate_methods.rds"),
+  category = "methods",
+  sections = "participants.recruitment",
+  global_vars = list(
+    n_participants = 250,
+    source = "university students and community members",
+    start_date = "January 2024",
+    end_date = "March 2024",
+    eligibility = "were 18 years or older and fluent in English",
+    n_final = 237,
+    pct_female = 58,
+    mean_age = 32.4,
+    sd_age = 11.2
+  ),
+  quiet = TRUE
+)
+
+# Generate analysis section
+analysis_text <- boilerplate_generate_text(
+  db_path = file.path(data_path, "boilerplate_methods.rds"),
+  category = "methods",
+  sections = "analysis.primary",
+  global_vars = list(
+    analysis_type = "multilevel regression analyses",
+    software = "R version 4.3.2 with the lme4 package",
+    model_description = "We included random intercepts for participants and fixed effects for time, condition, and their interaction",
+    alpha = ".05",
+    correction = "Bonferroni correction"
+  ),
+  quiet = TRUE
+)
+```
+
+### Methods
+
+#### Participants
+
+`r participant_text`
+
+#### Data Analysis
+
+`r analysis_text`
+
+## Generating Measures Section
+
+```{r generate-measures}
+measures_text <- boilerplate_generate_measures(
+  variable_heading = "Depression Measure",
+  variables = "phq9",
+  db = db$measures,
+  print_keywords = FALSE,
+  quiet = TRUE
+)
+```
+
+### Measures
+
+`r measures_text`
+
+## Batch Operations Example
+
+Let's say we want to update all our methods to reference a new version of R:
+
+```{r batch-update}
+# First, let's see what would change (preview mode)
+boilerplate_batch_edit(
+  db = db$methods,
+  field = "text",
+  new_value = function(old_text) {
+    if (is.character(old_text)) {
+      gsub("R version 4.3.2", "R version 4.4.0", old_text)
+    } else {
+      old_text
+    }
+  },
+  target_entries = "*",
+  category = "methods",
+  preview = TRUE,
+  quiet = TRUE
+)
+```
+
+## Saving Your Work
+
+When you're done, you can save your unified database:
+
+```{r save-db}
+# Save the entire database
+boilerplate_save(
+  db,
+  data_path = data_path,
+  confirm = FALSE,
+  quiet = TRUE,
+  create_backup = FALSE  # No backups for this example
+)
+```
+
+## Bibliography Integration
+
+The boilerplate package can manage your bibliography file:
+
+```{r bibliography-example}
+# Add bibliography to database
+db <- boilerplate_add_bibliography(
+  db,
+  url = "https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib",
+  local_path = "references.bib"
+)
+
+# Generate text with bibliography
+methods_with_bib <- boilerplate_generate_text(
+  category = "methods",
+  sections = "analysis.primary",
+  global_vars = list(
+    analysis_type = "regression analyses following @smith2023"
+  ),
+  db = db,
+  copy_bibliography = TRUE,
+  bibliography_path = ".",
+  quiet = TRUE
+)
+
+# Validate citations
+validation <- boilerplate_validate_references(db, quiet = TRUE)
+if (!validation$valid) {
+  warning("Missing references found!")
+}
+```
+
+## Tips for Using boilerplate with Quarto
+
+1. **Project Organization**: Keep your boilerplate data in a project-specific directory (e.g., `.boilerplate-data/`) rather than the default location.
+
+2. **Version Control**: Add your boilerplate database files to git so collaborators can use the same templates.
+
+3. **Bibliography Management**: Use the bibliography features to ensure consistent citations across documents.
+
+4. **Parameters**: Use Quarto parameters for values that change between documents:
+   ```yaml
+   params:
+     n_participants: 250
+     study_name: "Study 1"
+   ```
+
+4. **Child Documents**: Create separate `.qmd` files for methods, results, etc., and include them as child documents:
+   ```markdown
+   {{< include _methods.qmd >}}
+   ```
+
+5. **Functions**: Write wrapper functions for commonly used text generation:
+   ```r
+   generate_my_methods <- function(n, start_date, end_date) {
+     boilerplate_generate_text(
+       db_path = ".boilerplate-data/methods.rds",
+       category = "methods",
+       sections = c("participants", "procedures", "analysis"),
+       global_vars = list(
+         n_participants = n,
+         start_date = start_date,
+         end_date = end_date
+       )
+     )
+   }
+   ```
+
+## Conclusion
+
+The `boilerplate` package streamlines scientific writing in Quarto by:
+
+- Centralizing reusable text templates
+- Enabling variable substitution for customisation
+- Supporting hierarchical organization of content
+- Providing batch operations for maintenance
+- Integrating seamlessly with Quarto's workflow
+
+This approach ensures consistency across documents while maintaining flexibility for project-specific details.

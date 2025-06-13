@@ -1,0 +1,15 @@
+{
+  "sample": {
+    "default": "We recruited {{n_total}} participants from {{location}}. Participants were eligible if they were {{eligibility_criteria}}.",
+    "online": "Participants (N = {{n_total}}) were recruited through online platforms including {{platforms}}. The study was advertised as research on {{study_topic}}.",
+    "community": "We recruited {{n_total}} community members through {{recruitment_method}}. Recruitment materials were distributed in {{locations}}."
+  },
+  "measures": {
+    "default": "All measures were administered {{administration_method}}. The survey took approximately {{duration}} minutes to complete.",
+    "psychological": "Psychological measures included assessments of {{constructs}}. All scales demonstrated acceptable reliability in our sample (αs > {{reliability_threshold}})."
+  },
+  "analysis": {
+    "default": "Data were analyzed using {{software}} version {{version}}. Statistical significance was set at p < {{alpha}}.",
+    "longitudinal": "We employed {{analysis_method}} to examine change over time. Models accounted for {{covariates}}."
+  }
+}

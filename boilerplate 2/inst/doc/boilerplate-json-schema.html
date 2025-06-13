@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>JSON Schema Documentation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">JSON Schema Documentation</h1>
+
+
+
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>The boilerplate package supports JSON format for all database
+operations. This document describes the JSON schema structure for
+different database types.</p>
+</div>
+<div id="unified-database-schema" class="section level1">
+<h1>Unified Database Schema</h1>
+<p>The unified database combines all categories into a single JSON
+file:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="dt">&quot;methods&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="er">...</span> <span class="fu">},</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="dt">&quot;measures&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="er">...</span> <span class="fu">},</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="dt">&quot;results&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="er">...</span> <span class="fu">},</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="dt">&quot;discussion&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="er">...</span> <span class="fu">},</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="dt">&quot;appendix&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="er">...</span> <span class="fu">},</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="dt">&quot;template&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="er">...</span> <span class="fu">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<div id="methods-database-schema" class="section level1">
+<h1>Methods Database Schema</h1>
+<p>Methods entries contain standardised text with template
+variables.</p>
+<div id="basic-structure" class="section level2">
+<h2>Basic Structure</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="dt">&quot;category&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">&quot;subcategory&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>      <span class="dt">&quot;entry_name&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>        <span class="dt">&quot;text&quot;</span><span class="fu">:</span> <span class="st">&quot;Method description with {{variables}}&quot;</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>        <span class="dt">&quot;reference&quot;</span><span class="fu">:</span> <span class="st">&quot;@citation2023&quot;</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>        <span class="dt">&quot;keywords&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;keyword1&quot;</span><span class="ot">,</span> <span class="st">&quot;keyword2&quot;</span><span class="ot">]</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<div id="entry-variants" class="section level2">
+<h2>Entry Variants</h2>
+<p>Methods can have multiple text variants:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="dt">&quot;statistical&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="dt">&quot;regression&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>      <span class="dt">&quot;linear&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>        <span class="dt">&quot;default&quot;</span><span class="fu">:</span> <span class="st">&quot;We used linear regression to analyse {{outcome}}.&quot;</span><span class="fu">,</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>        <span class="dt">&quot;large&quot;</span><span class="fu">:</span> <span class="st">&quot;We employed ordinary least squares linear regression to examine the relationship between {{predictors}} and {{outcome}}. Model assumptions were checked including...&quot;</span><span class="fu">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>        <span class="dt">&quot;brief&quot;</span><span class="fu">:</span> <span class="st">&quot;Linear regression was used.&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<div id="fields" class="section level2">
+<h2>Fields</h2>
+<ul>
+<li><strong>text</strong> or <strong>default</strong>: Main content
+(required)</li>
+<li><strong>large</strong>: Extended version (optional)</li>
+<li><strong>brief</strong>: Condensed version (optional)</li>
+<li><strong>reference</strong>: Citation in <span class="citation">@key</span> format (optional)</li>
+<li><strong>keywords</strong>: Array of searchable terms (optional)</li>
+<li>**_meta**: Metadata object (optional)</li>
+</ul>
+</div>
+</div>
+<div id="measures-database-schema" class="section level1">
+<h1>Measures Database Schema</h1>
+<p>Measures entries describe variables and instruments used in
+research.</p>
+<div id="basic-structure-1" class="section level2">
+<h2>Basic Structure</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="dt">&quot;category&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="dt">&quot;measure_name&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>      <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;unique_identifier&quot;</span><span class="fu">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>      <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Detailed description of the measure&quot;</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;continuous|categorical|ordinal|binary&quot;</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>      <span class="dt">&quot;additional_fields&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<div id="complete-example" class="section level2">
+<h2>Complete Example</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="dt">&quot;psychological&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="dt">&quot;anxiety&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>      <span class="dt">&quot;gad7&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;gad7&quot;</span><span class="fu">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>        <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Generalised Anxiety Disorder 7-item scale&quot;</span><span class="fu">,</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>        <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;ordinal&quot;</span><span class="fu">,</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>        <span class="dt">&quot;items&quot;</span><span class="fu">:</span> <span class="dv">7</span><span class="fu">,</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>        <span class="dt">&quot;range&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">0</span><span class="ot">,</span> <span class="dv">21</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>        <span class="dt">&quot;values&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">0</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">,</span> <span class="dv">2</span><span class="ot">,</span> <span class="dv">3</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>        <span class="dt">&quot;value_labels&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Not at all&quot;</span><span class="ot">,</span> <span class="st">&quot;Several days&quot;</span><span class="ot">,</span> <span class="st">&quot;More than half the days&quot;</span><span class="ot">,</span> <span class="st">&quot;Nearly every day&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>        <span class="dt">&quot;cutoffs&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>          <span class="dt">&quot;mild&quot;</span><span class="fu">:</span> <span class="dv">5</span><span class="fu">,</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>          <span class="dt">&quot;moderate&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>          <span class="dt">&quot;severe&quot;</span><span class="fu">:</span> <span class="dv">15</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>        <span class="fu">},</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>        <span class="dt">&quot;reference&quot;</span><span class="fu">:</span> <span class="st">&quot;@spitzer2006brief&quot;</span><span class="fu">,</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>        <span class="dt">&quot;keywords&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;anxiety&quot;</span><span class="ot">,</span> <span class="st">&quot;screening&quot;</span><span class="ot">,</span> <span class="st">&quot;GAD-7&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>        <span class="dt">&quot;scoring&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;sum&quot;</span><span class="fu">,</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>          <span class="dt">&quot;interpretation&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>            <span class="dt">&quot;0-4&quot;</span><span class="fu">:</span> <span class="st">&quot;Minimal anxiety&quot;</span><span class="fu">,</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>            <span class="dt">&quot;5-9&quot;</span><span class="fu">:</span> <span class="st">&quot;Mild anxiety&quot;</span><span class="fu">,</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>            <span class="dt">&quot;10-14&quot;</span><span class="fu">:</span> <span class="st">&quot;Moderate anxiety&quot;</span><span class="fu">,</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>            <span class="dt">&quot;15-21&quot;</span><span class="fu">:</span> <span class="st">&quot;Severe anxiety&quot;</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<div id="required-fields" class="section level2">
+<h2>Required Fields</h2>
+<ul>
+<li><strong>name</strong>: Unique identifier (string, alphanumeric +
+underscore)</li>
+<li><strong>description</strong>: Full description (string, min 10
+characters)</li>
+<li><strong>type</strong>: One of: “continuous”, “categorical”,
+“ordinal”, “binary”</li>
+</ul>
+</div>
+<div id="optional-fields" class="section level2">
+<h2>Optional Fields</h2>
+<div id="for-all-types" class="section level3">
+<h3>For All Types</h3>
+<ul>
+<li><strong>reference</strong>: Citation (string)</li>
+<li><strong>keywords</strong>: Search terms (array of strings)</li>
+<li><strong>waves</strong>: Data collection waves (array of
+integers)</li>
+<li><strong>unit</strong>: Unit of measurement (string)</li>
+</ul>
+</div>
+<div id="for-categoricalordinal" class="section level3">
+<h3>For Categorical/Ordinal</h3>
+<ul>
+<li><strong>values</strong>: Possible values (array)</li>
+<li><strong>value_labels</strong>: Labels for values (array of
+strings)</li>
+</ul>
+</div>
+<div id="for-continuous" class="section level3">
+<h3>For Continuous</h3>
+<ul>
+<li><strong>range</strong>: [min, max] values (array of 2 numbers)</li>
+</ul>
+</div>
+<div id="for-scales" class="section level3">
+<h3>For Scales</h3>
+<ul>
+<li><strong>items</strong>: Number of items (integer)</li>
+<li><strong>scoring</strong>: Scoring method object</li>
+<li><strong>subscales</strong>: Subscale definitions object</li>
+<li><strong>cutoffs</strong>: Clinical cutoffs object</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="results-database-schema" class="section level1">
+<h1>Results Database Schema</h1>
+<p>Results entries follow the same pattern as methods:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="dt">&quot;descriptive&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    <span class="dt">&quot;demographics&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>      <span class="dt">&quot;age&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>        <span class="dt">&quot;text&quot;</span><span class="fu">:</span> <span class="st">&quot;The mean age was {{mean_age}} years (SD = {{sd_age}}).&quot;</span><span class="fu">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>        <span class="dt">&quot;reference&quot;</span><span class="fu">:</span> <span class="st">&quot;@reporting2023&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<div id="template-database-schema" class="section level1">
+<h1>Template Database Schema</h1>
+<p>Template variables for substitution:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="dt">&quot;global&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="dt">&quot;n&quot;</span><span class="fu">:</span> <span class="dv">100</span><span class="fu">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    <span class="dt">&quot;study_name&quot;</span><span class="fu">:</span> <span class="st">&quot;Example Study&quot;</span><span class="fu">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    <span class="dt">&quot;year&quot;</span><span class="fu">:</span> <span class="dv">2024</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="dt">&quot;methods&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    <span class="dt">&quot;software&quot;</span><span class="fu">:</span> <span class="st">&quot;R version 4.3.0&quot;</span><span class="fu">,</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    <span class="dt">&quot;alpha&quot;</span><span class="fu">:</span> <span class="fl">0.05</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="dt">&quot;measures&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>    <span class="dt">&quot;wave1_date&quot;</span><span class="fu">:</span> <span class="st">&quot;January 2024&quot;</span><span class="fu">,</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>    <span class="dt">&quot;wave2_date&quot;</span><span class="fu">:</span> <span class="st">&quot;June 2024&quot;</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div id="variable-scoping" class="section level2">
+<h2>Variable Scoping</h2>
+<ul>
+<li><strong>global</strong>: Available to all sections</li>
+<li><strong>[section]</strong>: Override globals for specific
+section</li>
+</ul>
+</div>
+</div>
+<div id="schema-validation" class="section level1">
+<h1>Schema Validation</h1>
+<div id="json-schema-files" class="section level2">
+<h2>JSON Schema Files</h2>
+<p>Located in <code>inst/examples/json-poc/schema/</code>: -
+<code>measures_schema.json</code>: Formal schema for measures -
+<code>methods_schema.json</code>: Formal schema for methods</p>
+</div>
+<div id="validation-in-r" class="section level2">
+<h2>Validation in R</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Validate a JSON database</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>boilerplate<span class="sc">::</span><span class="fu">validate_json_database</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">json_file =</span> <span class="st">&quot;my_database.json&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">schema_file =</span> <span class="st">&quot;measures_schema.json&quot;</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="common-validation-errors" class="section level2">
+<h2>Common Validation Errors</h2>
+<ol style="list-style-type: decimal">
+<li><p><strong>Missing required fields</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="dt">&quot;measure1&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Missing &#39;name&#39; and &#39;type&#39; fields&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<li><p><strong>Invalid type values</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="dt">&quot;measure1&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;m1&quot;</span><span class="fu">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Invalid type&quot;</span><span class="fu">,</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;numeric&quot;</span>  <span class="er">//</span> <span class="er">Should</span> <span class="er">be</span> <span class="st">&quot;continuous&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<li><p><strong>Mismatched arrays</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="dt">&quot;measure1&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="dt">&quot;values&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">1</span><span class="ot">,</span> <span class="dv">2</span><span class="ot">,</span> <span class="dv">3</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>    <span class="dt">&quot;value_labels&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Low&quot;</span><span class="ot">,</span> <span class="st">&quot;High&quot;</span><span class="ot">]</span>  <span class="er">//</span> <span class="er">Should</span> <span class="er">have</span> <span class="dv">3</span> <span class="er">labels</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ol>
+</div>
+</div>
+<div id="migration-from-rds" class="section level1">
+<h1>Migration from RDS</h1>
+<div id="converting-rds-to-json" class="section level2">
+<h2>Converting RDS to JSON</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Single category</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">boilerplate_rds_to_json</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="at">rds_file =</span> <span class="st">&quot;measures_db.rds&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="at">json_file =</span> <span class="st">&quot;measures_db.json&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># Unified database</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="fu">boilerplate_migrate_to_json</span>(</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="at">rds_file =</span> <span class="st">&quot;boilerplate_unified.rds&quot;</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="at">output_dir =</span> <span class="st">&quot;data/json/&quot;</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="format-differences" class="section level2">
+<h2>Format Differences</h2>
+<div id="rds-format" class="section level3">
+<h3>RDS Format</h3>
+<ul>
+<li>Binary R object</li>
+<li>Preserves all R data types</li>
+<li>Not human-readable</li>
+<li>Platform-specific</li>
+</ul>
+</div>
+<div id="json-format" class="section level3">
+<h3>JSON Format</h3>
+<ul>
+<li>Text-based</li>
+<li>Limited data types</li>
+<li>Human-readable</li>
+<li>Cross-platform</li>
+</ul>
+</div>
+</div>
+<div id="handling-special-cases" class="section level2">
+<h2>Handling Special Cases</h2>
+<ol style="list-style-type: decimal">
+<li><strong>NULL values</strong>: Removed in JSON</li>
+<li><strong>Factors</strong>: Converted to character</li>
+<li><strong>Dates</strong>: Stored as ISO 8601 strings</li>
+<li><strong>Attributes</strong>: Stored in _meta fields</li>
+</ol>
+</div>
+</div>
+<div id="best-practices" class="section level1">
+<h1>Best Practices</h1>
+<div id="file-organisation" class="section level2">
+<h2>File Organisation</h2>
+<pre><code>project/
+├── data/
+│   ├── boilerplate_unified.json    # Single unified file
+│   └── categories/                  # Or separate files
+│       ├── methods.json
+│       ├── measures.json
+│       └── results.json</code></pre>
+</div>
+<div id="naming-conventions" class="section level2">
+<h2>Naming Conventions</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Keys</strong>: Use lowercase with underscores</li>
+<li><strong>Categories</strong>: Descriptive, hierarchical</li>
+<li><strong>Measures</strong>: Include instrument abbreviation</li>
+</ol>
+</div>
+<div id="version-control" class="section level2">
+<h2>Version Control</h2>
+<p>JSON files work well with git: - Human-readable diffs - Easy conflict
+resolution - Track changes over time</p>
+</div>
+<div id="performance-considerations" class="section level2">
+<h2>Performance Considerations</h2>
+<ol style="list-style-type: decimal">
+<li><strong>File Size</strong>: JSON files are larger than RDS</li>
+<li><strong>Parse Time</strong>: Slightly slower than RDS</li>
+<li><strong>Recommendation</strong>: Use unified format for &lt;1000
+entries</li>
+</ol>
+</div>
+</div>
+<div id="examples" class="section level1">
+<h1>Examples</h1>
+<div id="creating-a-new-measures-entry" class="section level2">
+<h2>Creating a New Measures Entry</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="dt">&quot;demographic&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    <span class="dt">&quot;age&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>      <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;age&quot;</span><span class="fu">,</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>      <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Participant age at time of assessment&quot;</span><span class="fu">,</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;continuous&quot;</span><span class="fu">,</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>      <span class="dt">&quot;unit&quot;</span><span class="fu">:</span> <span class="st">&quot;years&quot;</span><span class="fu">,</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>      <span class="dt">&quot;range&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">18</span><span class="ot">,</span> <span class="dv">100</span><span class="ot">]</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<div id="adding-a-methods-entry-with-variants" class="section level2">
+<h2>Adding a Methods Entry with Variants</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="dt">&quot;sampling&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    <span class="dt">&quot;random&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>      <span class="dt">&quot;default&quot;</span><span class="fu">:</span> <span class="st">&quot;Participants were randomly selected from {{population}}.&quot;</span><span class="fu">,</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>      <span class="dt">&quot;large&quot;</span><span class="fu">:</span> <span class="st">&quot;We employed a stratified random sampling approach. The {{population}} was first divided into {{strata}} strata based on {{stratification_var}}. Within each stratum, participants were randomly selected using a random number generator with seed {{seed}} for reproducibility.&quot;</span><span class="fu">,</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>      <span class="dt">&quot;brief&quot;</span><span class="fu">:</span> <span class="st">&quot;Random sampling was used.&quot;</span><span class="fu">,</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>      <span class="dt">&quot;reference&quot;</span><span class="fu">:</span> <span class="st">&quot;@cochran1977sampling&quot;</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<div id="template-variables-with-overrides" class="section level2">
+<h2>Template Variables with Overrides</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="dt">&quot;global&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>    <span class="dt">&quot;software&quot;</span><span class="fu">:</span> <span class="st">&quot;R&quot;</span><span class="fu">,</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="st">&quot;4.3.0&quot;</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="dt">&quot;methods&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>    <span class="dt">&quot;software&quot;</span><span class="fu">:</span> <span class="st">&quot;R version 4.3.0 with lme4 package&quot;</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>In this example, methods sections will use the more specific software
+description, while other sections use the global version.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

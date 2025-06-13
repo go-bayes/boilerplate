@@ -1,0 +1,298 @@
+---
+title: "boilerplate Package Architecture"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{boilerplate Package Architecture}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+# Overview
+
+The `boilerplate` package is designed to manage and generate standardised text for scientific reports. It uses a unified database architecture with a hierarchical path system and template variable substitution.
+
+# Core Architecture Components
+
+## 1. Unified Database System
+
+The package uses a unified database structure where all content types share a common interface:
+
+```
+boilerplate_db (unified)
+├── methods/
+│   ├── statistical/
+│   │   ├── regression/
+│   │   └── longitudinal/
+│   └── sampling/
+├── measures/
+│   ├── psychological/
+│   └── demographic/
+├── results/
+├── discussion/
+├── appendix/
+└── template/
+```
+
+### Key Design Principles
+
+- **Single Source of Truth**: All content managed through one unified database
+- **Consistent Interface**: Same functions work across all content types
+- **Hierarchical Organisation**: Dot notation paths for nested content
+- **Format Agnostic**: Supports both RDS (legacy) and JSON formats
+
+## 2. Path System
+
+Content is organised using dot notation paths:
+
+```r
+# Access nested content
+"methods.statistical.regression.linear"
+"measures.psychological.anxiety.gad7"
+"results.descriptive.demographics"
+```
+
+### Path Operations
+
+- **Navigation**: `get_nested_folder()` traverses the hierarchy
+- **Modification**: `modify_nested_entry()` adds/updates/removes entries
+- **Wildcards**: `methods.statistical.*` matches all statistical methods
+- **Validation**: `boilerplate_path_exists()` checks path validity
+
+## 3. Template Variable System
+
+Dynamic content substitution using `{{variable}}` syntax:
+
+```r
+# Template text
+"We analysed {{n}} participants using {{method}} regression."
+
+# Variables
+list(n = 100, method = "linear")
+
+# Result
+"We analysed 100 participants using linear regression."
+```
+
+### Variable Scoping
+
+1. **Global Variables**: Available to all sections
+2. **Section Variables**: Override globals for specific sections
+3. **Text Overrides**: Direct text replacement
+
+## 4. File Organisation
+
+```
+R/
+├── Core Functions
+│   ├── init-functions.R          # Database initialisation
+│   ├── import-export-functions.R # I/O operations
+│   └── utilities.R               # Core utilities
+│
+├── User Interface
+│   ├── manage-measures.R         # Measure management
+│   ├── generate-text.R           # Text generation
+│   └── generate-measures.R       # Measure generation
+│
+├── Data Operations
+│   ├── merge-databases.R         # Database merging
+│   ├── path-operations.R         # Path manipulation
+│   └── category-helpers.R        # Category extraction
+│
+├── Format Support
+│   ├── json-support.R            # JSON operations
+│   ├── migration-utilities.R     # Format migration
+│   └── bibliography-support.R    # Citation handling
+│
+└── Batch Operations
+    ├── boilerplate_batch_edit_functions.R
+    └── boilerplate_standardise_measures.R
+```
+
+# Data Flow Architecture
+
+## 1. Initialisation Flow
+
+```
+boilerplate_init()
+    ├── Creates directory structure
+    ├── Initialises empty databases
+    └── Saves as unified.json/rds
+```
+
+## 2. Import Flow
+
+```
+External Data → boilerplate_import()
+    ├── Detects format (JSON/RDS/CSV)
+    ├── Validates structure
+    ├── Merges with existing
+    └── Updates unified database
+```
+
+## 3. Text Generation Flow
+
+```
+boilerplate_generate_text()
+    ├── Load unified database
+    ├── Extract category paths
+    ├── Apply template variables
+    ├── Handle text overrides
+    └── Return formatted text
+```
+
+# Key Design Patterns
+
+## 1. Function Naming Convention
+
+```r
+# Public API
+boilerplate_<action>()         # Main functions
+boilerplate_<category>_<action>() # Category-specific
+
+# Internal functions
+<action>_<object>()            # No prefix for internals
+```
+
+## 2. Error Handling Strategy
+
+- User confirmation prompts for destructive operations
+- Informative error messages with suggestions
+- Validation before operations
+- Backup creation for critical operations
+
+## 3. Extensibility Points
+
+### Adding New Categories
+
+1. Define default content in `default-databases.R`
+2. Add accessor function following pattern
+3. Update unified structure
+4. Add tests
+
+### Adding New Formats
+
+1. Implement read/write functions in format-specific file
+2. Add format detection in `detect_database_type()`
+3. Update import/export functions
+4. Ensure round-trip compatibility
+
+## 4. Performance Considerations
+
+- Lazy loading of large databases
+- Efficient path traversal using recursive algorithms
+- Minimal file I/O with in-memory operations
+- Batch operations for multiple edits
+
+# Database Schema
+
+## Unified Database Structure
+
+```r
+list(
+  methods = list(
+    category1 = list(
+      entry1 = list(
+        text = "Method description with {{variables}}",
+        reference = "@citation2023",
+        keywords = c("keyword1", "keyword2")
+      )
+    )
+  ),
+  measures = list(
+    category1 = list(
+      measure1 = list(
+        name = "measure_name",
+        description = "Description",
+        type = "continuous|categorical|ordinal|binary",
+        ...
+      )
+    )
+  ),
+  template = list(
+    global = list(var1 = "value1"),
+    methods = list(var2 = "value2")
+  )
+)
+```
+
+## Entry Types
+
+### Text Entries (methods, results, discussion)
+
+```r
+list(
+  text = "Content with {{variables}}",     # Required
+  reference = "@citation",                 # Optional
+  keywords = c("keyword1", "keyword2"),    # Optional
+  large = "Extended version",              # Optional variant
+  brief = "Short version"                  # Optional variant
+)
+```
+
+### Measure Entries
+
+```r
+list(
+  name = "measure_id",              # Required
+  description = "Description",      # Required
+  type = "continuous",              # Required
+  values = c(1, 2, 3),              # For categorical
+  value_labels = c("Low", "Med", "High"),
+  range = c(0, 100),                # For continuous
+  unit = "points",
+  reference = "@citation"
+)
+```
+
+# Testing Architecture
+
+## Test Organisation
+
+```
+tests/testthat/
+├── test-init-functions.R      # Initialisation tests
+├── test-import-export.R       # I/O operations
+├── test-generate-text.R       # Text generation
+├── test-path-operations.R     # Path system
+├── test-json-support.R        # JSON functionality
+└── test-utilities.R           # Core utilities
+```
+
+## Testing Strategy
+
+1. **Unit Tests**: Each function tested in isolation
+2. **Integration Tests**: Full workflows tested
+3. **Format Tests**: Round-trip compatibility
+4. **Edge Cases**: Invalid inputs, empty databases
+
+# Security Considerations
+
+1. **File Operations**: Validated paths, no arbitrary file access
+2. **User Input**: Sanitised for path traversal attacks
+3. **Confirmations**: Required for destructive operations
+4. **Backups**: Automatic for critical operations
+
+# Future Architecture Considerations
+
+## Planned Enhancements
+
+1. **Plugin System**: Allow custom content types
+2. **Version Control**: Built-in change tracking
+3. **Validation Rules**: Custom validation per category
+4. **Performance**: Caching for large databases
+
+## Backwards Compatibility
+
+- RDS format support maintained
+- Automatic migration utilities
+- Deprecation warnings for old functions
+- Version detection in files

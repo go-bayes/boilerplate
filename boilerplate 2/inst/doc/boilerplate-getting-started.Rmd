@@ -121,9 +121,6 @@ measures_db$political_orientation
 ## Add Study-Specific Methods
 
 ```{r add-custom-methods}
-# The 'db' variable contains our database from Step 2
-# Now we'll add custom content for our study
-
 # Add your sampling method
 db <- boilerplate_add_entry(
   db,
@@ -183,7 +180,6 @@ boilerplate_save(db, data_path = "data/boilerplate")
 # Step 4: Set Up Bibliography Management
 
 ```{r setup-bibliography}
-# Continue working with our 'db' from previous steps
 # Configure bibliography source
 db <- boilerplate_add_bibliography(
   db,

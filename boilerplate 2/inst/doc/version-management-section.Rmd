@@ -1,0 +1,188 @@
+---
+title: "Version Management and Backup Recovery"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Version Management and Backup Recovery}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+```{r load-package}
+library(boilerplate)
+```
+
+## Overview
+
+The boilerplate package provides comprehensive version management features to help you track changes, manage different versions of your databases, and recover from backups when needed.
+
+## Managing Multiple Versions
+
+When working on a project over time, you'll accumulate different versions of your databases. The boilerplate package helps manage these:
+
+```{r list-versions}
+# See all available database files
+files <- boilerplate_list_files()
+print(files)
+
+# Check what versions exist for methods
+methods_files <- boilerplate_list_files(category = "methods")
+```
+
+The `boilerplate_list_files()` function organises files into:
+- **Standard files**: Current working versions
+- **Timestamped versions**: Saved with timestamps
+- **Backup files**: Automatic backups created before overwrites
+
+## Working with Timestamped Versions
+
+Save important milestones with timestamps:
+
+```{r save-with-timestamp}
+# Load your database
+db <- boilerplate_import()
+
+# Save with timestamp before major revision
+boilerplate_save(
+  db,
+  timestamp = TRUE,
+  quiet = FALSE
+)
+#> ✔ Saved unified database to: boilerplate_unified_20240115_143022.rds
+
+# Later, import specific version
+db_milestone <- boilerplate_import(
+  data_path = "boilerplate/data/boilerplate_unified_20240115_143022.rds"
+)
+```
+
+## Backup and Recovery
+
+If something goes wrong, recover from automatic backups:
+
+```{r backup-recovery}
+# List available backups
+files <- boilerplate_list_files()
+# Look at files$backups for backup files
+
+# View latest backup without restoring
+backup_db <- boilerplate_restore_backup(category = "methods")
+
+# Restore latest backup as current version
+boilerplate_restore_backup(
+  category = "methods",
+  restore = TRUE,
+  confirm = TRUE
+)
+#> ✔ Restored backup from 20240110_120000
+
+# Restore specific backup by timestamp
+boilerplate_restore_backup(
+  category = "methods",
+  backup_version = "20240110_120000",
+  restore = TRUE
+)
+```
+
+## Version Management Workflow
+
+Here's a typical workflow for managing versions:
+
+```{r workflow-example}
+# 1. Check current versions
+files <- boilerplate_list_files("methods")
+
+# 2. Save current work with timestamp
+methods_db <- boilerplate_import("methods")
+boilerplate_save(
+  methods_db,
+  category = "methods",
+  timestamp = TRUE
+)
+
+# 3. Make changes
+methods_db$new_method <- "New methodology text"
+boilerplate_save(methods_db, category = "methods")
+
+# 4. If changes were problematic, restore from backup
+boilerplate_restore_backup("methods", restore = TRUE)
+
+# 5. Compare versions
+current <- boilerplate_import("methods")
+old_version <- boilerplate_import(
+  data_path = "boilerplate/data/methods_db_20240110_120000.rds"
+)
+```
+
+## Best Practices
+
+1. **Regular timestamped saves**: Save with timestamps at key milestones
+2. **Document changes**: Use meaningful commit messages when saving
+3. **Clean up old versions**: Periodically review and archive old versions
+4. **Test before overwriting**: Import and check old versions before replacing
+
+## Integration with Version Control
+
+While the package provides its own versioning, it works well with Git:
+
+```{r git-integration}
+# Save timestamped version for Git commit
+boilerplate_save(db, timestamp = TRUE)
+
+# Add to Git
+# git add boilerplate/data/boilerplate_unified_*.rds
+# git commit -m "Snapshot before major refactoring"
+```
+
+## Troubleshooting
+
+### Finding Lost Work
+
+If you've lost work, check these locations:
+
+```{r troubleshooting}
+# List all files including backups
+all_files <- boilerplate_list_files()
+
+# Check modification times
+# The most recently modified files appear first
+print(all_files$timestamped[1:5, c("file", "modified")])
+print(all_files$backups[1:5, c("file", "modified")])
+```
+
+### Recovering from Corruption
+
+If a database file becomes corrupted:
+
+```{r recovery}
+# Try loading backup
+backup_db <- tryCatch(
+  boilerplate_restore_backup("methods"),
+  error = function(e) {
+    message("Backup corrupted, trying older version...")
+    # List files and manually load an older one
+    files <- boilerplate_list_files("methods")
+    if (nrow(files$timestamped) > 0) {
+      boilerplate_import(data_path = files$timestamped$path[2])
+    }
+  }
+)
+```
+
+## Summary
+
+Version management in boilerplate provides:
+- Automatic backups before overwrites
+- Timestamped saves for milestones
+- Easy listing and organisation of versions
+- Simple restoration from backups
+- Direct import of any version by path
+
+This ensures you never lose work and can always recover from mistakes or explore different versions of your content.

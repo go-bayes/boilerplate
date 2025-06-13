@@ -1,0 +1,264 @@
+---
+title: "Managing Multiple Projects with boilerplate"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Managing Multiple Projects with boilerplate}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(boilerplate)
+```
+
+## Introduction
+
+Starting with version 1.1.0, boilerplate supports **projects** - a way to organize multiple independent collections of boilerplate content. This is particularly useful when:
+
+- You want to keep your personal boilerplate separate from shared content
+- You're working with colleagues who have their own boilerplate collections
+- You manage boilerplate for different research areas or contexts
+- You want to experiment without affecting your main boilerplate database
+
+## Project Basics
+
+### Default Project
+
+For backward compatibility, all boilerplate operations use a "default" project if you don't specify one:
+
+```{r eval=FALSE}
+# These are equivalent:
+boilerplate_init()
+boilerplate_init(project = "default")
+
+# Your existing code continues to work unchanged
+db <- boilerplate_import()
+```
+
+### Creating a New Project
+
+To create a new project, simply specify the project name when initializing:
+
+```{r eval=FALSE}
+# Create a project for your lab's shared content
+boilerplate_init(
+  project = "lab_shared",
+  categories = c("methods", "measures"),
+  create_dirs = TRUE,
+  confirm = FALSE
+)
+
+# Create a project for content from a colleague
+boilerplate_init(
+  project = "smith_measures",
+  categories = "measures",
+  create_dirs = TRUE,
+  confirm = FALSE
+)
+```
+
+### Working with Projects
+
+All core functions accept a `project` parameter:
+
+```{r eval=FALSE}
+# Import from a specific project
+lab_db <- boilerplate_import(project = "lab_shared")
+
+# Save to a specific project
+boilerplate_save(lab_db, project = "lab_shared")
+
+# Export from a specific project
+boilerplate_export(
+  db = lab_db,
+  project = "lab_shared",
+  format = "json"
+)
+```
+
+## Project Organization
+
+Projects are stored in a structured directory hierarchy:
+
+```
+boilerplate/
+└── projects/
+    ├── default/
+    │   └── data/
+    │       └── boilerplate_unified.json
+    ├── lab_shared/
+    │   └── data/
+    │       └── boilerplate_unified.json
+    └── smith_measures/
+        └── data/
+            └── boilerplate_unified.json
+```
+
+## Cross-Project Operations
+
+### Listing Projects
+
+To see all available projects:
+
+```{r eval=FALSE}
+# Simple list
+projects <- boilerplate_list_projects()
+print(projects)
+
+# With details
+boilerplate_list_projects(details = TRUE)
+```
+
+### Copying Between Projects
+
+The `boilerplate_copy_from_project()` function enables selective copying of content between projects:
+
+```{r eval=FALSE}
+# Copy specific measures from a colleague's project
+boilerplate_copy_from_project(
+  from_project = "smith_measures",
+  to_project = "default",
+  paths = c("measures.anxiety", "measures.depression"),
+  confirm = FALSE
+)
+
+# Copy with a prefix to avoid naming conflicts
+boilerplate_copy_from_project(
+  from_project = "smith_measures",
+  to_project = "default",
+  paths = c("measures.anxiety", "measures.depression"),
+  prefix = "smith_",  # Results in smith_anxiety, smith_depression
+  confirm = FALSE
+)
+```
+
+### Conflict Handling
+
+When copying between projects, you can handle conflicts in three ways:
+
+```{r eval=FALSE}
+# Skip conflicting entries (default)
+boilerplate_copy_from_project(
+  from_project = "lab_shared",
+  to_project = "default",
+  paths = "methods.sampling",
+  merge_strategy = "skip"
+)
+
+# Overwrite existing entries
+boilerplate_copy_from_project(
+  from_project = "lab_shared",
+  to_project = "default",
+  paths = "methods.sampling",
+  merge_strategy = "overwrite",
+  confirm = TRUE  # Will ask for confirmation
+)
+
+# Rename conflicting entries
+boilerplate_copy_from_project(
+  from_project = "lab_shared",
+  to_project = "default",
+  paths = "methods.sampling",
+  merge_strategy = "rename"  # Creates sampling_2, sampling_3, etc.
+)
+```
+
+## Practical Workflow Example
+
+Here's a complete workflow for managing content from multiple sources:
+
+```{r eval=FALSE}
+# 1. Initialize your main project (if not already done)
+boilerplate_init(
+  project = "my_research",
+  create_dirs = TRUE,
+  confirm = FALSE
+)
+
+# 2. Create a project for colleague's content
+boilerplate_init(
+  project = "colleague_jane",
+  categories = "measures",
+  create_dirs = TRUE,
+  confirm = FALSE
+)
+
+# 3. Import and add content to colleague's project
+jane_db <- list(
+  measures = list(
+    work_stress = list(
+      description = "Work stress scale from Jane's lab",
+      items = 15,
+      reference = "Smith2023"
+    ),
+    burnout = list(
+      description = "Burnout inventory",
+      items = 22,
+      reference = "Smith2022"
+    )
+  )
+)
+
+boilerplate_save(jane_db, project = "colleague_jane")
+
+# 4. Selectively import what you need
+boilerplate_copy_from_project(
+  from_project = "colleague_jane",
+  to_project = "my_research",
+  paths = "measures.work_stress",  # Only import the work stress scale
+  prefix = "jane_",  # Avoid conflicts
+  confirm = FALSE
+)
+
+# 5. Verify the import
+my_db <- boilerplate_import(project = "my_research")
+names(my_db$measures)  # Should include "jane_work_stress"
+```
+
+## Best Practices
+
+1. **Use descriptive project names**: Instead of "project1", use "smith_lab_measures" or "meta_analysis_2024"
+
+2. **Document project sources**: Keep notes about where content came from
+   ```{r eval=FALSE}
+   # Add source information to imported content
+   my_db$measures$jane_work_stress$source <- "Jane Smith's lab, imported 2024-01-15"
+   boilerplate_save(my_db, project = "my_research")
+   ```
+
+3. **Regular backups**: Projects are independent, so back them up separately
+   ```{r eval=FALSE}
+   boilerplate_export(
+     db = my_db,
+     project = "my_research",
+     format = "json",
+     output_file = paste0("backup_my_research_", Sys.Date(), ".json")
+   )
+   ```
+
+4. **Use prefixes for external content**: This prevents naming conflicts and makes sources clear
+
+## Migration from Pre-1.1.0
+
+If you're upgrading from an earlier version, your existing boilerplate data will continue to work:
+
+- Existing data in `boilerplate/data/` is treated as the "default" project
+- No changes to your code are required
+- You can start using projects whenever you're ready
+
+## Summary
+
+Projects in boilerplate provide a flexible way to:
+- Keep different collections of content separate
+- Share content with colleagues without mixing databases
+- Experiment with new content without affecting your main database
+- Maintain clear organization as your boilerplate collection grows
+
+The project system is entirely optional - if you don't need multiple collections, simply continue using boilerplate as before, and everything will work with the "default" project.

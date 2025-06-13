@@ -1,0 +1,324 @@
+---
+title: "Introduction to boilerplate"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to boilerplate}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(boilerplate)
+```
+
+## Overview
+
+The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It uses a unified database system with template variable substitution, making it easy to maintain consistent language across projects while allowing for customisation.
+
+**New in v1.1.0**: The package now defaults to a single unified JSON database, simplifying database management and improving version control integration.
+
+## Key Features
+
+- **Single JSON Database**: All content types in one human-readable JSON file by default
+- **Template Variable Substitution**: Use `{{variable}}` placeholders for dynamic content
+- **Hierarchical Organization**: Organize content using dot notation (e.g., `methods.statistical.longitudinal`)
+- **Batch Operations**: Edit multiple entries at once
+- **Safety Features**: Confirmation prompts and backup creation
+- **Version Control Friendly**: JSON format makes Git diffs meaningful and merges easier
+
+## Quick Start
+
+### 1. Initialise Databases
+
+First, create and initialise your boilerplate databases:
+
+```{r init, eval=FALSE}
+# Initialise unified database with default content
+# Creates a single boilerplate_unified.json file
+boilerplate_init(
+  create_dirs = TRUE,
+  create_empty = FALSE,  # Use FALSE to get example content
+  confirm = FALSE,
+  quiet = FALSE
+)
+```
+
+### 2. Import Databases
+
+Import your databases to work with them:
+
+```{r import, eval=FALSE}
+# Import all databases as a unified structure
+unified_db <- boilerplate_import()
+
+# Or import specific categories
+methods_db <- boilerplate_import("methods")
+measures_db <- boilerplate_import("measures")
+```
+
+### 3. Generate Text
+
+Generate text with variable substitution:
+
+```{r generate, eval=FALSE}
+# Generate methods text
+methods_text <- boilerplate_generate_text(
+  category = "methods",
+  sections = c("sample", "measures", "statistical_estimator"),
+  global_vars = list(
+    n_total = 5000,
+    exposure_var = "political_conservative",
+    outcome_var = "anxiety",
+    population = "New Zealand adults"
+  ),
+  db = unified_db
+)
+
+cat(methods_text)
+```
+
+### 4. Generate Measure Descriptions
+
+Create formatted descriptions of your measures:
+
+```{r measures, eval=FALSE}
+# Generate measure descriptions
+measures_text <- boilerplate_generate_measures(
+  variable_heading = "Outcome Variables",
+  variables = c("anxiety", "depression"),
+  db = unified_db,
+  sample_items = 3  # Show only first 3 items
+)
+
+cat(measures_text)
+```
+
+## Working with Databases
+
+### Viewing Database Content
+
+```{r view, eval=FALSE}
+# List all paths in a database
+all_paths <- boilerplate_list_paths(unified_db)
+head(all_paths)
+
+# Get specific content
+sample_text <- boilerplate_get_entry(unified_db, "methods.sample.default")
+cat(sample_text)
+```
+
+### Adding and Updating Content
+
+```{r update, eval=FALSE}
+# Add a new entry
+unified_db <- boilerplate_add_entry(
+  db = unified_db,
+  path = "methods.sample.online",
+  value = "We recruited {{n_total}} participants through online platforms.",
+  category = "methods"
+)
+
+# Update existing entry
+unified_db <- boilerplate_update_entry(
+  db = unified_db,
+  path = "methods.sample.default",
+  value = "Our sample consisted of {{n_total}} {{population}}.",
+  category = "methods"
+)
+
+# Save changes
+boilerplate_save(unified_db)
+```
+
+### Batch Operations
+
+```{r batch, eval=FALSE}
+# Update multiple references at once
+unified_db <- boilerplate_batch_edit(
+  db = unified_db,
+  field = "reference",
+  new_value = "smith2024",
+  target_entries = c("anxiety", "depression", "stress"),
+  category = "measures"
+)
+
+# Clean text fields
+unified_db <- boilerplate_batch_clean(
+  db = unified_db,
+  field = "description",
+  remove_chars = c("@", "[", "]"),
+  trim_whitespace = TRUE,
+  category = "measures"
+)
+```
+
+## Template System
+
+The template system uses `{{variable}}` placeholders that are replaced with actual values:
+
+```{r templates, eval=FALSE}
+# Create a template
+template_text <- "We analysed data from {{n_total}} {{population}} 
+  ({{n_female}} female, {{n_male}} male) with a mean age of {{age_mean}} 
+  years (SD = {{age_sd}})."
+
+# Use in your database
+unified_db <- boilerplate_add_entry(
+  db = unified_db,
+  path = "methods.participants.demographics",
+  value = template_text,
+  category = "methods"
+)
+
+# Generate with variables
+demographics_text <- boilerplate_generate_text(
+  category = "methods",
+  sections = "participants.demographics",
+  global_vars = list(
+    n_total = 1000,
+    population = "university students",
+    n_female = 600,
+    n_male = 400,
+    age_mean = 21.3,
+    age_sd = 3.2
+  ),
+  db = unified_db
+)
+```
+
+## Best Practices
+
+1. **Use Version Control**: Export your databases regularly for version control
+   ```{r export, eval=FALSE}
+   boilerplate_export(
+     db = unified_db,
+     output_file = "boilerplate_backup_2024.rds"
+   )
+   ```
+
+2. **Organise Hierarchically**: Use dot notation for clear organisation
+   ```{r organise, eval=FALSE}
+   # Good organisation
+   "methods.measures.psychological.anxiety"
+   "methods.measures.psychological.depression"
+   "methods.measures.demographic.age"
+   ```
+
+3. **Document Your Variables**: Keep a record of template variables
+   ```{r document, eval=FALSE}
+   # Add a template reference
+   unified_db <- boilerplate_add_entry(
+     db = unified_db,
+     path = "templates.variable_reference",
+     value = "Common variables: {{n_total}}, {{exposure_var}}, {{outcome_var}}",
+     category = "template"
+   )
+   ```
+
+4. **Use Meaningful Names**: Choose clear, descriptive names for entries
+
+## Advanced Features
+
+### Measure Standardisation
+
+```{r standardise, eval=FALSE}
+# Standardise measure entries
+unified_db$measures <- boilerplate_standardise_measures(
+  unified_db$measures,
+  extract_scale = TRUE,
+  clean_descriptions = TRUE
+)
+
+# Generate quality report
+boilerplate_measures_report(unified_db$measures)
+```
+
+### Cross-Project Workflows
+
+```{r projects, eval=FALSE}
+# Work with multiple projects
+# Create a project for shared content
+boilerplate_init(project = "shared", confirm = FALSE)
+
+# Copy content between projects
+boilerplate_copy_from_project(
+  from_project = "shared",
+  to_project = "default",
+  paths = c("methods.statistical", "measures.anxiety"),
+  confirm = FALSE
+)
+
+# List available projects
+projects <- boilerplate_list_projects(details = TRUE)
+```
+
+## Managing Database Versions
+
+The boilerplate package includes version management features to help you track and restore different versions of your databases.
+
+### Listing Available Versions
+
+```{r list-versions, eval=FALSE}
+# List all database files
+files <- boilerplate_list_files()
+print(files)
+
+# List files for a specific category
+methods_files <- boilerplate_list_files(category = "methods")
+
+# Filter by date pattern
+jan_files <- boilerplate_list_files(pattern = "202401")
+```
+
+### Working with Timestamped Versions
+
+```{r timestamps, eval=FALSE}
+# Save with timestamp
+boilerplate_save(
+  db = unified_db,
+  timestamp = TRUE  # Creates boilerplate_unified_20240115_143022.rds
+)
+
+# Import a specific timestamped version
+old_version <- boilerplate_import(
+  data_path = "boilerplate/data/boilerplate_unified_20240110_120000.rds"
+)
+```
+
+### Backup and Restore
+
+```{r backup-restore, eval=FALSE}
+# View latest backup without restoring
+backup_db <- boilerplate_restore_backup(category = "methods")
+
+# Restore backup as current version
+boilerplate_restore_backup(
+  category = "methods",
+  restore = TRUE,
+  confirm = TRUE
+)
+
+# Restore specific backup by timestamp
+boilerplate_restore_backup(
+  category = "methods",
+  backup_version = "20240110_120000",
+  restore = TRUE
+)
+```
+
+## Getting Help
+
+For more information and examples, see:
+
+- Package documentation: `help(package = "boilerplate")`
+- Function help: `?boilerplate_generate_text`
+- GitHub repository: https://github.com/go-bayes/boilerplate
+- Example files: `system.file("examples", package = "boilerplate")`
+- Example data: `system.file("extdata", package = "boilerplate")`

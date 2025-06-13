@@ -1,37 +1,30 @@
----
-output: github_document
----
 
 <!-- readme.md is generated from readme.rmd. please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%",
-  eval = FALSE  # Don't evaluate any code
-)
-```
 
 <img src="man/figures/logo.png" align="right" width="120" alt="boilerplate hex sticker"/>
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/go-bayes/boilerplate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/go-bayes/boilerplate/actions/workflows/R-CMD-check.yaml)
 [![R-hub](https://github.com/go-bayes/boilerplate/actions/workflows/rhub.yaml/badge.svg)](https://github.com/go-bayes/boilerplate/actions/workflows/rhub.yaml)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
-[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
+[![Project Status:
+Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
 ## Overview
 
-The `boilerplate` package provides tools for managing and generating standardised text for methods and results sections of scientific reports. It handles template variable substitution and supports hierarchical organisation of text through dot-separated paths. 
+The `boilerplate` package provides tools for managing and generating
+standardised text for methods and results sections of scientific
+reports. It handles template variable substitution and supports
+hierarchical organisation of text through dot-separated paths.
 
 ## Installation
 
 You can install the development version of boilerplate from GitHub with:
 
-```{r}
+``` r
 # install the devtools package if you don't have it already
 install.packages("devtools")
 devtools::install_github("go-bayes/boilerplate")
@@ -40,47 +33,81 @@ devtools::install_github("go-bayes/boilerplate")
 ## Features
 
 ### Core Features
-- **Single Unified Database**: All content types in one JSON file by default (simplified workflow)
-- **Multiple Categories**: Support for methods, results, discussion, measures, appendices and document templates
-- **Hierarchical Organisation**: Organise content in nested categories using dot notation (e.g., `statistical.longitudinal.lmtp`)
-- **Default Content**: Comes with pre-loaded defaults for common methods sections
-- **Quarto/R Markdown Integration**: Generate sections for scientific reports
-- **JSON Default Format**: Human-readable JSON as default, with RDS support for legacy workflows
+
+- **Single Unified Database**: All content types in one JSON file by
+  default (simplified workflow)
+- **Multiple Categories**: Support for methods, results, discussion,
+  measures, appendices and document templates
+- **Hierarchical Organisation**: Organise content in nested categories
+  using dot notation (e.g., `statistical.longitudinal.lmtp`)
+- **Default Content**: Comes with pre-loaded defaults for common methods
+  sections
+- **Quarto/R Markdown Integration**: Generate sections for scientific
+  reports
+- **JSON Default Format**: Human-readable JSON as default, with RDS
+  support for legacy workflows
 
 ### Text and Document Features
-- **Text Template Management**: Create, update, and retrieve reusable text templates
-- **Variable Substitution**: Replace `{{variable}}` placeholders with actual values
-- **Document Templates**: Streamlined creation of journal articles, conference presentations, and grant proposals
-- **Custom Headings**: Flexible heading levels and custom text for generated sections
+
+- **Text Template Management**: Create, update, and retrieve reusable
+  text templates
+- **Variable Substitution**: Replace `{{variable}}` placeholders with
+  actual values
+- **Document Templates**: Streamlined creation of journal articles,
+  conference presentations, and grant proposals
+- **Custom Headings**: Flexible heading levels and custom text for
+  generated sections
 
 ### Measurement Features
-- **Measures Database**: Special handling for research measures with descriptions, items, and metadata
-- **Measure Standardisation**: Automatically clean and standardise measure entries for consistency
-- **Quality Reporting**: Assess completeness and consistency of your measures database
-- **Formatted Output**: Generate publication-ready measure descriptions with multiple format options
+
+- **Measures Database**: Special handling for research measures with
+  descriptions, items, and metadata
+- **Measure Standardisation**: Automatically clean and standardise
+  measure entries for consistency
+- **Quality Reporting**: Assess completeness and consistency of your
+  measures database
+- **Formatted Output**: Generate publication-ready measure descriptions
+  with multiple format options
 
 ### Database Management Features
-- **Batch Operations**: Efficiently update or clean multiple entries at once with pattern matching and wildcards
-- **Preview Mode**: See all changes before applying them to prevent accidents
-- **Export Functions**: Create backups and share specific database subsets
-- **Safety Features**: Prevention of accidental file overwrites and standardised file naming
-- **JSON Migration**: Easy migration from RDS to JSON format with validation tools
-- **Bibliography Management**: Automatic bibliography file management and citation validation
+
+- **Batch Operations**: Efficiently update or clean multiple entries at
+  once with pattern matching and wildcards
+- **Preview Mode**: See all changes before applying them to prevent
+  accidents
+- **Export Functions**: Create backups and share specific database
+  subsets
+- **Safety Features**: Prevention of accidental file overwrites and
+  standardised file naming
+- **JSON Migration**: Easy migration from RDS to JSON format with
+  validation tools
+- **Bibliography Management**: Automatic bibliography file management
+  and citation validation
 
 ## Safety Features
 
-The boilerplate package includes several safety features to prevent accidental data loss:
+The boilerplate package includes several safety features to prevent
+accidental data loss:
 
-- **Explicit category specification**: The `boilerplate_save()` function requires explicit specification of categories when saving individual databases
-- **Standardised file naming**: Consistent naming conventions (`boilerplate_unified.rds` for unified databases, `{category}_db.rds` for individual categories)
-- **Confirmation prompts**: All functions that modify files include confirmation prompts (when `confirm=TRUE`) before overwriting existing files
-- **Automatic timestamping**: Optional timestamps can be added to filenames (when `timestamp=TRUE`) to prevent overwrites
-- **Backup creation**: Automatic backup creation before overwriting files (when `create_backup=TRUE` in interactive sessions)
-- **Directory safety**: Functions require explicit permission to create new directories (when `create_dirs=TRUE`)
+- **Explicit category specification**: The `boilerplate_save()` function
+  requires explicit specification of categories when saving individual
+  databases
+- **Standardised file naming**: Consistent naming conventions
+  (`boilerplate_unified.rds` for unified databases, `{category}_db.rds`
+  for individual categories)
+- **Confirmation prompts**: All functions that modify files include
+  confirmation prompts (when `confirm=TRUE`) before overwriting existing
+  files
+- **Automatic timestamping**: Optional timestamps can be added to
+  filenames (when `timestamp=TRUE`) to prevent overwrites
+- **Backup creation**: Automatic backup creation before overwriting
+  files (when `create_backup=TRUE` in interactive sessions)
+- **Directory safety**: Functions require explicit permission to create
+  new directories (when `create_dirs=TRUE`)
 
 ## Basic Usage with Unified Database
 
-```{r}
+``` r
 # install from github if not already installed
 if (!require(boilerplate, quietly = TRUE)) {
   # install devtools if necessary
@@ -91,20 +118,16 @@ if (!require(boilerplate, quietly = TRUE)) {
 }
 
 # initialise unified database (default: single JSON file)
-boilerplate_init(
-  data_path = "boilerplate/data",  # Specify where to store the database
-  create_dirs = TRUE, 
-  confirm = FALSE  # Set to TRUE for interactive confirmation
-)
+boilerplate_init(create_dirs = TRUE, confirm = TRUE)
 
 # import the unified database
-unified_db <- boilerplate_import(data_path = "boilerplate/data")
+unified_db <- boilerplate_import()
 
 # add a new method entry directly to the unified database
 unified_db$methods$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
 
 # save all changes at once (JSON by default)
-boilerplate_save(unified_db, data_path = "boilerplate/data")
+boilerplate_save(unified_db)
 
 # generate text with variable substitution
 methods_text <- boilerplate_generate_text(
@@ -123,22 +146,16 @@ cat(methods_text)
 
 ## Bibliography Management
 
-The boilerplate package can manage bibliography files for your projects, ensuring consistent citations across all your boilerplate text:
+The boilerplate package can manage bibliography files for your projects,
+ensuring consistent citations across all your boilerplate text:
 
-```{r}
-# Make sure you have the unified_db loaded from previous example
-# If not, load it:
-# unified_db <- boilerplate_import(data_path = "boilerplate/data")
-
+``` r
 # Add bibliography information to your database
 unified_db <- boilerplate_add_bibliography(
   unified_db,
   url = "https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib",
   local_path = "references.bib"
 )
-
-# Save the updated database
-boilerplate_save(unified_db, data_path = "boilerplate/data")
 
 # Generate text and automatically copy bibliography
 methods_text <- boilerplate_generate_text(
@@ -158,27 +175,28 @@ if (!validation$valid) {
 
 ## Working with JSON Format
 
-The boilerplate package supports JSON format for all database operations. JSON provides several advantages over the traditional RDS format:
+The boilerplate package supports JSON format for all database
+operations. JSON provides several advantages over the traditional RDS
+format:
 
-- **Human-readable**: JSON files can be opened and edited in any text editor
+- **Human-readable**: JSON files can be opened and edited in any text
+  editor
 - **Version control friendly**: Changes are easily tracked in Git
-- **Language agnostic**: JSON files can be read by any programming language
+- **Language agnostic**: JSON files can be read by any programming
+  language
 - **Web-friendly**: JSON is the standard format for web applications
 
-For detailed JSON workflows, see `vignette("boilerplate-json-workflow")`.
+For detailed JSON workflows, see
+`vignette("boilerplate-json-workflow")`.
 
 ### Basic JSON Operations
 
-```{r}
-# First ensure you have a database to import
-# Initialize if needed:
-# boilerplate_init(data_path = "path/to", create_dirs = TRUE)
-
+``` r
 # import database (automatically detects JSON or RDS format)
 unified_db <- boilerplate_import(data_path = "path/to")
 
 # save as JSON
-boilerplate_save(unified_db, data_path = "path/to", format = "json")
+boilerplate_save(unified_db, format = "json")
 
 # migrate existing RDS databases to JSON
 results <- boilerplate_migrate_to_json(
@@ -191,7 +209,7 @@ results <- boilerplate_migrate_to_json(
 
 ### JSON with Custom Paths
 
-```{r}
+``` r
 # set path for JSON data
 my_json_path <- "path/to/json/data"
 
@@ -207,7 +225,7 @@ boilerplate_save(db, data_path = my_json_path, format = "json")
 
 ### Validating JSON Structure
 
-```{r}
+``` r
 # Validate JSON database structure
 validation_errors <- validate_json_database(
   "path/to/boilerplate_unified.json",
@@ -224,18 +242,26 @@ if (length(validation_errors) == 0) {
 
 ## Working with Custom Data Paths
 
-By default, boilerplate stores database files in the "boilerplate/data" subdirectory of your working directory (using `here::here()`). However, there are many situations where you might need to use a different location:
+By default, boilerplate stores database files in the “boilerplate/data”
+subdirectory of your working directory (using `here::here()`). However,
+there are many situations where you might need to use a different
+location:
 
-- Working with multiple projects that each need their own boilerplate databases
+- Working with multiple projects that each need their own boilerplate
+  databases
 - Storing databases in a shared network location
 - Organising files according to a specific project structure
 - Testing and development scenarios
 
-All key functions in the package (`boilerplate_init()`, `boilerplate_import()`, `boilerplate_save()`, and `boilerplate_export()`) accept a `data_path` parameter to specify a custom location. When working with custom paths, be sure to use the same path consistently across all functions.
+All key functions in the package (`boilerplate_init()`,
+`boilerplate_import()`, `boilerplate_save()`, and
+`boilerplate_export()`) accept a `data_path` parameter to specify a
+custom location. When working with custom paths, be sure to use the same
+path consistently across all functions.
 
 ### Example: Full Workflow with Custom Paths
 
-```{r}
+``` r
 # define your custom path
 my_project_path <- "path/to/your/project/data"
 
@@ -280,9 +306,10 @@ boilerplate_save(
 
 ### Project Management (New in v1.2.0)
 
-The boilerplate package now supports **projects** - isolated namespaces that keep different boilerplate collections separate. This is ideal for:
+The boilerplate package now supports **projects** - isolated namespaces
+that keep different boilerplate collections separate. This is ideal for:
 
-- Managing personal vs. shared boilerplate content
+- Managing personal vs. shared boilerplate content
 - Working with multiple research projects simultaneously  
 - Collaborating with colleagues who have their own collections
 - Experimenting without affecting your main database
@@ -291,7 +318,7 @@ The boilerplate package now supports **projects** - isolated namespaces that kee
 
 All core functions now accept a `project` parameter:
 
-```{r}
+``` r
 # Create a new project for shared lab content
 boilerplate_init(
   project = "lab_shared",
@@ -312,7 +339,7 @@ boilerplate_save(lab_db, project = "lab_shared")
 
 #### Working with Multiple Projects
 
-```{r}
+``` r
 # List all available projects
 projects <- boilerplate_list_projects()
 print(projects)
@@ -330,7 +357,7 @@ team_db <- boilerplate_import(project = "team_templates")
 
 Copy content between projects with conflict handling:
 
-```{r}
+``` r
 # Copy specific content from team templates to your project
 boilerplate_copy_from_project(
   from_project = "team_templates",
@@ -350,11 +377,11 @@ boilerplate_copy_from_project(
 )
 ```
 
-### Relative vs. Absolute Paths
+### Relative vs. Absolute Paths
 
 Both relative and absolute paths are supported:
 
-```{r}
+``` r
 # relative path (relative to working directory)
 boilerplate_import(data_path = "my_project/data")
 
@@ -362,13 +389,16 @@ boilerplate_import(data_path = "my_project/data")
 boilerplate_import(data_path = "/Users/researcher/projects/study_2023/data")
 ```
 
-For portable code, consider using relative paths or functions like `here::here()` to construct paths.
+For portable code, consider using relative paths or functions like
+`here::here()` to construct paths.
 
 ## Lab Workflow: Central Database with Project Copies
 
-A common workflow in research labs involves maintaining a central boilerplate database on GitHub that team members copy for project-specific use:
+A common workflow in research labs involves maintaining a central
+boilerplate database on GitHub that team members copy for
+project-specific use:
 
-```{r}
+``` r
 # 1. Clone the central database from GitHub
 # git clone https://github.com/yourlab/boilerplate-database.git
 
@@ -395,13 +425,15 @@ boilerplate_save(db, data_path = ".boilerplate-data", format = "json")
 
 ## Managing Database Versions
 
-The boilerplate package now supports version management for your databases. When you save databases with timestamps or when backups are created, you can easily manage and restore these versions.
+The boilerplate package now supports version management for your
+databases. When you save databases with timestamps or when backups are
+created, you can easily manage and restore these versions.
 
 ### Listing Available Versions
 
 Use `boilerplate_list_files()` to see all available database files:
 
-```{r}
+``` r
 # List all database files in your data directory
 files <- boilerplate_list_files()
 print(files)
@@ -413,16 +445,17 @@ files <- boilerplate_list_files(category = "methods")
 files <- boilerplate_list_files(pattern = "202401")  # January 2024 files
 ```
 
-The function organises files into:
-- **Standard files**: Current working versions (e.g., `methods_db.rds`)
-- **Timestamped versions**: Saved with timestamps (e.g., `methods_db_20240115_143022.rds`)
-- **Backup files**: Automatic backups (e.g., `methods_db_backup_20240115_140000.rds`)
+The function organises files into: - **Standard files**: Current working
+versions (e.g., `methods_db.rds`) - **Timestamped versions**: Saved with
+timestamps (e.g., `methods_db_20240115_143022.rds`) - **Backup files**:
+Automatic backups (e.g., `methods_db_backup_20240115_140000.rds`)
 
 ### Importing Specific Versions
 
-The enhanced `boilerplate_import()` function can now import any database file directly:
+The enhanced `boilerplate_import()` function can now import any database
+file directly:
 
-```{r}
+``` r
 # Import the current standard version (default behaviour)
 db <- boilerplate_import("methods")
 
@@ -437,7 +470,7 @@ db <- boilerplate_import(data_path = "boilerplate/data/methods_db_backup_2024011
 
 Use `boilerplate_restore_backup()` for convenient backup restoration:
 
-```{r}
+``` r
 # View the latest backup without restoring
 backup_db <- boilerplate_restore_backup("methods")
 
@@ -458,9 +491,9 @@ db <- boilerplate_restore_backup(
 
 ### Version Management Workflow
 
-Here's a typical workflow for managing versions:
+Here’s a typical workflow for managing versions:
 
-```{r}
+``` r
 # 1. Check what versions are available
 files <- boilerplate_list_files("methods")
 
@@ -487,16 +520,21 @@ v2 <- boilerplate_import(data_path = files$timestamped$path[2])
 
 ### Best Practices
 
-1. **Regular timestamped saves**: Save important milestones with timestamps
-2. **Keep recent backups**: The package automatically creates backups, but consider archiving important versions
-3. **Document version changes**: Use meaningful commit messages when saving versions
-4. **Clean up old files**: Periodically review and remove unnecessary old versions
+1.  **Regular timestamped saves**: Save important milestones with
+    timestamps
+2.  **Keep recent backups**: The package automatically creates backups,
+    but consider archiving important versions
+3.  **Document version changes**: Use meaningful commit messages when
+    saving versions
+4.  **Clean up old files**: Periodically review and remove unnecessary
+    old versions
 
 ### Embedding in Analysis Documents
 
-Rather than creating separate `.qmd` files, you can embed boilerplate directly in your analysis code chunks:
+Rather than creating separate `.qmd` files, you can embed boilerplate
+directly in your analysis code chunks:
 
-```{r}
+``` r
 # at the beginning of your analysis script or Quarto document
 library(boilerplate)
 
@@ -527,7 +565,7 @@ cat("## Methods\n\n", methods_sample)
 
 You can still work with individual databases if preferred:
 
-```{r}
+``` r
 # import just the methods database
 methods_db <- boilerplate_import("methods")
 
@@ -554,9 +592,10 @@ cat(methods_text)
 
 ## Creating Empty Databases
 
-The package supports initialising empty database structures by default, providing a clean slate for your project without sample content.
+The package supports initialising empty database structures by default,
+providing a clean slate for your project without sample content.
 
-```{r}
+``` r
 # initialise empty databases (default behavior)
 boilerplate_init(
   categories = c("methods", "results"),
@@ -573,13 +612,15 @@ boilerplate_init(
 )
 ```
 
-Empty databases provide just the top-level structure without example content, making it easier to start with a clean slate.
+Empty databases provide just the top-level structure without example
+content, making it easier to start with a clean slate.
 
 ## Database Export
 
-The package now supports exporting databases for versioning or sharing specific elements:
+The package now supports exporting databases for versioning or sharing
+specific elements:
 
-```{r}
+``` r
 # export entire database for versioning
 # creates a point-in-time snapshot of your boilerplate content
 unified_db <- boilerplate_import()
@@ -599,19 +640,24 @@ boilerplate_export(
 )
 ```
 
-The export function supports:
-- Full database export (ideal for versioning)
-- Selective export using dot notation (e.g., "methods.statistical.longitudinal")
-- Wildcard selections using "*" (e.g., "methods.*" selects all methods)
-- Category-prefixed paths for unified databases
+The export function supports: - Full database export (ideal for
+versioning) - Selective export using dot notation (e.g.,
+“methods.statistical.longitudinal”) - Wildcard selections using “*”
+(e.g., ”methods.*” selects all methods) - Category-prefixed paths for
+unified databases
 
-Export is distinct from save: use `boilerplate_save()` for normal database updates and `boilerplate_export()` for creating standalone exports.
+Export is distinct from save: use `boilerplate_save()` for normal
+database updates and `boilerplate_export()` for creating standalone
+exports.
 
 ## Managing Measures with the Unified Database
 
-The package provides a simplified way to manage measures and generate formatted text about them. Measures are stored as top-level entries in the measures database, with each measure containing standardised properties like name, description, reference, etc.
+The package provides a simplified way to manage measures and generate
+formatted text about them. Measures are stored as top-level entries in
+the measures database, with each measure containing standardised
+properties like name, description, reference, etc.
 
-```{r}
+``` r
 # import the unified database
 unified_db <- boilerplate_import()
 
@@ -703,20 +749,22 @@ cat(methods_section)
 When adding measures to the database:
 
 - Each measure should be a top-level entry in the measures database
-- Standard properties include: name, description, reference, waves, keywords, and items
+- Standard properties include: name, description, reference, waves,
+  keywords, and items
 - The items property should be a list of item text strings
-- When referencing measures in `boilerplate_generate_measures()`, use the top-level name
+- When referencing measures in `boilerplate_generate_measures()`, use
+  the top-level name
 
 **Incorrect structure (avoid this):**
 
-```{r}
+``` r
 # don't organise measures under categories at the top level
 unified_db$measures$psychological$anxiety <- list(...)  # WRONG
 ```
 
 **Correct structure:**
 
-```{r}
+``` r
 # Add measures directly at the top level
 unified_db$measures$anxiety_gad7 <- list(...)  # CORRECT
 unified_db$measures$depression_phq9 <- list(...) # CORRECT
@@ -724,13 +772,17 @@ unified_db$measures$depression_phq9 <- list(...) # CORRECT
 
 ## Standardising and Reporting on Measures
 
-The package includes powerful tools for standardising measure entries and reporting on database quality. This is particularly useful when working with legacy databases or when multiple contributors have added measures with inconsistent formatting.
+The package includes powerful tools for standardising measure entries
+and reporting on database quality. This is particularly useful when
+working with legacy databases or when multiple contributors have added
+measures with inconsistent formatting.
 
 ### Standardising Measures
 
-The `boilerplate_standardise_measures()` function automatically cleans and standardises your measures:
+The `boilerplate_standardise_measures()` function automatically cleans
+and standardises your measures:
 
-```{r}
+``` r
 # Import your database
 unified_db <- boilerplate_import()
 
@@ -752,40 +804,43 @@ boilerplate_save(unified_db)
 
 ### What Standardisation Does
 
-1. **Extracts Scale Information**: Identifies and extracts scale details from descriptions
+1.  **Extracts Scale Information**: Identifies and extracts scale
+    details from descriptions
 
-   ```r
-   # Before:
-   description = "Ordinal response: (1 = Strongly Disagree, 7 = Strongly Agree)"
-   
-   # After:
-   description = NULL  # Removed if only contains scale info
-   scale_info = "1 = Strongly Disagree, 7 = Strongly Agree"
-   scale_anchors = c("1 = Strongly Disagree", "7 = Strongly Agree")
-   ```
+    ``` r
+    # Before:
+    description = "Ordinal response: (1 = Strongly Disagree, 7 = Strongly Agree)"
 
-2. **Identifies Reversed Items**: Detects items marked with (r), (reversed), etc.
-   ```{r}
-   # Items with (r) markers are identified
-   items = list(
-     "I have frequent mood swings.",
-     "I am relaxed most of the time. (r)",
-     "I get upset easily."
-   )
-   # Creates: reversed_items = c(2)
-   ```
+    # After:
+    description = NULL  # Removed if only contains scale info
+    scale_info = "1 = Strongly Disagree, 7 = Strongly Agree"
+    scale_anchors = c("1 = Strongly Disagree", "7 = Strongly Agree")
+    ```
 
-3. **Cleans Descriptions**: Removes extra whitespace, fixes punctuation
+2.  **Identifies Reversed Items**: Detects items marked with (r),
+    (reversed), etc.
 
-4. **Standardises References**: Ensures consistent reference formatting
+    ``` r
+    # Items with (r) markers are identified
+    items = list(
+      "I have frequent mood swings.",
+      "I am relaxed most of the time. (r)",
+      "I get upset easily."
+    )
+    # Creates: reversed_items = c(2)
+    ```
 
-5. **Ensures Complete Structure**: All measures have standard fields
+3.  **Cleans Descriptions**: Removes extra whitespace, fixes punctuation
+
+4.  **Standardises References**: Ensures consistent reference formatting
+
+5.  **Ensures Complete Structure**: All measures have standard fields
 
 ### Quality Reporting
 
 Use `boilerplate_measures_report()` to assess your measures database:
 
-```{r}
+``` r
 # get a quality overview
 boilerplate_measures_report(unified_db$measures)
 
@@ -816,7 +871,7 @@ View(quality_report)
 
 You can also standardise individual measures or a subset:
 
-```{r}
+``` r
 # standardise only specific measures
 unified_db$measures <- boilerplate_standardise_measures(
   unified_db$measures,
@@ -831,9 +886,10 @@ unified_db$measures$anxiety_gad7 <- boilerplate_standardise_measures(
 
 ### Enhanced Output with Standardised Measures
 
-After standardisation, the `boilerplate_generate_measures()` function can better format your measures:
+After standardisation, the `boilerplate_generate_measures()` function
+can better format your measures:
 
-```{r}
+``` r
 # Generate formatted output with enhanced features
 measures_text <- boilerplate_generate_measures(
   variable_heading = "Psychological Measures",
@@ -850,71 +906,67 @@ cat(measures_text)
 
 Example output:
 
-```
-### Psychological Measures
+    ### Psychological Measures
 
-#### Self Control
+    #### Self Control
 
-| Field | Information |
-|-------|-------------|
-| Description | Self-control was measured using two items [@tangney_high_2004]. |
-| Response Scale | 1 = Strongly Disagree, 7 = Strongly Agree |
-| Waves | 5-current |
+    | Field | Information |
+    |-------|-------------|
+    | Description | Self-control was measured using two items [@tangney_high_2004]. |
+    | Response Scale | 1 = Strongly Disagree, 7 = Strongly Agree |
+    | Waves | 5-current |
 
-**Items:**
+    **Items:**
 
-1. In general, I have a lot of self-control
-2. I wish I had more self-discipline (r)
+    1. In general, I have a lot of self-control
+    2. I wish I had more self-discipline (r)
 
-*(r) denotes reverse-scored item*
+    *(r) denotes reverse-scored item*
 
-#### Neuroticism
+    #### Neuroticism
 
-| Field | Information |
-|-------|-------------|
-| Description | Mini-IPIP6 Neuroticism dimension [@sibley2011]. |
-| Response Scale | 1 = Strongly Disagree, 7 = Strongly Agree |
-| Waves | 1-current |
+    | Field | Information |
+    |-------|-------------|
+    | Description | Mini-IPIP6 Neuroticism dimension [@sibley2011]. |
+    | Response Scale | 1 = Strongly Disagree, 7 = Strongly Agree |
+    | Waves | 1-current |
 
-**Items:**
+    **Items:**
 
-1. I have frequent mood swings.
-2. I am relaxed most of the time. (r)
-3. I get upset easily.
+    1. I have frequent mood swings.
+    2. I am relaxed most of the time. (r)
+    3. I get upset easily.
 
-*(1 additional items not shown)*
+    *(1 additional items not shown)*
 
-*(r) denotes reverse-scored item*
-```
+    *(r) denotes reverse-scored item*
 
 ### Best Practices
 
-1. Run standardisation after importing legacy databases to ensure consistency
-2. Check the quality report to identify measures needing attention
-3. Review standardised output before saving to ensure nothing important was lost
-4. Keep the original - use `boilerplate_export()` to create a backup before standardising
-5. Document changes - the standardisation adds metadata showing when measures were standardised
+1.  Run standardisation after importing legacy databases to ensure
+    consistency
+2.  Check the quality report to identify measures needing attention
+3.  Review standardised output before saving to ensure nothing important
+    was lost
+4.  Keep the original - use `boilerplate_export()` to create a backup
+    before standardising
+5.  Document changes - the standardisation adds metadata showing when
+    measures were standardised
 
 ## Batch Editing and Cleaning Databases
 
-The package includes powerful functions for batch editing and cleaning your databases. These are particularly useful when you need to update multiple entries at once or clean up inconsistent formatting.
+The package includes powerful functions for batch editing and cleaning
+your databases. These are particularly useful when you need to update
+multiple entries at once or clean up inconsistent formatting.
 
 ### Batch Editing Fields
 
-Use `boilerplate_batch_edit()` to update specific fields across multiple entries:
+Use `boilerplate_batch_edit()` to update specific fields across multiple
+entries:
 
-```{r}
-# First, ensure you have a database to work with
-# If starting fresh, initialize it:
-boilerplate_init(
-  data_path = "boilerplate/data",
-  create_dirs = TRUE,
-  create_empty = FALSE,  # Start with example content
-  confirm = FALSE        # For non-interactive use
-)
-
+``` r
 # Load your database
-unified_db <- boilerplate_import(data_path = "boilerplate/data")
+unified_db <- boilerplate_import()
 
 # Example 1: Update specific references
 unified_db <- boilerplate_batch_edit(
@@ -957,7 +1009,7 @@ unified_db <- boilerplate_batch_edit(
 
 Always preview changes before applying them:
 
-```{r}
+``` r
 # preview what would change
 boilerplate_batch_edit(
   db = unified_db,
@@ -979,7 +1031,7 @@ boilerplate_batch_edit(
 
 Edit multiple fields in one operation:
 
-```{r}
+``` r
 # update both reference and waves for specific entries
 unified_db <- boilerplate_batch_edit_multi(
   db = unified_db,
@@ -1003,8 +1055,7 @@ unified_db <- boilerplate_batch_edit_multi(
 
 Clean up formatting issues across your database:
 
-```{r}
-# Continue with the unified_db from previous examples
+``` r
 # Example 1: Remove unwanted characters from references
 unified_db <- boilerplate_batch_clean(
   db = unified_db,
@@ -1042,17 +1093,13 @@ unified_db <- boilerplate_batch_clean(
   collapse_spaces = TRUE,
   category = "measures"
 )
-
-# Save all the changes made through batch operations
-boilerplate_save(unified_db, data_path = "boilerplate/data")
 ```
 
 ### Finding Entries That Need Cleaning
 
 Before cleaning, identify which entries contain specific characters:
 
-```{r}
-# Using the same unified_db from previous examples
+``` r
 # Find all entries with problematic characters
 entries_to_clean <- boilerplate_find_chars(
   db = unified_db,
@@ -1076,9 +1123,9 @@ entries_to_clean <- boilerplate_find_chars(
 
 ### Workflow Example: Cleaning References
 
-Here's a complete workflow for cleaning up reference formatting:
+Here’s a complete workflow for cleaning up reference formatting:
 
-```{r}
+``` r
 # 1. First, see what needs cleaning
 problem_refs <- boilerplate_find_chars(
   db = unified_db,
@@ -1117,23 +1164,28 @@ boilerplate_save(unified_db)
 
 ### Best Practices for Batch Operations
 
-1. **Always preview first**: Use `preview = TRUE` to see what will change
+1.  **Always preview first**: Use `preview = TRUE` to see what will
+    change
 
-2. **Make backups**: Export your database before major changes
-   ```{r}
-   boilerplate_export(unified_db, output_file = "backup_before_cleaning.rds")
-   ```
+2.  **Make backups**: Export your database before major changes
 
-3. **Use exclusions carefully**: Some entries might have special formatting requirements
+    ``` r
+    boilerplate_export(unified_db, output_file = "backup_before_cleaning.rds")
+    ```
 
-4. **Test on subsets**: Try operations on a few entries before applying to all
+3.  **Use exclusions carefully**: Some entries might have special
+    formatting requirements
 
-5. **Document changes**: Keep notes about what was changed and why
+4.  **Test on subsets**: Try operations on a few entries before applying
+    to all
+
+5.  **Document changes**: Keep notes about what was changed and why
 
 ### Common Use Cases
 
 **Standardising References**
-```{r}
+
+``` r
 # Convert various reference formats to consistent style
 unified_db <- boilerplate_batch_clean(
   db = unified_db,
@@ -1149,7 +1201,8 @@ unified_db <- boilerplate_batch_clean(
 ```
 
 **Updating Wave Information**
-```{r}
+
+``` r
 # Update all measures from a specific wave range
 unified_db <- boilerplate_batch_edit(
   db = unified_db,
@@ -1161,7 +1214,8 @@ unified_db <- boilerplate_batch_edit(
 ```
 
 **Fixing Description Formatting**
-```{r}
+
+``` r
 # Clean up description formatting issues
 unified_db <- boilerplate_batch_clean(
   db = unified_db,
@@ -1176,13 +1230,16 @@ unified_db <- boilerplate_batch_clean(
 )
 ```
 
-These batch operations make it easy to maintain consistency across your entire database, especially when dealing with legacy data or contributions from multiple sources.
+These batch operations make it easy to maintain consistency across your
+entire database, especially when dealing with legacy data or
+contributions from multiple sources.
 
 ## Appendix Content with the Unified Database
 
-The package supports appendix content that can be managed within the unified database:
+The package supports appendix content that can be managed within the
+unified database:
 
-```{r}
+``` r
 # import the unified database
 unified_db <- boilerplate_import()
 
@@ -1209,9 +1266,10 @@ cat(appendix_text)
 
 ## Creating Complete Document Workflows
 
-You can create complete workflows that integrate methods, results, and templates using the unified database:
+You can create complete workflows that integrate methods, results, and
+templates using the unified database:
 
-```{r}
+``` r
 # import the unified database
 unified_db <- boilerplate_import()
 
@@ -1263,9 +1321,10 @@ cat(substr(journal_article, 1, 2500), "...")
 
 ## Advanced Usage: Audience-Specific Reports with the Unified Database
 
-You can create tailored reports for different audiences from the same underlying data:
+You can create tailored reports for different audiences from the same
+underlying data:
 
-```{r}
+``` r
 # import the unified database
 unified_db <- boilerplate_import()
 
@@ -1308,9 +1367,10 @@ cat("General audience report:\n\n", general_report)
 
 ## Helper Functions for the Unified Database
 
-The unified database approach includes several helper functions to extract specific categories:
+The unified database approach includes several helper functions to
+extract specific categories:
 
-```{r}
+``` r
 # import the unified database
 unified_db <- boilerplate_import()
 
@@ -1333,9 +1393,10 @@ causal_assumptions <- unified_db$methods$causal_assumptions$identification
 
 ## Document Templates with the Unified Database
 
-The package supports document templates that can be used to create complete documents with placeholders for dynamic content:
+The package supports document templates that can be used to create
+complete documents with placeholders for dynamic content:
 
-```{r}
+``` r
 # import unified database
 unified_db <- boilerplate_import()
 
@@ -1364,9 +1425,10 @@ cat(abstract_text)
 
 ## Complete Workflow Example with the Unified Database
 
-This example demonstrates combining multiple components to create a complete methods section using the unified database approach:
+This example demonstrates combining multiple components to create a
+complete methods section using the unified database approach:
 
-```{r}
+``` r
 # initialise all databases and import them
 boilerplate_init(create_dirs = TRUE, confirm = TRUE)
 unified_db <- boilerplate_import()
@@ -1424,22 +1486,22 @@ cat(exposure_text)
 
 To cite the boilerplate package in publications, please use:
 
-Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating Standardised Text for Scientific Reports. R package version 1.2.0 https://doi.org/10.5281/zenodo.13370825
+Bulbulia, J. (2025). boilerplate: Tools for Managing and Generating
+Standardised Text for Scientific Reports. R package version 1.2.0
+<https://doi.org/10.5281/zenodo.13370825>
 
 A BibTeX entry for LaTeX users:
 
-```
-@software{bulbulia_boilerplate_2025,
-  author       = {Bulbulia, Joseph},
-  title        = {{boilerplate: Tools for Managing and Generating 
-                   Standardised Text for Scientific Reports}},
-  year         = 2025,
-  publisher    = {Zenodo},
-  version      = {1.2.0},
-  doi          = {10.5281/zenodo.13370825},
-  url          = {https://github.com/go-bayes/boilerplate}
-}
-```
+    @software{bulbulia_boilerplate_2025,
+      author       = {Bulbulia, Joseph},
+      title        = {{boilerplate: Tools for Managing and Generating 
+                       Standardised Text for Scientific Reports}},
+      year         = 2025,
+      publisher    = {Zenodo},
+      version      = {1.2.0},
+      doi          = {10.5281/zenodo.13370825},
+      url          = {https://github.com/go-bayes/boilerplate}
+    }
 
 ## Licence
 
@@ -1447,54 +1509,60 @@ MIT © Joseph Bulbulia
 
 ## See Also
 
-For specific workflows:
-- JSON support: See `vignette("boilerplate-json-workflow")`
-- Quarto integration: See `vignette("boilerplate-quarto-workflow")`
-- Getting started: See `vignette("boilerplate-intro")`
+For specific workflows: - JSON support: See
+`vignette("boilerplate-json-workflow")` - Quarto integration: See
+`vignette("boilerplate-quarto-workflow")` - Getting started: See
+`vignette("boilerplate-intro")`
 
 ### Example Files
 
-The package includes example files in the `inst/` directory:
-- **Quarto example**: `system.file("examples", "minimal-quarto-example.qmd", package = "boilerplate")`
-- **JSON workflows**: See files in `system.file("examples/json-examples", package = "boilerplate")`
-- **Example data**: CSV and JSON examples in `system.file("extdata", package = "boilerplate")`
+The package includes example files in the `inst/` directory: - **Quarto
+example**:
+`system.file("examples", "minimal-quarto-example.qmd", package = "boilerplate")` -
+**JSON workflows**: See files in
+`system.file("examples/json-examples", package = "boilerplate")` -
+**Example data**: CSV and JSON examples in
+`system.file("extdata", package = "boilerplate")`
 
 ## Development Roadmap
 
-The `boilerplate` package is under active development. Here's our planned roadmap for upcoming features:
+The `boilerplate` package is under active development. Here’s our
+planned roadmap for upcoming features:
 
 ### 🚀 Near Term
-**Enhanced Type Safety (v1.2.1)**
-- Implementation of S3 classes for all database objects
-- Improved validation and error messages
-- Better IDE support with autocompletion
-- Zero breaking changes - full backward compatibility
 
-### 📋 Medium Term  
-**Extended S3 Methods (v1.3.x)**
-- Custom print methods for cleaner output
-- Validation methods for database integrity
-- Safe subsetting and extraction operators
-- Enhanced merge capabilities with type checking
+**Enhanced Type Safety (v1.2.1)** - Implementation of S3 classes for all
+database objects - Improved validation and error messages - Better IDE
+support with autocompletion - Zero breaking changes - full backward
+compatibility
+
+### 📋 Medium Term
+
+**Extended S3 Methods (v1.3.x)** - Custom print methods for cleaner
+output - Validation methods for database integrity - Safe subsetting and
+extraction operators - Enhanced merge capabilities with type checking
 
 ### 🔮 Long Term
-**Modern R Infrastructure (v2.0)**
-- Migration to S7 object system (once stable)
-- Performance optimizations
-- Extended validation framework
-- Advanced project management features
+
+**Modern R Infrastructure (v2.0)** - Migration to S7 object system (once
+stable) - Performance optimizations - Extended validation framework -
+Advanced project management features
 
 ### 🎯 Design Principles
-Our development follows these principles:
-- **Backward compatibility**: No breaking changes without major version bump
-- **User-first design**: Features driven by real research needs
-- **Type safety**: Progressive enhancement of type checking
-- **Modern R practices**: Adoption of new standards as they mature
+
+Our development follows these principles: - **Backward compatibility**:
+No breaking changes without major version bump - **User-first design**:
+Features driven by real research needs - **Type safety**: Progressive
+enhancement of type checking - **Modern R practices**: Adoption of new
+standards as they mature
 
 ### 📊 Current State
+
 - **Version**: 1.2.0 (CRAN submission pending)
 - **Code coverage**: 63.54%
 - **Dependencies**: Minimal (6 packages)
 - **Test suite**: 130 tests across 16 files
 
-We welcome feedback and contributions! Please see our [contribution guidelines](https://github.com/go-bayes/boilerplate/blob/main/.github/CONTRIBUTING.md) for more information.
+We welcome feedback and contributions! Please see our [contribution
+guidelines](https://github.com/go-bayes/boilerplate/blob/main/.github/CONTRIBUTING.md)
+for more information.

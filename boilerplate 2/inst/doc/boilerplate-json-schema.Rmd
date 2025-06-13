@@ -1,0 +1,378 @@
+---
+title: "JSON Schema Documentation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{JSON Schema Documentation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Overview
+
+The boilerplate package supports JSON format for all database operations. This document describes the JSON schema structure for different database types.
+
+# Unified Database Schema
+
+The unified database combines all categories into a single JSON file:
+
+```json
+{
+  "methods": { ... },
+  "measures": { ... },
+  "results": { ... },
+  "discussion": { ... },
+  "appendix": { ... },
+  "template": { ... }
+}
+```
+
+# Methods Database Schema
+
+Methods entries contain standardised text with template variables.
+
+## Basic Structure
+
+```json
+{
+  "category": {
+    "subcategory": {
+      "entry_name": {
+        "text": "Method description with {{variables}}",
+        "reference": "@citation2023",
+        "keywords": ["keyword1", "keyword2"]
+      }
+    }
+  }
+}
+```
+
+## Entry Variants
+
+Methods can have multiple text variants:
+
+```json
+{
+  "statistical": {
+    "regression": {
+      "linear": {
+        "default": "We used linear regression to analyse {{outcome}}.",
+        "large": "We employed ordinary least squares linear regression to examine the relationship between {{predictors}} and {{outcome}}. Model assumptions were checked including...",
+        "brief": "Linear regression was used."
+      }
+    }
+  }
+}
+```
+
+## Fields
+
+- **text** or **default**: Main content (required)
+- **large**: Extended version (optional)
+- **brief**: Condensed version (optional)
+- **reference**: Citation in @key format (optional)
+- **keywords**: Array of searchable terms (optional)
+- **_meta**: Metadata object (optional)
+
+# Measures Database Schema
+
+Measures entries describe variables and instruments used in research.
+
+## Basic Structure
+
+```json
+{
+  "category": {
+    "measure_name": {
+      "name": "unique_identifier",
+      "description": "Detailed description of the measure",
+      "type": "continuous|categorical|ordinal|binary",
+      "additional_fields": "..."
+    }
+  }
+}
+```
+
+## Complete Example
+
+```json
+{
+  "psychological": {
+    "anxiety": {
+      "gad7": {
+        "name": "gad7",
+        "description": "Generalised Anxiety Disorder 7-item scale",
+        "type": "ordinal",
+        "items": 7,
+        "range": [0, 21],
+        "values": [0, 1, 2, 3],
+        "value_labels": ["Not at all", "Several days", "More than half the days", "Nearly every day"],
+        "cutoffs": {
+          "mild": 5,
+          "moderate": 10,
+          "severe": 15
+        },
+        "reference": "@spitzer2006brief",
+        "keywords": ["anxiety", "screening", "GAD-7"],
+        "scoring": {
+          "type": "sum",
+          "interpretation": {
+            "0-4": "Minimal anxiety",
+            "5-9": "Mild anxiety",
+            "10-14": "Moderate anxiety",
+            "15-21": "Severe anxiety"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Required Fields
+
+- **name**: Unique identifier (string, alphanumeric + underscore)
+- **description**: Full description (string, min 10 characters)
+- **type**: One of: "continuous", "categorical", "ordinal", "binary"
+
+## Optional Fields
+
+### For All Types
+- **reference**: Citation (string)
+- **keywords**: Search terms (array of strings)
+- **waves**: Data collection waves (array of integers)
+- **unit**: Unit of measurement (string)
+
+### For Categorical/Ordinal
+- **values**: Possible values (array)
+- **value_labels**: Labels for values (array of strings)
+
+### For Continuous
+- **range**: [min, max] values (array of 2 numbers)
+
+### For Scales
+- **items**: Number of items (integer)
+- **scoring**: Scoring method object
+- **subscales**: Subscale definitions object
+- **cutoffs**: Clinical cutoffs object
+
+# Results Database Schema
+
+Results entries follow the same pattern as methods:
+
+```json
+{
+  "descriptive": {
+    "demographics": {
+      "age": {
+        "text": "The mean age was {{mean_age}} years (SD = {{sd_age}}).",
+        "reference": "@reporting2023"
+      }
+    }
+  }
+}
+```
+
+# Template Database Schema
+
+Template variables for substitution:
+
+```json
+{
+  "global": {
+    "n": 100,
+    "study_name": "Example Study",
+    "year": 2024
+  },
+  "methods": {
+    "software": "R version 4.3.0",
+    "alpha": 0.05
+  },
+  "measures": {
+    "wave1_date": "January 2024",
+    "wave2_date": "June 2024"
+  }
+}
+```
+
+## Variable Scoping
+
+- **global**: Available to all sections
+- **[section]**: Override globals for specific section
+
+# Schema Validation
+
+## JSON Schema Files
+
+Located in `inst/examples/json-poc/schema/`:
+- `measures_schema.json`: Formal schema for measures
+- `methods_schema.json`: Formal schema for methods
+
+## Validation in R
+
+```r
+# Validate a JSON database
+boilerplate::validate_json_database(
+  json_file = "my_database.json",
+  schema_file = "measures_schema.json"
+)
+```
+
+## Common Validation Errors
+
+1. **Missing required fields**
+   ```json
+   {
+     "measure1": {
+       "description": "Missing 'name' and 'type' fields"
+     }
+   }
+   ```
+
+2. **Invalid type values**
+   ```json
+   {
+     "measure1": {
+       "name": "m1",
+       "description": "Invalid type",
+       "type": "numeric"  // Should be "continuous"
+     }
+   }
+   ```
+
+3. **Mismatched arrays**
+   ```json
+   {
+     "measure1": {
+       "values": [1, 2, 3],
+       "value_labels": ["Low", "High"]  // Should have 3 labels
+     }
+   }
+   ```
+
+# Migration from RDS
+
+## Converting RDS to JSON
+
+```r
+# Single category
+boilerplate_rds_to_json(
+  rds_file = "measures_db.rds",
+  json_file = "measures_db.json"
+)
+
+# Unified database
+boilerplate_migrate_to_json(
+  rds_file = "boilerplate_unified.rds",
+  output_dir = "data/json/"
+)
+```
+
+## Format Differences
+
+### RDS Format
+- Binary R object
+- Preserves all R data types
+- Not human-readable
+- Platform-specific
+
+### JSON Format
+- Text-based
+- Limited data types
+- Human-readable
+- Cross-platform
+
+## Handling Special Cases
+
+1. **NULL values**: Removed in JSON
+2. **Factors**: Converted to character
+3. **Dates**: Stored as ISO 8601 strings
+4. **Attributes**: Stored in _meta fields
+
+# Best Practices
+
+## File Organisation
+
+```
+project/
+├── data/
+│   ├── boilerplate_unified.json    # Single unified file
+│   └── categories/                  # Or separate files
+│       ├── methods.json
+│       ├── measures.json
+│       └── results.json
+```
+
+## Naming Conventions
+
+1. **Keys**: Use lowercase with underscores
+2. **Categories**: Descriptive, hierarchical
+3. **Measures**: Include instrument abbreviation
+
+## Version Control
+
+JSON files work well with git:
+- Human-readable diffs
+- Easy conflict resolution
+- Track changes over time
+
+## Performance Considerations
+
+1. **File Size**: JSON files are larger than RDS
+2. **Parse Time**: Slightly slower than RDS
+3. **Recommendation**: Use unified format for <1000 entries
+
+# Examples
+
+## Creating a New Measures Entry
+
+```json
+{
+  "demographic": {
+    "age": {
+      "name": "age",
+      "description": "Participant age at time of assessment",
+      "type": "continuous",
+      "unit": "years",
+      "range": [18, 100]
+    }
+  }
+}
+```
+
+## Adding a Methods Entry with Variants
+
+```json
+{
+  "sampling": {
+    "random": {
+      "default": "Participants were randomly selected from {{population}}.",
+      "large": "We employed a stratified random sampling approach. The {{population}} was first divided into {{strata}} strata based on {{stratification_var}}. Within each stratum, participants were randomly selected using a random number generator with seed {{seed}} for reproducibility.",
+      "brief": "Random sampling was used.",
+      "reference": "@cochran1977sampling"
+    }
+  }
+}
+```
+
+## Template Variables with Overrides
+
+```json
+{
+  "global": {
+    "software": "R",
+    "version": "4.3.0"
+  },
+  "methods": {
+    "software": "R version 4.3.0 with lme4 package"
+  }
+}
+```
+
+In this example, methods sections will use the more specific software description, while other sections use the global version.
