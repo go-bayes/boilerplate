@@ -8,7 +8,7 @@
 
 ## Testing and quality
 * **Code coverage**: 63.58% overall
-* **Test suite**: 577 tests across 16 test files
+* **Test suite**: 130 tests across 16 test files
 * All examples now properly initialize databases and clean up temporary files
 * Examples are self-contained and run without errors
 
