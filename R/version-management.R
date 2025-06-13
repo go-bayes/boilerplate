@@ -195,7 +195,7 @@ print.boilerplate_files <- function(x, ...) {
   # Standard files
   if (nrow(x$standard) > 0) {
     cat("Standard files:\n")
-    for (i in 1:nrow(x$standard)) {
+    for (i in seq_len(nrow(x$standard))) {
       cat(sprintf("  - %s (modified: %s)\n", 
                   x$standard$file[i], 
                   format(x$standard$modified[i], "%Y-%m-%d %H:%M")))

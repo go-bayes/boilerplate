@@ -397,14 +397,14 @@ print.boilerplate_health <- function(x, ...) {
           cat("    - ", path, "\n", sep = "")
         }
       } else if (issue_name == "orphaned_variables" && length(issue$details) <= 5) {
-        for (path in names(issue$details)[1:min(5, length(issue$details))]) {
+        for (path in names(issue$details)[seq_len(min(5, length(issue$details)))]) {
           cat("    ", path, ": ", paste(issue$details[[path]], collapse = ", "), "\n", sep = "")
         }
         if (length(issue$details) > 5) {
           cat("    ... and ", length(issue$details) - 5, " more paths\n", sep = "")
         }
       } else if (issue_name == "duplicate_content" && length(issue$groups) <= 3) {
-        for (i in seq_along(issue$groups)[1:min(3, length(issue$groups))]) {
+        for (i in seq_along(issue$groups)[seq_len(min(3, length(issue$groups)))]) {
           cat("    Group ", i, ": ", paste(issue$groups[[i]], collapse = ", "), "\n", sep = "")
         }
       }
