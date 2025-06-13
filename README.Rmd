@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-<img src="man/figures/logo-new.png" align="right" width="130" alt="boilerplate hex sticker"/>
+<img src="man/figures/logo.png" align="right" width="130" alt="boilerplate hex sticker"/>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/go-bayes/boilerplate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/go-bayes/boilerplate/actions/workflows/R-CMD-check.yaml)

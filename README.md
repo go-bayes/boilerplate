@@ -1,7 +1,7 @@
 
 <!-- readme.md is generated from readme.rmd. please edit that file -->
 
-<img src="man/figures/logo-new.png" align="right" width="140" alt="boilerplate hex sticker"/>
+<img src="man/figures/logo.png" align="right" width="130" alt="boilerplate hex sticker"/>
 
 <!-- badges: start -->
 

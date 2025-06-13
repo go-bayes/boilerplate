@@ -53,7 +53,7 @@ documents in scientific writing.
 
 ## Package strengths
 
-* **Minimal dependencies**: Only 6 imports (cli, here, jsonlite, jsonvalidate, tools, utils)
+* **Minimal dependencies**: Only 7 imports (cli, digest, here, jsonlite, jsonvalidate, tools, utils)
   - Reduced from 9 in development by replacing glue, janitor, and stringr with base R
   - All remaining dependencies serve essential, distinct purposes
 * **Comprehensive testing**: 726 tests across 22 test files with 71.20% code coverage
