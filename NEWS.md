@@ -7,8 +7,8 @@
 * All \dontrun{} replaced with \donttest{}
 
 ## Testing and quality
-* **Code coverage**: 63.54% (1,352 of 2,367 lines covered)
-* **Test suite**: 130 tests across 16 test files
+* **Code coverage**: 63.58% overall
+* **Test suite**: 577 tests across 16 test files
 * All examples now properly initialize databases and clean up temporary files
 * Examples are self-contained and run without errors
 

@@ -84,10 +84,12 @@ The package addresses a specific need in scientific writing:
 
 ## Testing and code quality
 
-* **Code coverage**: 63.54% (1,352 of 2,367 lines covered)
-  - High coverage (>80%) for core functionality: path operations (93%), health checks (91%), JSON support (84%)
-  - Lower coverage for deprecated functions (0%) and interactive functions that skip in non-interactive environments
-  - 130 tests across 16 test files ensure robust functionality
+* **Code coverage**: 63.58% overall
+  - High coverage (>80%) for core functionality: path operations (93.33%), health checks (91.51%), JSON support (83.78%), standardise measures (83.33%)
+  - Medium coverage (50-80%) for most modules: generate-text (78.26%), zzz (75.00%), batch edit (73.02%), migration utilities (72.03%), version management (68.03%), utilities (59.75%), import functions (57.49%), bibliography support (57.43%), init functions (56.12%), generate measures (51.98%)
+  - Lower coverage for: project functions (46.98%), import-export functions (46.52%), category helpers (45.45%)
+  - Zero coverage for deprecated merge-databases.R (0%) which is intentional as these functions are deprecated
+  - 577 tests across 16 test files ensure robust functionality
 * All examples use \donttest{} instead of \dontrun{}
 * All examples now properly initialize databases and clean up after themselves
 * Consistent API design across all functions
