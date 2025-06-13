@@ -56,8 +56,13 @@ project_name <- "my_wellbeing_study"
 data_path <- file.path(project_name, "data", "boilerplate")
 
 # Option 2: Use a specific location (uncomment if preferred)
-# project_dir <- "~/Documents/my_wellbeing_study"
+# Note: Replace with your actual project directory
+# project_dir <- "/path/to/your/project"  # e.g., "~/Documents/my_wellbeing_study"
 # data_path <- file.path(project_dir, "data", "boilerplate")
+
+# Best practice: Use here::here() for project-based paths
+# library(here)
+# data_path <- here::here("data", "boilerplate")
 
 # Initialise unified database with full path
 boilerplate_init(
@@ -412,15 +417,19 @@ Share your boilerplate database with collaborators:
 
 ```{r team-collaboration}
 # Export to shared location
+# Note: Replace 'shared_path' with your actual shared folder location
+# Examples: Dropbox, OneDrive, network drive, or Git repository
+shared_path <- "/path/to/shared/folder"  # e.g., "~/Dropbox/TeamProject"
+
 boilerplate_export(
   db,
   data_path = data_path,
-  output_file = "~/Dropbox/TeamProject/shared_boilerplate.json",
+  output_file = file.path(shared_path, "shared_boilerplate.json"),
   format = "json"
 )
 
 # Collaborator imports
-team_db <- boilerplate_import("~/Dropbox/TeamProject/shared_boilerplate.json")
+team_db <- boilerplate_import(file.path(shared_path, "shared_boilerplate.json"))
 ```
 
 ## 2. Multiple Papers from Same Dataset

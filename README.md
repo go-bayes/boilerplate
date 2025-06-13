@@ -119,20 +119,20 @@ if (!require(boilerplate, quietly = TRUE)) {
 
 # initialise unified database with example content
 boilerplate_init(
-  data_path = "boilerplate/data",
+  data_path = here::here("boilerplate", "data"),
   create_dirs = TRUE, 
   create_empty = FALSE,  # FALSE loads default example content
   confirm = FALSE
 )
 
 # import the unified database
-unified_db <- boilerplate_import(data_path = "boilerplate/data")
+unified_db <- boilerplate_import(data_path = here::here("boilerplate", "data"))
 
 # add a new method entry directly to the unified database
 unified_db$methods$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
 
 # save all changes at once (JSON by default)
-boilerplate_save(unified_db, data_path = "boilerplate/data", confirm = FALSE)
+boilerplate_save(unified_db, data_path = here::here("boilerplate", "data"), confirm = FALSE)
 
 # generate text with variable substitution
 methods_text <- boilerplate_generate_text(
@@ -157,7 +157,7 @@ ensuring consistent citations across all your boilerplate text:
 ``` r
 # Make sure you have the unified_db loaded from previous example
 # If not, load it:
-# unified_db <- boilerplate_import(data_path = "boilerplate/data")
+# unified_db <- boilerplate_import(data_path = here::here("boilerplate", "data"))
 
 # Add bibliography information to your database
 unified_db <- boilerplate_add_bibliography(
@@ -167,7 +167,7 @@ unified_db <- boilerplate_add_bibliography(
 )
 
 # Save the updated database
-boilerplate_save(unified_db, data_path = "boilerplate/data")
+boilerplate_save(unified_db, data_path = here::here("boilerplate", "data"))
 
 # Generate text and automatically copy bibliography
 methods_text <- boilerplate_generate_text(
@@ -984,14 +984,14 @@ entries:
 # First, ensure you have a database to work with
 # If starting fresh, initialize it with example content:
 boilerplate_init(
-  data_path = "boilerplate/data",
+  data_path = here::here("boilerplate", "data"),
   create_dirs = TRUE,
   create_empty = FALSE,  # FALSE loads example content with actual measures
   confirm = FALSE
 )
 
 # Load your database
-unified_db <- boilerplate_import(data_path = "boilerplate/data")
+unified_db <- boilerplate_import(data_path = here::here("boilerplate", "data"))
 
 # Example 1: Update specific references
 unified_db <- boilerplate_batch_edit(
@@ -1121,7 +1121,7 @@ unified_db <- boilerplate_batch_clean(
 )
 
 # Save all the changes made through batch operations
-boilerplate_save(unified_db, data_path = "boilerplate/data")
+boilerplate_save(unified_db, data_path = here::here("boilerplate", "data"))
 ```
 
 ### Finding Entries That Need Cleaning
@@ -1542,9 +1542,7 @@ MIT © Joseph Bulbulia
 For specific workflows: - JSON support: See
 `vignette("boilerplate-json-workflow")` - Quarto integration: See
 `vignette("boilerplate-quarto-workflow")` - Getting started: See
-`vignette("boilerplate-intro")`
-
-### Example Files
+`vignette("boilerplate-intro")` d \### Example Files
 
 The package includes example files in the `inst/` directory: - **Quarto
 example**:

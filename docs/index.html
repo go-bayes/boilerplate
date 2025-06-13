@@ -172,20 +172,20 @@
 <span></span>
 <span><span class="co"># initialise unified database with example content</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
-<span>  data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># FALSE loads default example content</span></span>
 <span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import the unified database</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add a new method entry directly to the unified database</span></span>
 <span><span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">sample_selection</span> <span class="op">&lt;-</span> <span class="st">"Participants were selected from {{population}} during {{timeframe}}."</span></span>
 <span></span>
 <span><span class="co"># save all changes at once (JSON by default)</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate text with variable substitution</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -208,7 +208,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make sure you have the unified_db loaded from previous example</span></span>
 <span><span class="co"># If not, load it:</span></span>
-<span><span class="co"># unified_db &lt;- boilerplate_import(data_path = "boilerplate/data")</span></span>
+<span><span class="co"># unified_db &lt;- boilerplate_import(data_path = here::here("boilerplate", "data"))</span></span>
 <span></span>
 <span><span class="co"># Add bibliography information to your database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_add_bibliography.html">boilerplate_add_bibliography</a></span><span class="op">(</span></span>
@@ -218,7 +218,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save the updated database</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate text and automatically copy bibliography</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -970,14 +970,14 @@
 <code class="sourceCode R"><span><span class="co"># First, ensure you have a database to work with</span></span>
 <span><span class="co"># If starting fresh, initialize it with example content:</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
-<span>  data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># FALSE loads example content with actual measures</span></span>
 <span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load your database</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Example 1: Update specific references</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_batch_edit.html">boilerplate_batch_edit</a></span><span class="op">(</span></span>
@@ -1104,7 +1104,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save all the changes made through batch operations</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="finding-entries-that-need-cleaning">Finding Entries That Need Cleaning<a class="anchor" aria-label="anchor" href="#finding-entries-that-need-cleaning"></a>
@@ -1492,12 +1492,8 @@
 <div class="section level2">
 <h2 id="see-also">See Also<a class="anchor" aria-label="anchor" href="#see-also"></a>
 </h2>
-<p>For specific workflows: - JSON support: See <code><a href="articles/boilerplate-json-workflow.html">vignette("boilerplate-json-workflow")</a></code> - Quarto integration: See <code><a href="articles/boilerplate-quarto-workflow.html">vignette("boilerplate-quarto-workflow")</a></code> - Getting started: See <code><a href="articles/boilerplate-intro.html">vignette("boilerplate-intro")</a></code></p>
-<div class="section level3">
-<h3 id="example-files">Example Files<a class="anchor" aria-label="anchor" href="#example-files"></a>
-</h3>
+<p>For specific workflows: - JSON support: See <code><a href="articles/boilerplate-json-workflow.html">vignette("boilerplate-json-workflow")</a></code> - Quarto integration: See <code><a href="articles/boilerplate-quarto-workflow.html">vignette("boilerplate-quarto-workflow")</a></code> - Getting started: See <code><a href="articles/boilerplate-intro.html">vignette("boilerplate-intro")</a></code> d ### Example Files</p>
 <p>The package includes example files in the <code>inst/</code> directory: - <strong>Quarto example</strong>: <code>system.file("examples", "minimal-quarto-example.qmd", package = "boilerplate")</code> - <strong>JSON workflows</strong>: See files in <code>system.file("examples/json-examples", package = "boilerplate")</code> - <strong>Example data</strong>: CSV and JSON examples in <code>system.file("extdata", package = "boilerplate")</code></p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="development-roadmap">Development Roadmap<a class="anchor" aria-label="anchor" href="#development-roadmap"></a>

@@ -262,18 +262,34 @@ message("All references validated successfully!")
 
 ```{r cache-management}
 # Check cache location
-cache_dir <- "~/.boilerplate/cache"
+# Note: The cache directory is system-specific
+# On Unix-like systems (Mac/Linux): ~/.boilerplate/cache
+# On Windows: Usually in %APPDATA%/boilerplate/cache
+cache_dir <- file.path(Sys.getenv("HOME"), ".boilerplate", "cache")
+
+# Alternative: Use platform-independent approach
+# if (!requireNamespace("rappdirs", quietly = TRUE)) {
+#   install.packages("rappdirs")
+# }
+# cache_dir <- file.path(rappdirs::user_cache_dir("boilerplate"), "cache")
 
 # View cached files
-list.files(cache_dir, pattern = "\\.bib$")
+if (dir.exists(cache_dir)) {
+  list.files(cache_dir, pattern = "\\.bib$")
+}
 
 # Clear old cache if needed
-old_files <- list.files(
-  cache_dir, 
-  pattern = "\\.bib$", 
-  full.names = TRUE
-)
-file.remove(old_files[file.mtime(old_files) < Sys.Date() - 30])
+if (dir.exists(cache_dir)) {
+  old_files <- list.files(
+    cache_dir, 
+    pattern = "\\.bib$", 
+    full.names = TRUE
+  )
+  if (length(old_files) > 0) {
+    old_files <- old_files[file.mtime(old_files) < Sys.Date() - 30]
+    if (length(old_files) > 0) file.remove(old_files)
+  }
+}
 ```
 
 ## 3. Version Control Strategy
@@ -314,7 +330,10 @@ open(con)
 bib_file <- boilerplate_update_bibliography(db, force = TRUE)
 
 # Check cache directory permissions
-file.access("~/.boilerplate/cache", mode = 2)  # 0 = success
+cache_dir <- file.path(Sys.getenv("HOME"), ".boilerplate", "cache")
+if (dir.exists(cache_dir)) {
+  file.access(cache_dir, mode = 2)  # 0 = success
+}
 ```
 
 ### Validation Errors

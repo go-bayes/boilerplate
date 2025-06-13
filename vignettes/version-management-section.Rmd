@@ -58,8 +58,9 @@ boilerplate_save(
 #> ✔ Saved unified database to: boilerplate_unified_20240115_143022.rds
 
 # Later, import specific version
+# Note: Replace with your actual timestamped filename
 db_milestone <- boilerplate_import(
-  data_path = "boilerplate/data/boilerplate_unified_20240115_143022.rds"
+  data_path = "path/to/your/boilerplate_unified_20240115_143022.rds"
 )
 ```
 
@@ -117,7 +118,7 @@ boilerplate_restore_backup("methods", restore = TRUE)
 # 5. Compare versions
 current <- boilerplate_import("methods")
 old_version <- boilerplate_import(
-  data_path = "boilerplate/data/methods_db_20240110_120000.rds"
+  data_path = "path/to/your/methods_db_20240110_120000.rds"
 )
 ```
 

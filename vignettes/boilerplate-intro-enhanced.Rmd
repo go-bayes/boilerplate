@@ -40,7 +40,11 @@ Here's how `boilerplate` helps:
 library(boilerplate)
 
 # Sarah's project structure
-project_root <- "~/Research/workplace_wellbeing_project"
+# Note: In practice, use here::here() for project paths or specify full paths
+# Example with here package: project_root <- here::here()
+# Example with full path: project_root <- "/Users/sarah/Research/workplace_wellbeing_project"
+project_root <- tempfile("workplace_wellbeing_project")  # For this example
+dir.create(project_root, recursive = TRUE)
 ```
 
 ## Setting Up the Project

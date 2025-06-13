@@ -330,18 +330,34 @@ management</li>
 </h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check cache location</span></span>
-<span><span class="va">cache_dir</span> <span class="op">&lt;-</span> <span class="st">"~/.boilerplate/cache"</span></span>
+<span><span class="co"># Note: The cache directory is system-specific</span></span>
+<span><span class="co"># On Unix-like systems (Mac/Linux): ~/.boilerplate/cache</span></span>
+<span><span class="co"># On Windows: Usually in %APPDATA%/boilerplate/cache</span></span>
+<span><span class="va">cache_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"HOME"</span><span class="op">)</span>, <span class="st">".boilerplate"</span>, <span class="st">"cache"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Alternative: Use platform-independent approach</span></span>
+<span><span class="co"># if (!requireNamespace("rappdirs", quietly = TRUE)) {</span></span>
+<span><span class="co">#   install.packages("rappdirs")</span></span>
+<span><span class="co"># }</span></span>
+<span><span class="co"># cache_dir &lt;- file.path(rappdirs::user_cache_dir("boilerplate"), "cache")</span></span>
 <span></span>
 <span><span class="co"># View cached files</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">cache_dir</span>, pattern <span class="op">=</span> <span class="st">"\\.bib$"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">cache_dir</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">cache_dir</span>, pattern <span class="op">=</span> <span class="st">"\\.bib$"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Clear old cache if needed</span></span>
-<span><span class="va">old_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span></span>
-<span>  <span class="va">cache_dir</span>, </span>
-<span>  pattern <span class="op">=</span> <span class="st">"\\.bib$"</span>, </span>
-<span>  full.names <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="va">old_files</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.mtime</a></span><span class="op">(</span><span class="va">old_files</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">cache_dir</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">old_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span></span>
+<span>    <span class="va">cache_dir</span>, </span>
+<span>    pattern <span class="op">=</span> <span class="st">"\\.bib$"</span>, </span>
+<span>    full.names <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">old_files</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">old_files</span> <span class="op">&lt;-</span> <span class="va">old_files</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.mtime</a></span><span class="op">(</span><span class="va">old_files</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30</span><span class="op">]</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">old_files</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="va">old_files</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="version-control-strategy">3. Version Control Strategy<a class="anchor" aria-label="anchor" href="#version-control-strategy"></a>
@@ -386,7 +402,10 @@ management</li>
 <span><span class="va">bib_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_update_bibliography.html">boilerplate_update_bibliography</a></span><span class="op">(</span><span class="va">db</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check cache directory permissions</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/file.access.html" class="external-link">file.access</a></span><span class="op">(</span><span class="st">"~/.boilerplate/cache"</span>, mode <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>  <span class="co"># 0 = success</span></span></code></pre></div>
+<span><span class="va">cache_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"HOME"</span><span class="op">)</span>, <span class="st">".boilerplate"</span>, <span class="st">"cache"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">cache_dir</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/file.access.html" class="external-link">file.access</a></span><span class="op">(</span><span class="va">cache_dir</span>, mode <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>  <span class="co"># 0 = success</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="validation-errors">Validation Errors<a class="anchor" aria-label="anchor" href="#validation-errors"></a>

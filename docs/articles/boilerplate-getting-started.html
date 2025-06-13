@@ -117,8 +117,13 @@ location, making the code more reproducible and safer to run.</p>
 <span><span class="va">data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_name</span>, <span class="st">"data"</span>, <span class="st">"boilerplate"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Option 2: Use a specific location (uncomment if preferred)</span></span>
-<span><span class="co"># project_dir &lt;- "~/Documents/my_wellbeing_study"</span></span>
+<span><span class="co"># Note: Replace with your actual project directory</span></span>
+<span><span class="co"># project_dir &lt;- "/path/to/your/project"  # e.g., "~/Documents/my_wellbeing_study"</span></span>
 <span><span class="co"># data_path &lt;- file.path(project_dir, "data", "boilerplate")</span></span>
+<span></span>
+<span><span class="co"># Best practice: Use here::here() for project-based paths</span></span>
+<span><span class="co"># library(here)</span></span>
+<span><span class="co"># data_path &lt;- here::here("data", "boilerplate")</span></span>
 <span></span>
 <span><span class="co"># Initialise unified database with full path</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
@@ -454,15 +459,19 @@ Share your boilerplate database with collaborators:
 
 ``` r
 # Export to shared location
+# Note: Replace 'shared_path' with your actual shared folder location
+# Examples: Dropbox, OneDrive, network drive, or Git repository
+shared_path &lt;- "/path/to/shared/folder"  # e.g., "~/Dropbox/TeamProject"
+
 boilerplate_export(
   db,
   data_path = data_path,
-  output_file = "~/Dropbox/TeamProject/shared_boilerplate.json",
+  output_file = file.path(shared_path, "shared_boilerplate.json"),
   format = "json"
 )
 
 # Collaborator imports
-team_db &lt;- boilerplate_import("~/Dropbox/TeamProject/shared_boilerplate.json")</code></pre>
+team_db &lt;- boilerplate_import(file.path(shared_path, "shared_boilerplate.json"))</code></pre>
 <div class="section level3">
 <h3 id="multiple-papers-from-same-dataset">2. Multiple Papers from Same Dataset<a class="anchor" aria-label="anchor" href="#multiple-papers-from-same-dataset"></a>
 </h3>

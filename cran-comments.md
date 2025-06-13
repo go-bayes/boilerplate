@@ -56,7 +56,7 @@ documents in scientific writing.
 * **Minimal dependencies**: Only 6 imports (cli, here, jsonlite, jsonvalidate, tools, utils)
   - Reduced from 9 in development by replacing glue, janitor, and stringr with base R
   - All remaining dependencies serve essential, distinct purposes
-* **Comprehensive testing**: 173 tests across 22 test files with 63.58% code coverage
+* **Comprehensive testing**: 726 tests across 22 test files with 67.49% code coverage
   - Core functionality has high coverage (>80%)
   - Interactive functions have appropriate skip conditions for non-interactive environments
   - New project functionality tested
@@ -85,12 +85,12 @@ The package addresses a specific need in scientific writing:
 
 ## Testing and code quality
 
-* **Code coverage**: 63.58% overall
-  - High coverage (>80%) for core functionality: path operations (93.33%), health checks (91.51%), JSON support (83.78%), standardise measures (83.33%)
-  - Medium coverage (50-80%) for most modules: generate-text (78.26%), zzz (75.00%), batch edit (73.02%), migration utilities (72.03%), version management (68.03%), utilities (59.75%), import functions (57.49%), bibliography support (57.43%), init functions (56.12%), generate measures (51.98%)
-  - Lower coverage for: project functions (46.98%), import-export functions (46.52%), category helpers (45.45%)
+* **Code coverage**: 67.49% overall
+  - High coverage (>80%) for core functionality: default databases (98.79%), path operations (93.33%), health checks (91.51%), JSON support (83.78%), standardise measures (83.33%), generate-text (81.52%)
+  - Medium coverage (50-80%) for most modules: migration utilities (75.85%), zzz (75.00%), batch edit (73.61%), bibliography support (68.24%), version management (68.03%), generate measures (64.97%), init functions (63.27%), utilities (59.75%), import functions (58.08%)
+  - Lower coverage (<50%) for: import-export functions (49.13%), project functions (46.98%), category helpers (45.45%)
   - Zero coverage for deprecated merge-databases.R (0%) which is intentional as these functions are deprecated
-  - 173 tests across 22 test files ensure robust functionality
+  - 726 tests across 22 test files ensure robust functionality
 * All examples use \donttest{} instead of \dontrun{}
 * All examples now properly initialize databases and clean up after themselves
 * Consistent API design across all functions

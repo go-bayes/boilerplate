@@ -95,6 +95,7 @@ test_that("measures-workflow vignette: measures report generation works", {
   # Initialize with example content
   boilerplate_init(
     data_path = temp_dir,
+    create_dirs = TRUE,
     create_empty = FALSE,
     confirm = FALSE,
     quiet = TRUE
@@ -103,12 +104,12 @@ test_that("measures-workflow vignette: measures report generation works", {
   db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
   
   # Generate measures report
-  report <- boilerplate_measures_report(db$measures, quiet = TRUE)
+  report <- boilerplate_measures_report(db$measures, return_report = TRUE)
   
-  expect_type(report, "list")
-  expect_true("summary" %in% names(report))
-  expect_true("total_measures" %in% names(report$summary))
-  expect_true(report$summary$total_measures > 0)
+  expect_true(is.data.frame(report))
+  expect_true(nrow(report) > 0)
+  expect_true("measure" %in% names(report))
+  expect_true("has_description" %in% names(report))
 })
 
 test_that("measures-workflow vignette: generating measures text works", {
@@ -118,6 +119,7 @@ test_that("measures-workflow vignette: generating measures text works", {
   # Initialize with example content
   boilerplate_init(
     data_path = temp_dir,
+    create_dirs = TRUE,
     create_empty = FALSE,
     confirm = FALSE,
     quiet = TRUE
@@ -127,9 +129,9 @@ test_that("measures-workflow vignette: generating measures text works", {
   
   # Generate measures text for methods section
   measures_text <- boilerplate_generate_measures(
-    measures_db = db$measures,
-    measures = c("anxiety", "depression", "life_satisfaction"),
-    format = "methods",
+    variable_heading = "Study Measures",
+    variables = c("anxiety", "depression", "life_satisfaction"),
+    db = db,
     quiet = TRUE
   )
   
@@ -140,9 +142,11 @@ test_that("measures-workflow vignette: generating measures text works", {
   
   # Generate appendix format
   appendix_text <- boilerplate_generate_measures(
-    measures_db = db$measures,
-    format = "appendix",
-    include_items = TRUE,
+    variable_heading = "Measures Appendix",
+    variables = c("anxiety", "depression", "life_satisfaction"),
+    db = db,
+    table_format = TRUE,
+    sample_items = FALSE,  # Show all items
     quiet = TRUE
   )
   
@@ -157,6 +161,7 @@ test_that("measures-workflow vignette: batch operations on measures work", {
   # Initialize with example content
   boilerplate_init(
     data_path = temp_dir,
+    create_dirs = TRUE,
     create_empty = FALSE,
     confirm = FALSE,
     quiet = TRUE
@@ -208,6 +213,7 @@ test_that("measures-workflow vignette: exporting measures subset works", {
   # Initialize with example content
   boilerplate_init(
     data_path = temp_dir,
+    create_dirs = TRUE,
     create_empty = FALSE,
     confirm = FALSE,
     quiet = TRUE
@@ -224,6 +230,7 @@ test_that("measures-workflow vignette: exporting measures subset works", {
     data_path = temp_dir,
     output_file = output_file,
     format = "json",
+    save_by_category = FALSE,
     quiet = TRUE,
     confirm = FALSE
   )
@@ -244,6 +251,7 @@ test_that("measures-workflow vignette: integrating with analysis works", {
   # Initialize
   boilerplate_init(
     data_path = temp_dir,
+    create_dirs = TRUE,
     create_empty = FALSE,
     confirm = FALSE,
     quiet = TRUE
