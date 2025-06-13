@@ -184,7 +184,10 @@ political attitudes and well-being. You want to:</p>
 <h3 id="add-study-specific-methods">Add Study-Specific Methods<a class="anchor" aria-label="anchor" href="#add-study-specific-methods"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Add your sampling method</span></span>
+<code class="sourceCode R"><span><span class="co"># The 'db' variable contains our database from Step 2</span></span>
+<span><span class="co"># Now we'll add custom content for our study</span></span>
+<span></span>
+<span><span class="co"># Add your sampling method</span></span>
 <span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"methods.sample.nz_national"</span>,</span>
@@ -244,7 +247,8 @@ political attitudes and well-being. You want to:</p>
 <h2 id="step-4-set-up-bibliography-management">Step 4: Set Up Bibliography Management<a class="anchor" aria-label="anchor" href="#step-4-set-up-bibliography-management"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Configure bibliography source</span></span>
+<code class="sourceCode R"><span><span class="co"># Continue working with our 'db' from previous steps</span></span>
+<span><span class="co"># Configure bibliography source</span></span>
 <span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_add_bibliography.html">boilerplate_add_bibliography</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
 <span>  url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/go-bayes/templates/refs/heads/main/bib/references.bib"</span>,</span>

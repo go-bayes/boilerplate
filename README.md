@@ -118,16 +118,20 @@ if (!require(boilerplate, quietly = TRUE)) {
 }
 
 # initialise unified database (default: single JSON file)
-boilerplate_init(create_dirs = TRUE, confirm = TRUE)
+boilerplate_init(
+  data_path = "boilerplate/data",  # Specify where to store the database
+  create_dirs = TRUE, 
+  confirm = FALSE  # Set to TRUE for interactive confirmation
+)
 
 # import the unified database
-unified_db <- boilerplate_import()
+unified_db <- boilerplate_import(data_path = "boilerplate/data")
 
 # add a new method entry directly to the unified database
 unified_db$methods$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
 
 # save all changes at once (JSON by default)
-boilerplate_save(unified_db)
+boilerplate_save(unified_db, data_path = "boilerplate/data")
 
 # generate text with variable substitution
 methods_text <- boilerplate_generate_text(
@@ -150,12 +154,19 @@ The boilerplate package can manage bibliography files for your projects,
 ensuring consistent citations across all your boilerplate text:
 
 ``` r
+# Make sure you have the unified_db loaded from previous example
+# If not, load it:
+# unified_db <- boilerplate_import(data_path = "boilerplate/data")
+
 # Add bibliography information to your database
 unified_db <- boilerplate_add_bibliography(
   unified_db,
   url = "https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib",
   local_path = "references.bib"
 )
+
+# Save the updated database
+boilerplate_save(unified_db, data_path = "boilerplate/data")
 
 # Generate text and automatically copy bibliography
 methods_text <- boilerplate_generate_text(
@@ -192,11 +203,15 @@ For detailed JSON workflows, see
 ### Basic JSON Operations
 
 ``` r
+# First ensure you have a database to import
+# Initialize if needed:
+# boilerplate_init(data_path = "path/to", create_dirs = TRUE)
+
 # import database (automatically detects JSON or RDS format)
 unified_db <- boilerplate_import(data_path = "path/to")
 
 # save as JSON
-boilerplate_save(unified_db, format = "json")
+boilerplate_save(unified_db, data_path = "path/to", format = "json")
 
 # migrate existing RDS databases to JSON
 results <- boilerplate_migrate_to_json(
@@ -965,8 +980,17 @@ Use `boilerplate_batch_edit()` to update specific fields across multiple
 entries:
 
 ``` r
+# First, ensure you have a database to work with
+# If starting fresh, initialize it:
+boilerplate_init(
+  data_path = "boilerplate/data",
+  create_dirs = TRUE,
+  create_empty = FALSE,  # Start with example content
+  confirm = FALSE        # For non-interactive use
+)
+
 # Load your database
-unified_db <- boilerplate_import()
+unified_db <- boilerplate_import(data_path = "boilerplate/data")
 
 # Example 1: Update specific references
 unified_db <- boilerplate_batch_edit(
@@ -1056,6 +1080,7 @@ unified_db <- boilerplate_batch_edit_multi(
 Clean up formatting issues across your database:
 
 ``` r
+# Continue with the unified_db from previous examples
 # Example 1: Remove unwanted characters from references
 unified_db <- boilerplate_batch_clean(
   db = unified_db,
@@ -1093,6 +1118,9 @@ unified_db <- boilerplate_batch_clean(
   collapse_spaces = TRUE,
   category = "measures"
 )
+
+# Save all the changes made through batch operations
+boilerplate_save(unified_db, data_path = "boilerplate/data")
 ```
 
 ### Finding Entries That Need Cleaning
@@ -1100,6 +1128,7 @@ unified_db <- boilerplate_batch_clean(
 Before cleaning, identify which entries contain specific characters:
 
 ``` r
+# Using the same unified_db from previous examples
 # Find all entries with problematic characters
 entries_to_clean <- boilerplate_find_chars(
   db = unified_db,

@@ -173,16 +173,20 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># initialise unified database (default: single JSON file)</span></span>
-<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
+<span>  data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>,  <span class="co"># Specify where to store the database</span></span>
+<span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>  <span class="co"># Set to TRUE for interactive confirmation</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import the unified database</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add a new method entry directly to the unified database</span></span>
 <span><span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">sample_selection</span> <span class="op">&lt;-</span> <span class="st">"Participants were selected from {{population}} during {{timeframe}}."</span></span>
 <span></span>
 <span><span class="co"># save all changes at once (JSON by default)</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate text with variable substitution</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -203,12 +207,19 @@
 </h2>
 <p>The boilerplate package can manage bibliography files for your projects, ensuring consistent citations across all your boilerplate text:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Add bibliography information to your database</span></span>
+<code class="sourceCode R"><span><span class="co"># Make sure you have the unified_db loaded from previous example</span></span>
+<span><span class="co"># If not, load it:</span></span>
+<span><span class="co"># unified_db &lt;- boilerplate_import(data_path = "boilerplate/data")</span></span>
+<span></span>
+<span><span class="co"># Add bibliography information to your database</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_add_bibliography.html">boilerplate_add_bibliography</a></span><span class="op">(</span></span>
 <span>  <span class="va">unified_db</span>,</span>
 <span>  url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib"</span>,</span>
 <span>  local_path <span class="op">=</span> <span class="st">"references.bib"</span></span>
 <span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save the updated database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate text and automatically copy bibliography</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -244,11 +255,15 @@
 <h3 id="basic-json-operations">Basic JSON Operations<a class="anchor" aria-label="anchor" href="#basic-json-operations"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># import database (automatically detects JSON or RDS format)</span></span>
+<code class="sourceCode R"><span><span class="co"># First ensure you have a database to import</span></span>
+<span><span class="co"># Initialize if needed:</span></span>
+<span><span class="co"># boilerplate_init(data_path = "path/to", create_dirs = TRUE)</span></span>
+<span></span>
+<span><span class="co"># import database (automatically detects JSON or RDS format)</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"path/to"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># save as JSON</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, format <span class="op">=</span> <span class="st">"json"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"path/to"</span>, format <span class="op">=</span> <span class="st">"json"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># migrate existing RDS databases to JSON</span></span>
 <span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_migrate_to_json.html">boilerplate_migrate_to_json</a></span><span class="op">(</span></span>
@@ -953,8 +968,17 @@
 </h3>
 <p>Use <code><a href="reference/boilerplate_batch_edit.html">boilerplate_batch_edit()</a></code> to update specific fields across multiple entries:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load your database</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># First, ensure you have a database to work with</span></span>
+<span><span class="co"># If starting fresh, initialize it:</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
+<span>  data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>,</span>
+<span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Start with example content</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>        <span class="co"># For non-interactive use</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load your database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Example 1: Update specific references</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_batch_edit.html">boilerplate_batch_edit</a></span><span class="op">(</span></span>
@@ -1041,7 +1065,8 @@
 </h3>
 <p>Clean up formatting issues across your database:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example 1: Remove unwanted characters from references</span></span>
+<code class="sourceCode R"><span><span class="co"># Continue with the unified_db from previous examples</span></span>
+<span><span class="co"># Example 1: Remove unwanted characters from references</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_batch_clean.html">boilerplate_batch_clean</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  field <span class="op">=</span> <span class="st">"reference"</span>,</span>
@@ -1077,14 +1102,18 @@
 <span>  trim_whitespace <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  collapse_spaces <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  category <span class="op">=</span> <span class="st">"measures"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save all the changes made through batch operations</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="finding-entries-that-need-cleaning">Finding Entries That Need Cleaning<a class="anchor" aria-label="anchor" href="#finding-entries-that-need-cleaning"></a>
 </h3>
 <p>Before cleaning, identify which entries contain specific characters:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Find all entries with problematic characters</span></span>
+<code class="sourceCode R"><span><span class="co"># Using the same unified_db from previous examples</span></span>
+<span><span class="co"># Find all entries with problematic characters</span></span>
 <span><span class="va">entries_to_clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_find_chars.html">boilerplate_find_chars</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  field <span class="op">=</span> <span class="st">"reference"</span>,</span>
