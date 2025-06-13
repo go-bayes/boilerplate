@@ -92,43 +92,31 @@ test_that("boilerplate_import handles JSON files", {
     quiet = TRUE
   )
   
-  # Find where init actually created files
-  json_files <- list.files(test_data_dir, pattern = "\\.json$", recursive = TRUE, full.names = TRUE)
+  # For testing JSON import, we'll work with the initialized structure
+  # First, get the current databases
+  init_db <- boilerplate_import(data_path = test_data_dir, quiet = TRUE)
   
-  # Get the directory containing the JSON files
-  if (length(json_files) > 0) {
-    actual_data_path <- dirname(json_files[1])
-  } else {
-    actual_data_path <- test_data_dir
-  }
+  # Modify the databases with our test data
+  init_db$methods$sample <- list(
+    text = "Sample methods text",
+    description = "Sample description"
+  )
   
-  # Create methods JSON
-  methods_db <- list(
-    sample = list(
-      text = "Sample methods text",
-      description = "Sample description"
+  init_db$measures$demographics <- list(
+    age = list(
+      name = "age",
+      description = "Age in years",
+      type = "continuous"
     )
   )
-  jsonlite::write_json(
-    methods_db, 
-    file.path(actual_data_path, "methods_db.json"),
-    auto_unbox = TRUE
-  )
   
-  # Create measures JSON
-  measures_db <- list(
-    demographics = list(
-      age = list(
-        name = "age",
-        description = "Age in years",
-        type = "continuous"
-      )
-    )
-  )
-  jsonlite::write_json(
-    measures_db,
-    file.path(actual_data_path, "measures_db.json"),
-    auto_unbox = TRUE
+  # Save the modified databases back
+  boilerplate_save(
+    init_db,
+    data_path = test_data_dir,
+    format = "json",
+    confirm = FALSE,
+    quiet = TRUE
   )
   
   # Test importing all categories
