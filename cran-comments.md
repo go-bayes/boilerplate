@@ -18,9 +18,10 @@
 
 This is a resubmission of the boilerplate package (version 1.2.0). Since the initial submission, we have:
 
-* Fixed merge conflicts that occurred during the submission process
-* Corrected YAML syntax errors in GitHub Actions workflows
-* Ensured clean package state for resubmission
+* Fixed all test failures on Windows by adding the `create_dirs=TRUE` parameter to file operations
+* Removed non-standard file (`submit_to_cran.R`) from the top level directory
+* Fixed vignette building errors related to directory creation
+* All tests now pass on Windows, Linux, and macOS platforms
 
 In this version, I have addressed all feedback from the CRAN reviewer:
 
