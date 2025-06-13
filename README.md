@@ -1587,8 +1587,8 @@ standards as they mature
 ### 📊 Current State
 
 - **Version**: 1.2.0 (CRAN submission pending)
-- **Code coverage**: 67.49%
-- **Dependencies**: Minimal (6 packages)
+- **Code coverage**: 71.20%
+- **Dependencies**: Minimal (7 packages)
 - **Test suite**: 726 tests across 22 files
 
 We welcome feedback and contributions! Please see our [contribution

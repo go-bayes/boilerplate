@@ -9,8 +9,10 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 2 notes
 
+* NOTE: New submission
+  - This is expected for the first submission to CRAN
 * NOTE: checking for future file timestamps ... unable to verify current time
   - This is a known issue with the check system and not related to the package
 
