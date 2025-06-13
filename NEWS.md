@@ -1,12 +1,14 @@
 # boilerplate 1.2.0 [2025-06-13]
 
 ## CRAN resubmission
+
 * Addressed all CRAN reviewer feedback from version 1.1.0
 * Fixed all examples to pass R CMD check --run-donttest
 * All exported functions have \value tags
 * All \dontrun{} replaced with \donttest{}
 
 ## Testing and quality
+
 * **Code coverage**: 71.20% overall
 * **Test suite**: 726 tests across 22 test files
 * All examples now properly initialize databases and clean up temporary files
