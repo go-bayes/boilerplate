@@ -16,7 +16,7 @@
 
 ## Resubmission
 
-This is a resubmission of the boilerplate package (version 1.2.0). Since the initial submission, we have:
+This is a resubmission of the boilerplate package (version 1.2.0). In response to the CRAN team feedback, we have:
 
 * Fixed all test failures on Windows by adding the `create_dirs=TRUE` parameter to file operations
 * Removed non-standard file (`submit_to_cran.R`) from the top level directory
@@ -25,11 +25,11 @@ This is a resubmission of the boilerplate package (version 1.2.0). Since the ini
 
 In this version, I have addressed all feedback from the CRAN reviewer:
 
-* Removed redundant "Tools for" from the package title (addressed in v1.1.0)
-* Removed redundant "Provides tools for" from the package description (addressed in v1.1.0)
-* Added \value tags to all exported functions (.Rd files) (addressed in v1.1.0)
-* Replaced all \dontrun{} with \donttest{} in examples (addressed in v1.1.0)
-* **NEW in v1.2.0**: Fixed all examples to pass R CMD check --run-donttest
+* Removed redundant "Tools for" from the package title
+* Removed redundant "Provides tools for" from the package description
+* Added \value tags to all exported functions (.Rd files)
+* Replaced all \dontrun{} with \donttest{} in examples
+* Fixed all examples to pass R CMD check --run-donttest
   - All examples now properly initialize databases in temporary directories
   - Examples clean up after themselves
   - Examples are self-contained and do not rely on existing files
