@@ -172,11 +172,12 @@
 <span>  <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"go-bayes/boilerplate"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># initialise unified database (default: single JSON file)</span></span>
+<span><span class="co"># initialise unified database with example content</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
-<span>  data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>,  <span class="co"># Specify where to store the database</span></span>
+<span>  data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>  <span class="co"># Set to TRUE for interactive confirmation</span></span>
+<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># FALSE loads default example content</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import the unified database</span></span>
@@ -186,7 +187,7 @@
 <span><span class="va">unified_db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">sample_selection</span> <span class="op">&lt;-</span> <span class="st">"Participants were selected from {{population}} during {{timeframe}}."</span></span>
 <span></span>
 <span><span class="co"># save all changes at once (JSON by default)</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate text with variable substitution</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -196,7 +197,7 @@
 <span>    population <span class="op">=</span> <span class="st">"university students"</span>,</span>
 <span>    timeframe <span class="op">=</span> <span class="st">"2020-2021"</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  db <span class="op">=</span> <span class="va">unified_db</span>,  <span class="co"># pass the unified database</span></span>
+<span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  add_headings <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -969,12 +970,12 @@
 <p>Use <code><a href="reference/boilerplate_batch_edit.html">boilerplate_batch_edit()</a></code> to update specific fields across multiple entries:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># First, ensure you have a database to work with</span></span>
-<span><span class="co"># If starting fresh, initialize it:</span></span>
+<span><span class="co"># If starting fresh, initialize it with example content:</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
 <span>  data_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Start with example content</span></span>
-<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>        <span class="co"># For non-interactive use</span></span>
+<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># FALSE loads example content with actual measures</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load your database</span></span>
@@ -985,16 +986,16 @@
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  field <span class="op">=</span> <span class="st">"reference"</span>,</span>
 <span>  new_value <span class="op">=</span> <span class="st">"sibley2021"</span>,</span>
-<span>  target_entries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ban_hate_speech"</span>, <span class="st">"born_nz"</span>, <span class="st">"age"</span><span class="op">)</span>,</span>
+<span>  target_entries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety"</span>, <span class="st">"depression"</span>, <span class="st">"life_satisfaction"</span><span class="op">)</span>,</span>
 <span>  category <span class="op">=</span> <span class="st">"measures"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Example 2: Update all references containing "NZAVS"</span></span>
+<span><span class="co"># Example 2: Update all references containing "_reference"</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_batch_edit.html">boilerplate_batch_edit</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  field <span class="op">=</span> <span class="st">"reference"</span>,</span>
-<span>  new_value <span class="op">=</span> <span class="st">"sibley2021"</span>,</span>
-<span>  match_pattern <span class="op">=</span> <span class="st">"NZAVS"</span>,</span>
+<span>  new_value <span class="op">=</span> <span class="st">"sibley2023"</span>,</span>
+<span>  match_pattern <span class="op">=</span> <span class="st">"_reference"</span>,</span>
 <span>  category <span class="op">=</span> <span class="st">"measures"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -1003,7 +1004,7 @@
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  field <span class="op">=</span> <span class="st">"waves"</span>,</span>
 <span>  new_value <span class="op">=</span> <span class="st">"1-15"</span>,</span>
-<span>  target_entries <span class="op">=</span> <span class="st">"anxiety*"</span>,  <span class="co"># All entries starting with "anxiety"</span></span>
+<span>  target_entries <span class="op">=</span> <span class="st">"alcohol*"</span>,  <span class="co"># All entries starting with "alcohol"</span></span>
 <span>  category <span class="op">=</span> <span class="st">"measures"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -1012,7 +1013,7 @@
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  field <span class="op">=</span> <span class="st">"reference"</span>,</span>
 <span>  new_value <span class="op">=</span> <span class="st">"sibley2024"</span>,</span>
-<span>  match_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dore2022boundaries"</span>, <span class="st">"string_is Developed for the NZAVS."</span><span class="op">)</span>,</span>
+<span>  match_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety_reference"</span>, <span class="st">"depression_reference"</span><span class="op">)</span>,</span>
 <span>  category <span class="op">=</span> <span class="st">"measures"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -1078,18 +1079,18 @@
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_batch_clean.html">boilerplate_batch_clean</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  field <span class="op">=</span> <span class="st">"reference"</span>,</span>
-<span>  remove_chars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"@"</span>, <span class="st">"["</span>, <span class="st">"]"</span><span class="op">)</span>,</span>
-<span>  exclude_entries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"forgiveness"</span>, <span class="st">"special_measure"</span><span class="op">)</span>,</span>
+<span>  remove_chars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="st">"["</span>, <span class="st">"]"</span><span class="op">)</span>,</span>
+<span>  exclude_entries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"anxiety"</span>, <span class="st">"depression"</span><span class="op">)</span>,</span>
 <span>  category <span class="op">=</span> <span class="st">"measures"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Example 3: Clean with pattern matching and exclusions</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_batch_clean.html">boilerplate_batch_clean</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
-<span>  field <span class="op">=</span> <span class="st">"reference"</span>,</span>
-<span>  remove_chars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"@"</span>, <span class="st">"["</span>, <span class="st">"]"</span><span class="op">)</span>,</span>
-<span>  target_entries <span class="op">=</span> <span class="st">"emp_*"</span>,        <span class="co"># All entries starting with "emp_"</span></span>
-<span>  exclude_entries <span class="op">=</span> <span class="st">"emp_special"</span>,  <span class="co"># Except this one</span></span>
+<span>  field <span class="op">=</span> <span class="st">"description"</span>,</span>
+<span>  remove_chars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"("</span>, <span class="st">")"</span><span class="op">)</span>,</span>
+<span>  target_entries <span class="op">=</span> <span class="st">"life_*"</span>,        <span class="co"># All entries starting with "life_"</span></span>
+<span>  exclude_entries <span class="op">=</span> <span class="st">"life_events"</span>,  <span class="co"># Except this one (if it existed)</span></span>
 <span>  category <span class="op">=</span> <span class="st">"measures"</span></span>
 <span><span class="op">)</span></span>
 <span></span>

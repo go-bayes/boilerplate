@@ -117,11 +117,12 @@ if (!require(boilerplate, quietly = TRUE)) {
   devtools::install_github("go-bayes/boilerplate")
 }
 
-# initialise unified database (default: single JSON file)
+# initialise unified database with example content
 boilerplate_init(
-  data_path = "boilerplate/data",  # Specify where to store the database
+  data_path = "boilerplate/data",
   create_dirs = TRUE, 
-  confirm = FALSE  # Set to TRUE for interactive confirmation
+  create_empty = FALSE,  # FALSE loads default example content
+  confirm = FALSE
 )
 
 # import the unified database
@@ -131,7 +132,7 @@ unified_db <- boilerplate_import(data_path = "boilerplate/data")
 unified_db$methods$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
 
 # save all changes at once (JSON by default)
-boilerplate_save(unified_db, data_path = "boilerplate/data")
+boilerplate_save(unified_db, data_path = "boilerplate/data", confirm = FALSE)
 
 # generate text with variable substitution
 methods_text <- boilerplate_generate_text(
@@ -141,7 +142,7 @@ methods_text <- boilerplate_generate_text(
     population = "university students",
     timeframe = "2020-2021"
   ),
-  db = unified_db,  # pass the unified database
+  db = unified_db,
   add_headings = TRUE
 )
 
@@ -981,12 +982,12 @@ entries:
 
 ``` r
 # First, ensure you have a database to work with
-# If starting fresh, initialize it:
+# If starting fresh, initialize it with example content:
 boilerplate_init(
   data_path = "boilerplate/data",
   create_dirs = TRUE,
-  create_empty = FALSE,  # Start with example content
-  confirm = FALSE        # For non-interactive use
+  create_empty = FALSE,  # FALSE loads example content with actual measures
+  confirm = FALSE
 )
 
 # Load your database
@@ -997,16 +998,16 @@ unified_db <- boilerplate_batch_edit(
   db = unified_db,
   field = "reference",
   new_value = "sibley2021",
-  target_entries = c("ban_hate_speech", "born_nz", "age"),
+  target_entries = c("anxiety", "depression", "life_satisfaction"),
   category = "measures"
 )
 
-# Example 2: Update all references containing "NZAVS"
+# Example 2: Update all references containing "_reference"
 unified_db <- boilerplate_batch_edit(
   db = unified_db,
   field = "reference",
-  new_value = "sibley2021",
-  match_pattern = "NZAVS",
+  new_value = "sibley2023",
+  match_pattern = "_reference",
   category = "measures"
 )
 
@@ -1015,7 +1016,7 @@ unified_db <- boilerplate_batch_edit(
   db = unified_db,
   field = "waves",
   new_value = "1-15",
-  target_entries = "anxiety*",  # All entries starting with "anxiety"
+  target_entries = "alcohol*",  # All entries starting with "alcohol"
   category = "measures"
 )
 
@@ -1024,7 +1025,7 @@ unified_db <- boilerplate_batch_edit(
   db = unified_db,
   field = "reference",
   new_value = "sibley2024",
-  match_values = c("dore2022boundaries", "string_is Developed for the NZAVS."),
+  match_values = c("anxiety_reference", "depression_reference"),
   category = "measures"
 )
 ```
@@ -1093,18 +1094,18 @@ unified_db <- boilerplate_batch_clean(
 unified_db <- boilerplate_batch_clean(
   db = unified_db,
   field = "reference",
-  remove_chars = c("@", "[", "]"),
-  exclude_entries = c("forgiveness", "special_measure"),
+  remove_chars = c("_", "[", "]"),
+  exclude_entries = c("anxiety", "depression"),
   category = "measures"
 )
 
 # Example 3: Clean with pattern matching and exclusions
 unified_db <- boilerplate_batch_clean(
   db = unified_db,
-  field = "reference",
-  remove_chars = c("@", "[", "]"),
-  target_entries = "emp_*",        # All entries starting with "emp_"
-  exclude_entries = "emp_special",  # Except this one
+  field = "description",
+  remove_chars = c("(", ")"),
+  target_entries = "life_*",        # All entries starting with "life_"
+  exclude_entries = "life_events",  # Except this one (if it existed)
   category = "measures"
 )
 

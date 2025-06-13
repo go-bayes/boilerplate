@@ -1452,7 +1452,7 @@ For specific workflows:
 - JSON support: See `vignette("boilerplate-json-workflow")`
 - Quarto integration: See `vignette("boilerplate-quarto-workflow")`
 - Getting started: See `vignette("boilerplate-intro")`
-
+d
 ### Example Files
 
 The package includes example files in the `inst/` directory:
