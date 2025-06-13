@@ -92,12 +92,14 @@ test_that("boilerplate_import handles JSON files", {
     quiet = TRUE
   )
   
-  # Determine the actual data path where files should be placed
-  # For temp directories, the init function uses flat structure
-  actual_data_path <- if (grepl("^/tmp|^/var/folders|Temp", test_data_dir)) {
-    test_data_dir
+  # Find where init actually created files
+  json_files <- list.files(test_data_dir, pattern = "\\.json$", recursive = TRUE, full.names = TRUE)
+  
+  # Get the directory containing the JSON files
+  if (length(json_files) > 0) {
+    actual_data_path <- dirname(json_files[1])
   } else {
-    file.path(test_data_dir, "projects", "default", "data")
+    actual_data_path <- test_data_dir
   }
   
   # Create methods JSON
