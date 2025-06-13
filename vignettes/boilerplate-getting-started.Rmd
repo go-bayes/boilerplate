@@ -30,6 +30,8 @@ Imagine you're writing a paper about the relationship between political attitude
 
 Let's see how boilerplate makes this easier!
 
+> **Note on Working Directories**: This vignette uses relative paths and does not change your working directory with `setwd()`. All paths are constructed relative to your current location, making the code more reproducible and safer to run.
+
 # Step 1: Initial Project Setup
 
 ## Install and Load the Package
@@ -48,20 +50,24 @@ library(boilerplate)
 ## Create Project Structure
 
 ```{r setup-project}
-# Set up your project directory
-project_dir <- "~/Documents/my_wellbeing_study"
-dir.create(project_dir, showWarnings = FALSE)
-setwd(project_dir)
+# Set up your project structure (without changing working directory)
+# Option 1: Create in current directory
+project_name <- "my_wellbeing_study"
+data_path <- file.path(project_name, "data", "boilerplate")
 
-# Initialise unified database (new default)
+# Option 2: Use a specific location (uncomment if preferred)
+# project_dir <- "~/Documents/my_wellbeing_study"
+# data_path <- file.path(project_dir, "data", "boilerplate")
+
+# Initialise unified database with full path
 boilerplate_init(
-  data_path = "data/boilerplate",
+  data_path = data_path,
   create_dirs = TRUE,
   create_empty = FALSE  # Start with example content
 )
-#> ✔ Created directory: data/boilerplate
+#> ✔ Created directory: my_wellbeing_study/data/boilerplate
 #> ✔ Initialising unified database with 6 categories
-#> ✔ Saved unified database to data/boilerplate/boilerplate_unified.json
+#> ✔ Saved unified database to my_wellbeing_study/data/boilerplate/boilerplate_unified.json
 ```
 
 # Step 2: Explore the Default Content
@@ -69,8 +75,8 @@ boilerplate_init(
 ## View Available Methods
 
 ```{r explore-methods}
-# Import the database
-db <- boilerplate_import(data_path = "data/boilerplate")
+# Import the database using the same path
+db <- boilerplate_import(data_path = data_path)
 
 # See what methods are available
 methods_db <- boilerplate_methods(db)
@@ -152,7 +158,7 @@ db <- boilerplate_add_entry(
 )
 
 # Save your customizations
-boilerplate_save(db, data_path = "data/boilerplate")
+boilerplate_save(db, data_path = data_path)
 ```
 
 ## Add Study-Specific Measures
@@ -177,7 +183,7 @@ db <- boilerplate_add_entry(
 )
 
 # Update the database
-boilerplate_save(db, data_path = "data/boilerplate")
+boilerplate_save(db, data_path = data_path)
 ```
 
 # Step 4: Set Up Bibliography Management
@@ -195,7 +201,7 @@ db <- boilerplate_add_bibliography(
 boilerplate_copy_bibliography(db, target_dir = ".")
 
 # Save configuration
-boilerplate_save(db, data_path = "data/boilerplate")
+boilerplate_save(db, data_path = data_path)
 ```
 
 # Step 5: Generate Your Methods Section
@@ -335,7 +341,7 @@ if (!validation$valid) {
 boilerplate_export(
   db,
   paths = c("methods.*", "measures.*"),
-  data_path = "data/boilerplate",
+  data_path = data_path,
   output_file = "project_boilerplate.json",
   format = "json"  # JSON is git-friendly
 )
@@ -408,7 +414,7 @@ Share your boilerplate database with collaborators:
 # Export to shared location
 boilerplate_export(
   db,
-  data_path = "data/boilerplate",
+  data_path = data_path,
   output_file = "~/Dropbox/TeamProject/shared_boilerplate.json",
   format = "json"
 )
