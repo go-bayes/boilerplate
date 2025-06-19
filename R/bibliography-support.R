@@ -1,10 +1,28 @@
+# internal function to migrate cache from old location to new cran-compliant location
+migrate_old_cache <- function() {
+  old_cache <- path.expand("~/.boilerplate/cache")
+  new_cache <- tools::R_user_dir("boilerplate", "cache")
+  
+  if (dir.exists(old_cache) && !identical(old_cache, new_cache)) {
+    if (!dir.exists(new_cache)) {
+      dir.create(new_cache, recursive = TRUE, showWarnings = FALSE)
+    }
+    # copy files from old to new location
+    files <- list.files(old_cache, full.names = TRUE)
+    if (length(files) > 0) {
+      file.copy(files, new_cache, overwrite = FALSE)
+      message("Migrated bibliography cache from old location to ", new_cache)
+    }
+  }
+}
+
 #' Update Bibliography from Remote Source
 #'
 #' Downloads and caches a bibliography file from a remote URL specified in the database.
 #'
 #' @param db Database object containing bibliography information
 #' @param cache_dir Directory to cache the bibliography file.
-#'   Default is "~/.boilerplate/cache"
+#'   Default uses tools::R_user_dir("boilerplate", "cache")
 #' @param force Logical. Force re-download even if cached file exists
 #' @param quiet Logical. Suppress messages
 #'
@@ -31,10 +49,17 @@
 #' @export
 boilerplate_update_bibliography <- function(
   db,
-    cache_dir = "~/.boilerplate/cache",
+    cache_dir = NULL,
     force = FALSE,
     quiet = FALSE
 ) {
+  # use cran-compliant cache directory
+  if (is.null(cache_dir)) {
+    cache_dir <- tools::R_user_dir("boilerplate", "cache")
+    # migrate from old location if needed
+    migrate_old_cache()
+  }
+  
   # Extract bibliography info
   bib_info <- if (is.list(db) && "bibliography" %in% names(db)) {
     db$bibliography

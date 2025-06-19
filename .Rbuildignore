@@ -37,3 +37,6 @@
 ^codecov\.yml$
 ^CRAN-SUBMISSION$
 ^inst/ROADMAP_S3_CLASSES\.md$
+^planning$
+^summary$
+^\.vscode$

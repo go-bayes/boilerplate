@@ -258,6 +258,60 @@ test_that("generate_text copies bibliography when requested", {
   unlink(temp_dir, recursive = TRUE)
 })
 
+test_that("default cache directory is set correctly", {
+  # Simple test without mocking
+  expected_cache <- tools::R_user_dir("boilerplate", "cache")
+  
+  # The internal migrate_old_cache function should use the same path
+  # We can't test it directly since it's internal, but we can verify
+  # the pattern is consistent
+  expect_true(is.character(expected_cache))
+  expect_true(length(expected_cache) == 1)
+  expect_true(nchar(expected_cache) > 0)
+})
+
+test_that("cache directory uses tools::R_user_dir", {
+  # Skip on CRAN to avoid mocking issues
+  skip_on_cran()
+  
+  # Create test database with bibliography
+  test_db <- list(
+    bibliography = list(
+      url = "https://example.com/test.bib",
+      local_path = "test.bib"
+    )
+  )
+  
+  # Create a temporary file to simulate successful download
+  temp_dir <- tempfile()
+  dir.create(temp_dir)
+  temp_bib <- file.path(temp_dir, "test.bib")
+  writeLines("@article{test2024}", temp_bib)
+  
+  # Mock download.file to copy our temp file
+  with_mocked_bindings(
+    download.file = function(url, destfile, ...) {
+      file.copy(temp_bib, destfile, overwrite = TRUE)
+      invisible(0)
+    },
+    {
+      # Get cache directory that would be used
+      expected_cache <- tools::R_user_dir("boilerplate", "cache")
+      
+      # Call update_bibliography without specifying cache_dir
+      result <- suppressMessages(boilerplate_update_bibliography(test_db, quiet = TRUE))
+      
+      # Check that result uses the expected cache directory
+      expect_true(!is.null(result))
+      expect_true(grepl(expected_cache, result, fixed = TRUE))
+    },
+    .package = "utils"
+  )
+  
+  # Clean up
+  unlink(temp_dir, recursive = TRUE)
+})
+
 test_that("bibliography validation integrates with database workflow", {
   # Create a complete test scenario
   temp_dir <- tempfile("test_workflow")

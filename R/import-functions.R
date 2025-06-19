@@ -11,7 +11,7 @@
 #' @param data_path Character. Can be either:
 #'   - A directory path containing database files (original behaviour)
 #'   - A specific file path to import (e.g., "data/methods_db_20240115_143022.rds")
-#'   If NULL (default), uses here::here("boilerplate", "data").
+#'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
 #' @param project Character. Project name for organizing databases. Default is "default".
 #'   Projects are stored in separate subdirectories to allow multiple independent
@@ -75,7 +75,6 @@
 #' unlink(file.path(temp_dir, "boilerplate_import_example"), recursive = TRUE)
 #'
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning
-#' @importFrom here here
 #' @export
 boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE, project = "default") {
   # Validate project name
@@ -88,7 +87,8 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
   
   # Set default data path or append project if directory
   if (is.null(data_path)) {
-    data_path <- here::here("boilerplate", "projects", project, "data")
+    # use cran-compliant user directory
+    data_path <- file.path(tools::R_user_dir("boilerplate", "data"), "projects", project)
   } else if (!is_file_path) {
     # Check if this looks like a legacy path or test path
     # Don't add project structure if:
@@ -261,7 +261,7 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
 #' @param category Character. The category name if saving a single category.
 #'   If NULL and db contains multiple categories, saves as unified database.
 #' @param data_path Character. Base path for data directory.
-#'   If NULL (default), uses here::here("boilerplate", "data").
+#'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 #' @param format Character. Format to save: "json" (default), "rds", or "both".
 #' @param confirm Logical. If TRUE, asks for confirmation. Default is TRUE.
 #' @param create_dirs Logical. If TRUE, creates directories if they don't exist. Default is FALSE.
@@ -318,7 +318,6 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
 #' unlink(file.path(temp_dir, "boilerplate_save_example"), recursive = TRUE)
 #'
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_danger
-#' @importFrom here here
 #' @export
 boilerplate_save <- function(
     db,
@@ -343,7 +342,8 @@ boilerplate_save <- function(
   
   # Set default data path
   if (is.null(data_path)) {
-    data_path <- here::here("boilerplate", "projects", project, "data")
+    # use cran-compliant user directory
+    data_path <- file.path(tools::R_user_dir("boilerplate", "data"), "projects", project)
   } else {
     # Check if this looks like a legacy path or test path
     # Don't add project structure if:
@@ -412,13 +412,12 @@ boilerplate_save <- function(
 
     # Create backup if file exists
     if (file.exists(rds_path) && create_backup && !timestamp) {
-      backup_path <- create_db_backup(rds_path, quiet)
+      create_db_backup(rds_path, quiet)
     }
 
     # Ask for confirmation
     if (confirm && file.exists(rds_path) && !timestamp) {
-      response <- readline(paste0("Overwrite ", save_type, " at ", rds_path, "? (y/n): "))
-      if (tolower(response) != "y") {
+      if (!ask_yes_no(paste0("Overwrite ", save_type, " at ", rds_path, "?"))) {
         if (!quiet) cli_alert_info("save cancelled")
         return(invisible(FALSE))
       }
@@ -435,8 +434,7 @@ boilerplate_save <- function(
 
     # Ask for confirmation if file exists
     if (confirm && file.exists(json_path) && !timestamp) {
-      response <- readline(paste0("Overwrite ", save_type, " at ", json_path, "? (y/n): "))
-      if (tolower(response) != "y") {
+      if (!ask_yes_no(paste0("Overwrite ", save_type, " at ", json_path, "?"))) {
         if (!quiet) cli_alert_info("save cancelled")
         return(invisible(FALSE))
       }

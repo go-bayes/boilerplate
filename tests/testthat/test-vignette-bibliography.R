@@ -192,7 +192,7 @@ test_that("bibliography-workflow vignette: integration with text generation work
 
 test_that("bibliography-workflow vignette: cache management works", {
   temp_dir <- tempfile()
-  cache_dir <- file.path(temp_dir, ".boilerplate", "cache")
+  cache_dir <- file.path(temp_dir, "test_cache")
   on.exit(unlink(temp_dir, recursive = TRUE))
   
   # Create cache directory

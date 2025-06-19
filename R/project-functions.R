@@ -236,7 +236,8 @@ boilerplate_copy_from_project <- function(
 boilerplate_list_projects <- function(data_path = NULL, details = FALSE) {
   # Set default path
   if (is.null(data_path)) {
-    base_path <- here::here("boilerplate", "projects")
+    # use cran-compliant user directory
+    base_path <- file.path(tools::R_user_dir("boilerplate", "data"), "projects")
   } else {
     base_path <- file.path(data_path, "projects")
   }
@@ -420,11 +421,4 @@ merge_recursive_lists <- function(list1, list2) {
 }
 
 
-#' Ask yes/no question
-#' @noRd
-ask_yes_no <- function(prompt) {
-  if (!interactive()) return(TRUE)
-  
-  response <- readline(paste0(prompt, " [y/n]: "))
-  tolower(response) %in% c("y", "yes")
-}
+# ask_yes_no function is defined in utilities.R

@@ -250,7 +250,6 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 #' unlink(file.path(temp_dir, "boilerplate_export_example"), recursive = TRUE)
 #'
 #' @importFrom cli cli_alert_info cli_alert_success cli_alert_warning cli_alert_danger
-#' @importFrom here here
 #' @export
 boilerplate_export <- function(
     db,
@@ -277,11 +276,8 @@ boilerplate_export <- function(
 
   # Set default path if not provided
   if (is.null(data_path)) {
-    if (!requireNamespace("here", quietly = TRUE)) {
-      if (!quiet) cli_alert_danger("package 'here' is required for default path resolution")
-      stop("Package 'here' is required for default path resolution. Please install it or specify 'data_path' manually.")
-    }
-    data_path <- here::here("boilerplate", "projects", project, "data")
+    # use cran-compliant user directory
+    data_path <- file.path(tools::R_user_dir("boilerplate", "data"), "projects", project)
     if (!quiet) cli_alert_info("using project '{project}' at path: {data_path}")
   } else {
     # Check if this looks like a legacy path or test path

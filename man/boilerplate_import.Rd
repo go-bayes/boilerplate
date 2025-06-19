@@ -21,7 +21,7 @@ Ignored if data_path points to a specific file.}
 \itemize{
 \item A directory path containing database files (original behaviour)
 \item A specific file path to import (e.g., "data/methods_db_20240115_143022.rds")
-If NULL (default), uses here::here("boilerplate", "data").
+If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 }}
 
 \item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}

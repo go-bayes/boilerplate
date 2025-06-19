@@ -52,7 +52,11 @@ read_boilerplate_db <- function(file_path, format = "auto") {
 #' @keywords internal
 #' @noRd
 write_boilerplate_db <- function(db, file_path, format = "rds", pretty = TRUE) {
-  dir.create(dirname(file_path), recursive = TRUE, showWarnings = FALSE)
+  # only create directory if it doesn't exist
+  dir_path <- dirname(file_path)
+  if (!dir.exists(dir_path)) {
+    stop("Directory does not exist: ", dir_path, ". Directory must be created explicitly by the user or calling function.")
+  }
 
   if (format %in% c("json", "both")) {
     if (!requireNamespace("jsonlite", quietly = TRUE)) {

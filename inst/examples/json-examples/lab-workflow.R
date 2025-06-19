@@ -6,7 +6,7 @@ library(cli)
 
 # Configuration
 CENTRAL_REPO <- "https://raw.githubusercontent.com/go-bayes/templates/main/boilerplate_data/"
-LOCAL_CACHE <- "~/.boilerplate/cache/"
+LOCAL_CACHE <- file.path(tools::R_user_dir("boilerplate", "cache"), "lab_workflow")
 PROJECT_DATA <- "data/boilerplate/"
 
 # 1. Setup function for new projects

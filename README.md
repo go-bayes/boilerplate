@@ -11,6 +11,7 @@
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
 <!-- badges: end -->
 
 ## Overview
@@ -1528,7 +1529,7 @@ A BibTeX entry for LaTeX users:
                        Standardised Text for Scientific Reports}},
       year         = 2025,
       publisher    = {Zenodo},
-      version      = {1.2.0},
+      version      = {1.3.0},
       doi          = {10.5281/zenodo.13370825},
       url          = {https://github.com/go-bayes/boilerplate}
     }
@@ -1587,8 +1588,8 @@ standards as they mature
 ### 📊 Current State
 
 - **Version**: 1.2.0 (CRAN submission pending)
-- **Code coverage**: 71.20%
-- **Dependencies**: Minimal (7 packages)
+- **Code coverage**: 67.49%
+- **Dependencies**: Minimal (6 packages)
 - **Test suite**: 726 tests across 22 files
 
 We welcome feedback and contributions! Please see our [contribution

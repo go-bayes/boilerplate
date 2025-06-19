@@ -28,7 +28,7 @@ boilerplate_save(
 If NULL and db contains multiple categories, saves as unified database.}
 
 \item{data_path}{Character. Base path for data directory.
-If NULL (default), uses here::here("boilerplate", "data").}
+If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
 \item{format}{Character. Format to save: "json" (default), "rds", or "both".}
 

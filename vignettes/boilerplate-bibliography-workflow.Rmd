@@ -72,7 +72,7 @@ bib_file <- boilerplate_update_bibliography(db, force = TRUE)
 
 # Check cache age
 boilerplate_update_bibliography(db, force = FALSE)
-#> ℹ Using cached bibliography from ~/.boilerplate/cache/references.bib
+#> ℹ Using cached bibliography from /path/to/cache/references.bib
 #> ⚠ Bibliography cache is 5.2 days old. Consider using force=TRUE to update.
 ```
 
@@ -262,16 +262,12 @@ message("All references validated successfully!")
 
 ```{r cache-management}
 # Check cache location
-# Note: The cache directory is system-specific
-# On Unix-like systems (Mac/Linux): ~/.boilerplate/cache
-# On Windows: Usually in %APPDATA%/boilerplate/cache
-cache_dir <- file.path(Sys.getenv("HOME"), ".boilerplate", "cache")
+# The cache directory uses R's standard user directory
+cache_dir <- tools::R_user_dir("boilerplate", "cache")
 
-# Alternative: Use platform-independent approach
-# if (!requireNamespace("rappdirs", quietly = TRUE)) {
-#   install.packages("rappdirs")
-# }
-# cache_dir <- file.path(rappdirs::user_cache_dir("boilerplate"), "cache")
+# This provides a platform-independent location that complies with CRAN policies:
+# - On Unix-like systems (Mac/Linux): ~/.local/share/boilerplate
+# - On Windows: Usually in %LOCALAPPDATA%/boilerplate/boilerplate/cache
 
 # View cached files
 if (dir.exists(cache_dir)) {
@@ -330,7 +326,7 @@ open(con)
 bib_file <- boilerplate_update_bibliography(db, force = TRUE)
 
 # Check cache directory permissions
-cache_dir <- file.path(Sys.getenv("HOME"), ".boilerplate", "cache")
+cache_dir <- tools::R_user_dir("boilerplate", "cache")
 if (dir.exists(cache_dir)) {
   file.access(cache_dir, mode = 2)  # 0 = success
 }

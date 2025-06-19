@@ -6,7 +6,7 @@
 \usage{
 boilerplate_update_bibliography(
   db,
-  cache_dir = "~/.boilerplate/cache",
+  cache_dir = NULL,
   force = FALSE,
   quiet = FALSE
 )
@@ -15,7 +15,7 @@ boilerplate_update_bibliography(
 \item{db}{Database object containing bibliography information}
 
 \item{cache_dir}{Directory to cache the bibliography file.
-Default is "~/.boilerplate/cache"}
+Default uses tools::R_user_dir("boilerplate", "cache")}
 
 \item{force}{Logical. Force re-download even if cached file exists}
 

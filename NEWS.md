@@ -1,3 +1,20 @@
+# boilerplate 1.3 [2025-06-17]
+
+## Bug fixes
+* Fixed CRAN policy violation: package now uses `tools::R_user_dir()` for cache storage instead of `~/.boilerplate/cache`
+* Cache files are now stored in the appropriate user directory as per CRAN requirements  
+* Added automatic migration from old cache location to new location
+* Removed 'here' package dependency - all paths now use `tools::R_user_dir()` for CRAN compliance
+* Fixed linting issues: removed unused variables in generate-text.R and import-functions.R
+* All default paths now use `tools::R_user_dir("boilerplate", "data")` instead of project directories
+* Added `interactive()` checks to all user prompts for non-interactive compatibility
+
+## Testing
+* All 731 tests pass
+* Code coverage: 71.47%
+* All examples run successfully with --run-donttest
+* R CMD check passes with only 1 expected NOTE (new submission)
+
 # boilerplate 1.2.0 [2025-06-13]
 
 ## CRAN resubmission

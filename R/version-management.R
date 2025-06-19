@@ -55,7 +55,8 @@
 boilerplate_list_files <- function(data_path = NULL, pattern = NULL, category = NULL) {
   # Set default data path
   if (is.null(data_path)) {
-    data_path <- here::here("boilerplate", "data")
+    # use cran-compliant user directory
+    data_path <- file.path(tools::R_user_dir("boilerplate", "data"), "data")
   }
   
   if (!dir.exists(data_path)) {
@@ -359,7 +360,8 @@ boilerplate_restore_backup <- function(category = NULL,
     
     # Determine the target file
     if (is.null(data_path)) {
-      data_path <- here::here("boilerplate", "data")
+      # use cran-compliant user directory
+      data_path <- file.path(tools::R_user_dir("boilerplate", "data"), "data")
     }
     
     # Save as standard file (this will create its own backup!)

@@ -9,14 +9,25 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 0 notes
 
-* NOTE: New submission
-  - This is expected for the first submission to CRAN
-* NOTE: checking for future file timestamps ... unable to verify current time
-  - This is a known issue with the check system and not related to the package
 
-## Resubmission
+## Third resubmission
+
+This is a resubmission of boilerplate 1.2.1. In response to CRAN feedback about writing to user's home directory:
+
+* Fixed policy violation by replacing hardcoded `~/.boilerplate/cache` with `tools::R_user_dir("boilerplate", "cache")`
+* All default data paths now use `tools::R_user_dir("boilerplate", "data")` instead of user's project directory
+* Removed 'here' package dependency - reduced imports from 7 to 6
+* Updated all functions, tests, and vignettes to use CRAN-compliant locations
+* Added migration code to move existing cache files from old location to new location
+* Ensured no files are written outside of R session's temporary directory or approved user directories
+* Fixed linting issues: removed unused variables in generate-text.R and import-functions.R
+* Added interactive() checks to all user prompts for non-interactive compatibility
+
+The package now fully complies with CRAN's policy on file system usage for R 4.0+.
+
+## Previous resubmission
 
 This is a resubmission of the boilerplate package (version 1.2.0). In response to the CRAN team feedback, we have:
 
@@ -87,11 +98,11 @@ The package addresses a specific need in scientific writing:
 
 ## Testing and code quality
 
-* **Code coverage**: 71.20% overall
-  - High coverage (>80%) for core functionality: default databases (98.79%), path operations (93.33%), health checks (91.51%), JSON support (83.78%), standardise measures (83.33%), generate-text (81.52%)
-  - Medium coverage (50-80%) for most modules: migration utilities (75.85%), zzz (75.00%), batch edit (73.61%), bibliography support (68.24%), version management (68.03%), generate measures (64.97%), init functions (63.27%), utilities (59.75%), import functions (58.08%)
-  - Lower coverage (<50%) for: import-export functions (49.13%), project functions (46.98%), category helpers (45.45%)
-  - 726 tests across 22 test files ensure robust functionality
+* **Code coverage**: 71.47% overall
+  - High coverage (>80%) for core functionality: default databases (98.79%), path operations (93.33%), health checks (91.47%), JSON support (82.89%), standardise measures (83.33%), generate-text (81.32%)
+  - Medium coverage (50-80%) for most modules: migration utilities (75.85%), zzz (75.00%), batch edit (73.61%), bibliography support (70.00%), version management (68.03%), init functions (65.26%), generate measures (64.97%), utilities (59.75%), import functions (58.79%)
+  - Lower coverage (<50%) for: import-export functions (49.78%), project functions (46.98%), category helpers (45.45%)
+  - 731 tests across 22 test files ensure robust functionality
 * All examples use \donttest{} instead of \dontrun{}
 * All examples now properly initialize databases and clean up after themselves
 * Consistent API design across all functions

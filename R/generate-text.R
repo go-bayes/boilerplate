@@ -103,9 +103,6 @@ boilerplate_generate_text <- function(
 
   if (!quiet) cli_alert_info("generating {category} text with {length(sections)} sections")
 
-  # if category is "methods", use singular form for main heading
-  category_title <- ifelse(category == "methods", "Method", tools::toTitleCase(category))
-
   # prepare the database
   if (is.null(db)) {
     # if no database is provided, load it from disk

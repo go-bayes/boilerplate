@@ -1,7 +1,12 @@
-#' Shared Utility Functions for the boilerplate Package
-#'
-#' This file contains helper functions used by multiple parts of the package.
-#' Moving these functions to a shared utilities file reduces code duplication.
+# Shared Utility Functions for the boilerplate Package
+#
+# This file contains helper functions used by multiple parts of the package.
+# Moving these functions to a shared utilities file reduces code duplication.
+
+# get default data path using tools::R_user_dir for cran compliance
+get_default_data_path <- function() {
+  tools::R_user_dir("boilerplate", "data")
+}
 
 #' Sort a Database Recursively
 #'
@@ -188,11 +193,8 @@ get_db_file_path <- function(category, base_path = NULL, file_name = NULL,
 
   # determine directory path
   if (is.null(base_path)) {
-    if (!requireNamespace("here", quietly = TRUE)) {
-      if (!quiet) cli_alert_danger("package 'here' is required for default path resolution")
-      stop("package 'here' is required for default path resolution. please install it or specify 'base_path' manually.")
-    }
-    base_path <- here::here("boilerplate", "data")
+    # use cran-compliant user directory
+    base_path <- file.path(tools::R_user_dir("boilerplate", "data"), "data")
     if (!quiet) cli_alert_info("using default path: {base_path}")
   }
 
@@ -231,6 +233,11 @@ get_db_file_path <- function(category, base_path = NULL, file_name = NULL,
 #' @return Logical. TRUE if user confirms, FALSE otherwise.
 #' @keywords internal
 ask_yes_no <- function(question) {
+  # in non-interactive mode, return FALSE (conservative default)
+  if (!interactive()) {
+    return(FALSE)
+  }
+  
   # add a default if not already present
   if (!grepl("\\[y/n\\]", question)) {
     question <- paste0(question, " [y/n]: ")
