@@ -260,3 +260,64 @@ test_that("README bibliography management works", {
     boilerplate_save(unified_db, data_path = temp_dir, confirm = FALSE, quiet = TRUE)
   )
 })
+
+test_that("README bibliography with copy_bibliography works", {
+  temp_dir <- tempfile()
+  on.exit(unlink(temp_dir, recursive = TRUE))
+  
+  # Create manuscript directory
+  manuscript_dir <- file.path(temp_dir, "manuscript")
+  dir.create(manuscript_dir, recursive = TRUE)
+  
+  # Initialize and import
+  boilerplate_init(
+    data_path = temp_dir,
+    create_dirs = TRUE,
+    create_empty = FALSE,
+    confirm = FALSE,
+    quiet = TRUE
+  )
+  
+  unified_db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+  
+  # Test generating text with statistical.default section
+  methods_text <- boilerplate_generate_text(
+    category = "methods",
+    sections = "statistical.default",
+    db = unified_db,
+    copy_bibliography = FALSE,  # Don't copy for now
+    quiet = TRUE
+  )
+  
+  expect_type(methods_text, "character")
+  expect_true(grepl("appropriate statistical methods", methods_text))
+  
+  # Add bibliography info for copy test
+  unified_db <- boilerplate_add_bibliography(
+    unified_db,
+    url = "https://example.com/references.bib",
+    local_path = file.path(temp_dir, "references.bib")
+  )
+  
+  # Create a dummy bibliography file to copy
+  writeLines("@article{test2023,\n  title = {Test},\n  author = {Author},\n  year = {2023}\n}", 
+             file.path(temp_dir, "references.bib"))
+  
+  # Test with copy_bibliography = TRUE
+  methods_text <- boilerplate_generate_text(
+    category = "methods",
+    sections = "statistical.default",
+    db = unified_db,
+    copy_bibliography = TRUE,
+    bibliography_path = manuscript_dir,
+    quiet = TRUE
+  )
+  
+  # Check if bibliography was copied
+  expect_true(file.exists(file.path(manuscript_dir, "references.bib")))
+  
+  # Test validation
+  validation <- boilerplate_validate_references(unified_db, quiet = TRUE)
+  expect_type(validation, "list")
+  expect_true("valid" %in% names(validation))
+})

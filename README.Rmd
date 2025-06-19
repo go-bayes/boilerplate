@@ -145,7 +145,7 @@ boilerplate_save(unified_db, data_path = here::here("boilerplate", "data"))
 # Generate text and automatically copy bibliography
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = "analysis",
+  sections = "statistical.default",
   db = unified_db,
   copy_bibliography = TRUE,
   bibliography_path = "manuscript/"
