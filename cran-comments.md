@@ -1,6 +1,6 @@
 ## Test environments
 
-* local macOS install (aarch64-apple-darwin20), R 4.5.0
+* local macOS install (aarch64-apple-darwin20), R 4.5.1
 * win-builder (devel and release)
 * R-hub
   - Windows (latest)
