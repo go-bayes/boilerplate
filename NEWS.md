@@ -1,4 +1,4 @@
-# boilerplate 1.3 [2025-06-17]
+# boilerplate 1.3.0 [2025-06-20]
 
 ## Bug fixes
 * Fixed CRAN policy violation: package now uses `tools::R_user_dir()` for cache storage instead of `~/.boilerplate/cache`
@@ -8,12 +8,21 @@
 * Fixed linting issues: removed unused variables in generate-text.R and import-functions.R
 * All default paths now use `tools::R_user_dir("boilerplate", "data")` instead of project directories
 * Added `interactive()` checks to all user prompts for non-interactive compatibility
+* Fixed README example to use correct section path (`statistical.default` instead of non-existent `analysis`)
+* Made `get_default_data_path` an internal function to resolve pkgdown documentation issues
+
+## Documentation
+* Added comprehensive tests for all README examples
+* Added tests for all vignettes to ensure examples work correctly
+* Fixed `.vscode` directory inclusion in package builds
 
 ## Testing
-* All 731 tests pass
-* Code coverage: 71.47%
+* Test suite expanded to 847 tests (was 731)
+* Added 8 new test files for previously untested vignettes and README examples
+* All vignette examples now have comprehensive test coverage
+* Code coverage: 73.12%
 * All examples run successfully with --run-donttest
-* R CMD check passes with only 1 expected NOTE (new submission)
+* R CMD check passes with 0 errors, 0 warnings, 1 NOTE (new submission)
 
 # boilerplate 1.2.0 [2025-06-13]
 

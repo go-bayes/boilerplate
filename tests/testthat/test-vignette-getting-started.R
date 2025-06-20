@@ -147,9 +147,11 @@ test_that("getting-started vignette: bibliography management works", {
   db <- boilerplate_import(data_path = data_path, quiet = TRUE)
   
   # Configure bibliography
+  # Using the example bibliography included with the package
+  example_bib <- system.file("extdata", "example_references.bib", package = "boilerplate")
   db <- boilerplate_add_bibliography(
     db,
-    url = "https://raw.githubusercontent.com/go-bayes/templates/refs/heads/main/bib/references.bib",
+    url = paste0("file://", example_bib),
     local_path = "references.bib"
   )
   

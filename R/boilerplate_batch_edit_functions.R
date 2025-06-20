@@ -357,9 +357,6 @@ boilerplate_batch_edit_multi <- function(
     stop("edits must be a list of edit specifications")
   }
 
-  # Keep track of all changes for final confirmation
-  all_changes <- list()
-
   # Process each edit
   for (i in seq_along(edits)) {
     edit <- edits[[i]]

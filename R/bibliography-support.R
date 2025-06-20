@@ -430,9 +430,11 @@ boilerplate_validate_references <- function(
 #' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
 #' 
 #' # Add bibliography
+#' # Using the example bibliography included with the package
+#' example_bib <- system.file("extdata", "example_references.bib", package = "boilerplate")
 #' db <- boilerplate_add_bibliography(
 #'   db,
-#'   url = "https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib",
+#'   url = paste0("file://", example_bib),
 #'   local_path = "references.bib"
 #' )
 #' 

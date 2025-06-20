@@ -438,7 +438,6 @@ print.boilerplate_health <- function(x, ...) {
 check_measures_consistency <- function(measures_db, stats) {
   issues <- list()
   required_fields <- c("name", "description")
-  recommended_fields <- c("type", "items", "reference")
 
   incomplete_measures <- list()
   inconsistent_measures <- list()

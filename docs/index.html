@@ -212,9 +212,11 @@
 <span><span class="co"># unified_db &lt;- boilerplate_import(data_path = here::here("boilerplate", "data"))</span></span>
 <span></span>
 <span><span class="co"># Add bibliography information to your database</span></span>
+<span><span class="co"># Using the example bibliography included with the package</span></span>
+<span><span class="va">example_bib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_references.bib"</span>, package <span class="op">=</span> <span class="st">"boilerplate"</span><span class="op">)</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_add_bibliography.html">boilerplate_add_bibliography</a></span><span class="op">(</span></span>
 <span>  <span class="va">unified_db</span>,</span>
-<span>  url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib"</span>,</span>
+<span>  url <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"file://"</span>, <span class="va">example_bib</span><span class="op">)</span>,</span>
 <span>  local_path <span class="op">=</span> <span class="st">"references.bib"</span></span>
 <span><span class="op">)</span></span>
 <span></span>

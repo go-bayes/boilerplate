@@ -161,9 +161,11 @@ ensuring consistent citations across all your boilerplate text:
 # unified_db <- boilerplate_import(data_path = here::here("boilerplate", "data"))
 
 # Add bibliography information to your database
+# Using the example bibliography included with the package
+example_bib <- system.file("extdata", "example_references.bib", package = "boilerplate")
 unified_db <- boilerplate_add_bibliography(
   unified_db,
-  url = "https://raw.githubusercontent.com/go-bayes/templates/main/bib/references.bib",
+  url = paste0("file://", example_bib),
   local_path = "references.bib"
 )
 

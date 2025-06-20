@@ -1,3 +1,10 @@
+# NOTE: This file contains example code that references 'boilerplate_manage_text',
+# which is a placeholder function. In actual usage, you would use:
+# - boilerplate_import() to load databases
+# - boilerplate_generate_text() to generate text
+# - boilerplate_save() to save databases
+# The code here demonstrates workflow patterns, not working examples.
+
 # Example 1: Using the new simplified function
 methods_path = here::here("/Users/joseph/GIT/templates/databases/methods")
 measures_path = here::here("/Users/joseph/GIT/templates/databases/measures")
@@ -1064,14 +1071,16 @@ advanced_params <- list(
   level3_units = "clinics",
   level1_description = "Individual patients receiving treatment (n = 1240)",
   level2_description = "Therapists providing treatment"
-  }
+)
 
 
 # creating and using audience-specific method descriptions
 library(tidyverse)
 
 # get the current methods database
-methods_db <- boilerplate_manage_text(category = "methods", action = "list")
+# Note: boilerplate_manage_text is a placeholder - use boilerplate_import() instead
+# methods_db <- boilerplate_manage_text(category = "methods", action = "list")
+methods_db <- list()  # Initialize empty for example
 
 # ------------------------------------------------------
 # add audience-specific lmtp descriptions
@@ -1172,7 +1181,9 @@ library(tidyverse)
 library(glue)
 
 # get the current methods database
-methods_db <- boilerplate_manage_text(category = "methods", action = "list")
+# Note: boilerplate_manage_text is a placeholder - use boilerplate_import() instead
+# methods_db <- boilerplate_manage_text(category = "methods", action = "list")
+methods_db <- list()  # Initialize empty for example
 
 # ------------------------------------------------------
 # create document templates for different formats

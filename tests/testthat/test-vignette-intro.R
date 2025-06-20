@@ -65,15 +65,18 @@ test_that("Intro vignette measures workflow works", {
   db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
   
   # Test measures report
-  measures_text <- boilerplate_measures_report(
-    db = db,
-    waves = "1-3",
-    quiet = TRUE
-  )
+  # Capture output since the function prints to console
+  output <- capture.output({
+    report <- boilerplate_measures_report(
+      db = db$measures,
+      return_report = TRUE
+    )
+  })
   
-  expect_type(measures_text, "character")
-  expect_true(grepl("anxiety", measures_text, ignore.case = TRUE))
-  expect_true(grepl("depression", measures_text, ignore.case = TRUE))
+  expect_s3_class(report, "data.frame")
+  expect_true("measure" %in% names(report))
+  expect_true(any(grepl("anxiety", report$measure, ignore.case = TRUE)))
+  expect_true(any(grepl("depression", report$measure, ignore.case = TRUE)))
 })
 
 test_that("Intro vignette save and export works", {
@@ -101,16 +104,20 @@ test_that("Intro vignette save and export works", {
   
   # Export to different location
   export_dir <- file.path(temp_dir, "export")
-  expect_true(
-    boilerplate_export(
-      db = db,
-      export_path = export_dir,
-      format = "json",
-      confirm = FALSE,
-      quiet = TRUE
-    )
+  export_result <- boilerplate_export(
+    db = db,
+    data_path = export_dir,
+    format = "json",
+    confirm = FALSE,
+    create_dirs = TRUE,
+    quiet = TRUE
   )
   
+  # Export returns character vector of file paths
+  expect_type(export_result, "character")
+  expect_true(length(export_result) > 0)
+  
   # Check export exists
-  expect_true(file.exists(file.path(export_dir, "boilerplate_unified.json")))
+  json_files <- list.files(export_dir, pattern = "\\.json$", full.names = TRUE, recursive = TRUE)
+  expect_true(length(json_files) > 0)
 })

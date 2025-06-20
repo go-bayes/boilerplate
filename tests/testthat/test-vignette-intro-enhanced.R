@@ -118,20 +118,24 @@ test_that("Enhanced intro batch operations work", {
   expect_equal(db$measures$anxiety$reference, "sibley2024")
   expect_equal(db$measures$depression$reference, "sibley2024")
   
-  # Test batch clean
-  db$methods$test_section <- "Remove @special# characters[2024]"
+  # Test batch clean on measures
+  # First add some characters to clean
+  db$measures$anxiety$reference <- "@sibley2024[test]"
+  db$measures$depression$reference <- "@sibley2024[test]"
   
   db <- boilerplate_batch_clean(
     db = db,
-    field = "test_section",
-    remove_chars = c("@", "#", "[", "]"),
-    category = "methods",
+    field = "reference",
+    remove_chars = c("@", "[", "]"),
+    category = "measures",
+    target_entries = c("anxiety", "depression"),
     preview = FALSE,
     confirm = FALSE,
     quiet = TRUE
   )
   
-  expect_equal(db$methods$test_section, "Remove special characters2024")
+  expect_equal(db$measures$anxiety$reference, "sibley2024test")
+  expect_equal(db$measures$depression$reference, "sibley2024test")
 })
 
 test_that("Enhanced intro project workflow works", {

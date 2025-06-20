@@ -196,9 +196,11 @@ boilerplate_save(db, data_path = data_path)
 ```{r setup-bibliography}
 # Continue working with our 'db' from previous steps
 # Configure bibliography source
+# Using the example bibliography included with the package
+example_bib <- system.file("extdata", "example_references.bib", package = "boilerplate")
 db <- boilerplate_add_bibliography(
   db,
-  url = "https://raw.githubusercontent.com/go-bayes/templates/refs/heads/main/bib/references.bib",
+  url = paste0("file://", example_bib),
   local_path = "references.bib"
 )
 

@@ -19,7 +19,7 @@ test_that("bibliography-workflow vignette: setting up bibliography configuration
   # Add bibliography configuration
   db <- boilerplate_add_bibliography(
     db,
-    url = "https://raw.githubusercontent.com/go-bayes/templates/refs/heads/main/bib/references.bib",
+    url = paste0("file://", system.file("extdata", "example_references.bib", package = "boilerplate")),
     local_path = "references.bib",
     validate = FALSE  # Skip validation for test
   )
@@ -28,7 +28,7 @@ test_that("bibliography-workflow vignette: setting up bibliography configuration
   expect_equal(db$bibliography$local_path, "references.bib")
   expect_equal(
     db$bibliography$url, 
-    "https://raw.githubusercontent.com/go-bayes/templates/refs/heads/main/bib/references.bib"
+    paste0("file://", system.file("extdata", "example_references.bib", package = "boilerplate"))
   )
   
   # Save configuration
@@ -51,7 +51,7 @@ test_that("bibliography-workflow vignette: bibliography caching works", {
   
   db <- boilerplate_add_bibliography(
     db,
-    url = "https://raw.githubusercontent.com/go-bayes/templates/refs/heads/main/bib/references.bib",
+    url = paste0("file://", system.file("extdata", "example_references.bib", package = "boilerplate")),
     local_path = "test_refs.bib"
   )
   
@@ -80,7 +80,7 @@ test_that("bibliography-workflow vignette: copying bibliography to project works
   
   db <- boilerplate_add_bibliography(
     db,
-    url = "https://raw.githubusercontent.com/go-bayes/templates/refs/heads/main/bib/references.bib",
+    url = paste0("file://", system.file("extdata", "example_references.bib", package = "boilerplate")),
     local_path = "references.bib"
   )
   
@@ -164,7 +164,7 @@ test_that("bibliography-workflow vignette: integration with text generation work
   # Add bibliography
   db <- boilerplate_add_bibliography(
     db,
-    url = "https://raw.githubusercontent.com/go-bayes/templates/refs/heads/main/bib/references.bib",
+    url = paste0("file://", system.file("extdata", "example_references.bib", package = "boilerplate")),
     local_path = "references.bib"
   )
   
@@ -277,13 +277,13 @@ test_that("bibliography-workflow vignette: multi-author collaboration setup work
   # Add shared bibliography configuration
   team_db <- boilerplate_add_bibliography(
     team_db,
-    url = "https://github.com/our-lab/shared-refs/raw/main/lab_references.bib",
+    url = paste0("file://", system.file("extdata", "example_references.bib", package = "boilerplate")),
     local_path = "lab_references.bib",
     validate = FALSE  # Skip validation for test
   )
   
   expect_equal(team_db$bibliography$local_path, "lab_references.bib")
-  expect_true(grepl("our-lab/shared-refs", team_db$bibliography$url))
+  expect_true(grepl("example_references.bib", team_db$bibliography$url))
   
   # Save to shared location
   dir.create(temp_dir, recursive = TRUE, showWarnings = FALSE)

@@ -449,7 +449,7 @@ boilerplate_export <- function(
     } else {
       # Use default naming
       if (is_unified) {
-        base_name <- "unified_db"
+        base_name <- "boilerplate_unified"
       } else {
         base_name <- "exported_db"
       }
