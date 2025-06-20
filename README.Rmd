@@ -190,49 +190,53 @@ boilerplate_init(data_path = "my_project/data", create_dirs = TRUE, confirm = FA
 # import database (automatically detects JSON or RDS format)
 unified_db <- boilerplate_import(data_path = "my_project/data", quiet = TRUE)
 
-# save as JSON
+# save as JSON (this is the default format)
 boilerplate_save(unified_db, data_path = "my_project/data", format = "json", confirm = FALSE, quiet = TRUE)
 
-# migrate existing RDS databases to JSON
-results <- boilerplate_migrate_to_json(
-  source_path = "boilerplate/data",  # Path to RDS files
-  output_path = "json_data",          # Where to save JSON files
-  format = "unified",                 # Create single unified file
-  backup = TRUE                       # Backup RDS files first
-)
+# If you have old RDS files from a previous version, you can migrate them:
+# results <- boilerplate_migrate_to_json(
+#   source_path = "old_project/data",  # Path containing .rds files
+#   output_path = "new_project/data",   # Where to save JSON files
+#   format = "unified",                 # Create single unified file
+#   backup = TRUE                       # Backup RDS files first
+# )
 ```
 
 ### JSON with Custom Paths
 
 ```{r}
-# set path for JSON data
-my_json_path <- "path/to/json/data"
+# Example: Using a specific project directory for JSON data
+my_json_path <- file.path("my_analysis", "boilerplate_data")
+
+# Initialize if needed
+# boilerplate_init(data_path = my_json_path, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # import database (auto-detects JSON format)
-db <- boilerplate_import(data_path = my_json_path)
+# db <- boilerplate_import(data_path = my_json_path, quiet = TRUE)
 
 # make changes
-db$methods$new_method <- "This is a new method using {{technique}}."
+# db$methods$new_method <- "This is a new method using {{technique}}."
 
-# save back as JSON
-boilerplate_save(db, data_path = my_json_path, format = "json")
+# save back as JSON (default format)
+# boilerplate_save(db, data_path = my_json_path, confirm = FALSE, quiet = TRUE)
 ```
 
 ### Validating JSON Structure
 
 ```{r}
-# Validate JSON database structure
-validation_errors <- validate_json_database(
-  "path/to/boilerplate_unified.json",
-  type = "unified"
-)
-
-if (length(validation_errors) == 0) {
-  message("JSON structure is valid!")
-} else {
-  message("Validation errors found:")
-  print(validation_errors)
-}
+# Example: Validate JSON database structure
+# Note: This requires the JSON schema files to be installed
+# validation_errors <- validate_json_database(
+#   file.path("my_project/data", "boilerplate_unified.json"),
+#   type = "unified"
+# )
+# 
+# if (length(validation_errors) == 0) {
+#   message("JSON structure is valid!")
+# } else {
+#   message("Validation errors found:")
+#   print(validation_errors)
+# }
 ```
 
 ## Working with Custom Data Paths
@@ -332,12 +336,12 @@ projects <- boilerplate_list_projects()
 print(projects)
 
 # Create personal and shared projects
-boilerplate_init(project = "my_analysis", create_dirs = TRUE, confirm = FALSE)
-boilerplate_init(project = "team_templates", create_dirs = TRUE, confirm = FALSE)
+boilerplate_init(project = "my_analysis", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+boilerplate_init(project = "team_templates", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # Each project maintains its own isolated namespace
-my_db <- boilerplate_import(project = "my_analysis")
-team_db <- boilerplate_import(project = "team_templates")
+my_db <- boilerplate_import(project = "my_analysis", quiet = TRUE)
+team_db <- boilerplate_import(project = "team_templates", quiet = TRUE)
 ```
 
 #### Cross-Project Operations
@@ -354,14 +358,17 @@ boilerplate_copy_from_project(
   confirm = FALSE
 )
 
-# Copy with a prefix to avoid naming conflicts
-boilerplate_copy_from_project(
-  from_project = "colleague_jane",
-  to_project = "my_analysis", 
-  paths = "measures.anxiety",
-  prefix = "jane_",  # results in "jane_anxiety"
-  confirm = FALSE
-)
+# Example: Copy with a prefix to avoid naming conflicts
+# First create the colleague's project
+# boilerplate_init(project = "colleague_jane", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+# Then copy their content:
+# boilerplate_copy_from_project(
+#   from_project = "colleague_jane",
+#   to_project = "my_analysis", 
+#   paths = "measures.anxiety",
+#   prefix = "jane_",  # results in "jane_anxiety"
+#   confirm = FALSE
+# )
 ```
 
 ### Relative vs. Absolute Paths
@@ -369,11 +376,11 @@ boilerplate_copy_from_project(
 Both relative and absolute paths are supported:
 
 ```{r}
-# relative path (relative to working directory)
-boilerplate_import(data_path = "my_project/data")
+# Example: relative path (relative to working directory)
+# boilerplate_import(data_path = "my_project/data", quiet = TRUE)
 
-# absolute path
-boilerplate_import(data_path = "/Users/researcher/projects/study_2023/data")
+# Example: absolute path
+# boilerplate_import(data_path = "/Users/researcher/projects/study_2023/data", quiet = TRUE)
 ```
 
 For portable code, consider using relative paths or the `file.path()` function to construct paths.

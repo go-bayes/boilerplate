@@ -273,49 +273,53 @@
 <span><span class="co"># import database (automatically detects JSON or RDS format)</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"my_project/data"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># save as JSON</span></span>
+<span><span class="co"># save as JSON (this is the default format)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="st">"my_project/data"</span>, format <span class="op">=</span> <span class="st">"json"</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># migrate existing RDS databases to JSON</span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_migrate_to_json.html">boilerplate_migrate_to_json</a></span><span class="op">(</span></span>
-<span>  source_path <span class="op">=</span> <span class="st">"boilerplate/data"</span>,  <span class="co"># Path to RDS files</span></span>
-<span>  output_path <span class="op">=</span> <span class="st">"json_data"</span>,          <span class="co"># Where to save JSON files</span></span>
-<span>  format <span class="op">=</span> <span class="st">"unified"</span>,                 <span class="co"># Create single unified file</span></span>
-<span>  backup <span class="op">=</span> <span class="cn">TRUE</span>                       <span class="co"># Backup RDS files first</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># If you have old RDS files from a previous version, you can migrate them:</span></span>
+<span><span class="co"># results &lt;- boilerplate_migrate_to_json(</span></span>
+<span><span class="co">#   source_path = "old_project/data",  # Path containing .rds files</span></span>
+<span><span class="co">#   output_path = "new_project/data",   # Where to save JSON files</span></span>
+<span><span class="co">#   format = "unified",                 # Create single unified file</span></span>
+<span><span class="co">#   backup = TRUE                       # Backup RDS files first</span></span>
+<span><span class="co"># )</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="json-with-custom-paths">JSON with Custom Paths<a class="anchor" aria-label="anchor" href="#json-with-custom-paths"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># set path for JSON data</span></span>
-<span><span class="va">my_json_path</span> <span class="op">&lt;-</span> <span class="st">"path/to/json/data"</span></span>
+<code class="sourceCode R"><span><span class="co"># Example: Using a specific project directory for JSON data</span></span>
+<span><span class="va">my_json_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"my_analysis"</span>, <span class="st">"boilerplate_data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Initialize if needed</span></span>
+<span><span class="co"># boilerplate_init(data_path = my_json_path, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)</span></span>
 <span></span>
 <span><span class="co"># import database (auto-detects JSON format)</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">my_json_path</span><span class="op">)</span></span>
+<span><span class="co"># db &lt;- boilerplate_import(data_path = my_json_path, quiet = TRUE)</span></span>
 <span></span>
 <span><span class="co"># make changes</span></span>
-<span><span class="va">db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">new_method</span> <span class="op">&lt;-</span> <span class="st">"This is a new method using {{technique}}."</span></span>
+<span><span class="co"># db$methods$new_method &lt;- "This is a new method using {{technique}}."</span></span>
 <span></span>
-<span><span class="co"># save back as JSON</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="va">my_json_path</span>, format <span class="op">=</span> <span class="st">"json"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># save back as JSON (default format)</span></span>
+<span><span class="co"># boilerplate_save(db, data_path = my_json_path, confirm = FALSE, quiet = TRUE)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="validating-json-structure">Validating JSON Structure<a class="anchor" aria-label="anchor" href="#validating-json-structure"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Validate JSON database structure</span></span>
-<span><span class="va">validation_errors</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/validate_json_database.html">validate_json_database</a></span><span class="op">(</span></span>
-<span>  <span class="st">"path/to/boilerplate_unified.json"</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"unified"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">validation_errors</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"JSON structure is valid!"</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Validation errors found:"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">validation_errors</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Example: Validate JSON database structure</span></span>
+<span><span class="co"># Note: This requires the JSON schema files to be installed</span></span>
+<span><span class="co"># validation_errors &lt;- validate_json_database(</span></span>
+<span><span class="co">#   file.path("my_project/data", "boilerplate_unified.json"),</span></span>
+<span><span class="co">#   type = "unified"</span></span>
+<span><span class="co"># )</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># if (length(validation_errors) == 0) {</span></span>
+<span><span class="co">#   message("JSON structure is valid!")</span></span>
+<span><span class="co"># } else {</span></span>
+<span><span class="co">#   message("Validation errors found:")</span></span>
+<span><span class="co">#   print(validation_errors)</span></span>
+<span><span class="co"># }</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -417,12 +421,12 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">projects</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create personal and shared projects</span></span>
-<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"my_analysis"</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"team_templates"</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"my_analysis"</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"team_templates"</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Each project maintains its own isolated namespace</span></span>
-<span><span class="va">my_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"my_analysis"</span><span class="op">)</span></span>
-<span><span class="va">team_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"team_templates"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">my_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"my_analysis"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">team_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>project <span class="op">=</span> <span class="st">"team_templates"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="cross-project-operations">Cross-Project Operations<a class="anchor" aria-label="anchor" href="#cross-project-operations"></a>
@@ -438,14 +442,17 @@
 <span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Copy with a prefix to avoid naming conflicts</span></span>
-<span><span class="fu"><a href="reference/boilerplate_copy_from_project.html">boilerplate_copy_from_project</a></span><span class="op">(</span></span>
-<span>  from_project <span class="op">=</span> <span class="st">"colleague_jane"</span>,</span>
-<span>  to_project <span class="op">=</span> <span class="st">"my_analysis"</span>, </span>
-<span>  paths <span class="op">=</span> <span class="st">"measures.anxiety"</span>,</span>
-<span>  prefix <span class="op">=</span> <span class="st">"jane_"</span>,  <span class="co"># results in "jane_anxiety"</span></span>
-<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Example: Copy with a prefix to avoid naming conflicts</span></span>
+<span><span class="co"># First create the colleague's project</span></span>
+<span><span class="co"># boilerplate_init(project = "colleague_jane", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)</span></span>
+<span><span class="co"># Then copy their content:</span></span>
+<span><span class="co"># boilerplate_copy_from_project(</span></span>
+<span><span class="co">#   from_project = "colleague_jane",</span></span>
+<span><span class="co">#   to_project = "my_analysis", </span></span>
+<span><span class="co">#   paths = "measures.anxiety",</span></span>
+<span><span class="co">#   prefix = "jane_",  # results in "jane_anxiety"</span></span>
+<span><span class="co">#   confirm = FALSE</span></span>
+<span><span class="co"># )</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -453,11 +460,11 @@
 </h3>
 <p>Both relative and absolute paths are supported:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># relative path (relative to working directory)</span></span>
-<span><span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"my_project/data"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Example: relative path (relative to working directory)</span></span>
+<span><span class="co"># boilerplate_import(data_path = "my_project/data", quiet = TRUE)</span></span>
 <span></span>
-<span><span class="co"># absolute path</span></span>
-<span><span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"/Users/researcher/projects/study_2023/data"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Example: absolute path</span></span>
+<span><span class="co"># boilerplate_import(data_path = "/Users/researcher/projects/study_2023/data", quiet = TRUE)</span></span></code></pre></div>
 <p>For portable code, consider using relative paths or the <code><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path()</a></code> function to construct paths.</p>
 </div>
 </div>
