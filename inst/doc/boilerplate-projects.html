@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Managing Multiple Projects with boilerplate</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Managing Multiple Projects with
+boilerplate</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(boilerplate)</span></code></pre></div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Starting with version 1.1.0, boilerplate supports
+<strong>projects</strong> - a way to organize multiple independent
+collections of boilerplate content. This is particularly useful
+when:</p>
+<ul>
+<li>You want to keep your personal boilerplate separate from shared
+content</li>
+<li>You’re working with colleagues who have their own boilerplate
+collections</li>
+<li>You manage boilerplate for different research areas or contexts</li>
+<li>You want to experiment without affecting your main boilerplate
+database</li>
+</ul>
+</div>
+<div id="project-basics" class="section level2">
+<h2>Project Basics</h2>
+<div id="default-project" class="section level3">
+<h3>Default Project</h3>
+<p>For backward compatibility, all boilerplate operations use a
+“default” project if you don’t specify one:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># These are equivalent:</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">boilerplate_init</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">boilerplate_init</span>(<span class="at">project =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co"># Your existing code continues to work unchanged</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>()</span></code></pre></div>
+</div>
+<div id="creating-a-new-project" class="section level3">
+<h3>Creating a New Project</h3>
+<p>To create a new project, simply specify the project name when
+initializing:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Create a project for your lab&#39;s shared content</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">project =</span> <span class="st">&quot;lab_shared&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">categories =</span> <span class="fu">c</span>(<span class="st">&quot;methods&quot;</span>, <span class="st">&quot;measures&quot;</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># Create a project for content from a colleague</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  <span class="at">project =</span> <span class="st">&quot;smith_measures&quot;</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="at">categories =</span> <span class="st">&quot;measures&quot;</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="working-with-projects" class="section level3">
+<h3>Working with Projects</h3>
+<p>All core functions accept a <code>project</code> parameter:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Import from a specific project</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>lab_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">project =</span> <span class="st">&quot;lab_shared&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co"># Save to a specific project</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">boilerplate_save</span>(lab_db, <span class="at">project =</span> <span class="st">&quot;lab_shared&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co"># Export from a specific project</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="fu">boilerplate_export</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="at">db =</span> lab_db,</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="at">project =</span> <span class="st">&quot;lab_shared&quot;</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">&quot;json&quot;</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+<div id="project-organization" class="section level2">
+<h2>Project Organization</h2>
+<p>Projects are stored in a structured directory hierarchy:</p>
+<pre><code>boilerplate/
+└── projects/
+    ├── default/
+    │   └── data/
+    │       └── boilerplate_unified.json
+    ├── lab_shared/
+    │   └── data/
+    │       └── boilerplate_unified.json
+    └── smith_measures/
+        └── data/
+            └── boilerplate_unified.json</code></pre>
+</div>
+<div id="cross-project-operations" class="section level2">
+<h2>Cross-Project Operations</h2>
+<div id="listing-projects" class="section level3">
+<h3>Listing Projects</h3>
+<p>To see all available projects:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Simple list</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>projects <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_projects</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">print</span>(projects)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co"># With details</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">boilerplate_list_projects</span>(<span class="at">details =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="copying-between-projects" class="section level3">
+<h3>Copying Between Projects</h3>
+<p>The <code>boilerplate_copy_from_project()</code> function enables
+selective copying of content between projects:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Copy specific measures from a colleague&#39;s project</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">boilerplate_copy_from_project</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">from_project =</span> <span class="st">&quot;smith_measures&quot;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">to_project =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">paths =</span> <span class="fu">c</span>(<span class="st">&quot;measures.anxiety&quot;</span>, <span class="st">&quot;measures.depression&quot;</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co"># Copy with a prefix to avoid naming conflicts</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">boilerplate_copy_from_project</span>(</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="at">from_project =</span> <span class="st">&quot;smith_measures&quot;</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="at">to_project =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  <span class="at">paths =</span> <span class="fu">c</span>(<span class="st">&quot;measures.anxiety&quot;</span>, <span class="st">&quot;measures.depression&quot;</span>),</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="at">prefix =</span> <span class="st">&quot;smith_&quot;</span>,  <span class="co"># Results in smith_anxiety, smith_depression</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="conflict-handling" class="section level3">
+<h3>Conflict Handling</h3>
+<p>When copying between projects, you can handle conflicts in three
+ways:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Skip conflicting entries (default)</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">boilerplate_copy_from_project</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">from_project =</span> <span class="st">&quot;lab_shared&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">to_project =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">paths =</span> <span class="st">&quot;methods.sampling&quot;</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="at">merge_strategy =</span> <span class="st">&quot;skip&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co"># Overwrite existing entries</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="fu">boilerplate_copy_from_project</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="at">from_project =</span> <span class="st">&quot;lab_shared&quot;</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="at">to_project =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  <span class="at">paths =</span> <span class="st">&quot;methods.sampling&quot;</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  <span class="at">merge_strategy =</span> <span class="st">&quot;overwrite&quot;</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">TRUE</span>  <span class="co"># Will ask for confirmation</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>)</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co"># Rename conflicting entries</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="fu">boilerplate_copy_from_project</span>(</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>  <span class="at">from_project =</span> <span class="st">&quot;lab_shared&quot;</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  <span class="at">to_project =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  <span class="at">paths =</span> <span class="st">&quot;methods.sampling&quot;</span>,</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  <span class="at">merge_strategy =</span> <span class="st">&quot;rename&quot;</span>  <span class="co"># Creates sampling_2, sampling_3, etc.</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+<div id="practical-workflow-example" class="section level2">
+<h2>Practical Workflow Example</h2>
+<p>Here’s a complete workflow for managing content from multiple
+sources:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># 1. Initialize your main project (if not already done)</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">project =</span> <span class="st">&quot;my_research&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co"># 2. Create a project for colleague&#39;s content</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>  <span class="at">project =</span> <span class="st">&quot;colleague_jane&quot;</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>  <span class="at">categories =</span> <span class="st">&quot;measures&quot;</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>)</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co"># 3. Import and add content to colleague&#39;s project</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>jane_db <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>  <span class="at">measures =</span> <span class="fu">list</span>(</span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>    <span class="at">work_stress =</span> <span class="fu">list</span>(</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>      <span class="at">description =</span> <span class="st">&quot;Work stress scale from Jane&#39;s lab&quot;</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>      <span class="at">items =</span> <span class="dv">15</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>      <span class="at">reference =</span> <span class="st">&quot;Smith2023&quot;</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>    ),</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>    <span class="at">burnout =</span> <span class="fu">list</span>(</span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>      <span class="at">description =</span> <span class="st">&quot;Burnout inventory&quot;</span>,</span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>      <span class="at">items =</span> <span class="dv">22</span>,</span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>      <span class="at">reference =</span> <span class="st">&quot;Smith2022&quot;</span></span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a>    )</span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>  )</span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>)</span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a><span class="fu">boilerplate_save</span>(jane_db, <span class="at">project =</span> <span class="st">&quot;colleague_jane&quot;</span>)</span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a><span class="co"># 4. Selectively import what you need</span></span>
+<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a><span class="fu">boilerplate_copy_from_project</span>(</span>
+<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>  <span class="at">from_project =</span> <span class="st">&quot;colleague_jane&quot;</span>,</span>
+<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a>  <span class="at">to_project =</span> <span class="st">&quot;my_research&quot;</span>,</span>
+<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a>  <span class="at">paths =</span> <span class="st">&quot;measures.work_stress&quot;</span>,  <span class="co"># Only import the work stress scale</span></span>
+<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a>  <span class="at">prefix =</span> <span class="st">&quot;jane_&quot;</span>,  <span class="co"># Avoid conflicts</span></span>
+<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a>)</span>
+<span id="cb9-42"><a href="#cb9-42" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" tabindex="-1"></a><span class="co"># 5. Verify the import</span></span>
+<span id="cb9-44"><a href="#cb9-44" tabindex="-1"></a>my_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">project =</span> <span class="st">&quot;my_research&quot;</span>)</span>
+<span id="cb9-45"><a href="#cb9-45" tabindex="-1"></a><span class="fu">names</span>(my_db<span class="sc">$</span>measures)  <span class="co"># Should include &quot;jane_work_stress&quot;</span></span></code></pre></div>
+</div>
+<div id="best-practices" class="section level2">
+<h2>Best Practices</h2>
+<ol style="list-style-type: decimal">
+<li><p><strong>Use descriptive project names</strong>: Instead of
+“project1”, use “smith_lab_measures” or “meta_analysis_2024”</p></li>
+<li><p><strong>Document project sources</strong>: Keep notes about where
+content came from</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Add source information to imported content</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>my_db<span class="sc">$</span>measures<span class="sc">$</span>jane_work_stress<span class="sc">$</span>source <span class="ot">&lt;-</span> <span class="st">&quot;Jane Smith&#39;s lab, imported 2024-01-15&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">boilerplate_save</span>(my_db, <span class="at">project =</span> <span class="st">&quot;my_research&quot;</span>)</span></code></pre></div></li>
+<li><p><strong>Regular backups</strong>: Projects are independent, so
+back them up separately</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">boilerplate_export</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="at">db =</span> my_db,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">project =</span> <span class="st">&quot;my_research&quot;</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">&quot;json&quot;</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">output_file =</span> <span class="fu">paste0</span>(<span class="st">&quot;backup_my_research_&quot;</span>, <span class="fu">Sys.Date</span>(), <span class="st">&quot;.json&quot;</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>)</span></code></pre></div></li>
+<li><p><strong>Use prefixes for external content</strong>: This prevents
+naming conflicts and makes sources clear</p></li>
+</ol>
+</div>
+<div id="migration-from-pre-1.1.0" class="section level2">
+<h2>Migration from Pre-1.1.0</h2>
+<p>If you’re upgrading from an earlier version, your existing
+boilerplate data will continue to work:</p>
+<ul>
+<li>Existing data in <code>boilerplate/data/</code> is treated as the
+“default” project</li>
+<li>No changes to your code are required</li>
+<li>You can start using projects whenever you’re ready</li>
+</ul>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>Projects in boilerplate provide a flexible way to: - Keep different
+collections of content separate - Share content with colleagues without
+mixing databases - Experiment with new content without affecting your
+main database - Maintain clear organization as your boilerplate
+collection grows</p>
+<p>The project system is entirely optional - if you don’t need multiple
+collections, simply continue using boilerplate as before, and everything
+will work with the “default” project.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to boilerplate</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to boilerplate</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(boilerplate)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; boilerplate 1.3.0</span></span></code></pre></div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>The <code>boilerplate</code> package provides tools for managing and
+generating standardised text for methods and results sections of
+scientific reports. It uses a unified database system with template
+variable substitution, making it easy to maintain consistent language
+across projects while allowing for customisation.</p>
+<p><strong>New in v1.1.0</strong>: The package now defaults to a single
+unified JSON database, simplifying database management and improving
+version control integration.</p>
+</div>
+<div id="key-features" class="section level2">
+<h2>Key Features</h2>
+<ul>
+<li><strong>Single JSON Database</strong>: All content types in one
+human-readable JSON file by default</li>
+<li><strong>Template Variable Substitution</strong>: Use
+<code>{{variable}}</code> placeholders for dynamic content</li>
+<li><strong>Hierarchical Organization</strong>: Organize content using
+dot notation (e.g., <code>methods.statistical.longitudinal</code>)</li>
+<li><strong>Batch Operations</strong>: Edit multiple entries at
+once</li>
+<li><strong>Safety Features</strong>: Confirmation prompts and backup
+creation</li>
+<li><strong>Version Control Friendly</strong>: JSON format makes Git
+diffs meaningful and merges easier</li>
+</ul>
+</div>
+<div id="quick-start" class="section level2">
+<h2>Quick Start</h2>
+<div id="initialise-databases" class="section level3">
+<h3>1. Initialise Databases</h3>
+<p>First, create and initialise your boilerplate databases:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Initialise unified database with default content</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># Creates a single boilerplate_unified.json file</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">create_empty =</span> <span class="cn">FALSE</span>,  <span class="co"># Use FALSE to get example content</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="import-databases" class="section level3">
+<h3>2. Import Databases</h3>
+<p>Import your databases to work with them:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Import all databases as a unified structure</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># Or import specific categories</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>methods_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="st">&quot;methods&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>measures_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="st">&quot;measures&quot;</span>)</span></code></pre></div>
+</div>
+<div id="generate-text" class="section level3">
+<h3>3. Generate Text</h3>
+<p>Generate text with variable substitution:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Generate methods text</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>methods_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;sample&quot;</span>, <span class="st">&quot;measures&quot;</span>, <span class="st">&quot;statistical_estimator&quot;</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">n_total =</span> <span class="dv">5000</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">exposure_var =</span> <span class="st">&quot;political_conservative&quot;</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="at">outcome_var =</span> <span class="st">&quot;anxiety&quot;</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">&quot;New Zealand adults&quot;</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  ),</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="at">db =</span> unified_db</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>)</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="fu">cat</span>(methods_text)</span></code></pre></div>
+</div>
+<div id="generate-measure-descriptions" class="section level3">
+<h3>4. Generate Measure Descriptions</h3>
+<p>Create formatted descriptions of your measures:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Generate measure descriptions</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>measures_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_measures</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">variable_heading =</span> <span class="st">&quot;Outcome Variables&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety&quot;</span>, <span class="st">&quot;depression&quot;</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">sample_items =</span> <span class="dv">3</span>  <span class="co"># Show only first 3 items</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="fu">cat</span>(measures_text)</span></code></pre></div>
+</div>
+</div>
+<div id="working-with-databases" class="section level2">
+<h2>Working with Databases</h2>
+<div id="viewing-database-content" class="section level3">
+<h3>Viewing Database Content</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># List all paths in a database</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>all_paths <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_paths</span>(unified_db)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">head</span>(all_paths)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co"># Get specific content</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>sample_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_get_entry</span>(unified_db, <span class="st">&quot;methods.sample.default&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">cat</span>(sample_text)</span></code></pre></div>
+</div>
+<div id="adding-and-updating-content" class="section level3">
+<h3>Adding and Updating Content</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Add a new entry</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_add_entry</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;methods.sample.online&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">value =</span> <span class="st">&quot;We recruited {{n_total}} participants through online platforms.&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co"># Update existing entry</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_update_entry</span>(</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;methods.sample.default&quot;</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  <span class="at">value =</span> <span class="st">&quot;Our sample consisted of {{n_total}} {{population}}.&quot;</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>)</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co"># Save changes</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db)</span></code></pre></div>
+</div>
+<div id="batch-operations" class="section level3">
+<h3>Batch Operations</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Update multiple references at once</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;reference&quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;smith2024&quot;</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="at">target_entries =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety&quot;</span>, <span class="st">&quot;depression&quot;</span>, <span class="st">&quot;stress&quot;</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># Clean text fields</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_clean</span>(</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;description&quot;</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  <span class="at">remove_chars =</span> <span class="fu">c</span>(<span class="st">&quot;@&quot;</span>, <span class="st">&quot;[&quot;</span>, <span class="st">&quot;]&quot;</span>),</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  <span class="at">trim_whitespace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+<div id="template-system" class="section level2">
+<h2>Template System</h2>
+<p>The template system uses <code>{{variable}}</code> placeholders that
+are replaced with actual values:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Create a template</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>template_text <span class="ot">&lt;-</span> <span class="st">&quot;We analysed data from {{n_total}} {{population}} </span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="st">  ({{n_female}} female, {{n_male}} male) with a mean age of {{age_mean}} </span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="st">  years (SD = {{age_sd}}).&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co"># Use in your database</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_add_entry</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;methods.participants.demographics&quot;</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>  <span class="at">value =</span> template_text,</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>)</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co"># Generate with variables</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>demographics_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;participants.demographics&quot;</span>,</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(</span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>    <span class="at">n_total =</span> <span class="dv">1000</span>,</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">&quot;university students&quot;</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>    <span class="at">n_female =</span> <span class="dv">600</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>    <span class="at">n_male =</span> <span class="dv">400</span>,</span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>    <span class="at">age_mean =</span> <span class="fl">21.3</span>,</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>    <span class="at">age_sd =</span> <span class="fl">3.2</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>  ),</span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>  <span class="at">db =</span> unified_db</span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="best-practices" class="section level2">
+<h2>Best Practices</h2>
+<ol style="list-style-type: decimal">
+<li><p><strong>Use Version Control</strong>: Export your databases
+regularly for version control</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">boilerplate_export</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">output_file =</span> <span class="st">&quot;boilerplate_backup_2024.rds&quot;</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>)</span></code></pre></div></li>
+<li><p><strong>Organise Hierarchically</strong>: Use dot notation for
+clear organisation</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Good organisation</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="st">&quot;methods.measures.psychological.anxiety&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="st">&quot;methods.measures.psychological.depression&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="st">&quot;methods.measures.demographic.age&quot;</span></span></code></pre></div></li>
+<li><p><strong>Document Your Variables</strong>: Keep a record of
+template variables</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Add a template reference</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_add_entry</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">&quot;templates.variable_reference&quot;</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="at">value =</span> <span class="st">&quot;Common variables: {{n_total}}, {{exposure_var}}, {{outcome_var}}&quot;</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;template&quot;</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>)</span></code></pre></div></li>
+<li><p><strong>Use Meaningful Names</strong>: Choose clear, descriptive
+names for entries</p></li>
+</ol>
+</div>
+<div id="advanced-features" class="section level2">
+<h2>Advanced Features</h2>
+<div id="measure-standardisation" class="section level3">
+<h3>Measure Standardisation</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Standardise measure entries</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>unified_db<span class="sc">$</span>measures <span class="ot">&lt;-</span> <span class="fu">boilerplate_standardise_measures</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  unified_db<span class="sc">$</span>measures,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="at">extract_scale =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="at">clean_descriptions =</span> <span class="cn">TRUE</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co"># Generate quality report</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="fu">boilerplate_measures_report</span>(unified_db<span class="sc">$</span>measures)</span></code></pre></div>
+</div>
+<div id="cross-project-workflows" class="section level3">
+<h3>Cross-Project Workflows</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Work with multiple projects</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co"># Create a project for shared content</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">boilerplate_init</span>(<span class="at">project =</span> <span class="st">&quot;shared&quot;</span>, <span class="at">confirm =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co"># Copy content between projects</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="fu">boilerplate_copy_from_project</span>(</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="at">from_project =</span> <span class="st">&quot;shared&quot;</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="at">to_project =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="at">paths =</span> <span class="fu">c</span>(<span class="st">&quot;methods.statistical&quot;</span>, <span class="st">&quot;measures.anxiety&quot;</span>),</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>)</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co"># List available projects</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>projects <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_projects</span>(<span class="at">details =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="managing-database-versions" class="section level2">
+<h2>Managing Database Versions</h2>
+<p>The boilerplate package includes version management features to help
+you track and restore different versions of your databases.</p>
+<div id="listing-available-versions" class="section level3">
+<h3>Listing Available Versions</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># List all database files</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_files</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">print</span>(files)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co"># List files for a specific category</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>methods_files <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_files</span>(<span class="at">category =</span> <span class="st">&quot;methods&quot;</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co"># Filter by date pattern</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>jan_files <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_files</span>(<span class="at">pattern =</span> <span class="st">&quot;202401&quot;</span>)</span></code></pre></div>
+</div>
+<div id="working-with-timestamped-versions" class="section level3">
+<h3>Working with Timestamped Versions</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Save with timestamp</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">boilerplate_save</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="at">timestamp =</span> <span class="cn">TRUE</span>  <span class="co"># Creates boilerplate_unified_20240115_143022.rds</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co"># Import a specific timestamped version</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>old_version <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="at">data_path =</span> <span class="st">&quot;boilerplate/data/boilerplate_unified_20240110_120000.rds&quot;</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="backup-and-restore" class="section level3">
+<h3>Backup and Restore</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># View latest backup without restoring</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>backup_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_restore_backup</span>(<span class="at">category =</span> <span class="st">&quot;methods&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co"># Restore backup as current version</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="fu">boilerplate_restore_backup</span>(</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="at">restore =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>)</span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co"># Restore specific backup by timestamp</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="fu">boilerplate_restore_backup</span>(</span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>  <span class="at">backup_version =</span> <span class="st">&quot;20240110_120000&quot;</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a>  <span class="at">restore =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+<div id="getting-help" class="section level2">
+<h2>Getting Help</h2>
+<p>For more information and examples, see:</p>
+<ul>
+<li>Package documentation:
+<code>help(package = &quot;boilerplate&quot;)</code></li>
+<li>Function help: <code>?boilerplate_generate_text</code></li>
+<li>GitHub repository: <a href="https://github.com/go-bayes/boilerplate" class="uri">https://github.com/go-bayes/boilerplate</a></li>
+<li>Example files:
+<code>system.file(&quot;examples&quot;, package = &quot;boilerplate&quot;)</code></li>
+<li>Example data:
+<code>system.file(&quot;extdata&quot;, package = &quot;boilerplate&quot;)</code></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

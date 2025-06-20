@@ -24,7 +24,6 @@
 ^debug_test_failures\.R$
 ^tasks\.md$
 ^tasks-done\.md$
-^doc$
 ^Meta$
 ^inst/examples/example-usage\.R$
 ^inst/examples/json-poc$
