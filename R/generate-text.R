@@ -13,7 +13,7 @@
 #' @param db List. Optional database to use. Can be either a category-specific database or a unified database.
 #'   If a unified database is provided, the appropriate category will be extracted.
 #' @param data_path Character. Path to the directory where database files are stored.
-#'   If NULL (default), uses here::here("boilerplate", "data").
+#'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 #' @param warn_missing Logical. Whether to warn about missing template variables.
 #' @param add_headings Logical. Whether to add markdown headings to sections. Default is FALSE.
 #' @param heading_level Character. The heading level to use (e.g., "###"). Default is "###".

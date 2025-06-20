@@ -121,9 +121,8 @@ location, making the code more reproducible and safer to run.</p>
 <span><span class="co"># project_dir &lt;- "/path/to/your/project"  # e.g., "~/Documents/my_wellbeing_study"</span></span>
 <span><span class="co"># data_path &lt;- file.path(project_dir, "data", "boilerplate")</span></span>
 <span></span>
-<span><span class="co"># Best practice: Use here::here() for project-based paths</span></span>
-<span><span class="co"># library(here)</span></span>
-<span><span class="co"># data_path &lt;- here::here("data", "boilerplate")</span></span>
+<span><span class="co"># Best practice: Use relative paths or file.path() for project-based paths</span></span>
+<span><span class="co"># data_path &lt;- file.path("data", "boilerplate")</span></span>
 <span></span>
 <span><span class="co"># Initialise unified database with full path</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>

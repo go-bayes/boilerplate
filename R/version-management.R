@@ -4,7 +4,7 @@
 #' (standard, timestamped, or backup).
 #'
 #' @param data_path Character. Path to the directory containing database files.
-#'   If NULL (default), uses here::here("boilerplate", "data").
+#'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 #' @param pattern Character. Optional regex pattern to filter files.
 #' @param category Character. Optional category to filter results.
 #'   Options include "measures", "methods", "results", "discussion", 
@@ -266,7 +266,7 @@ print.boilerplate_files <- function(x, ...) {
 #' @param backup_version Character. Specific backup timestamp (format: "YYYYMMDD_HHMMSS"),
 #'   or NULL to use the latest backup.
 #' @param data_path Character. Path to directory containing backup files.
-#'   If NULL (default), uses here::here("boilerplate", "data").
+#'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 #' @param restore Logical. If TRUE, saves the backup as the current standard file
 #'   (overwrites existing). If FALSE (default), just returns the backup content.
 #' @param confirm Logical. If TRUE (default), asks for confirmation before overwriting.

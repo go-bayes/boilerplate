@@ -197,7 +197,7 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 #' @param output_file Character. Optional output filename. If NULL, uses default naming.
 #' @param select_elements Character vector. Optional paths to export (supports wildcards).
 #' @param data_path Character. Base path for data directory.
-#'   If NULL (default), uses here::here("boilerplate", "data").
+#'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 #' @param format Character. Format to save: "rds" (default), "json", or "both".
 #' @param confirm Logical. If TRUE (default), asks for confirmation before overwriting.
 #' @param create_dirs Logical. If TRUE, creates directories if they don't exist.

@@ -53,7 +53,7 @@ my-research-project/
 ```{r init}
 # Use a project-specific directory
 # Note: This creates a hidden directory in your project root
-# Alternative: Use here::here(".boilerplate-data") for more explicit paths
+# Alternative: Use file.path(getwd(), ".boilerplate-data") for more explicit paths
 data_path <- ".boilerplate-data"
 
 # Initialise all databases

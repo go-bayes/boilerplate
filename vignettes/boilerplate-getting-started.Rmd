@@ -60,9 +60,8 @@ data_path <- file.path(project_name, "data", "boilerplate")
 # project_dir <- "/path/to/your/project"  # e.g., "~/Documents/my_wellbeing_study"
 # data_path <- file.path(project_dir, "data", "boilerplate")
 
-# Best practice: Use here::here() for project-based paths
-# library(here)
-# data_path <- here::here("data", "boilerplate")
+# Best practice: Use relative paths or file.path() for project-based paths
+# data_path <- file.path("data", "boilerplate")
 
 # Initialise unified database with full path
 boilerplate_init(

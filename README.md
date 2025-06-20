@@ -118,22 +118,27 @@ if (!require(boilerplate, quietly = TRUE)) {
   devtools::install_github("go-bayes/boilerplate")
 }
 
+# create a directory for this example (in practice, use your project directory)
+example_dir <- file.path(tempdir(), "boilerplate_example")
+dir.create(example_dir, showWarnings = FALSE)
+
 # initialise unified database with example content
 boilerplate_init(
-  data_path = here::here("boilerplate", "data"),
+  data_path = example_dir,
   create_dirs = TRUE, 
   create_empty = FALSE,  # FALSE loads default example content
-  confirm = FALSE
+  confirm = FALSE,
+  quiet = TRUE
 )
 
 # import the unified database
-unified_db <- boilerplate_import(data_path = here::here("boilerplate", "data"))
+unified_db <- boilerplate_import(data_path = example_dir, quiet = TRUE)
 
 # add a new method entry directly to the unified database
 unified_db$methods$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
 
 # save all changes at once (JSON by default)
-boilerplate_save(unified_db, data_path = here::here("boilerplate", "data"), confirm = FALSE)
+boilerplate_save(unified_db, data_path = example_dir, confirm = FALSE, quiet = TRUE)
 
 # generate text with variable substitution
 methods_text <- boilerplate_generate_text(
@@ -158,7 +163,7 @@ ensuring consistent citations across all your boilerplate text:
 ``` r
 # Make sure you have the unified_db loaded from previous example
 # If not, load it:
-# unified_db <- boilerplate_import(data_path = here::here("boilerplate", "data"))
+# unified_db <- boilerplate_import(data_path = example_dir, quiet = TRUE)
 
 # Add bibliography information to your database
 # Using the example bibliography included with the package
@@ -170,7 +175,7 @@ unified_db <- boilerplate_add_bibliography(
 )
 
 # Save the updated database
-boilerplate_save(unified_db, data_path = here::here("boilerplate", "data"))
+boilerplate_save(unified_db, data_path = example_dir, confirm = FALSE, quiet = TRUE)
 
 # Generate text and automatically copy bibliography
 methods_text <- boilerplate_generate_text(
@@ -211,11 +216,15 @@ For detailed JSON workflows, see
 # Initialize if needed:
 # boilerplate_init(data_path = "path/to", create_dirs = TRUE)
 
+# First ensure you have a database to import
+# Initialize if needed:
+boilerplate_init(data_path = "my_project/data", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+
 # import database (automatically detects JSON or RDS format)
-unified_db <- boilerplate_import(data_path = "path/to")
+unified_db <- boilerplate_import(data_path = "my_project/data", quiet = TRUE)
 
 # save as JSON
-boilerplate_save(unified_db, data_path = "path/to", format = "json")
+boilerplate_save(unified_db, data_path = "my_project/data", format = "json", confirm = FALSE, quiet = TRUE)
 
 # migrate existing RDS databases to JSON
 results <- boilerplate_migrate_to_json(
@@ -261,8 +270,8 @@ if (length(validation_errors) == 0) {
 
 ## Working with Custom Data Paths
 
-By default, boilerplate stores database files in the “boilerplate/data”
-subdirectory of your working directory (using `here::here()`). However,
+By default, boilerplate stores database files using
+`tools::R_user_dir("boilerplate", "data")` for CRAN compliance. However,
 there are many situations where you might need to use a different
 location:
 
@@ -282,14 +291,15 @@ path consistently across all functions.
 
 ``` r
 # define your custom path
-my_project_path <- "path/to/your/project/data"
+my_project_path <- file.path("my_research_project", "data")
 
 # Initialise databases in your custom location
 boilerplate_init(
   categories = c("measures", "methods", "results", "discussion", "appendix", "template"),
   data_path = my_project_path,  # Specify custom path here
   create_dirs = TRUE,
-  confirm = FALSE
+  confirm = FALSE,
+  quiet = TRUE
 )
 
 # import all databases from your custom location
@@ -408,8 +418,8 @@ boilerplate_import(data_path = "my_project/data")
 boilerplate_import(data_path = "/Users/researcher/projects/study_2023/data")
 ```
 
-For portable code, consider using relative paths or functions like
-`here::here()` to construct paths.
+For portable code, consider using relative paths or the `file.path()`
+function to construct paths.
 
 ## Lab Workflow: Central Database with Project Copies
 

@@ -24,7 +24,7 @@ Default is all categories: "measures", "methods", "results", "discussion", "appe
 \item{merge_strategy}{Character. How to merge with existing databases: "keep_existing", "merge_recursive", or "overwrite_all".}
 
 \item{data_path}{Character. Base path for data directory.
-If NULL (default), uses here::here("boilerplate", "data").}
+If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
 \item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
 

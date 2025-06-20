@@ -172,7 +172,7 @@ modify_nested_entry <- function(db, path_parts, action, value = NULL, auto_sort 
 #' @param category Character. Category of data (e.g., "methods", "measures").
 #' @param base_path Character. Path to the directory where database files are stored.
 #'   If NULL, uses the "boilerplate/data/" subdirectory of the current working directory
-#'   via the here::here() function.
+#'   via tools::R_user_dir("boilerplate", "data").
 #' @param file_name Character. Name of the file (without path).
 #'   If NULL, uses "[category]_db.rds".
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.

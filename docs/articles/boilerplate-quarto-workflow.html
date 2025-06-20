@@ -110,7 +110,7 @@ workflows by:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use a project-specific directory</span></span>
 <span><span class="co"># Note: This creates a hidden directory in your project root</span></span>
-<span><span class="co"># Alternative: Use here::here(".boilerplate-data") for more explicit paths</span></span>
+<span><span class="co"># Alternative: Use file.path(getwd(), ".boilerplate-data") for more explicit paths</span></span>
 <span><span class="va">data_path</span> <span class="op">&lt;-</span> <span class="st">".boilerplate-data"</span></span>
 <span></span>
 <span><span class="co"># Initialise all databases</span></span>

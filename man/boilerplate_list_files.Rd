@@ -8,7 +8,7 @@ boilerplate_list_files(data_path = NULL, pattern = NULL, category = NULL)
 }
 \arguments{
 \item{data_path}{Character. Path to the directory containing database files.
-If NULL (default), uses here::here("boilerplate", "data").}
+If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
 \item{pattern}{Character. Optional regex pattern to filter files.}
 

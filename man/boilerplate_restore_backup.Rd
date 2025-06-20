@@ -20,7 +20,7 @@ boilerplate_restore_backup(
 or NULL to use the latest backup.}
 
 \item{data_path}{Character. Path to directory containing backup files.
-If NULL (default), uses here::here("boilerplate", "data").}
+If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
 \item{restore}{Logical. If TRUE, saves the backup as the current standard file
 (overwrites existing). If FALSE (default), just returns the backup content.}

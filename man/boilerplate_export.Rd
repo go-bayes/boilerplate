@@ -26,7 +26,7 @@ boilerplate_export(
 \item{select_elements}{Character vector. Optional paths to export (supports wildcards).}
 
 \item{data_path}{Character. Base path for data directory.
-If NULL (default), uses here::here("boilerplate", "data").}
+If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
 \item{format}{Character. Format to save: "rds" (default), "json", or "both".}
 

@@ -62,7 +62,7 @@ get_empty_measures_db_structure <- function() {
 #'   Default is all categories: "measures", "methods", "results", "discussion", "appendix", "template".
 #' @param merge_strategy Character. How to merge with existing databases: "keep_existing", "merge_recursive", or "overwrite_all".
 #' @param data_path Character. Base path for data directory.
-#'   If NULL (default), uses here::here("boilerplate", "data").
+#'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
 #' @param dry_run Logical. If TRUE, simulates the operation without writing files. Default is FALSE.
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.

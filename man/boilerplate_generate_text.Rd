@@ -38,7 +38,7 @@ boilerplate_generate_text(
 If a unified database is provided, the appropriate category will be extracted.}
 
 \item{data_path}{Character. Path to the directory where database files are stored.
-If NULL (default), uses here::here("boilerplate", "data").}
+If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
 \item{warn_missing}{Logical. Whether to warn about missing template variables.}
 
