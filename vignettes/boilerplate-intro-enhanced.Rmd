@@ -55,7 +55,9 @@ boilerplate_init(
   data_path = file.path(project_root, "shared/boilerplate"),
   categories = c("methods", "measures", "results", "discussion"),
   create_dirs = TRUE,
-  create_empty = FALSE  # Start with helpful examples
+  create_empty = FALSE,  # Start with helpful examples
+  confirm = FALSE,
+  quiet = TRUE
 )
 ```
 
@@ -65,7 +67,7 @@ Sarah's studies all use similar recruitment methods but different samples:
 
 ```{r create-methods}
 # Load the database
-db <- boilerplate_import(file.path(project_root, "shared/boilerplate"))
+db <- boilerplate_import(data_path = file.path(project_root, "shared/boilerplate"), quiet = TRUE)
 
 # Create a base recruitment method
 db <- boilerplate_add_entry(
@@ -95,7 +97,7 @@ db <- boilerplate_add_entry(
 )
 
 # Save the database
-boilerplate_save(db, file.path(project_root, "shared/boilerplate"))
+boilerplate_save(db, data_path = file.path(project_root, "shared/boilerplate"), confirm = FALSE, quiet = TRUE)
 ```
 
 ## Study 1: Pilot Study
@@ -118,8 +120,8 @@ study1_methods <- boilerplate_generate_text(
   category = "methods",
   sections = c(
     "recruitment.online_panel",
-    "design.cross_sectional",
-    "analysis.regression"
+    "statistical.default",  # Using existing default path
+    "causal_assumptions.identification"  # Using existing path
   ),
   global_vars = study1_params,
   db = db
@@ -153,10 +155,9 @@ study2_methods <- boilerplate_generate_text(
   category = "methods",
   sections = c(
     "recruitment.mturk",
-    "design.cross_sectional",
-    "measures.job_satisfaction",
-    "measures.burnout",
-    "analysis.sem"
+    "statistical.default",  # Using existing default path
+    "causal_assumptions.identification"  # Using existing path
+    # Note: measures.job_satisfaction and measures.burnout would need to be added first
   ),
   global_vars = study2_params,
   db = db
@@ -259,7 +260,8 @@ boilerplate_export(
 
 # Team member imports
 team_db <- boilerplate_import(
-  file.path(project_root, "shared/boilerplate/lab_boilerplate_v2.json")
+  data_path = file.path(project_root, "shared/boilerplate/lab_boilerplate_v2.json"),
+  quiet = TRUE
 )
 ```
 
@@ -343,18 +345,22 @@ Ensure consistency across manuscripts:
 papers <- c("study1", "study2", "study3")
 
 for (paper in papers) {
-  paper_db <- boilerplate_import(
-    file.path(project_root, paper, "boilerplate")
-  )
+  # Note: This assumes each paper has its own boilerplate database
+  # which would need to be created first
+  paper_path <- file.path(project_root, paper, "boilerplate")
+  if (dir.exists(paper_path)) {
+    paper_db <- boilerplate_import(data_path = paper_path, quiet = TRUE)
+  } else {
+    message("No boilerplate database found for ", paper)
+    next
+  }
   
   # Compare measure descriptions
-  differences <- compare_entries(
-    paper_db$measures$burnout,
-    db$measures$burnout
-  )
-  
-  if (length(differences) > 0) {
-    message("Update needed for ", paper, ": ", differences)
+  # Note: compare_entries() is not part of boilerplate package
+  # You would need to implement comparison logic
+  # For example:
+  if (!identical(paper_db$measures$burnout, db$measures$burnout)) {
+    message("Update needed for ", paper, ": measure descriptions differ")
   }
 }
 ```
@@ -375,7 +381,7 @@ bibliography: references.bib
 
 ```{r setup, include=FALSE}
 library(boilerplate)
-db <- boilerplate_import("shared/boilerplate")
+db <- boilerplate_import(data_path = "shared/boilerplate", quiet = TRUE)
 
 # Study-specific parameters
 params <- list(
@@ -394,10 +400,10 @@ methods <- boilerplate_generate_text(
   category = "methods",
   sections = c(
     "recruitment.mturk",
-    "design.experimental",
+    "statistical.default",  # Using existing path
     "measures.burnout.mbi",
-    "measures.engagement.uwes", 
-    "analysis.moderation"
+    # Note: measures.engagement.uwes would need to be added
+    "causal_assumptions.identification"
   ),
   global_vars = params,
   db = db,
@@ -412,7 +418,7 @@ cat(methods)
 ```{r results, echo=FALSE, results='asis'}
 results_intro <- boilerplate_generate_text(
   category = "results",
-  sections = "preliminary.descriptives",
+  sections = "main_effect",  # Using existing results section
   global_vars = params,
   db = db
 )
@@ -463,8 +469,11 @@ filename <- paste0("boilerplate_backup_", timestamp, ".json")
 
 boilerplate_export(
   db,
+  data_path = project_root,  # Or specify where to save
   output_file = filename,
-  format = "json"
+  format = "json",
+  confirm = FALSE,
+  quiet = TRUE
 )
 
 # Track in git

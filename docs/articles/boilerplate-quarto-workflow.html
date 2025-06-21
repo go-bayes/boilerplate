@@ -109,14 +109,15 @@ workflows by:</p>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use a project-specific directory</span></span>
-<span><span class="co"># Note: This creates a hidden directory in your project root</span></span>
-<span><span class="co"># Alternative: Use file.path(getwd(), ".boilerplate-data") for more explicit paths</span></span>
-<span><span class="va">data_path</span> <span class="op">&lt;-</span> <span class="st">".boilerplate-data"</span></span>
+<span><span class="co"># For this example, using a temporary directory</span></span>
+<span><span class="va">data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"quarto_example"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Initialise all databases</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
 <span>  data_path <span class="op">=</span> <span class="va">data_path</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Load default content</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -136,39 +137,39 @@ workflows by:</p>
 </h3>
 <p>Create reusable methods templates with placeholders:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Add participant recruitment template</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
-<span>  db_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".boilerplate-data"</span>, <span class="st">"boilerplate_methods.rds"</span><span class="op">)</span>,</span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  path <span class="op">=</span> <span class="st">"participants.recruitment"</span>,</span>
-<span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    description <span class="op">=</span> <span class="st">"Participant recruitment procedures"</span>,</span>
-<span>    text <span class="op">=</span> <span class="st">"We recruited {{n_participants}} participants through {{recruitment_method}}."</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Import database first</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">data_path</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Add participant recruitment template to the unified database</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
+<span>  <span class="va">db</span>,</span>
+<span>  path <span class="op">=</span> <span class="st">"methods.participants.recruitment"</span>,</span>
+<span>  value <span class="op">=</span> <span class="st">"We recruited {{n_participants}} participants through {{recruitment_method}}."</span>,</span>
+<span>  category <span class="op">=</span> <span class="st">"methods"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save the updated database</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="va">data_path</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="measures-database">Measures Database<a class="anchor" aria-label="anchor" href="#measures-database"></a>
 </h3>
 <p>Store information about your measures:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Add a measure</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
-<span>  db_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".boilerplate-data"</span>, <span class="st">"boilerplate_measures.rds"</span><span class="op">)</span>,</span>
-<span>  category <span class="op">=</span> <span class="st">"measures"</span>,</span>
-<span>  path <span class="op">=</span> <span class="st">"anxiety.gad7"</span>,</span>
-<span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="st">"GAD-7"</span>,</span>
-<span>    description <span class="op">=</span> <span class="st">"Generalized Anxiety Disorder 7-item scale"</span>,</span>
-<span>    items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="st">"Feeling nervous, anxious, or on edge"</span>,</span>
-<span>      <span class="st">"Not being able to stop or control worrying"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    reference <span class="op">=</span> <span class="st">"Spitzer et al. (2006)"</span></span>
+<code class="sourceCode R"><span><span class="co"># Add a measure to the unified database</span></span>
+<span><span class="va">db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">gad7</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"GAD-7"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Generalized Anxiety Disorder 7-item scale"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"ordinal"</span>,  <span class="co"># Required field</span></span>
+<span>  items <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Feeling nervous, anxious, or on edge"</span>,</span>
+<span>    <span class="st">"Not being able to stop or control worrying"</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>  reference <span class="op">=</span> <span class="st">"@spitzer2006"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save the updated database</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="va">data_path</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -176,8 +177,8 @@ workflows by:</p>
 </h2>
 <p>Here’s how to use boilerplate in your Quarto document:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Import database</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">".boilerplate-data"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Import database (using the temp path from above)</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">data_path</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate methods text</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -220,7 +221,7 @@ like:</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://go-bayes.github.io/boilerplate/">boilerplate</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load database and generate text</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">".boilerplate-data"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">data_path</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate participant section</span></span>
 <span><span class="va">participant_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -260,7 +261,7 @@ multiple entries</li>
 consistent citations across projects:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add bibliography information to your database</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">".boilerplate-data"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">data_path</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Using the example bibliography included with the package</span></span>
 <span><span class="va">example_bib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_references.bib"</span>, package <span class="op">=</span> <span class="st">"boilerplate"</span><span class="op">)</span></span>
@@ -271,7 +272,7 @@ consistent citations across projects:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save the updated database</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="st">".boilerplate-data"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="va">data_path</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="automatic-bibliography-copying">Automatic Bibliography Copying<a class="anchor" aria-label="anchor" href="#automatic-bibliography-copying"></a>
 </h3>
@@ -280,7 +281,7 @@ consistent citations across projects:</p>
 <code class="sourceCode R"><span><span class="co"># Generate text and copy bibliography</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="st">"analysis.regression"</span>,</span>
+<span>  sections <span class="op">=</span> <span class="st">"statistical.default"</span>,  <span class="co"># Use existing section</span></span>
 <span>  db <span class="op">=</span> <span class="va">db</span>,</span>
 <span>  copy_bibliography <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  bibliography_path <span class="op">=</span> <span class="st">"manuscript/"</span>  <span class="co"># Copy to manuscript directory</span></span>
@@ -314,7 +315,7 @@ bibliography:</p>
 <p>Update multiple entries at once:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Update all methods entries</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">".boilerplate-data"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">data_path</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/boilerplate_batch_edit.html">boilerplate_batch_edit</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">db</span><span class="op">$</span><span class="va">methods</span>,</span>

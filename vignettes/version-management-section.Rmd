@@ -29,11 +29,15 @@ When working on a project over time, you'll accumulate different versions of you
 
 ```{r list-versions}
 # See all available database files
-files <- boilerplate_list_files()
+# Using a temporary directory for this example
+temp_version <- file.path(tempdir(), "version_example")
+boilerplate_init(data_path = temp_version, create_empty = FALSE, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+
+files <- boilerplate_list_files(data_path = temp_version)
 print(files)
 
 # Check what versions exist for methods
-methods_files <- boilerplate_list_files(category = "methods")
+methods_files <- boilerplate_list_files(data_path = temp_version, category = "methods")
 ```
 
 The `boilerplate_list_files()` function organises files into:
@@ -47,12 +51,14 @@ Save important milestones with timestamps:
 
 ```{r save-with-timestamp}
 # Load your database
-db <- boilerplate_import()
+db <- boilerplate_import(data_path = temp_version, quiet = TRUE)
 
 # Save with timestamp before major revision
 boilerplate_save(
   db,
+  data_path = temp_version,
   timestamp = TRUE,
+  confirm = FALSE,
   quiet = FALSE
 )
 #> ✔ Saved unified database to: boilerplate_unified_20240115_143022.rds
@@ -70,14 +76,15 @@ If something goes wrong, recover from automatic backups:
 
 ```{r backup-recovery}
 # List available backups
-files <- boilerplate_list_files()
+files <- boilerplate_list_files(data_path = temp_version)
 # Look at files$backups for backup files
 
 # View latest backup without restoring
-backup_db <- boilerplate_restore_backup(category = "methods")
+backup_db <- boilerplate_restore_backup(data_path = temp_version, category = "methods")
 
 # Restore latest backup as current version
 boilerplate_restore_backup(
+  data_path = temp_version,
   category = "methods",
   restore = TRUE,
   confirm = TRUE
@@ -86,9 +93,11 @@ boilerplate_restore_backup(
 
 # Restore specific backup by timestamp
 boilerplate_restore_backup(
+  data_path = temp_version,
   category = "methods",
   backup_version = "20240110_120000",
-  restore = TRUE
+  restore = TRUE,
+  confirm = FALSE
 )
 ```
 
@@ -98,25 +107,28 @@ Here's a typical workflow for managing versions:
 
 ```{r workflow-example}
 # 1. Check current versions
-files <- boilerplate_list_files("methods")
+files <- boilerplate_list_files(data_path = temp_version, category = "methods")
 
 # 2. Save current work with timestamp
-methods_db <- boilerplate_import("methods")
+methods_db <- boilerplate_import("methods", data_path = temp_version, quiet = TRUE)
 boilerplate_save(
   methods_db,
+  data_path = temp_version,
   category = "methods",
-  timestamp = TRUE
+  timestamp = TRUE,
+  confirm = FALSE,
+  quiet = TRUE
 )
 
 # 3. Make changes
 methods_db$new_method <- "New methodology text"
-boilerplate_save(methods_db, category = "methods")
+boilerplate_save(methods_db, data_path = temp_version, category = "methods", confirm = FALSE, quiet = TRUE)
 
 # 4. If changes were problematic, restore from backup
-boilerplate_restore_backup("methods", restore = TRUE)
+boilerplate_restore_backup(data_path = temp_version, category = "methods", restore = TRUE, confirm = FALSE)
 
 # 5. Compare versions
-current <- boilerplate_import("methods")
+current <- boilerplate_import("methods", data_path = temp_version, quiet = TRUE)
 old_version <- boilerplate_import(
   data_path = "path/to/your/methods_db_20240110_120000.rds"
 )
@@ -135,7 +147,7 @@ While the package provides its own versioning, it works well with Git:
 
 ```{r git-integration}
 # Save timestamped version for Git commit
-boilerplate_save(db, timestamp = TRUE)
+boilerplate_save(db, data_path = temp_version, timestamp = TRUE, confirm = FALSE, quiet = TRUE)
 
 # Add to Git
 # git add boilerplate/data/boilerplate_unified_*.rds
@@ -150,7 +162,7 @@ If you've lost work, check these locations:
 
 ```{r troubleshooting}
 # List all files including backups
-all_files <- boilerplate_list_files()
+all_files <- boilerplate_list_files(data_path = temp_version)
 
 # Check modification times
 # The most recently modified files appear first
@@ -165,11 +177,11 @@ If a database file becomes corrupted:
 ```{r recovery}
 # Try loading backup
 backup_db <- tryCatch(
-  boilerplate_restore_backup("methods"),
+  boilerplate_restore_backup(data_path = temp_version, category = "methods"),
   error = function(e) {
     message("Backup corrupted, trying older version...")
     # List files and manually load an older one
-    files <- boilerplate_list_files("methods")
+    files <- boilerplate_list_files(data_path = temp_version, category = "methods")
     if (nrow(files$timestamped) > 0) {
       boilerplate_import(data_path = files$timestamped$path[2])
     }

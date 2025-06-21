@@ -196,7 +196,7 @@
 <span><span class="co"># generate text with variable substitution</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"sample_selection"</span><span class="op">)</span>,</span>
+<span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample.default"</span>, <span class="st">"sample_selection"</span><span class="op">)</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    population <span class="op">=</span> <span class="st">"university students"</span>,</span>
 <span>    timeframe <span class="op">=</span> <span class="st">"2020-2021"</span></span>
@@ -231,7 +231,7 @@
 <span><span class="co"># Generate text and automatically copy bibliography</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="st">"statistical"</span>,  <span class="co"># The default entry will be used automatically</span></span>
+<span>  sections <span class="op">=</span> <span class="st">"statistical.default"</span>,  <span class="co"># Use full path to the default text</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  copy_bibliography <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  bibliography_path <span class="op">=</span> <span class="st">"manuscript/"</span></span>
@@ -524,36 +524,42 @@
 </h3>
 <p>The enhanced <code><a href="reference/boilerplate_import.html">boilerplate_import()</a></code> function can now import any database file directly:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Import the current standard version (default behaviour)</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Import database examples</span></span>
+<span><span class="co"># Note: These examples show the pattern - replace paths with your actual files</span></span>
 <span></span>
-<span><span class="co"># Import a specific timestamped version</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"boilerplate/data/methods_db_20240115_143022.rds"</span><span class="op">)</span></span>
+<span><span class="co"># Import the current standard version</span></span>
+<span><span class="co"># db &lt;- boilerplate_import("methods")</span></span>
+<span></span>
+<span><span class="co"># Import a specific timestamped version  </span></span>
+<span><span class="co"># db &lt;- boilerplate_import(data_path = "path/to/methods_db_20240115_143022.rds")</span></span>
 <span></span>
 <span><span class="co"># Import a backup file</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"boilerplate/data/methods_db_backup_20240115_140000.rds"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># db &lt;- boilerplate_import(data_path = "path/to/methods_db_backup_20240115_140000.rds")</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="restoring-from-backups">Restoring from Backups<a class="anchor" aria-label="anchor" href="#restoring-from-backups"></a>
 </h3>
 <p>Use <code><a href="reference/boilerplate_restore_backup.html">boilerplate_restore_backup()</a></code> for convenient backup restoration:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># View the latest backup without restoring</span></span>
-<span><span class="va">backup_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Backup restoration examples</span></span>
+<span><span class="co"># Note: These require existing backup files in your data directory</span></span>
+<span></span>
+<span><span class="co"># View the latest backup without restoring</span></span>
+<span><span class="co"># backup_db &lt;- boilerplate_restore_backup("methods")</span></span>
 <span></span>
 <span><span class="co"># Restore the latest backup as the current version</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  restore <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  confirm <span class="op">=</span> <span class="cn">TRUE</span>  <span class="co"># Will ask for confirmation</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># db &lt;- boilerplate_restore_backup(</span></span>
+<span><span class="co">#   category = "methods",</span></span>
+<span><span class="co">#   restore = TRUE,</span></span>
+<span><span class="co">#   confirm = TRUE  # Will ask for confirmation</span></span>
+<span><span class="co"># )</span></span>
 <span></span>
 <span><span class="co"># Restore a specific backup by timestamp</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span></span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  backup_version <span class="op">=</span> <span class="st">"20240110_120000"</span>,</span>
-<span>  restore <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># db &lt;- boilerplate_restore_backup(</span></span>
+<span><span class="co">#   category = "methods",</span></span>
+<span><span class="co">#   backup_version = "20240110_120000",</span></span>
+<span><span class="co">#   restore = TRUE</span></span>
+<span><span class="co"># )</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="version-management-workflow">Version Management Workflow<a class="anchor" aria-label="anchor" href="#version-management-workflow"></a>
@@ -604,10 +610,10 @@
 </h3>
 <p>Rather than creating separate <code>.qmd</code> files, you can embed boilerplate directly in your analysis code chunks:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># at the beginning of your analysis script or Quarto document</span></span>
+<code class="sourceCode R"><span><span class="co"># At the beginning of your analysis script or Quarto document</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://go-bayes.github.io/boilerplate/">boilerplate</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># define global variables</span></span>
+<span><span class="co"># Define global variables</span></span>
 <span><span class="va">study_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  n_participants <span class="op">=</span> <span class="fl">250</span>,</span>
 <span>  study_name <span class="op">=</span> <span class="st">"Study 1"</span>,</span>
@@ -615,19 +621,42 @@
 <span>  analysis_software <span class="op">=</span> <span class="st">"R version 4.3.0"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># import database</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">".boilerplate-data"</span><span class="op">)</span></span>
+<span><span class="co"># Example 1: Using default location (recommended for persistent storage)</span></span>
+<span><span class="co"># The default location uses tools::R_user_dir() and includes project structure</span></span>
+<span><span class="co"># db &lt;- boilerplate_import()  # Uses default project</span></span>
 <span></span>
-<span><span class="co"># benerate methods text when needed</span></span>
+<span><span class="co"># Example 2: Using a temporary directory (for this example)</span></span>
+<span><span class="va">temp_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"analysis_example"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_analysis</span>, </span>
+<span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Load default content</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Import database</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_analysis</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Generate methods text when needed</span></span>
 <span><span class="va">methods_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="st">"sample"</span>,</span>
+<span>  sections <span class="op">=</span> <span class="st">"sample.default"</span>,  <span class="co"># Use full path to the default text</span></span>
 <span>  global_vars <span class="op">=</span> <span class="va">study_params</span>,</span>
 <span>  db <span class="op">=</span> <span class="va">db</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># use the text directly in your document</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"## Methods\n\n"</span>, <span class="va">methods_sample</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Use the text directly in your document</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"## Methods\n\n"</span>, <span class="va">methods_sample</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_analysis</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Example 3: For a real project with existing .boilerplate-data directory:</span></span>
+<span><span class="co"># If you have an existing directory structure, you may need to specify:</span></span>
+<span><span class="co"># db &lt;- boilerplate_import(data_path = ".boilerplate-data/projects/default/data")</span></span>
+<span><span class="co"># Or initialize it first:</span></span>
+<span><span class="co"># boilerplate_init(data_path = ".boilerplate-data", create_dirs = TRUE)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -635,19 +664,23 @@
 </h2>
 <p>You can still work with individual databases if preferred:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># import just the methods database</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Working with individual databases example</span></span>
+<span><span class="va">temp_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"individual_db_example"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_dir</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># add a new method entry</span></span>
+<span><span class="co"># Import just the methods database</span></span>
+<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span>, data_path <span class="op">=</span> <span class="va">temp_dir</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Add a new method entry</span></span>
 <span><span class="va">methods_db</span><span class="op">$</span><span class="va">sample_selection</span> <span class="op">&lt;-</span> <span class="st">"Participants were selected from {{population}} during {{timeframe}}."</span></span>
 <span></span>
-<span><span class="co"># save just the methods database</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">methods_db</span>, <span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="co"># Save just the methods database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">methods_db</span>, <span class="st">"methods"</span>, data_path <span class="op">=</span> <span class="va">temp_dir</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate text with variable substitution</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"sample_selection"</span><span class="op">)</span>,</span>
+<span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample.default"</span>, <span class="st">"sample_selection"</span><span class="op">)</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    population <span class="op">=</span> <span class="st">"university students"</span>,</span>
 <span>    timeframe <span class="op">=</span> <span class="st">"2020-2021"</span></span>
@@ -656,27 +689,52 @@
 <span>  add_headings <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_text</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_text</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="creating-empty-databases">Creating Empty Databases<a class="anchor" aria-label="anchor" href="#creating-empty-databases"></a>
 </h2>
 <p>The package supports initialising empty database structures by default, providing a clean slate for your project without sample content.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># initialise empty databases (default behavior)</span></span>
+<code class="sourceCode R"><span><span class="co"># Creating empty databases example</span></span>
+<span><span class="va">temp_empty</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"empty_db_example"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Initialise empty databases (default behavior)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
 <span>  categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"methods"</span>, <span class="st">"results"</span><span class="op">)</span>,</span>
-<span>  data_path <span class="op">=</span> <span class="st">"~/project/data"</span>,</span>
-<span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_empty</span>,</span>
+<span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># initialise with default content when needed</span></span>
+<span><span class="co"># Check that databases are empty</span></span>
+<span><span class="va">db_empty</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_empty</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">db_empty</span><span class="op">$</span><span class="va">methods</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Should be 0</span></span>
+<span></span>
+<span><span class="co"># Clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_empty</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Initialise with default content when needed</span></span>
+<span><span class="va">temp_content</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"content_db_example"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
 <span>  categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"methods"</span>, <span class="st">"results"</span><span class="op">)</span>,</span>
-<span>  data_path <span class="op">=</span> <span class="st">"~/project/data"</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_content</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># This loads default content</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Check that databases have content</span></span>
+<span><span class="va">db_content</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_content</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">db_content</span><span class="op">$</span><span class="va">methods</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Should be &gt; 0</span></span>
+<span></span>
+<span><span class="co"># Clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_content</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Empty databases provide just the top-level structure without example content, making it easier to start with a clean slate.</p>
 </div>
 <div class="section level2">
@@ -684,23 +742,37 @@
 </h2>
 <p>The package now supports exporting databases for versioning or sharing specific elements:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># export entire database for versioning</span></span>
-<span><span class="co"># creates a point-in-time snapshot of your boilerplate content</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Export database example</span></span>
+<span><span class="va">temp_export</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"export_example"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_export</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Import database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_export</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Export entire database for versioning</span></span>
 <span><span class="fu"><a href="reference/boilerplate_export.html">boilerplate_export</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
-<span>  output_file <span class="op">=</span> <span class="st">"boilerplate_v1.0.rds"</span>,</span>
-<span>  data_path <span class="op">=</span> <span class="st">"~/project/data"</span></span>
+<span>  output_file <span class="op">=</span> <span class="st">"boilerplate_v1.0.json"</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_export</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># export selected elements (specific methods and results)</span></span>
-<span><span class="co"># useful for sharing specialized subsets with collaborators</span></span>
+<span><span class="co"># Export selected elements (specific methods and results)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_export.html">boilerplate_export</a></span><span class="op">(</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
-<span>  output_file <span class="op">=</span> <span class="st">"causal_methods_subset.rds"</span>,</span>
+<span>  output_file <span class="op">=</span> <span class="st">"causal_methods_subset.json"</span>,</span>
 <span>  select_elements <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"methods.statistical.*"</span>, <span class="st">"results.main_effect"</span><span class="op">)</span>,</span>
-<span>  data_path <span class="op">=</span> <span class="st">"~/project/data"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>  data_path <span class="op">=</span> <span class="va">temp_export</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Check exported files exist</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">temp_export</span>, pattern <span class="op">=</span> <span class="st">"\\.(json|rds)$"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_export</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>The export function supports: - Full database export (ideal for versioning) - Selective export using dot notation (e.g., “methods.statistical.longitudinal”) - Wildcard selections using “<em>” (e.g., ”methods.</em>” selects all methods) - Category-prefixed paths for unified databases</p>
 <p>Export is distinct from save: use <code><a href="reference/boilerplate_save.html">boilerplate_save()</a></code> for normal database updates and <code><a href="reference/boilerplate_export.html">boilerplate_export()</a></code> for creating standalone exports.</p>
 </div>
@@ -709,8 +781,12 @@
 </h2>
 <p>The package provides a simplified way to manage measures and generate formatted text about them. Measures are stored as top-level entries in the measures database, with each measure containing standardised properties like name, description, reference, etc.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># import the unified database</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Measures example with temporary directory</span></span>
+<span><span class="va">temp_measures</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"measures_example"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_measures</span>, create_empty <span class="op">=</span> <span class="cn">FALSE</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Import the unified database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_measures</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add a measure directly to the unified database</span></span>
 <span><span class="co"># Note: Measures should be at the top level of the measures database</span></span>
@@ -728,11 +804,11 @@
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># save the entire unified database</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="co"># Save the entire unified database</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="va">temp_measures</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># alternatively, save just the measures portion</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span>, <span class="st">"measures"</span><span class="op">)</span></span>
+<span><span class="co"># Alternatively, save just the measures portion</span></span>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span>, <span class="st">"measures"</span>, data_path <span class="op">=</span> <span class="va">temp_measures</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># then generate text referencing the measure by its top-level name</span></span>
 <span><span class="va">exposure_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
@@ -773,7 +849,7 @@
 <span><span class="co"># initialise a sample text (assuming this was defined earlier)</span></span>
 <span><span class="va">sample_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="st">"sample"</span>,</span>
+<span>  sections <span class="op">=</span> <span class="st">"sample.default"</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>population <span class="op">=</span> <span class="st">"university students"</span>, timeframe <span class="op">=</span> <span class="st">"2023-2024"</span><span class="op">)</span>,</span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span></span>
 <span><span class="op">)</span></span>
@@ -791,8 +867,11 @@
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_section</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># save the methods section to a file that can be included in a quarto document</span></span>
-<span><span class="co"># writeLines(methods_section, "methods_section.qmd")</span></span></code></pre></div>
+<span><span class="co"># Save the methods section to a file that can be included in a quarto document</span></span>
+<span><span class="co"># writeLines(methods_section, "methods_section.qmd")</span></span>
+<span></span>
+<span><span class="co"># Clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_measures</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="important-notes-on-measure-structure">Important Notes on Measure Structure<a class="anchor" aria-label="anchor" href="#important-notes-on-measure-structure"></a>
 </h3>
@@ -823,8 +902,12 @@
 </h3>
 <p>The <code><a href="reference/boilerplate_standardise_measures.html">boilerplate_standardise_measures()</a></code> function automatically cleans and standardises your measures:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Import your database</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Standardisation example</span></span>
+<span><span class="va">temp_standard</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"standardise_example"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_standard</span>, create_empty <span class="op">=</span> <span class="cn">FALSE</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Import your database</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_standard</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check quality before standardisation</span></span>
 <span><span class="fu"><a href="reference/boilerplate_measures_report.html">boilerplate_measures_report</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">)</span></span>
@@ -839,7 +922,10 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save the standardised database</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="va">temp_standard</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_standard</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="what-standardisation-does">What Standardisation Does<a class="anchor" aria-label="anchor" href="#what-standardisation-does"></a>
@@ -1370,7 +1456,7 @@
 <span>  <span class="co"># generate text</span></span>
 <span>  <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>    category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>    sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="va">lmtp_path</span><span class="op">)</span>,</span>
+<span>    sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample.default"</span>, <span class="va">lmtp_path</span><span class="op">)</span>,</span>
 <span>    global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      exposure_var <span class="op">=</span> <span class="st">"political_conservative"</span>,</span>
 <span>      outcome_var <span class="op">=</span> <span class="st">"social_wellbeing"</span></span>
@@ -1532,12 +1618,12 @@
 <div class="section level3">
 <h3 id="rocket-near-term">🚀 Near Term<a class="anchor" aria-label="anchor" href="#rocket-near-term"></a>
 </h3>
-<p><strong>Enhanced Type Safety (v1.2.1)</strong> - Implementation of S3 classes for all database objects - Improved validation and error messages - Better IDE support with autocompletion - Zero breaking changes - full backward compatibility</p>
+<p><strong>Enhanced Documentation and Examples (v1.3.1)</strong> - Comprehensive example testing framework - Enhanced vignette coverage for all workflows - Improved error messages with helpful suggestions - Video tutorials for common workflows</p>
 </div>
 <div class="section level3">
 <h3 id="clipboard-medium-term">📋 Medium Term<a class="anchor" aria-label="anchor" href="#clipboard-medium-term"></a>
 </h3>
-<p><strong>Extended S3 Methods (v1.3.x)</strong> - Custom print methods for cleaner output - Validation methods for database integrity - Safe subsetting and extraction operators - Enhanced merge capabilities with type checking</p>
+<p><strong>Enhanced Type Safety (v1.4.x)</strong> - Implementation of S3 classes for all database objects - Custom print methods for cleaner output - Validation methods for database integrity - Better IDE support with autocompletion</p>
 </div>
 <div class="section level3">
 <h3 id="crystal_ball-long-term">🔮 Long Term<a class="anchor" aria-label="anchor" href="#crystal_ball-long-term"></a>
@@ -1554,13 +1640,13 @@
 </h3>
 <ul>
 <li>
-<strong>Version</strong>: 1.2.0 (CRAN submission pending)</li>
+<strong>Version</strong>: 1.3.0 (CRAN submission ready)</li>
 <li>
-<strong>Code coverage</strong>: 67.49%</li>
+<strong>Code coverage</strong>: 73.12%</li>
 <li>
 <strong>Dependencies</strong>: Minimal (6 packages)</li>
 <li>
-<strong>Test suite</strong>: 726 tests across 22 files</li>
+<strong>Test suite</strong>: 847 tests across 30 files</li>
 </ul>
 <p>We welcome feedback and contributions! Please see our <a href="https://github.com/go-bayes/boilerplate/blob/main/.github/CONTRIBUTING.md" class="external-link">contribution guidelines</a> for more information.</p>
 </div>

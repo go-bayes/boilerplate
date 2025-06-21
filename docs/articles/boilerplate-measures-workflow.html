@@ -83,8 +83,10 @@ generating formatted text about your measures.</p>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Initialise and import the database</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># Using a temporary directory for this example</span></span>
+<span><span class="va">temp_measures</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"measures_workflow_example"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_measures</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, create_empty <span class="op">=</span> <span class="cn">FALSE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_measures</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add a measure directly to the unified database</span></span>
 <span><span class="co"># IMPORTANT: Measures must be at the top level, not nested in categories</span></span>
@@ -106,7 +108,7 @@ generating formatted text about your measures.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save the database</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="va">temp_measures</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate formatted text about the measure</span></span>
 <span><span class="va">measures_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
@@ -237,7 +239,7 @@ measure</li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save all changes</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="va">temp_measures</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="interactive-management">Interactive Management<a class="anchor" aria-label="anchor" href="#interactive-management"></a>
@@ -247,8 +249,12 @@ measure</li>
 <code class="sourceCode R"><span><span class="co"># View all measures</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Access a specific measure</span></span>
-<span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">anxiety</span></span>
+<span><span class="co"># Access a specific measure (if it exists)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="st">"anxiety"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">anxiety</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="st">"anxiety_gad7"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">anxiety_gad7</span></span>
+<span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Add or update measures using boilerplate_add_entry() or boilerplate_update_entry()</span></span></code></pre></div>
 </div>
@@ -295,7 +301,7 @@ fields</li>
 <span><span class="fu"><a href="../reference/boilerplate_measures_report.html">boilerplate_measures_report</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save the standardised database</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="va">temp_measures</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-before-and-after-standardisation">Example: Before and After Standardisation<a class="anchor" aria-label="anchor" href="#example-before-and-after-standardisation"></a>
@@ -514,8 +520,10 @@ fields</li>
 methods section:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Initialise and import</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># Create a new temp directory for this complete example</span></span>
+<span><span class="va">temp_complete</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"complete_measures_example"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_complete</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, create_empty <span class="op">=</span> <span class="cn">FALSE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_complete</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 2. Add your measures</span></span>
 <span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">political_orientation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -552,7 +560,7 @@ methods section:</p>
 <span><span class="fu"><a href="../reference/boilerplate_measures_report.html">boilerplate_measures_report</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">$</span><span class="va">measures</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 5. Save the database</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="va">temp_complete</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 6. Generate formatted output</span></span>
 <span><span class="va">exposure_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
@@ -572,7 +580,7 @@ methods section:</p>
 <span><span class="co"># 7. Combine with other methods text</span></span>
 <span><span class="va">sample_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="st">"sample"</span>,</span>
+<span>  sections <span class="op">=</span> <span class="st">"sample.default"</span>,  <span class="co"># Use a valid section path</span></span>
 <span>  global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    population <span class="op">=</span> <span class="st">"New Zealand adults"</span>,</span>
 <span>    timeframe <span class="op">=</span> <span class="st">"2020-2024"</span></span>

@@ -83,6 +83,7 @@ imported_db <- boilerplate_import(
 )
 
 # Check structure
+# Note: Since we only added methods and measures, those will be the only categories
 str(imported_db, max.level = 3)
 ```
 

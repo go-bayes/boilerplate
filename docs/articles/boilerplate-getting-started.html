@@ -147,17 +147,11 @@ location, making the code more reproducible and safer to run.</p>
 <span></span>
 <span><span class="co"># See what methods are available</span></span>
 <span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_methods.html">boilerplate_methods</a></span><span class="op">(</span><span class="va">db</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_list_paths</a></span><span class="op">(</span><span class="va">methods_db</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "sample.default"                    </span></span>
-<span><span class="co">#&gt; [2] "sample.online"                     </span></span>
-<span><span class="co">#&gt; [3] "sample.student"                    </span></span>
-<span><span class="co">#&gt; [4] "design.cross_sectional"            </span></span>
-<span><span class="co">#&gt; [5] "design.longitudinal"               </span></span>
-<span><span class="co">#&gt; [6] "design.experimental"               </span></span>
-<span><span class="co">#&gt; [7] "analysis.regression"               </span></span>
-<span><span class="co">#&gt; [8] "analysis.multilevel"               </span></span>
-<span><span class="co">#&gt; [9] "missing.listwise"                  </span></span>
-<span><span class="co">#&gt; [10] "missing.multiple_imputation"       </span></span>
+<span><span class="co"># List paths in the methods database</span></span>
+<span><span class="co"># Note: boilerplate_list_paths() is a helper function that may need to be implemented</span></span>
+<span><span class="co"># For now, you can explore the structure with:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">methods_db</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "sample"             "causal_assumptions" "statistical"       </span></span>
 <span></span>
 <span><span class="co"># Look at a specific method</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">methods_db</span><span class="op">$</span><span class="va">sample</span><span class="op">$</span><span class="va">default</span><span class="op">)</span></span>
@@ -174,19 +168,14 @@ location, making the code more reproducible and safer to run.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">measures_db</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "anxiety"      "depression"   "life_satisfaction"  "political_orientation"</span></span>
 <span></span>
-<span><span class="co"># Examine a measure</span></span>
-<span><span class="va">measures_db</span><span class="op">$</span><span class="va">political_orientation</span></span>
-<span><span class="co">#&gt; $name</span></span>
-<span><span class="co">#&gt; [1] "political_orientation"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $description</span></span>
-<span><span class="co">#&gt; [1] "Political orientation from 1 (extremely liberal) to 7 (extremely conservative)"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $type</span></span>
-<span><span class="co">#&gt; [1] "continuous"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $scale</span></span>
-<span><span class="co">#&gt; [1] "1-7"</span></span></code></pre></div>
+<span><span class="co"># Examine a measure (if it exists)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="st">"political_orientation"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">measures_db</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">measures_db</span><span class="op">$</span><span class="va">political_orientation</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="co"># The default database may not include political_orientation</span></span>
+<span>  <span class="co"># Let's look at what's actually available</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">measures_db</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>  <span class="co"># Show structure of first measure</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -316,9 +305,9 @@ location, making the code more reproducible and safer to run.</p>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"sample.nz_national"</span>,</span>
-<span>    <span class="st">"design.longitudinal"</span>,</span>
+<span>    <span class="st">"statistical.default"</span>,  <span class="co"># Use an existing path</span></span>
 <span>    <span class="st">"analysis.political_wellbeing"</span>,</span>
-<span>    <span class="st">"missing.multiple_imputation"</span></span>
+<span>    <span class="st">"causal_assumptions.identification"</span>  <span class="co"># Use an existing path</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="va">study_params</span>,</span>
 <span>  db <span class="op">=</span> <span class="va">db</span>,</span>
@@ -333,9 +322,7 @@ a longitudinal national probability sample of New Zealand adults. For this study
 we analysed data from Wave 13 (2021-2022), which included 34782 participants 
 (62.3% female, 15.7% Māori, Mage = 48.2, SD = 13.9).
 
-This study employed a longitudinal design with measurements taken at multiple time 
-points. This design allows for the examination of within-person changes over time 
-and helps establish temporal precedence.
+We used appropriate statistical methods for causal inference.
 
 We examined the relationship between political orientation and well-being using 
 multilevel regression models. Political orientation was measured on a 7-point scale 
@@ -344,8 +331,13 @@ Well-being Index. We controlled for age, gender, education, and income in all
 analyses. All analyses were conducted in R version 4.3.2 using the lme4 and 
 marginaleffects packages.
 
-Missing data were handled using multiple imputation with chained equations (MICE). 
-We generated 20 imputed datasets and pooled results using Rubin's rules.</code></pre>
+This study relies on the following identification assumptions for estimating the causal effect of political_conservative:
+
+1. **Consistency**: the observed outcome under the observed political_conservative is equal to the potential outcome under that exposure level.
+
+2. **Positivity**: there is a non-zero probability of receiving each level of political_conservative for every combination of values of political_conservative and confounders in the population.
+
+3. **No unmeasured confounding**: all variables that affect both political_conservative and the outcome have been measured and accounted for in the analysis.</code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -354,11 +346,18 @@ We generated 20 imputed datasets and pooled results using Rubin's rules.</code><
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate description of your measures</span></span>
 <span><span class="va">measures_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_measures.html">boilerplate_generate_measures</a></span><span class="op">(</span></span>
-<span>  measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"political_orientation"</span>, <span class="st">"wellbeing_index"</span>, <span class="st">"anxiety"</span>, <span class="st">"depression"</span><span class="op">)</span>,</span>
+<span>  measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wellbeing_index"</span>, <span class="st">"anxiety"</span>, <span class="st">"depression"</span><span class="op">)</span>,  <span class="co"># Only include measures we added</span></span>
 <span>  db <span class="op">=</span> <span class="va">db</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">measures_text</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="generate-output-for-political-orientation-if-we-added-it">Generate output for political orientation if we added it<a class="anchor" aria-label="anchor" href="#generate-output-for-political-orientation-if-we-added-it"></a>
+</h2>
+<p>if (“political_orientation” %in% names(boilerplate_measures(db))) {
+pol_text &lt;- boilerplate_generate_measures( measures =
+“political_orientation”, db = db ) cat(pol_text) }</p>
 </div>
 <div class="section level2">
 <h2 id="step-7-validate-your-work">Step 7: Validate Your Work<a class="anchor" aria-label="anchor" href="#step-7-validate-your-work"></a>

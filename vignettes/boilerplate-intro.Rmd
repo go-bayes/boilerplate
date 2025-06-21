@@ -42,7 +42,10 @@ First, create and initialise your boilerplate databases:
 ```{r init, eval=FALSE}
 # Initialise unified database with default content
 # Creates a single boilerplate_unified.json file
+# Using a temporary directory for this example
+temp_intro <- file.path(tempdir(), "intro_example")
 boilerplate_init(
+  data_path = temp_intro,
   create_dirs = TRUE,
   create_empty = FALSE,  # Use FALSE to get example content
   confirm = FALSE,
@@ -56,11 +59,11 @@ Import your databases to work with them:
 
 ```{r import, eval=FALSE}
 # Import all databases as a unified structure
-unified_db <- boilerplate_import()
+unified_db <- boilerplate_import(data_path = temp_intro)
 
 # Or import specific categories
-methods_db <- boilerplate_import("methods")
-measures_db <- boilerplate_import("measures")
+methods_db <- boilerplate_import("methods", data_path = temp_intro)
+measures_db <- boilerplate_import("measures", data_path = temp_intro)
 ```
 
 ### 3. Generate Text
@@ -71,7 +74,7 @@ Generate text with variable substitution:
 # Generate methods text
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = c("sample", "measures", "statistical_estimator"),
+  sections = c("sample.default", "statistical.default"),  # Use valid paths
   global_vars = list(
     n_total = 5000,
     exposure_var = "political_conservative",
@@ -134,7 +137,7 @@ unified_db <- boilerplate_update_entry(
 )
 
 # Save changes
-boilerplate_save(unified_db)
+boilerplate_save(unified_db, data_path = temp_intro, confirm = FALSE, quiet = TRUE)
 ```
 
 ### Batch Operations
@@ -198,6 +201,12 @@ demographics_text <- boilerplate_generate_text(
 1. **Use Version Control**: Export your databases regularly for version control
    ```{r export, eval=FALSE}
    boilerplate_export(
+    unified_db,
+    data_path = temp_intro,  # Specify where to save
+    output_file = "backup_" + format(Sys.Date(), "%Y%m%d") + ".json",
+    confirm = FALSE,
+    quiet = TRUE
+  )
      db = unified_db,
      output_file = "boilerplate_backup_2024.rds"
    )

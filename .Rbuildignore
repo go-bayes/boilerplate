@@ -39,3 +39,4 @@
 ^planning$
 ^summary$
 ^\.vscode$
+^CRAN_COMPLIANCE_ANALYSIS\.md$

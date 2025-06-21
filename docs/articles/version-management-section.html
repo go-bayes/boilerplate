@@ -81,11 +81,15 @@ versions of your databases. The boilerplate package helps manage
 these:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># See all available database files</span></span>
-<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># Using a temporary directory for this example</span></span>
+<span><span class="va">temp_version</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"version_example"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span>, create_empty <span class="op">=</span> <span class="cn">FALSE</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">files</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check what versions exist for methods</span></span>
-<span><span class="va">methods_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">methods_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span></code></pre></div>
 <p>The <code><a href="../reference/boilerplate_list_files.html">boilerplate_list_files()</a></code> function organises files
 into: - <strong>Standard files</strong>: Current working versions -
 <strong>Timestamped versions</strong>: Saved with timestamps -
@@ -98,12 +102,14 @@ overwrites</p>
 <p>Save important milestones with timestamps:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load your database</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save with timestamp before major revision</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_version</span>,</span>
 <span>  timestamp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; ✔ Saved unified database to: boilerplate_unified_20240115_143022.rds</span></span>
@@ -120,14 +126,15 @@ overwrites</p>
 <p>If something goes wrong, recover from automatic backups:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List available backups</span></span>
-<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span><span class="op">)</span></span>
 <span><span class="co"># Look at files$backups for backup files</span></span>
 <span></span>
 <span><span class="co"># View latest backup without restoring</span></span>
-<span><span class="va">backup_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="va">backup_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Restore latest backup as current version</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span></span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_version</span>,</span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  restore <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  confirm <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -136,9 +143,11 @@ overwrites</p>
 <span></span>
 <span><span class="co"># Restore specific backup by timestamp</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span></span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_version</span>,</span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  backup_version <span class="op">=</span> <span class="st">"20240110_120000"</span>,</span>
-<span>  restore <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  restore <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -147,25 +156,28 @@ overwrites</p>
 <p>Here’s a typical workflow for managing versions:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Check current versions</span></span>
-<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 2. Save current work with timestamp</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span>, data_path <span class="op">=</span> <span class="va">temp_version</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span></span>
 <span>  <span class="va">methods_db</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_version</span>,</span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  timestamp <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  timestamp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 3. Make changes</span></span>
 <span><span class="va">methods_db</span><span class="op">$</span><span class="va">new_method</span> <span class="op">&lt;-</span> <span class="st">"New methodology text"</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">methods_db</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">methods_db</span>, data_path <span class="op">=</span> <span class="va">temp_version</span>, category <span class="op">=</span> <span class="st">"methods"</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 4. If changes were problematic, restore from backup</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span><span class="st">"methods"</span>, restore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span>, category <span class="op">=</span> <span class="st">"methods"</span>, restore <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 5. Compare versions</span></span>
-<span><span class="va">current</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="va">current</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span>, data_path <span class="op">=</span> <span class="va">temp_version</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">old_version</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span></span>
 <span>  data_path <span class="op">=</span> <span class="st">"path/to/your/methods_db_20240110_120000.rds"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -195,7 +207,7 @@ versions before replacing</li>
 Git:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Save timestamped version for Git commit</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, timestamp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="va">temp_version</span>, timestamp <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add to Git</span></span>
 <span><span class="co"># git add boilerplate/data/boilerplate_unified_*.rds</span></span>
@@ -210,7 +222,7 @@ Git:</p>
 <p>If you’ve lost work, check these locations:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List all files including backups</span></span>
-<span><span class="va">all_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">all_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check modification times</span></span>
 <span><span class="co"># The most recently modified files appear first</span></span>
@@ -224,11 +236,11 @@ Git:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Try loading backup</span></span>
 <span><span class="va">backup_db</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span>,</span>
 <span>  error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Backup corrupted, trying older version..."</span><span class="op">)</span></span>
 <span>    <span class="co"># List files and manually load an older one</span></span>
-<span>    <span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
+<span>    <span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_version</span>, category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">files</span><span class="op">$</span><span class="va">timestamped</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">files</span><span class="op">$</span><span class="va">timestamped</span><span class="op">$</span><span class="va">path</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>

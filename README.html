@@ -735,7 +735,7 @@ Database</h2>
 <span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co"># generate text with variable substitution</span></span>
 <span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>methods_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
 <span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>  <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;sample&quot;</span>, <span class="st">&quot;sample_selection&quot;</span>),</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>  <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;sample.default&quot;</span>, <span class="st">&quot;sample_selection&quot;</span>),</span>
 <span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(</span>
 <span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">&quot;university students&quot;</span>,</span>
 <span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>    <span class="at">timeframe =</span> <span class="st">&quot;2020-2021&quot;</span></span>
@@ -768,7 +768,7 @@ text:</p>
 <span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co"># Generate text and automatically copy bibliography</span></span>
 <span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>methods_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
 <span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;statistical&quot;</span>,  <span class="co"># The default entry will be used automatically</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;statistical.default&quot;</span>,  <span class="co"># Use full path to the default text</span></span>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
 <span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>  <span class="at">copy_bibliography =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>  <span class="at">bibliography_path =</span> <span class="st">&quot;manuscript/&quot;</span></span>
@@ -1035,33 +1035,39 @@ files</strong>: Automatic backups (e.g.,
 <h3 id="importing-specific-versions">Importing Specific Versions</h3>
 <p>The enhanced <code>boilerplate_import()</code> function can now
 import any database file directly:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Import the current standard version (default behaviour)</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="st">&quot;methods&quot;</span>)</span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Import database examples</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co"># Note: These examples show the pattern - replace paths with your actual files</span></span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># Import a specific timestamped version</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> <span class="st">&quot;boilerplate/data/methods_db_20240115_143022.rds&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># Import the current standard version</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co"># db &lt;- boilerplate_import(&quot;methods&quot;)</span></span>
 <span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># Import a backup file</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> <span class="st">&quot;boilerplate/data/methods_db_backup_20240115_140000.rds&quot;</span>)</span></code></pre></div>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># Import a specific timestamped version  </span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co"># db &lt;- boilerplate_import(data_path = &quot;path/to/methods_db_20240115_143022.rds&quot;)</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># Import a backup file</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co"># db &lt;- boilerplate_import(data_path = &quot;path/to/methods_db_backup_20240115_140000.rds&quot;)</span></span></code></pre></div>
 <h3 id="restoring-from-backups">Restoring from Backups</h3>
 <p>Use <code>boilerplate_restore_backup()</code> for convenient backup
 restoration:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># View the latest backup without restoring</span></span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>backup_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_restore_backup</span>(<span class="st">&quot;methods&quot;</span>)</span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># Backup restoration examples</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co"># Note: These require existing backup files in your data directory</span></span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co"># Restore the latest backup as the current version</span></span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_restore_backup</span>(</span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="at">restore =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">TRUE</span>  <span class="co"># Will ask for confirmation</span></span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>)</span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co"># Restore a specific backup by timestamp</span></span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_restore_backup</span>(</span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>  <span class="at">backup_version =</span> <span class="st">&quot;20240110_120000&quot;</span>,</span>
-<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>  <span class="at">restore =</span> <span class="cn">TRUE</span></span>
-<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co"># View the latest backup without restoring</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co"># backup_db &lt;- boilerplate_restore_backup(&quot;methods&quot;)</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co"># Restore the latest backup as the current version</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co"># db &lt;- boilerplate_restore_backup(</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#   category = &quot;methods&quot;,</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#   restore = TRUE,</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#   confirm = TRUE  # Will ask for confirmation</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co"># Restore a specific backup by timestamp</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co"># db &lt;- boilerplate_restore_backup(</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#   category = &quot;methods&quot;,</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#   backup_version = &quot;20240110_120000&quot;,</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#   restore = TRUE</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co"># )</span></span></code></pre></div>
 <h3 id="version-management-workflow">Version Management Workflow</h3>
 <p>Here’s a typical workflow for managing versions:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># 1. Check what versions are available</span></span>
@@ -1103,10 +1109,10 @@ unnecessary old versions</li>
 Documents</h3>
 <p>Rather than creating separate <code>.qmd</code> files, you can embed
 boilerplate directly in your analysis code chunks:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># at the beginning of your analysis script or Quarto document</span></span>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># At the beginning of your analysis script or Quarto document</span></span>
 <span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">library</span>(boilerplate)</span>
 <span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co"># define global variables</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co"># Define global variables</span></span>
 <span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>study_params <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="at">n_participants =</span> <span class="dv">250</span>,</span>
 <span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="at">study_name =</span> <span class="st">&quot;Study 1&quot;</span>,</span>
@@ -1114,84 +1120,150 @@ boilerplate directly in your analysis code chunks:</p>
 <span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>  <span class="at">analysis_software =</span> <span class="st">&quot;R version 4.3.0&quot;</span></span>
 <span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>)</span>
 <span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="co"># import database</span></span>
-<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> <span class="st">&quot;.boilerplate-data&quot;</span>)</span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a></span>
-<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co"># benerate methods text when needed</span></span>
-<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>methods_sample <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
-<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;sample&quot;</span>,</span>
-<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>  <span class="at">global_vars =</span> study_params,</span>
-<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a>  <span class="at">db =</span> db</span>
-<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a>)</span>
-<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a></span>
-<span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a><span class="co"># use the text directly in your document</span></span>
-<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;## Methods</span><span class="sc">\n\n</span><span class="st">&quot;</span>, methods_sample)</span></code></pre></div>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="co"># Example 1: Using default location (recommended for persistent storage)</span></span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co"># The default location uses tools::R_user_dir() and includes project structure</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co"># db &lt;- boilerplate_import()  # Uses default project</span></span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a><span class="co"># Example 2: Using a temporary directory (for this example)</span></span>
+<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a>temp_analysis <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;analysis_example&quot;</span>)</span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>  <span class="at">data_path =</span> temp_analysis, </span>
+<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a>  <span class="at">create_empty =</span> <span class="cn">FALSE</span>,  <span class="co"># Load default content</span></span>
+<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a>)</span>
+<span id="cb17-25"><a href="#cb17-25" tabindex="-1"></a></span>
+<span id="cb17-26"><a href="#cb17-26" tabindex="-1"></a><span class="co"># Import database</span></span>
+<span id="cb17-27"><a href="#cb17-27" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> temp_analysis, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-28"><a href="#cb17-28" tabindex="-1"></a></span>
+<span id="cb17-29"><a href="#cb17-29" tabindex="-1"></a><span class="co"># Generate methods text when needed</span></span>
+<span id="cb17-30"><a href="#cb17-30" tabindex="-1"></a>methods_sample <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
+<span id="cb17-31"><a href="#cb17-31" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
+<span id="cb17-32"><a href="#cb17-32" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;sample.default&quot;</span>,  <span class="co"># Use full path to the default text</span></span>
+<span id="cb17-33"><a href="#cb17-33" tabindex="-1"></a>  <span class="at">global_vars =</span> study_params,</span>
+<span id="cb17-34"><a href="#cb17-34" tabindex="-1"></a>  <span class="at">db =</span> db</span>
+<span id="cb17-35"><a href="#cb17-35" tabindex="-1"></a>)</span>
+<span id="cb17-36"><a href="#cb17-36" tabindex="-1"></a></span>
+<span id="cb17-37"><a href="#cb17-37" tabindex="-1"></a><span class="co"># Use the text directly in your document</span></span>
+<span id="cb17-38"><a href="#cb17-38" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;## Methods</span><span class="sc">\n\n</span><span class="st">&quot;</span>, methods_sample)</span>
+<span id="cb17-39"><a href="#cb17-39" tabindex="-1"></a></span>
+<span id="cb17-40"><a href="#cb17-40" tabindex="-1"></a><span class="co"># Clean up</span></span>
+<span id="cb17-41"><a href="#cb17-41" tabindex="-1"></a><span class="fu">unlink</span>(temp_analysis, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-42"><a href="#cb17-42" tabindex="-1"></a></span>
+<span id="cb17-43"><a href="#cb17-43" tabindex="-1"></a><span class="co"># Example 3: For a real project with existing .boilerplate-data directory:</span></span>
+<span id="cb17-44"><a href="#cb17-44" tabindex="-1"></a><span class="co"># If you have an existing directory structure, you may need to specify:</span></span>
+<span id="cb17-45"><a href="#cb17-45" tabindex="-1"></a><span class="co"># db &lt;- boilerplate_import(data_path = &quot;.boilerplate-data/projects/default/data&quot;)</span></span>
+<span id="cb17-46"><a href="#cb17-46" tabindex="-1"></a><span class="co"># Or initialize it first:</span></span>
+<span id="cb17-47"><a href="#cb17-47" tabindex="-1"></a><span class="co"># boilerplate_init(data_path = &quot;.boilerplate-data&quot;, create_dirs = TRUE)</span></span></code></pre></div>
 <h2 id="working-with-individual-databases">Working with Individual
 Databases</h2>
 <p>You can still work with individual databases if preferred:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># import just the methods database</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>methods_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="st">&quot;methods&quot;</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co"># add a new method entry</span></span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>methods_db<span class="sc">$</span>sample_selection <span class="ot">&lt;-</span> <span class="st">&quot;Participants were selected from {{population}} during {{timeframe}}.&quot;</span></span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co"># save just the methods database</span></span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="fu">boilerplate_save</span>(methods_db, <span class="st">&quot;methods&quot;</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co"># generate text with variable substitution</span></span>
-<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>methods_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
-<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>  <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;sample&quot;</span>, <span class="st">&quot;sample_selection&quot;</span>),</span>
-<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(</span>
-<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">&quot;university students&quot;</span>,</span>
-<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>    <span class="at">timeframe =</span> <span class="st">&quot;2020-2021&quot;</span></span>
-<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>  ),</span>
-<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a>  <span class="at">db =</span> methods_db,</span>
-<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a>  <span class="at">add_headings =</span> <span class="cn">TRUE</span></span>
-<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a>)</span>
-<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a></span>
-<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a><span class="fu">cat</span>(methods_text)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># Working with individual databases example</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>temp_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;individual_db_example&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">boilerplate_init</span>(<span class="at">data_path =</span> temp_dir, <span class="at">create_dirs =</span> <span class="cn">TRUE</span>, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co"># Import just the methods database</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>methods_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="st">&quot;methods&quot;</span>, <span class="at">data_path =</span> temp_dir, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co"># Add a new method entry</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>methods_db<span class="sc">$</span>sample_selection <span class="ot">&lt;-</span> <span class="st">&quot;Participants were selected from {{population}} during {{timeframe}}.&quot;</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="co"># Save just the methods database</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="fu">boilerplate_save</span>(methods_db, <span class="st">&quot;methods&quot;</span>, <span class="at">data_path =</span> temp_dir, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co"># generate text with variable substitution</span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>methods_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>  <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;sample.default&quot;</span>, <span class="st">&quot;sample_selection&quot;</span>),</span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(</span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">&quot;university students&quot;</span>,</span>
+<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a>    <span class="at">timeframe =</span> <span class="st">&quot;2020-2021&quot;</span></span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a>  ),</span>
+<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a>  <span class="at">db =</span> methods_db,</span>
+<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a>  <span class="at">add_headings =</span> <span class="cn">TRUE</span></span>
+<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a>)</span>
+<span id="cb18-25"><a href="#cb18-25" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="#cb18-26" tabindex="-1"></a><span class="fu">cat</span>(methods_text)</span>
+<span id="cb18-27"><a href="#cb18-27" tabindex="-1"></a></span>
+<span id="cb18-28"><a href="#cb18-28" tabindex="-1"></a><span class="co"># Clean up</span></span>
+<span id="cb18-29"><a href="#cb18-29" tabindex="-1"></a><span class="fu">unlink</span>(temp_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <h2 id="creating-empty-databases">Creating Empty Databases</h2>
 <p>The package supports initialising empty database structures by
 default, providing a clean slate for your project without sample
 content.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># initialise empty databases (default behavior)</span></span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="at">categories =</span> <span class="fu">c</span>(<span class="st">&quot;methods&quot;</span>, <span class="st">&quot;results&quot;</span>),</span>
-<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>  <span class="at">data_path =</span> <span class="st">&quot;~/project/data&quot;</span>,</span>
-<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span></span>
-<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>)</span>
-<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a></span>
-<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co"># initialise with default content when needed</span></span>
-<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
-<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>  <span class="at">categories =</span> <span class="fu">c</span>(<span class="st">&quot;methods&quot;</span>, <span class="st">&quot;results&quot;</span>),</span>
-<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>  <span class="at">data_path =</span> <span class="st">&quot;~/project/data&quot;</span>,</span>
-<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a>  <span class="at">create_empty =</span> <span class="cn">FALSE</span></span>
-<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># Creating empty databases example</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>temp_empty <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;empty_db_example&quot;</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co"># Initialise empty databases (default behavior)</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>  <span class="at">categories =</span> <span class="fu">c</span>(<span class="st">&quot;methods&quot;</span>, <span class="st">&quot;results&quot;</span>),</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  <span class="at">data_path =</span> temp_empty,</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>)</span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co"># Check that databases are empty</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a>db_empty <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> temp_empty, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">length</span>(db_empty<span class="sc">$</span>methods))  <span class="co"># Should be 0</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="co"># Clean up</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="fu">unlink</span>(temp_empty, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a><span class="co"># Initialise with default content when needed</span></span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a>temp_content <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;content_db_example&quot;</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a>  <span class="at">categories =</span> <span class="fu">c</span>(<span class="st">&quot;methods&quot;</span>, <span class="st">&quot;results&quot;</span>),</span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a>  <span class="at">data_path =</span> temp_content,</span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a>  <span class="at">create_empty =</span> <span class="cn">FALSE</span>,  <span class="co"># This loads default content</span></span>
+<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a>)</span>
+<span id="cb19-30"><a href="#cb19-30" tabindex="-1"></a></span>
+<span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a><span class="co"># Check that databases have content</span></span>
+<span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a>db_content <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> temp_content, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">length</span>(db_content<span class="sc">$</span>methods))  <span class="co"># Should be &gt; 0</span></span>
+<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a></span>
+<span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a><span class="co"># Clean up</span></span>
+<span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a><span class="fu">unlink</span>(temp_content, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Empty databases provide just the top-level structure without example
 content, making it easier to start with a clean slate.</p>
 <h2 id="database-export">Database Export</h2>
 <p>The package now supports exporting databases for versioning or
 sharing specific elements:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># export entire database for versioning</span></span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co"># creates a point-in-time snapshot of your boilerplate content</span></span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>()</span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="fu">boilerplate_export</span>(</span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
-<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  <span class="at">output_file =</span> <span class="st">&quot;boilerplate_v1.0.rds&quot;</span>,</span>
-<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>  <span class="at">data_path =</span> <span class="st">&quot;~/project/data&quot;</span></span>
-<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>)</span>
-<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a></span>
-<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co"># export selected elements (specific methods and results)</span></span>
-<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co"># useful for sharing specialized subsets with collaborators</span></span>
-<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="fu">boilerplate_export</span>(</span>
-<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
-<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a>  <span class="at">output_file =</span> <span class="st">&quot;causal_methods_subset.rds&quot;</span>,</span>
-<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a>  <span class="at">select_elements =</span> <span class="fu">c</span>(<span class="st">&quot;methods.statistical.*&quot;</span>, <span class="st">&quot;results.main_effect&quot;</span>),</span>
-<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a>  <span class="at">data_path =</span> <span class="st">&quot;~/project/data&quot;</span></span>
-<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># Export database example</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>temp_export <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;export_example&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">boilerplate_init</span>(<span class="at">data_path =</span> temp_export, <span class="at">create_dirs =</span> <span class="cn">TRUE</span>, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co"># Import database</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> temp_export, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="co"># Export entire database for versioning</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="fu">boilerplate_export</span>(</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>  <span class="at">output_file =</span> <span class="st">&quot;boilerplate_v1.0.json&quot;</span>,</span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>  <span class="at">data_path =</span> temp_export,</span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a>)</span>
+<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a><span class="co"># Export selected elements (specific methods and results)</span></span>
+<span id="cb20-18"><a href="#cb20-18" tabindex="-1"></a><span class="fu">boilerplate_export</span>(</span>
+<span id="cb20-19"><a href="#cb20-19" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb20-20"><a href="#cb20-20" tabindex="-1"></a>  <span class="at">output_file =</span> <span class="st">&quot;causal_methods_subset.json&quot;</span>,</span>
+<span id="cb20-21"><a href="#cb20-21" tabindex="-1"></a>  <span class="at">select_elements =</span> <span class="fu">c</span>(<span class="st">&quot;methods.statistical.*&quot;</span>, <span class="st">&quot;results.main_effect&quot;</span>),</span>
+<span id="cb20-22"><a href="#cb20-22" tabindex="-1"></a>  <span class="at">data_path =</span> temp_export,</span>
+<span id="cb20-23"><a href="#cb20-23" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb20-24"><a href="#cb20-24" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb20-25"><a href="#cb20-25" tabindex="-1"></a>)</span>
+<span id="cb20-26"><a href="#cb20-26" tabindex="-1"></a></span>
+<span id="cb20-27"><a href="#cb20-27" tabindex="-1"></a><span class="co"># Check exported files exist</span></span>
+<span id="cb20-28"><a href="#cb20-28" tabindex="-1"></a><span class="fu">list.files</span>(temp_export, <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.(json|rds)$&quot;</span>)</span>
+<span id="cb20-29"><a href="#cb20-29" tabindex="-1"></a></span>
+<span id="cb20-30"><a href="#cb20-30" tabindex="-1"></a><span class="co"># Clean up</span></span>
+<span id="cb20-31"><a href="#cb20-31" tabindex="-1"></a><span class="fu">unlink</span>(temp_export, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>The export function supports: - Full database export (ideal for
 versioning) - Selective export using dot notation (e.g.,
 “methods.statistical.longitudinal”) - Wildcard selections using “<em>”
@@ -1206,90 +1278,97 @@ with the Unified Database</h2>
 formatted text about them. Measures are stored as top-level entries in
 the measures database, with each measure containing standardised
 properties like name, description, reference, etc.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># import the unified database</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>()</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co"># Add a measure directly to the unified database</span></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co"># Note: Measures should be at the top level of the measures database</span></span>
-<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>unified_db<span class="sc">$</span>measures<span class="sc">$</span>anxiety_gad7 <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;generalised anxiety disorder scale (GAD-7)&quot;</span>,</span>
-<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">&quot;anxiety was measured using the GAD-7 scale.&quot;</span>,</span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  <span class="at">reference =</span> <span class="st">&quot;spitzer2006&quot;</span>,</span>
-<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>  <span class="at">waves =</span> <span class="st">&quot;1-3&quot;</span>,</span>
-<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety&quot;</span>, <span class="st">&quot;mental health&quot;</span>, <span class="st">&quot;gad&quot;</span>),</span>
-<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>  <span class="at">items =</span> <span class="fu">list</span>(</span>
-<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>    <span class="st">&quot;feeling nervous, anxious, or on edge&quot;</span>,</span>
-<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>    <span class="st">&quot;not being able to stop or control worrying&quot;</span>,</span>
-<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>    <span class="st">&quot;worrying too much about different things&quot;</span>,</span>
-<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a>    <span class="st">&quot;trouble relaxing&quot;</span></span>
-<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a>  )</span>
-<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a>)</span>
-<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a></span>
-<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a><span class="co"># save the entire unified database</span></span>
-<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db)</span>
-<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a></span>
-<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a><span class="co"># alternatively, save just the measures portion</span></span>
-<span id="cb21-24"><a href="#cb21-24" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db<span class="sc">$</span>measures, <span class="st">&quot;measures&quot;</span>)</span>
-<span id="cb21-25"><a href="#cb21-25" tabindex="-1"></a></span>
-<span id="cb21-26"><a href="#cb21-26" tabindex="-1"></a><span class="co"># then generate text referencing the measure by its top-level name</span></span>
-<span id="cb21-27"><a href="#cb21-27" tabindex="-1"></a>exposure_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_measures</span>(</span>
-<span id="cb21-28"><a href="#cb21-28" tabindex="-1"></a>  <span class="at">variable_heading =</span> <span class="st">&quot;Exposure Variable&quot;</span>,</span>
-<span id="cb21-29"><a href="#cb21-29" tabindex="-1"></a>  <span class="at">variables =</span> <span class="st">&quot;anxiety_gad7&quot;</span>, <span class="co"># match the name you used above</span></span>
-<span id="cb21-30"><a href="#cb21-30" tabindex="-1"></a>  <span class="at">db =</span> unified_db,  <span class="co"># can pass the unified database</span></span>
-<span id="cb21-31"><a href="#cb21-31" tabindex="-1"></a>  <span class="at">heading_level =</span> <span class="dv">3</span>,</span>
-<span id="cb21-32"><a href="#cb21-32" tabindex="-1"></a>  <span class="at">subheading_level =</span> <span class="dv">4</span>,</span>
-<span id="cb21-33"><a href="#cb21-33" tabindex="-1"></a>  <span class="at">print_waves =</span> <span class="cn">TRUE</span></span>
-<span id="cb21-34"><a href="#cb21-34" tabindex="-1"></a>)</span>
-<span id="cb21-35"><a href="#cb21-35" tabindex="-1"></a><span class="fu">cat</span>(exposure_text)</span>
-<span id="cb21-36"><a href="#cb21-36" tabindex="-1"></a></span>
-<span id="cb21-37"><a href="#cb21-37" tabindex="-1"></a><span class="co"># you can also use the helper function to extract just the measures</span></span>
-<span id="cb21-38"><a href="#cb21-38" tabindex="-1"></a>measures_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_measures</span>(unified_db)</span>
-<span id="cb21-39"><a href="#cb21-39" tabindex="-1"></a></span>
-<span id="cb21-40"><a href="#cb21-40" tabindex="-1"></a><span class="co"># generate text for outcome variables using just the measures database</span></span>
-<span id="cb21-41"><a href="#cb21-41" tabindex="-1"></a>psych_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_measures</span>(</span>
-<span id="cb21-42"><a href="#cb21-42" tabindex="-1"></a>  <span class="at">variable_heading =</span> <span class="st">&quot;Psychological Outcomes&quot;</span>,</span>
-<span id="cb21-43"><a href="#cb21-43" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety_gad7&quot;</span>, <span class="st">&quot;depression_phq9&quot;</span>),</span>
-<span id="cb21-44"><a href="#cb21-44" tabindex="-1"></a>  <span class="at">db =</span> measures_db,  <span class="co"># or use the extracted measures database</span></span>
-<span id="cb21-45"><a href="#cb21-45" tabindex="-1"></a>  <span class="at">heading_level =</span> <span class="dv">3</span>,</span>
-<span id="cb21-46"><a href="#cb21-46" tabindex="-1"></a>  <span class="at">subheading_level =</span> <span class="dv">4</span>,</span>
-<span id="cb21-47"><a href="#cb21-47" tabindex="-1"></a>  <span class="at">print_waves =</span> <span class="cn">TRUE</span></span>
-<span id="cb21-48"><a href="#cb21-48" tabindex="-1"></a>)</span>
-<span id="cb21-49"><a href="#cb21-49" tabindex="-1"></a><span class="fu">cat</span>(psych_text)</span>
-<span id="cb21-50"><a href="#cb21-50" tabindex="-1"></a></span>
-<span id="cb21-51"><a href="#cb21-51" tabindex="-1"></a><span class="co"># generate statistical methods text</span></span>
-<span id="cb21-52"><a href="#cb21-52" tabindex="-1"></a>stats_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
-<span id="cb21-53"><a href="#cb21-53" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb21-54"><a href="#cb21-54" tabindex="-1"></a>  <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;statistical.longitudinal.lmtp&quot;</span>),</span>
-<span id="cb21-55"><a href="#cb21-55" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(<span class="at">software =</span> <span class="st">&quot;R version 4.2.0&quot;</span>),</span>
-<span id="cb21-56"><a href="#cb21-56" tabindex="-1"></a>  <span class="at">add_headings =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb21-57"><a href="#cb21-57" tabindex="-1"></a>  <span class="at">custom_headings =</span> <span class="fu">list</span>(<span class="st">&quot;statistical.longitudinal.lmtp&quot;</span> <span class="ot">=</span> <span class="st">&quot;LMTP&quot;</span>),</span>
-<span id="cb21-58"><a href="#cb21-58" tabindex="-1"></a>  <span class="at">heading_level =</span> <span class="st">&quot;###&quot;</span>,</span>
-<span id="cb21-59"><a href="#cb21-59" tabindex="-1"></a>  <span class="at">db =</span> unified_db  <span class="co"># pass the unified database</span></span>
-<span id="cb21-60"><a href="#cb21-60" tabindex="-1"></a>)</span>
-<span id="cb21-61"><a href="#cb21-61" tabindex="-1"></a></span>
-<span id="cb21-62"><a href="#cb21-62" tabindex="-1"></a><span class="co"># initialise a sample text (assuming this was defined earlier)</span></span>
-<span id="cb21-63"><a href="#cb21-63" tabindex="-1"></a>sample_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
-<span id="cb21-64"><a href="#cb21-64" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb21-65"><a href="#cb21-65" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;sample&quot;</span>,</span>
-<span id="cb21-66"><a href="#cb21-66" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(<span class="at">population =</span> <span class="st">&quot;university students&quot;</span>, <span class="at">timeframe =</span> <span class="st">&quot;2023-2024&quot;</span>),</span>
-<span id="cb21-67"><a href="#cb21-67" tabindex="-1"></a>  <span class="at">db =</span> unified_db</span>
-<span id="cb21-68"><a href="#cb21-68" tabindex="-1"></a>)</span>
-<span id="cb21-69"><a href="#cb21-69" tabindex="-1"></a></span>
-<span id="cb21-70"><a href="#cb21-70" tabindex="-1"></a><span class="co"># combine all sections into a complete methods section</span></span>
-<span id="cb21-71"><a href="#cb21-71" tabindex="-1"></a>methods_section <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
-<span id="cb21-72"><a href="#cb21-72" tabindex="-1"></a>  <span class="st">&quot;## Methods</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
-<span id="cb21-73"><a href="#cb21-73" tabindex="-1"></a>  sample_text, <span class="st">&quot;</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
-<span id="cb21-74"><a href="#cb21-74" tabindex="-1"></a>  <span class="st">&quot;### Variables</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
-<span id="cb21-75"><a href="#cb21-75" tabindex="-1"></a>  exposure_text, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb21-76"><a href="#cb21-76" tabindex="-1"></a>  <span class="st">&quot;### Outcome Variables</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
-<span id="cb21-77"><a href="#cb21-77" tabindex="-1"></a>  psych_text, <span class="st">&quot;</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
-<span id="cb21-78"><a href="#cb21-78" tabindex="-1"></a>  stats_text,</span>
-<span id="cb21-79"><a href="#cb21-79" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb21-80"><a href="#cb21-80" tabindex="-1"></a>)</span>
-<span id="cb21-81"><a href="#cb21-81" tabindex="-1"></a><span class="fu">cat</span>(methods_section)</span>
-<span id="cb21-82"><a href="#cb21-82" tabindex="-1"></a></span>
-<span id="cb21-83"><a href="#cb21-83" tabindex="-1"></a><span class="co"># save the methods section to a file that can be included in a quarto document</span></span>
-<span id="cb21-84"><a href="#cb21-84" tabindex="-1"></a><span class="co"># writeLines(methods_section, &quot;methods_section.qmd&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># Measures example with temporary directory</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>temp_measures <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;measures_example&quot;</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">boilerplate_init</span>(<span class="at">data_path =</span> temp_measures, <span class="at">create_empty =</span> <span class="cn">FALSE</span>, <span class="at">create_dirs =</span> <span class="cn">TRUE</span>, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co"># Import the unified database</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> temp_measures, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="co"># Add a measure directly to the unified database</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co"># Note: Measures should be at the top level of the measures database</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>unified_db<span class="sc">$</span>measures<span class="sc">$</span>anxiety_gad7 <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;generalised anxiety disorder scale (GAD-7)&quot;</span>,</span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">&quot;anxiety was measured using the GAD-7 scale.&quot;</span>,</span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>  <span class="at">reference =</span> <span class="st">&quot;spitzer2006&quot;</span>,</span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>  <span class="at">waves =</span> <span class="st">&quot;1-3&quot;</span>,</span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>  <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety&quot;</span>, <span class="st">&quot;mental health&quot;</span>, <span class="st">&quot;gad&quot;</span>),</span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a>  <span class="at">items =</span> <span class="fu">list</span>(</span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a>    <span class="st">&quot;feeling nervous, anxious, or on edge&quot;</span>,</span>
+<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a>    <span class="st">&quot;not being able to stop or control worrying&quot;</span>,</span>
+<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a>    <span class="st">&quot;worrying too much about different things&quot;</span>,</span>
+<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a>    <span class="st">&quot;trouble relaxing&quot;</span></span>
+<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a>  )</span>
+<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a>)</span>
+<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a></span>
+<span id="cb21-24"><a href="#cb21-24" tabindex="-1"></a><span class="co"># Save the entire unified database</span></span>
+<span id="cb21-25"><a href="#cb21-25" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db, <span class="at">data_path =</span> temp_measures, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-26"><a href="#cb21-26" tabindex="-1"></a></span>
+<span id="cb21-27"><a href="#cb21-27" tabindex="-1"></a><span class="co"># Alternatively, save just the measures portion</span></span>
+<span id="cb21-28"><a href="#cb21-28" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db<span class="sc">$</span>measures, <span class="st">&quot;measures&quot;</span>, <span class="at">data_path =</span> temp_measures, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-29"><a href="#cb21-29" tabindex="-1"></a></span>
+<span id="cb21-30"><a href="#cb21-30" tabindex="-1"></a><span class="co"># then generate text referencing the measure by its top-level name</span></span>
+<span id="cb21-31"><a href="#cb21-31" tabindex="-1"></a>exposure_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_measures</span>(</span>
+<span id="cb21-32"><a href="#cb21-32" tabindex="-1"></a>  <span class="at">variable_heading =</span> <span class="st">&quot;Exposure Variable&quot;</span>,</span>
+<span id="cb21-33"><a href="#cb21-33" tabindex="-1"></a>  <span class="at">variables =</span> <span class="st">&quot;anxiety_gad7&quot;</span>, <span class="co"># match the name you used above</span></span>
+<span id="cb21-34"><a href="#cb21-34" tabindex="-1"></a>  <span class="at">db =</span> unified_db,  <span class="co"># can pass the unified database</span></span>
+<span id="cb21-35"><a href="#cb21-35" tabindex="-1"></a>  <span class="at">heading_level =</span> <span class="dv">3</span>,</span>
+<span id="cb21-36"><a href="#cb21-36" tabindex="-1"></a>  <span class="at">subheading_level =</span> <span class="dv">4</span>,</span>
+<span id="cb21-37"><a href="#cb21-37" tabindex="-1"></a>  <span class="at">print_waves =</span> <span class="cn">TRUE</span></span>
+<span id="cb21-38"><a href="#cb21-38" tabindex="-1"></a>)</span>
+<span id="cb21-39"><a href="#cb21-39" tabindex="-1"></a><span class="fu">cat</span>(exposure_text)</span>
+<span id="cb21-40"><a href="#cb21-40" tabindex="-1"></a></span>
+<span id="cb21-41"><a href="#cb21-41" tabindex="-1"></a><span class="co"># you can also use the helper function to extract just the measures</span></span>
+<span id="cb21-42"><a href="#cb21-42" tabindex="-1"></a>measures_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_measures</span>(unified_db)</span>
+<span id="cb21-43"><a href="#cb21-43" tabindex="-1"></a></span>
+<span id="cb21-44"><a href="#cb21-44" tabindex="-1"></a><span class="co"># generate text for outcome variables using just the measures database</span></span>
+<span id="cb21-45"><a href="#cb21-45" tabindex="-1"></a>psych_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_measures</span>(</span>
+<span id="cb21-46"><a href="#cb21-46" tabindex="-1"></a>  <span class="at">variable_heading =</span> <span class="st">&quot;Psychological Outcomes&quot;</span>,</span>
+<span id="cb21-47"><a href="#cb21-47" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety_gad7&quot;</span>, <span class="st">&quot;depression_phq9&quot;</span>),</span>
+<span id="cb21-48"><a href="#cb21-48" tabindex="-1"></a>  <span class="at">db =</span> measures_db,  <span class="co"># or use the extracted measures database</span></span>
+<span id="cb21-49"><a href="#cb21-49" tabindex="-1"></a>  <span class="at">heading_level =</span> <span class="dv">3</span>,</span>
+<span id="cb21-50"><a href="#cb21-50" tabindex="-1"></a>  <span class="at">subheading_level =</span> <span class="dv">4</span>,</span>
+<span id="cb21-51"><a href="#cb21-51" tabindex="-1"></a>  <span class="at">print_waves =</span> <span class="cn">TRUE</span></span>
+<span id="cb21-52"><a href="#cb21-52" tabindex="-1"></a>)</span>
+<span id="cb21-53"><a href="#cb21-53" tabindex="-1"></a><span class="fu">cat</span>(psych_text)</span>
+<span id="cb21-54"><a href="#cb21-54" tabindex="-1"></a></span>
+<span id="cb21-55"><a href="#cb21-55" tabindex="-1"></a><span class="co"># generate statistical methods text</span></span>
+<span id="cb21-56"><a href="#cb21-56" tabindex="-1"></a>stats_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
+<span id="cb21-57"><a href="#cb21-57" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
+<span id="cb21-58"><a href="#cb21-58" tabindex="-1"></a>  <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;statistical.longitudinal.lmtp&quot;</span>),</span>
+<span id="cb21-59"><a href="#cb21-59" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(<span class="at">software =</span> <span class="st">&quot;R version 4.2.0&quot;</span>),</span>
+<span id="cb21-60"><a href="#cb21-60" tabindex="-1"></a>  <span class="at">add_headings =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-61"><a href="#cb21-61" tabindex="-1"></a>  <span class="at">custom_headings =</span> <span class="fu">list</span>(<span class="st">&quot;statistical.longitudinal.lmtp&quot;</span> <span class="ot">=</span> <span class="st">&quot;LMTP&quot;</span>),</span>
+<span id="cb21-62"><a href="#cb21-62" tabindex="-1"></a>  <span class="at">heading_level =</span> <span class="st">&quot;###&quot;</span>,</span>
+<span id="cb21-63"><a href="#cb21-63" tabindex="-1"></a>  <span class="at">db =</span> unified_db  <span class="co"># pass the unified database</span></span>
+<span id="cb21-64"><a href="#cb21-64" tabindex="-1"></a>)</span>
+<span id="cb21-65"><a href="#cb21-65" tabindex="-1"></a></span>
+<span id="cb21-66"><a href="#cb21-66" tabindex="-1"></a><span class="co"># initialise a sample text (assuming this was defined earlier)</span></span>
+<span id="cb21-67"><a href="#cb21-67" tabindex="-1"></a>sample_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
+<span id="cb21-68"><a href="#cb21-68" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
+<span id="cb21-69"><a href="#cb21-69" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;sample.default&quot;</span>,</span>
+<span id="cb21-70"><a href="#cb21-70" tabindex="-1"></a>  <span class="at">global_vars =</span> <span class="fu">list</span>(<span class="at">population =</span> <span class="st">&quot;university students&quot;</span>, <span class="at">timeframe =</span> <span class="st">&quot;2023-2024&quot;</span>),</span>
+<span id="cb21-71"><a href="#cb21-71" tabindex="-1"></a>  <span class="at">db =</span> unified_db</span>
+<span id="cb21-72"><a href="#cb21-72" tabindex="-1"></a>)</span>
+<span id="cb21-73"><a href="#cb21-73" tabindex="-1"></a></span>
+<span id="cb21-74"><a href="#cb21-74" tabindex="-1"></a><span class="co"># combine all sections into a complete methods section</span></span>
+<span id="cb21-75"><a href="#cb21-75" tabindex="-1"></a>methods_section <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
+<span id="cb21-76"><a href="#cb21-76" tabindex="-1"></a>  <span class="st">&quot;## Methods</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
+<span id="cb21-77"><a href="#cb21-77" tabindex="-1"></a>  sample_text, <span class="st">&quot;</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
+<span id="cb21-78"><a href="#cb21-78" tabindex="-1"></a>  <span class="st">&quot;### Variables</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
+<span id="cb21-79"><a href="#cb21-79" tabindex="-1"></a>  exposure_text, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb21-80"><a href="#cb21-80" tabindex="-1"></a>  <span class="st">&quot;### Outcome Variables</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
+<span id="cb21-81"><a href="#cb21-81" tabindex="-1"></a>  psych_text, <span class="st">&quot;</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
+<span id="cb21-82"><a href="#cb21-82" tabindex="-1"></a>  stats_text,</span>
+<span id="cb21-83"><a href="#cb21-83" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb21-84"><a href="#cb21-84" tabindex="-1"></a>)</span>
+<span id="cb21-85"><a href="#cb21-85" tabindex="-1"></a><span class="fu">cat</span>(methods_section)</span>
+<span id="cb21-86"><a href="#cb21-86" tabindex="-1"></a></span>
+<span id="cb21-87"><a href="#cb21-87" tabindex="-1"></a><span class="co"># Save the methods section to a file that can be included in a quarto document</span></span>
+<span id="cb21-88"><a href="#cb21-88" tabindex="-1"></a><span class="co"># writeLines(methods_section, &quot;methods_section.qmd&quot;)</span></span>
+<span id="cb21-89"><a href="#cb21-89" tabindex="-1"></a></span>
+<span id="cb21-90"><a href="#cb21-90" tabindex="-1"></a><span class="co"># Clean up</span></span>
+<span id="cb21-91"><a href="#cb21-91" tabindex="-1"></a><span class="fu">unlink</span>(temp_measures, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <h3 id="important-notes-on-measure-structure">Important Notes on Measure
 Structure</h3>
 <p>When adding measures to the database:</p>
@@ -1319,23 +1398,30 @@ measures with inconsistent formatting.</p>
 <h3 id="standardising-measures">Standardising Measures</h3>
 <p>The <code>boilerplate_standardise_measures()</code> function
 automatically cleans and standardises your measures:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># Import your database</span></span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>()</span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co"># Check quality before standardisation</span></span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="fu">boilerplate_measures_report</span>(unified_db<span class="sc">$</span>measures)</span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="co"># Standardise all measures</span></span>
-<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>unified_db<span class="sc">$</span>measures <span class="ot">&lt;-</span> <span class="fu">boilerplate_standardise_measures</span>(</span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>  unified_db<span class="sc">$</span>measures,</span>
-<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>  <span class="at">extract_scale =</span> <span class="cn">TRUE</span>,      <span class="co"># Extract scale info from descriptions</span></span>
-<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>  <span class="at">identify_reversed =</span> <span class="cn">TRUE</span>,   <span class="co"># Identify reversed items</span></span>
-<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>  <span class="at">clean_descriptions =</span> <span class="cn">TRUE</span>,  <span class="co"># Clean up description text</span></span>
-<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">TRUE</span>             <span class="co"># Show what&#39;s being done</span></span>
-<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>)</span>
-<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a></span>
-<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a><span class="co"># Save the standardised database</span></span>
-<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># Standardisation example</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>temp_standard <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;standardise_example&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="fu">boilerplate_init</span>(<span class="at">data_path =</span> temp_standard, <span class="at">create_empty =</span> <span class="cn">FALSE</span>, <span class="at">create_dirs =</span> <span class="cn">TRUE</span>, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co"># Import your database</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> temp_standard, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="co"># Check quality before standardisation</span></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="fu">boilerplate_measures_report</span>(unified_db<span class="sc">$</span>measures)</span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a><span class="co"># Standardise all measures</span></span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>unified_db<span class="sc">$</span>measures <span class="ot">&lt;-</span> <span class="fu">boilerplate_standardise_measures</span>(</span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>  unified_db<span class="sc">$</span>measures,</span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>  <span class="at">extract_scale =</span> <span class="cn">TRUE</span>,      <span class="co"># Extract scale info from descriptions</span></span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a>  <span class="at">identify_reversed =</span> <span class="cn">TRUE</span>,   <span class="co"># Identify reversed items</span></span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a>  <span class="at">clean_descriptions =</span> <span class="cn">TRUE</span>,  <span class="co"># Clean up description text</span></span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">TRUE</span>             <span class="co"># Show what&#39;s being done</span></span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a>)</span>
+<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a><span class="co"># Save the standardised database</span></span>
+<span id="cb24-21"><a href="#cb24-21" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db, <span class="at">data_path =</span> temp_standard, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-22"><a href="#cb24-22" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="#cb24-23" tabindex="-1"></a><span class="co"># Clean up</span></span>
+<span id="cb24-24"><a href="#cb24-24" tabindex="-1"></a><span class="fu">unlink</span>(temp_standard, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <h3 id="what-standardisation-does">What Standardisation Does</h3>
 <ol style="list-style-type: decimal">
 <li><p><strong>Extracts Scale Information</strong>: Identifies and
@@ -1826,7 +1912,7 @@ underlying data:</p>
 <span id="cb43-21"><a href="#cb43-21" tabindex="-1"></a>  <span class="co"># generate text</span></span>
 <span id="cb43-22"><a href="#cb43-22" tabindex="-1"></a>  <span class="fu">boilerplate_generate_text</span>(</span>
 <span id="cb43-23"><a href="#cb43-23" tabindex="-1"></a>    <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb43-24"><a href="#cb43-24" tabindex="-1"></a>    <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;sample&quot;</span>, lmtp_path),</span>
+<span id="cb43-24"><a href="#cb43-24" tabindex="-1"></a>    <span class="at">sections =</span> <span class="fu">c</span>(<span class="st">&quot;sample.default&quot;</span>, lmtp_path),</span>
 <span id="cb43-25"><a href="#cb43-25" tabindex="-1"></a>    <span class="at">global_vars =</span> <span class="fu">list</span>(</span>
 <span id="cb43-26"><a href="#cb43-26" tabindex="-1"></a>      <span class="at">exposure_var =</span> <span class="st">&quot;political_conservative&quot;</span>,</span>
 <span id="cb43-27"><a href="#cb43-27" tabindex="-1"></a>      <span class="at">outcome_var =</span> <span class="st">&quot;social_wellbeing&quot;</span></span>
@@ -1980,15 +2066,15 @@ directory: - <strong>Quarto example</strong>:
 <p>The <code>boilerplate</code> package is under active development.
 Here’s our planned roadmap for upcoming features:</p>
 <h3 id="rocket-near-term">🚀 Near Term</h3>
-<p><strong>Enhanced Type Safety (v1.2.1)</strong> - Implementation of S3
-classes for all database objects - Improved validation and error
-messages - Better IDE support with autocompletion - Zero breaking
-changes - full backward compatibility</p>
+<p><strong>Enhanced Documentation and Examples (v1.3.1)</strong> -
+Comprehensive example testing framework - Enhanced vignette coverage for
+all workflows - Improved error messages with helpful suggestions - Video
+tutorials for common workflows</p>
 <h3 id="clipboard-medium-term">📋 Medium Term</h3>
-<p><strong>Extended S3 Methods (v1.3.x)</strong> - Custom print methods
-for cleaner output - Validation methods for database integrity - Safe
-subsetting and extraction operators - Enhanced merge capabilities with
-type checking</p>
+<p><strong>Enhanced Type Safety (v1.4.x)</strong> - Implementation of S3
+classes for all database objects - Custom print methods for cleaner
+output - Validation methods for database integrity - Better IDE support
+with autocompletion</p>
 <h3 id="crystal_ball-long-term">🔮 Long Term</h3>
 <p><strong>Modern R Infrastructure (v2.0)</strong> - Migration to S7
 object system (once stable) - Performance optimizations - Extended
@@ -2002,10 +2088,10 @@ checking - <strong>Modern R practices</strong>: Adoption of new
 standards as they mature</p>
 <h3 id="bar_chart-current-state">📊 Current State</h3>
 <ul>
-<li><strong>Version</strong>: 1.2.0 (CRAN submission pending)</li>
-<li><strong>Code coverage</strong>: 67.49%</li>
+<li><strong>Version</strong>: 1.3.0 (CRAN submission ready)</li>
+<li><strong>Code coverage</strong>: 73.12%</li>
 <li><strong>Dependencies</strong>: Minimal (6 packages)</li>
-<li><strong>Test suite</strong>: 726 tests across 22 files</li>
+<li><strong>Test suite</strong>: 847 tests across 30 files</li>
 </ul>
 <p>We welcome feedback and contributions! Please see our <a href="https://github.com/go-bayes/boilerplate/blob/main/.github/CONTRIBUTING.md">contribution
 guidelines</a> for more information.</p>

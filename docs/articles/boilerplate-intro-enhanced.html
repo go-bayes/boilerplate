@@ -106,7 +106,9 @@ a series of studies on workplace well-being. She needs to:</p>
 <span>  data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="st">"shared/boilerplate"</span><span class="op">)</span>,</span>
 <span>  categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"methods"</span>, <span class="st">"measures"</span>, <span class="st">"results"</span>, <span class="st">"discussion"</span><span class="op">)</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>  <span class="co"># Start with helpful examples</span></span>
+<span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Start with helpful examples</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -116,7 +118,7 @@ a series of studies on workplace well-being. She needs to:</p>
 samples:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load the database</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="st">"shared/boilerplate"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="st">"shared/boilerplate"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create a base recruitment method</span></span>
 <span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
@@ -146,7 +148,7 @@ samples:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save the database</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="st">"shared/boilerplate"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="st">"shared/boilerplate"</span><span class="op">)</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="study-1-pilot-study">Study 1: Pilot Study<a class="anchor" aria-label="anchor" href="#study-1-pilot-study"></a>
@@ -168,8 +170,8 @@ samples:</p>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"recruitment.online_panel"</span>,</span>
-<span>    <span class="st">"design.cross_sectional"</span>,</span>
-<span>    <span class="st">"analysis.regression"</span></span>
+<span>    <span class="st">"statistical.default"</span>,  <span class="co"># Using existing default path</span></span>
+<span>    <span class="st">"causal_assumptions.identification"</span>  <span class="co"># Using existing path</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="va">study1_params</span>,</span>
 <span>  db <span class="op">=</span> <span class="va">db</span></span>
@@ -202,10 +204,9 @@ samples:</p>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
 <span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"recruitment.mturk"</span>,</span>
-<span>    <span class="st">"design.cross_sectional"</span>,</span>
-<span>    <span class="st">"measures.job_satisfaction"</span>,</span>
-<span>    <span class="st">"measures.burnout"</span>,</span>
-<span>    <span class="st">"analysis.sem"</span></span>
+<span>    <span class="st">"statistical.default"</span>,  <span class="co"># Using existing default path</span></span>
+<span>    <span class="st">"causal_assumptions.identification"</span>  <span class="co"># Using existing path</span></span>
+<span>    <span class="co"># Note: measures.job_satisfaction and measures.burnout would need to be added first</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  global_vars <span class="op">=</span> <span class="va">study2_params</span>,</span>
 <span>  db <span class="op">=</span> <span class="va">db</span></span>
@@ -309,7 +310,8 @@ samples:</p>
 <span></span>
 <span><span class="co"># Team member imports</span></span>
 <span><span class="va">team_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="st">"shared/boilerplate/lab_boilerplate_v2.json"</span><span class="op">)</span></span>
+<span>  data_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="st">"shared/boilerplate/lab_boilerplate_v2.json"</span><span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -392,18 +394,22 @@ samples:</p>
 <span><span class="va">papers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"study1"</span>, <span class="st">"study2"</span>, <span class="st">"study3"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">paper</span> <span class="kw">in</span> <span class="va">papers</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">paper_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="va">paper</span>, <span class="st">"boilerplate"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span>  <span class="co"># Note: This assumes each paper has its own boilerplate database</span></span>
+<span>  <span class="co"># which would need to be created first</span></span>
+<span>  <span class="va">paper_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="va">paper</span>, <span class="st">"boilerplate"</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">paper_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">paper_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">paper_path</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"No boilerplate database found for "</span>, <span class="va">paper</span><span class="op">)</span></span>
+<span>    <span class="kw">next</span></span>
+<span>  <span class="op">}</span></span>
 <span>  </span>
 <span>  <span class="co"># Compare measure descriptions</span></span>
-<span>  <span class="va">differences</span> <span class="op">&lt;-</span> <span class="fu">compare_entries</span><span class="op">(</span></span>
-<span>    <span class="va">paper_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">burnout</span>,</span>
-<span>    <span class="va">db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">burnout</span></span>
-<span>  <span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">differences</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Update needed for "</span>, <span class="va">paper</span>, <span class="st">": "</span>, <span class="va">differences</span><span class="op">)</span></span>
+<span>  <span class="co"># Note: compare_entries() is not part of boilerplate package</span></span>
+<span>  <span class="co"># You would need to implement comparison logic</span></span>
+<span>  <span class="co"># For example:</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">paper_db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">burnout</span>, <span class="va">db</span><span class="op">$</span><span class="va">measures</span><span class="op">$</span><span class="va">burnout</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Update needed for "</span>, <span class="va">paper</span>, <span class="st">": measure descriptions differ"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -476,8 +482,11 @@ samples:</p>
 <span></span>
 <span><span class="fu"><a href="../reference/boilerplate_export.html">boilerplate_export</a></span><span class="op">(</span></span>
 <span>  <span class="va">db</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">project_root</span>,  <span class="co"># Or specify where to save</span></span>
 <span>  output_file <span class="op">=</span> <span class="va">filename</span>,</span>
-<span>  format <span class="op">=</span> <span class="st">"json"</span></span>
+<span>  format <span class="op">=</span> <span class="st">"json"</span>,</span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Track in git</span></span>

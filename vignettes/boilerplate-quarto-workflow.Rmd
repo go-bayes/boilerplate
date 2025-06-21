@@ -52,14 +52,15 @@ my-research-project/
 
 ```{r init}
 # Use a project-specific directory
-# Note: This creates a hidden directory in your project root
-# Alternative: Use file.path(getwd(), ".boilerplate-data") for more explicit paths
-data_path <- ".boilerplate-data"
+# For this example, using a temporary directory
+data_path <- file.path(tempdir(), "quarto_example")
 
 # Initialise all databases
 boilerplate_init(
   data_path = data_path,
   create_dirs = TRUE,
+  create_empty = FALSE,  # Load default content
+  confirm = FALSE,
   quiet = TRUE
 )
 ```
@@ -80,17 +81,19 @@ Add to your `.gitignore`:
 Create reusable methods templates with placeholders:
 
 ```{r methods-templates}
-# Add participant recruitment template
-boilerplate_add_entry(
-  db_path = file.path(".boilerplate-data", "boilerplate_methods.rds"),
-  category = "methods",
-  path = "participants.recruitment",
-  value = list(
-    description = "Participant recruitment procedures",
-    text = "We recruited {{n_participants}} participants through {{recruitment_method}}."
-  ),
-  confirm = FALSE
+# Import database first
+db <- boilerplate_import(data_path = data_path, quiet = TRUE)
+
+# Add participant recruitment template to the unified database
+db <- boilerplate_add_entry(
+  db,
+  path = "methods.participants.recruitment",
+  value = "We recruited {{n_participants}} participants through {{recruitment_method}}.",
+  category = "methods"
 )
+
+# Save the updated database
+boilerplate_save(db, data_path = data_path, confirm = FALSE, quiet = TRUE)
 ```
 
 ### Measures Database
@@ -98,22 +101,20 @@ boilerplate_add_entry(
 Store information about your measures:
 
 ```{r measures-templates}
-# Add a measure
-boilerplate_add_entry(
-  db_path = file.path(".boilerplate-data", "boilerplate_measures.rds"),
-  category = "measures",
-  path = "anxiety.gad7",
-  value = list(
-    name = "GAD-7",
-    description = "Generalized Anxiety Disorder 7-item scale",
-    items = list(
-      "Feeling nervous, anxious, or on edge",
-      "Not being able to stop or control worrying"
-    ),
-    reference = "Spitzer et al. (2006)"
+# Add a measure to the unified database
+db$measures$gad7 <- list(
+  name = "GAD-7",
+  description = "Generalized Anxiety Disorder 7-item scale",
+  type = "ordinal",  # Required field
+  items = list(
+    "Feeling nervous, anxious, or on edge",
+    "Not being able to stop or control worrying"
   ),
-  confirm = FALSE
+  reference = "@spitzer2006"
 )
+
+# Save the updated database
+boilerplate_save(db, data_path = data_path, confirm = FALSE, quiet = TRUE)
 ```
 
 ## Using Templates in Quarto
@@ -121,8 +122,8 @@ boilerplate_add_entry(
 Here's how to use boilerplate in your Quarto document:
 
 ```{r quarto-example}
-# Import database
-db <- boilerplate_import(data_path = ".boilerplate-data", quiet = TRUE)
+# Import database (using the temp path from above)
+db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 
 # Generate methods text
 methods_text <- boilerplate_generate_text(
@@ -173,7 +174,7 @@ And in `_methods.qmd`:
 library(boilerplate)
 
 # Load database and generate text
-db <- boilerplate_import(".boilerplate-data", quiet = TRUE)
+db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 
 # Generate participant section
 participant_text <- boilerplate_generate_text(
@@ -200,7 +201,7 @@ The boilerplate package can manage your bibliography file, ensuring consistent c
 
 ```{r bibliography-setup}
 # Add bibliography information to your database
-db <- boilerplate_import(".boilerplate-data", quiet = TRUE)
+db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 
 # Using the example bibliography included with the package
 example_bib <- system.file("extdata", "example_references.bib", package = "boilerplate")
@@ -211,7 +212,7 @@ db <- boilerplate_add_bibliography(
 )
 
 # Save the updated database
-boilerplate_save(db, data_path = ".boilerplate-data")
+boilerplate_save(db, data_path = data_path, confirm = FALSE, quiet = TRUE)
 ```
 
 ### Automatic Bibliography Copying
@@ -222,7 +223,7 @@ When generating text, automatically copy the bibliography:
 # Generate text and copy bibliography
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = "analysis.regression",
+  sections = "statistical.default",  # Use existing section
   db = db,
   copy_bibliography = TRUE,
   bibliography_path = "manuscript/"  # Copy to manuscript directory
@@ -259,7 +260,7 @@ Update multiple entries at once:
 
 ```{r batch-ops}
 # Update all methods entries
-db <- boilerplate_import(".boilerplate-data", quiet = TRUE)
+db <- boilerplate_import(data_path = data_path, quiet = TRUE)
 
 boilerplate_batch_edit(
   db = db$methods,

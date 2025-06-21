@@ -143,7 +143,7 @@ boilerplate_save(unified_db, data_path = example_dir, confirm = FALSE, quiet = T
 # generate text with variable substitution
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = c("sample", "sample_selection"),
+  sections = c("sample.default", "sample_selection"),
   global_vars = list(
     population = "university students",
     timeframe = "2020-2021"
@@ -180,7 +180,7 @@ boilerplate_save(unified_db, data_path = example_dir, confirm = FALSE, quiet = T
 # Generate text and automatically copy bibliography
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = "statistical",  # The default entry will be used automatically
+  sections = "statistical.default",  # Use full path to the default text
   db = unified_db,
   copy_bibliography = TRUE,
   bibliography_path = "manuscript/"
@@ -495,14 +495,17 @@ The enhanced `boilerplate_import()` function can now import any database
 file directly:
 
 ``` r
-# Import the current standard version (default behaviour)
-db <- boilerplate_import("methods")
+# Import database examples
+# Note: These examples show the pattern - replace paths with your actual files
 
-# Import a specific timestamped version
-db <- boilerplate_import(data_path = "boilerplate/data/methods_db_20240115_143022.rds")
+# Import the current standard version
+# db <- boilerplate_import("methods")
+
+# Import a specific timestamped version  
+# db <- boilerplate_import(data_path = "path/to/methods_db_20240115_143022.rds")
 
 # Import a backup file
-db <- boilerplate_import(data_path = "boilerplate/data/methods_db_backup_20240115_140000.rds")
+# db <- boilerplate_import(data_path = "path/to/methods_db_backup_20240115_140000.rds")
 ```
 
 ### Restoring from Backups
@@ -510,22 +513,25 @@ db <- boilerplate_import(data_path = "boilerplate/data/methods_db_backup_2024011
 Use `boilerplate_restore_backup()` for convenient backup restoration:
 
 ``` r
+# Backup restoration examples
+# Note: These require existing backup files in your data directory
+
 # View the latest backup without restoring
-backup_db <- boilerplate_restore_backup("methods")
+# backup_db <- boilerplate_restore_backup("methods")
 
 # Restore the latest backup as the current version
-db <- boilerplate_restore_backup(
-  category = "methods",
-  restore = TRUE,
-  confirm = TRUE  # Will ask for confirmation
-)
+# db <- boilerplate_restore_backup(
+#   category = "methods",
+#   restore = TRUE,
+#   confirm = TRUE  # Will ask for confirmation
+# )
 
 # Restore a specific backup by timestamp
-db <- boilerplate_restore_backup(
-  category = "methods",
-  backup_version = "20240110_120000",
-  restore = TRUE
-)
+# db <- boilerplate_restore_backup(
+#   category = "methods",
+#   backup_version = "20240110_120000",
+#   restore = TRUE
+# )
 ```
 
 ### Version Management Workflow
@@ -576,10 +582,10 @@ Rather than creating separate `.qmd` files, you can embed boilerplate
 directly in your analysis code chunks:
 
 ``` r
-# at the beginning of your analysis script or Quarto document
+# At the beginning of your analysis script or Quarto document
 library(boilerplate)
 
-# define global variables
+# Define global variables
 study_params <- list(
   n_participants = 250,
   study_name = "Study 1",
@@ -587,19 +593,42 @@ study_params <- list(
   analysis_software = "R version 4.3.0"
 )
 
-# import database
-db <- boilerplate_import(data_path = ".boilerplate-data")
+# Example 1: Using default location (recommended for persistent storage)
+# The default location uses tools::R_user_dir() and includes project structure
+# db <- boilerplate_import()  # Uses default project
 
-# benerate methods text when needed
+# Example 2: Using a temporary directory (for this example)
+temp_analysis <- file.path(tempdir(), "analysis_example")
+boilerplate_init(
+  data_path = temp_analysis, 
+  create_dirs = TRUE, 
+  create_empty = FALSE,  # Load default content
+  confirm = FALSE, 
+  quiet = TRUE
+)
+
+# Import database
+db <- boilerplate_import(data_path = temp_analysis, quiet = TRUE)
+
+# Generate methods text when needed
 methods_sample <- boilerplate_generate_text(
   category = "methods",
-  sections = "sample",
+  sections = "sample.default",  # Use full path to the default text
   global_vars = study_params,
   db = db
 )
 
-# use the text directly in your document
+# Use the text directly in your document
 cat("## Methods\n\n", methods_sample)
+
+# Clean up
+unlink(temp_analysis, recursive = TRUE)
+
+# Example 3: For a real project with existing .boilerplate-data directory:
+# If you have an existing directory structure, you may need to specify:
+# db <- boilerplate_import(data_path = ".boilerplate-data/projects/default/data")
+# Or initialize it first:
+# boilerplate_init(data_path = ".boilerplate-data", create_dirs = TRUE)
 ```
 
 ## Working with Individual Databases
@@ -607,19 +636,23 @@ cat("## Methods\n\n", methods_sample)
 You can still work with individual databases if preferred:
 
 ``` r
-# import just the methods database
-methods_db <- boilerplate_import("methods")
+# Working with individual databases example
+temp_dir <- file.path(tempdir(), "individual_db_example")
+boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
-# add a new method entry
+# Import just the methods database
+methods_db <- boilerplate_import("methods", data_path = temp_dir, quiet = TRUE)
+
+# Add a new method entry
 methods_db$sample_selection <- "Participants were selected from {{population}} during {{timeframe}}."
 
-# save just the methods database
-boilerplate_save(methods_db, "methods")
+# Save just the methods database
+boilerplate_save(methods_db, "methods", data_path = temp_dir, confirm = FALSE, quiet = TRUE)
 
 # generate text with variable substitution
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = c("sample", "sample_selection"),
+  sections = c("sample.default", "sample_selection"),
   global_vars = list(
     population = "university students",
     timeframe = "2020-2021"
@@ -629,6 +662,9 @@ methods_text <- boilerplate_generate_text(
 )
 
 cat(methods_text)
+
+# Clean up
+unlink(temp_dir, recursive = TRUE)
 ```
 
 ## Creating Empty Databases
@@ -637,20 +673,42 @@ The package supports initialising empty database structures by default,
 providing a clean slate for your project without sample content.
 
 ``` r
-# initialise empty databases (default behavior)
+# Creating empty databases example
+temp_empty <- file.path(tempdir(), "empty_db_example")
+
+# Initialise empty databases (default behavior)
 boilerplate_init(
   categories = c("methods", "results"),
-  data_path = "~/project/data",
-  create_dirs = TRUE
+  data_path = temp_empty,
+  create_dirs = TRUE,
+  confirm = FALSE,
+  quiet = TRUE
 )
 
-# initialise with default content when needed
+# Check that databases are empty
+db_empty <- boilerplate_import(data_path = temp_empty, quiet = TRUE)
+print(length(db_empty$methods))  # Should be 0
+
+# Clean up
+unlink(temp_empty, recursive = TRUE)
+
+# Initialise with default content when needed
+temp_content <- file.path(tempdir(), "content_db_example")
 boilerplate_init(
   categories = c("methods", "results"),
-  data_path = "~/project/data",
+  data_path = temp_content,
   create_dirs = TRUE,
-  create_empty = FALSE
+  create_empty = FALSE,  # This loads default content
+  confirm = FALSE,
+  quiet = TRUE
 )
+
+# Check that databases have content
+db_content <- boilerplate_import(data_path = temp_content, quiet = TRUE)
+print(length(db_content$methods))  # Should be > 0
+
+# Clean up
+unlink(temp_content, recursive = TRUE)
 ```
 
 Empty databases provide just the top-level structure without example
@@ -662,23 +720,37 @@ The package now supports exporting databases for versioning or sharing
 specific elements:
 
 ``` r
-# export entire database for versioning
-# creates a point-in-time snapshot of your boilerplate content
-unified_db <- boilerplate_import()
+# Export database example
+temp_export <- file.path(tempdir(), "export_example")
+boilerplate_init(data_path = temp_export, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+
+# Import database
+unified_db <- boilerplate_import(data_path = temp_export, quiet = TRUE)
+
+# Export entire database for versioning
 boilerplate_export(
   db = unified_db,
-  output_file = "boilerplate_v1.0.rds",
-  data_path = "~/project/data"
+  output_file = "boilerplate_v1.0.json",
+  data_path = temp_export,
+  confirm = FALSE,
+  quiet = TRUE
 )
 
-# export selected elements (specific methods and results)
-# useful for sharing specialized subsets with collaborators
+# Export selected elements (specific methods and results)
 boilerplate_export(
   db = unified_db,
-  output_file = "causal_methods_subset.rds",
+  output_file = "causal_methods_subset.json",
   select_elements = c("methods.statistical.*", "results.main_effect"),
-  data_path = "~/project/data"
+  data_path = temp_export,
+  confirm = FALSE,
+  quiet = TRUE
 )
+
+# Check exported files exist
+list.files(temp_export, pattern = "\\.(json|rds)$")
+
+# Clean up
+unlink(temp_export, recursive = TRUE)
 ```
 
 The export function supports: - Full database export (ideal for
@@ -699,8 +771,12 @@ the measures database, with each measure containing standardised
 properties like name, description, reference, etc.
 
 ``` r
-# import the unified database
-unified_db <- boilerplate_import()
+# Measures example with temporary directory
+temp_measures <- file.path(tempdir(), "measures_example")
+boilerplate_init(data_path = temp_measures, create_empty = FALSE, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+
+# Import the unified database
+unified_db <- boilerplate_import(data_path = temp_measures, quiet = TRUE)
 
 # Add a measure directly to the unified database
 # Note: Measures should be at the top level of the measures database
@@ -718,11 +794,11 @@ unified_db$measures$anxiety_gad7 <- list(
   )
 )
 
-# save the entire unified database
-boilerplate_save(unified_db)
+# Save the entire unified database
+boilerplate_save(unified_db, data_path = temp_measures, confirm = FALSE, quiet = TRUE)
 
-# alternatively, save just the measures portion
-boilerplate_save(unified_db$measures, "measures")
+# Alternatively, save just the measures portion
+boilerplate_save(unified_db$measures, "measures", data_path = temp_measures, confirm = FALSE, quiet = TRUE)
 
 # then generate text referencing the measure by its top-level name
 exposure_text <- boilerplate_generate_measures(
@@ -763,7 +839,7 @@ stats_text <- boilerplate_generate_text(
 # initialise a sample text (assuming this was defined earlier)
 sample_text <- boilerplate_generate_text(
   category = "methods",
-  sections = "sample",
+  sections = "sample.default",
   global_vars = list(population = "university students", timeframe = "2023-2024"),
   db = unified_db
 )
@@ -781,8 +857,11 @@ methods_section <- paste(
 )
 cat(methods_section)
 
-# save the methods section to a file that can be included in a quarto document
+# Save the methods section to a file that can be included in a quarto document
 # writeLines(methods_section, "methods_section.qmd")
+
+# Clean up
+unlink(temp_measures, recursive = TRUE)
 ```
 
 ### Important Notes on Measure Structure
@@ -824,8 +903,12 @@ The `boilerplate_standardise_measures()` function automatically cleans
 and standardises your measures:
 
 ``` r
+# Standardisation example
+temp_standard <- file.path(tempdir(), "standardise_example")
+boilerplate_init(data_path = temp_standard, create_empty = FALSE, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+
 # Import your database
-unified_db <- boilerplate_import()
+unified_db <- boilerplate_import(data_path = temp_standard, quiet = TRUE)
 
 # Check quality before standardisation
 boilerplate_measures_report(unified_db$measures)
@@ -840,7 +923,10 @@ unified_db$measures <- boilerplate_standardise_measures(
 )
 
 # Save the standardised database
-boilerplate_save(unified_db)
+boilerplate_save(unified_db, data_path = temp_standard, confirm = FALSE, quiet = TRUE)
+
+# Clean up
+unlink(temp_standard, recursive = TRUE)
 ```
 
 ### What Standardisation Does
@@ -1408,7 +1494,7 @@ generate_methods_by_audience <- function(audience = c("technical", "applied", "g
   # generate text
   boilerplate_generate_text(
     category = "methods",
-    sections = c("sample", lmtp_path),
+    sections = c("sample.default", lmtp_path),
     global_vars = list(
       exposure_var = "political_conservative",
       outcome_var = "social_wellbeing"
@@ -1589,16 +1675,16 @@ planned roadmap for upcoming features:
 
 ### 🚀 Near Term
 
-**Enhanced Type Safety (v1.2.1)** - Implementation of S3 classes for all
-database objects - Improved validation and error messages - Better IDE
-support with autocompletion - Zero breaking changes - full backward
-compatibility
+**Enhanced Documentation and Examples (v1.3.1)** - Comprehensive example
+testing framework - Enhanced vignette coverage for all workflows -
+Improved error messages with helpful suggestions - Video tutorials for
+common workflows
 
 ### 📋 Medium Term
 
-**Extended S3 Methods (v1.3.x)** - Custom print methods for cleaner
-output - Validation methods for database integrity - Safe subsetting and
-extraction operators - Enhanced merge capabilities with type checking
+**Enhanced Type Safety (v1.4.x)** - Implementation of S3 classes for all
+database objects - Custom print methods for cleaner output - Validation
+methods for database integrity - Better IDE support with autocompletion
 
 ### 🔮 Long Term
 
@@ -1616,10 +1702,10 @@ standards as they mature
 
 ### 📊 Current State
 
-- **Version**: 1.2.0 (CRAN submission pending)
-- **Code coverage**: 67.49%
+- **Version**: 1.3.0 (CRAN submission ready)
+- **Code coverage**: 73.12%
 - **Dependencies**: Minimal (6 packages)
-- **Test suite**: 726 tests across 22 files
+- **Test suite**: 847 tests across 30 files
 
 We welcome feedback and contributions! Please see our [contribution
 guidelines](https://github.com/go-bayes/boilerplate/blob/main/.github/CONTRIBUTING.md)

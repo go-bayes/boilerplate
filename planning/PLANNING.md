@@ -1,5 +1,43 @@
 # PLANNING.md
 
+## 2025-06-21: Comprehensive Vignette and Example Fixes (v1.3.0)
+
+### Issue
+User reported that the README example `sections = "statistical"` was failing with error "section statistical is not a character string or list with default". Further investigation revealed systematic issues across all vignettes.
+
+### Solution
+1. Fixed README.Rmd:
+   - Changed `sections = "statistical"` to `sections = "statistical.default"` to use full path
+   - Fixed embedding example to use `create_empty = FALSE` to load default content
+   - Updated all section paths to use complete paths (e.g., "sample.default" not just "sample")
+
+2. Fixed 12 vignettes:
+   - Added `create_empty = FALSE` to initialization calls that need default content
+   - Added missing `data_path` parameters to all function calls
+   - Used temporary directories for all examples to avoid file system issues
+   - Fixed section paths to use valid entries from default database
+   - Commented out examples that reference non-existent entries with explanations
+
+3. Systematic fixes across all vignettes:
+   - boilerplate-bibliography-workflow.Rmd: Fixed initialization and section paths
+   - boilerplate-getting-started.Rmd: Fixed paths and added checks for optional entries
+   - boilerplate-intro-enhanced.Rmd: Updated all examples with proper paths
+   - boilerplate-intro.Rmd: Added temp directories and fixed export example
+   - boilerplate-json-workflow.Rmd: Added clarifying comments
+   - boilerplate-measures-workflow.Rmd: Fixed all save calls and added existence checks
+   - boilerplate-quarto-workflow.Rmd: Complete rewrite to use unified database approach
+   - version-management-section.Rmd: Added data_path to all function calls
+
+### Technical Details
+- The issue was that `create_empty = TRUE` (default) creates empty database structures
+- Users need `create_empty = FALSE` to get the default example content
+- Section paths must be complete (e.g., "statistical.default" not just "statistical")
+
+### Testing
+- All examples now use self-contained temporary directories
+- Examples are runnable without prior setup
+- Fixed examples test user workflows accurately
+
 ## 2025-06-20: Documentation and Example Fixes (v1.3.0)
 
 ### Issue

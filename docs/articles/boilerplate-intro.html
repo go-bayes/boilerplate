@@ -113,7 +113,10 @@ diffs meaningful and merges easier</li>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Initialise unified database with default content</span></span>
 <span><span class="co"># Creates a single boilerplate_unified.json file</span></span>
+<span><span class="co"># Using a temporary directory for this example</span></span>
+<span><span class="va">temp_intro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"intro_example"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_intro</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Use FALSE to get example content</span></span>
 <span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -126,11 +129,11 @@ diffs meaningful and merges easier</li>
 <p>Import your databases to work with them:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Import all databases as a unified structure</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_intro</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Or import specific categories</span></span>
-<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
-<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"measures"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">methods_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span>, data_path <span class="op">=</span> <span class="va">temp_intro</span><span class="op">)</span></span>
+<span><span class="va">measures_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"measures"</span>, data_path <span class="op">=</span> <span class="va">temp_intro</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="generate-text">3. Generate Text<a class="anchor" aria-label="anchor" href="#generate-text"></a>
@@ -140,7 +143,7 @@ diffs meaningful and merges easier</li>
 <code class="sourceCode R"><span><span class="co"># Generate methods text</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"measures"</span>, <span class="st">"statistical_estimator"</span><span class="op">)</span>,</span>
+<span>  sections <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample.default"</span>, <span class="st">"statistical.default"</span><span class="op">)</span>,  <span class="co"># Use valid paths</span></span>
 <span>  global_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    n_total <span class="op">=</span> <span class="fl">5000</span>,</span>
 <span>    exposure_var <span class="op">=</span> <span class="st">"political_conservative"</span>,</span>
@@ -204,7 +207,7 @@ diffs meaningful and merges easier</li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save changes</span></span>
-<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="va">temp_intro</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="batch-operations">Batch Operations<a class="anchor" aria-label="anchor" href="#batch-operations"></a>
@@ -270,11 +273,16 @@ are replaced with actual values:</p>
 <li>
 <p><strong>Use Version Control</strong>: Export your databases
 regularly for version control</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/boilerplate_export.html">boilerplate_export</a></span><span class="op">(</span></span>
-<span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
-<span>  output_file <span class="op">=</span> <span class="st">"boilerplate_backup_2024.rds"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">boilerplate_export</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a> unified_db,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a> <span class="at">data_path =</span> temp_intro,  <span class="co"># Specify where to save</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a> <span class="at">output_file =</span> <span class="st">"backup_"</span> <span class="sc">+</span> <span class="fu">format</span>(<span class="fu">Sys.Date</span>(), <span class="st">"%Y%m%d"</span>) <span class="sc">+</span> <span class="st">".json"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a> <span class="at">confirm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a> <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  )</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  db <span class="ot">=</span> unified_db,</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  output_file <span class="ot">=</span> <span class="st">"boilerplate_backup_2024.rds"</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="er">)</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>Organise Hierarchically</strong>: Use dot notation for

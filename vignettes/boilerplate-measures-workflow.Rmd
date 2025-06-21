@@ -29,8 +29,10 @@ This vignette provides a comprehensive guide to working with measures in the boi
 
 ```{r}
 # Initialise and import the database
-boilerplate_init(create_dirs = TRUE, confirm = FALSE)
-unified_db <- boilerplate_import()
+# Using a temporary directory for this example
+temp_measures <- file.path(tempdir(), "measures_workflow_example")
+boilerplate_init(data_path = temp_measures, create_dirs = TRUE, create_empty = FALSE, confirm = FALSE, quiet = TRUE)
+unified_db <- boilerplate_import(data_path = temp_measures, quiet = TRUE)
 
 # Add a measure directly to the unified database
 # IMPORTANT: Measures must be at the top level, not nested in categories
@@ -52,7 +54,7 @@ unified_db$measures$anxiety_gad7 <- list(
 )
 
 # Save the database
-boilerplate_save(unified_db)
+boilerplate_save(unified_db, data_path = temp_measures, confirm = FALSE, quiet = TRUE)
 
 # Generate formatted text about the measure
 measures_text <- boilerplate_generate_measures(
@@ -152,7 +154,7 @@ unified_db$measures$self_esteem <- list(
 )
 
 # Save all changes
-boilerplate_save(unified_db)
+boilerplate_save(unified_db, data_path = temp_measures, confirm = FALSE, quiet = TRUE)
 ```
 
 ## Interactive Management
@@ -163,8 +165,12 @@ Browse and edit measures programmatically:
 # View all measures
 names(unified_db$measures)
 
-# Access a specific measure
-unified_db$measures$anxiety
+# Access a specific measure (if it exists)
+if ("anxiety" %in% names(unified_db$measures)) {
+  unified_db$measures$anxiety
+} else if ("anxiety_gad7" %in% names(unified_db$measures)) {
+  unified_db$measures$anxiety_gad7
+}
 
 # Add or update measures using boilerplate_add_entry() or boilerplate_update_entry()
 ```
@@ -200,7 +206,7 @@ unified_db$measures <- boilerplate_standardise_measures(
 boilerplate_measures_report(unified_db$measures)
 
 # Save the standardised database
-boilerplate_save(unified_db)
+boilerplate_save(unified_db, data_path = temp_measures, confirm = FALSE, quiet = TRUE)
 ```
 
 ## Example: Before and After Standardisation
@@ -408,8 +414,10 @@ Here's a complete workflow from adding measures to generating a methods section:
 
 ```{r}
 # 1. Initialise and import
-boilerplate_init(create_dirs = TRUE, confirm = FALSE)
-unified_db <- boilerplate_import()
+# Create a new temp directory for this complete example
+temp_complete <- file.path(tempdir(), "complete_measures_example")
+boilerplate_init(data_path = temp_complete, create_dirs = TRUE, create_empty = FALSE, confirm = FALSE, quiet = TRUE)
+unified_db <- boilerplate_import(data_path = temp_complete, quiet = TRUE)
 
 # 2. Add your measures
 unified_db$measures$political_orientation <- list(
@@ -446,7 +454,7 @@ unified_db$measures <- boilerplate_standardise_measures(
 boilerplate_measures_report(unified_db$measures)
 
 # 5. Save the database
-boilerplate_save(unified_db)
+boilerplate_save(unified_db, data_path = temp_complete, confirm = FALSE, quiet = TRUE)
 
 # 6. Generate formatted output
 exposure_text <- boilerplate_generate_measures(
@@ -466,7 +474,7 @@ outcome_text <- boilerplate_generate_measures(
 # 7. Combine with other methods text
 sample_text <- boilerplate_generate_text(
   category = "methods",
-  sections = "sample",
+  sections = "sample.default",  # Use a valid section path
   global_vars = list(
     population = "New Zealand adults",
     timeframe = "2020-2024"

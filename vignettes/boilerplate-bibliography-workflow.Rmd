@@ -45,7 +45,10 @@ Add bibliography information to your boilerplate database:
 library(boilerplate)
 
 # Load your database
-db <- boilerplate_import()
+# Initialize with default content if needed
+temp_bib <- file.path(tempdir(), "bibliography_example")
+boilerplate_init(data_path = temp_bib, create_empty = FALSE, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+db <- boilerplate_import(data_path = temp_bib, quiet = TRUE)
 
 # Add bibliography configuration
 # Using the example bibliography included with the package
@@ -58,7 +61,7 @@ db <- boilerplate_add_bibliography(
 )
 
 # Save the updated database
-boilerplate_save(db)
+boilerplate_save(db, data_path = temp_bib, confirm = FALSE, quiet = TRUE)
 ```
 
 ## Step 2: Download and Cache the Bibliography
@@ -158,7 +161,7 @@ When generating text, automatically copy the bibliography:
 # Generate methods text with automatic bibliography copying
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = c("sample.default", "analysis.primary"),
+  sections = c("sample.default", "statistical.default"),
   global_vars = list(n = 1000),
   db = db,
   copy_bibliography = TRUE,
@@ -199,11 +202,15 @@ used_refs <- validation$used
 bib_lines <- readLines("references.bib")
 
 # Extract entries for used citations
-# (This is a simplified example - real implementation would need proper BibTeX parsing)
-project_bib <- extract_bibtex_entries(bib_lines, used_refs)
+# Note: This is a simplified example - real implementation would need proper BibTeX parsing
+# The function extract_bibtex_entries() is not part of boilerplate
+# You would need to implement this or use a BibTeX parsing package
 
-# Write project-specific bibliography
-writeLines(project_bib, "project_references.bib")
+# Example approach (pseudo-code):
+# library(RefManageR)  # or another BibTeX parsing package
+# bib_data <- ReadBib("references.bib")
+# project_bib <- bib_data[used_refs]
+# WriteBib(project_bib, "project_references.bib")
 ```
 
 ## Multi-Author Collaboration
@@ -355,10 +362,11 @@ Here's a complete workflow from setup to document generation:
 library(boilerplate)
 
 # Initialise new project
-boilerplate_init(create_dirs = TRUE)
+temp_complete <- file.path(tempdir(), "complete_example")
+boilerplate_init(data_path = temp_complete, create_empty = FALSE, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # Import database
-db <- boilerplate_import()
+db <- boilerplate_import(data_path = temp_complete, quiet = TRUE)
 
 # Configure bibliography
 # Using the example bibliography included with the package
@@ -370,7 +378,7 @@ db <- boilerplate_add_bibliography(
 )
 
 # Save configuration
-boilerplate_save(db)
+boilerplate_save(db, data_path = temp_complete, confirm = FALSE, quiet = TRUE)
 
 # 2. Daily workflow
 # Update bibliography if needed
@@ -392,7 +400,7 @@ if (validation$valid) {
 # 4. Generate final document
 final_text <- boilerplate_generate_text(
   category = "methods",
-  sections = c("all"),
+  sections = c("sample.default", "statistical.default"),
   db = db,
   copy_bibliography = TRUE
 )
