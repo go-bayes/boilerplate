@@ -2,7 +2,7 @@
 migrate_old_cache <- function() {
   old_cache <- path.expand("~/.boilerplate/cache")
   new_cache <- tools::R_user_dir("boilerplate", "cache")
-  
+
   if (dir.exists(old_cache) && !identical(old_cache, new_cache)) {
     if (!dir.exists(new_cache)) {
       dir.create(new_cache, recursive = TRUE, showWarnings = FALSE)
@@ -33,14 +33,14 @@ migrate_old_cache <- function() {
 #' # Create temporary directory for example
 #' temp_dir <- tempfile()
 #' dir.create(temp_dir)
-#' 
-#' # Initialize and import
+#'
+#' # Initialise and import
 #' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 #' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-#' 
+#'
 #' # Update bibliography
 #' bib_file <- boilerplate_update_bibliography(db)
-#' 
+#'
 #' # Clean up
 #' unlink(temp_dir, recursive = TRUE)
 #' }
@@ -59,7 +59,7 @@ boilerplate_update_bibliography <- function(
     # migrate from old location if needed
     migrate_old_cache()
   }
-  
+
   # Extract bibliography info
   bib_info <- if (is.list(db) && "bibliography" %in% names(db)) {
     db$bibliography
@@ -140,14 +140,14 @@ boilerplate_update_bibliography <- function(
 #' # Create temporary directory for example
 #' temp_dir <- tempfile()
 #' dir.create(temp_dir)
-#' 
-#' # Initialize and import
+#'
+#' # Initialise and import
 #' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 #' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-#' 
+#'
 #' # Copy bibliography
 #' boilerplate_copy_bibliography(db, temp_dir)
-#' 
+#'
 #' # Clean up
 #' unlink(temp_dir, recursive = TRUE)
 #' }
@@ -323,17 +323,17 @@ extract_all_text <- function(db) {
 #' # Create temporary directory for example
 #' temp_dir <- tempfile()
 #' dir.create(temp_dir)
-#' 
-#' # Initialize and import
+#'
+#' # Initialise and import
 #' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 #' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-#' 
+#'
 #' # Validate references
 #' validation <- boilerplate_validate_references(db)
 #' if (length(validation$missing) > 0) {
 #'   warning("Missing references: ", paste(validation$missing, collapse = ", "))
 #' }
-#' 
+#'
 #' # Clean up
 #' unlink(temp_dir, recursive = TRUE)
 #' }
@@ -424,11 +424,11 @@ boilerplate_validate_references <- function(
 #' # Create temporary directory for example
 #' temp_dir <- tempfile()
 #' dir.create(temp_dir)
-#' 
-#' # Initialize and import
+#'
+#' # Initialise and import
 #' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 #' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-#' 
+#'
 #' # Add bibliography
 #' # Using the example bibliography included with the package
 #' example_bib <- system.file("extdata", "example_references.bib", package = "boilerplate")
@@ -437,10 +437,10 @@ boilerplate_validate_references <- function(
 #'   url = paste0("file://", example_bib),
 #'   local_path = "references.bib"
 #' )
-#' 
+#'
 #' # Save the updated database
 #' boilerplate_save(db, data_path = temp_dir, confirm = FALSE, quiet = TRUE)
-#' 
+#'
 #' # Clean up
 #' unlink(temp_dir, recursive = TRUE)
 #' }

@@ -263,11 +263,11 @@
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># First ensure you have a database to import</span></span>
-<span><span class="co"># Initialize if needed:</span></span>
+<span><span class="co"># Initialise if needed:</span></span>
 <span><span class="co"># boilerplate_init(data_path = "path/to", create_dirs = TRUE)</span></span>
 <span></span>
 <span><span class="co"># First ensure you have a database to import</span></span>
-<span><span class="co"># Initialize if needed:</span></span>
+<span><span class="co"># Initialise if needed:</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">"my_project/data"</span>, create_dirs <span class="op">=</span> <span class="cn">TRUE</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import database (automatically detects JSON or RDS format)</span></span>
@@ -291,7 +291,7 @@
 <code class="sourceCode R"><span><span class="co"># Example: Using a specific project directory for JSON data</span></span>
 <span><span class="va">my_json_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"my_analysis"</span>, <span class="st">"boilerplate_data"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Initialize if needed</span></span>
+<span><span class="co"># Initialise if needed</span></span>
 <span><span class="co"># boilerplate_init(data_path = my_json_path, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)</span></span>
 <span></span>
 <span><span class="co"># import database (auto-detects JSON format)</span></span>
@@ -505,7 +505,7 @@
 <p>Use <code><a href="reference/boilerplate_list_files.html">boilerplate_list_files()</a></code> to see all available database files:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List all database files in your data directory</span></span>
-<span><span class="co"># First ensure you have initialized a database:</span></span>
+<span><span class="co"># First ensure you have initialised a database:</span></span>
 <span><span class="co"># boilerplate_init(data_path = "my_project/data", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)</span></span>
 <span></span>
 <span><span class="co"># Then list files:</span></span>
@@ -655,7 +655,7 @@
 <span><span class="co"># Example 3: For a real project with existing .boilerplate-data directory:</span></span>
 <span><span class="co"># If you have an existing directory structure, you may need to specify:</span></span>
 <span><span class="co"># db &lt;- boilerplate_import(data_path = ".boilerplate-data/projects/default/data")</span></span>
-<span><span class="co"># Or initialize it first:</span></span>
+<span><span class="co"># Or initialise it first:</span></span>
 <span><span class="co"># boilerplate_init(data_path = ".boilerplate-data", create_dirs = TRUE)</span></span></code></pre></div>
 </div>
 </div>

@@ -33,7 +33,7 @@ Downloads and caches a bibliography file from a remote URL specified in the data
 temp_dir <- tempfile()
 dir.create(temp_dir)
 
-# Initialize and import
+# Initialise and import
 boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
 

@@ -23,10 +23,10 @@ Lists all available boilerplate projects in the specified data path.
 temp_dir <- tempfile()
 dir.create(temp_dir)
 
-# Initialize some projects
-boilerplate_init(data_path = temp_dir, project = "project1", 
+# Initialise some projects
+boilerplate_init(data_path = temp_dir, project = "project1",
                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
-boilerplate_init(data_path = temp_dir, project = "project2", 
+boilerplate_init(data_path = temp_dir, project = "project2",
                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # List all projects

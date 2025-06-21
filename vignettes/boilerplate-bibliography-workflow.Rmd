@@ -45,7 +45,7 @@ Add bibliography information to your boilerplate database:
 library(boilerplate)
 
 # Load your database
-# Initialize with default content if needed
+# Initialise with default content if needed
 temp_bib <- file.path(tempdir(), "bibliography_example")
 boilerplate_init(data_path = temp_bib, create_empty = FALSE, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 db <- boilerplate_import(data_path = temp_bib, quiet = TRUE)

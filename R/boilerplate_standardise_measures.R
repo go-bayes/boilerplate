@@ -257,7 +257,7 @@ boilerplate_standardise_measures <- function(
       if (!is.null(measure$reversed_items) && !is.list(measure$reversed_items)) {
         measure$reversed_items <- as.list(measure$reversed_items)
       }
-      
+
       # Remove NULL values if needed for cleaner JSON
       measure <- measure[!sapply(measure, is.null)]
     }
@@ -321,18 +321,18 @@ boilerplate_standardise_measures <- function(
 #' # Create temporary directory for example
 #' temp_dir <- tempfile()
 #' dir.create(temp_dir)
-#' 
-#' # Initialize and import
+#'
+#' # Initialise and import
 #' boilerplate_init(data_path = temp_dir, categories = "measures",
 #'                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 #' unified_db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-#' 
+#'
 #' # Get a quality report
 #' report <- boilerplate_measures_report(unified_db$measures, return_report = TRUE)
 #'
 #' # Just print summary
 #' boilerplate_measures_report(unified_db$measures)
-#' 
+#'
 #' # Clean up
 #' unlink(temp_dir, recursive = TRUE)
 #' }

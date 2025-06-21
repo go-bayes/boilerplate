@@ -43,13 +43,13 @@ import the backup for inspection or restore it as the current database.
 temp_dir <- tempfile()
 dir.create(temp_dir)
 
-# Initialize and create some content
+# Initialise and create some content
 boilerplate_init(data_path = temp_dir, categories = "methods",
                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
 
 # Create a backup by saving with timestamp
-boilerplate_save(db, data_path = temp_dir, timestamp = TRUE, 
+boilerplate_save(db, data_path = temp_dir, timestamp = TRUE,
                  confirm = FALSE, quiet = TRUE)
 
 # List available files to see backup

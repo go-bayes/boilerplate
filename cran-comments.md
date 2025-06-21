@@ -45,7 +45,7 @@ In this version, I have addressed all feedback from the CRAN reviewer:
 * Added \value tags to all exported functions (.Rd files)
 * Replaced all \dontrun{} with \donttest{} in examples
 * Fixed all examples to pass R CMD check --run-donttest
-  - All examples now properly initialize databases in temporary directories
+  - All examples now properly initialise databases in temporary directories
   - Examples clean up after themselves
   - Examples are self-contained and do not rely on existing files
 * Regarding references: This package does not implement any published statistical methods or algorithms that require citations. It is a utility package for managing text templates and boilerplate content. The package helps users organize and reuse their own text snippets for scientific writing, but does not itself implement any methods from the literature.
@@ -62,7 +62,7 @@ documents in scientific writing.
   - `boilerplate_copy_from_project()` enables selective copying between projects
   - Backward compatible with default "default" project
 * **Fixed all examples**: Every example now passes R CMD check --run-donttest
-  - Examples properly initialize databases in temporary directories
+  - Examples properly initialise databases in temporary directories
   - All examples are self-contained and clean up after themselves
   - No reliance on existing files or directories
 
@@ -106,7 +106,7 @@ The package addresses a specific need in scientific writing:
   - Lower coverage (<50%) for: project functions (46.98%)
   - 847 tests across 30 test files ensure robust functionality
 * All examples use \donttest{} instead of \dontrun{}
-* All examples now properly initialize databases and clean up after themselves
+* All examples now properly initialise databases and clean up after themselves
 * Consistent API design across all functions
 * Defensive programming with input validation
 * Clear error messages with cli package

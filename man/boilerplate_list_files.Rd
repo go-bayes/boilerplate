@@ -36,13 +36,13 @@ Lists all boilerplate database files in a directory, organised by type
 temp_dir <- tempfile()
 dir.create(temp_dir)
 
-# Initialize with some content
+# Initialise with some content
 boilerplate_init(data_path = temp_dir, categories = "methods",
                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # Save with timestamp to create some files
 db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-boilerplate_save(db, data_path = temp_dir, timestamp = TRUE, 
+boilerplate_save(db, data_path = temp_dir, timestamp = TRUE,
                  confirm = FALSE, quiet = TRUE)
 
 # List all database files

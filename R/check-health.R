@@ -22,12 +22,12 @@
 #' # Create temporary directory for example
 #' temp_dir <- tempfile()
 #' dir.create(temp_dir)
-#' 
-#' # Initialize and import database
-#' boilerplate_init(data_path = temp_dir, create_dirs = TRUE, 
+#'
+#' # Initialise and import database
+#' boilerplate_init(data_path = temp_dir, create_dirs = TRUE,
 #'                  confirm = FALSE, quiet = TRUE)
 #' db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-#' 
+#'
 #' # Check database health
 #' health <- boilerplate_check_health(db)
 #' print(health)
@@ -47,7 +47,7 @@
 #' if (health$summary$issues_fixed > 0) {
 #'   db <- attr(health, "fixed_db")
 #' }
-#' 
+#'
 #' # Clean up
 #' unlink(temp_dir, recursive = TRUE)
 #' }

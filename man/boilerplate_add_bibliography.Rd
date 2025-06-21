@@ -27,7 +27,7 @@ Adds or updates bibliography information in a boilerplate database.
 temp_dir <- tempfile()
 dir.create(temp_dir)
 
-# Initialize and import
+# Initialise and import
 boilerplate_init(data_path = temp_dir, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
 

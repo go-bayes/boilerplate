@@ -37,7 +37,7 @@
 
 * **Code coverage**: 71.20% overall
 * **Test suite**: 726 tests across 22 test files
-* All examples now properly initialize databases and clean up temporary files
+* All examples now properly initialise databases and clean up temporary files
 * Examples are self-contained and run without errors
 * Added comprehensive tests for vignette examples
 

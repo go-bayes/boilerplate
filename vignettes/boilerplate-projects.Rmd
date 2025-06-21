@@ -175,7 +175,7 @@ boilerplate_copy_from_project(
 Here's a complete workflow for managing content from multiple sources:
 
 ```{r eval=FALSE}
-# 1. Initialize your main project (if not already done)
+# 1. Initialise your main project (if not already done)
 boilerplate_init(
   project = "my_research",
   create_dirs = TRUE,

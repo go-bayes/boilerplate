@@ -47,18 +47,18 @@ to another, enabling controlled sharing of content between projects.
 temp_dir <- tempfile()
 dir.create(temp_dir)
 
-# Initialize two projects
-boilerplate_init(data_path = temp_dir, project = "colleague_measures", 
+# Initialise two projects
+boilerplate_init(data_path = temp_dir, project = "colleague_measures",
                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
-boilerplate_init(data_path = temp_dir, project = "my_research", 
+boilerplate_init(data_path = temp_dir, project = "my_research",
                  create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # Add some content to source project
-source_db <- boilerplate_import(data_path = temp_dir, 
+source_db <- boilerplate_import(data_path = temp_dir,
                                  project = "colleague_measures", quiet = TRUE)
 source_db$measures$anxiety <- list(name = "Anxiety Scale", items = 10)
 source_db$measures$depression <- list(name = "Depression Scale", items = 20)
-boilerplate_save(source_db, data_path = temp_dir, 
+boilerplate_save(source_db, data_path = temp_dir,
                  project = "colleague_measures", confirm = FALSE, quiet = TRUE)
 
 # Copy specific measures from colleague's project

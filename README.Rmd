@@ -180,11 +180,11 @@ For detailed JSON workflows, see `vignette("boilerplate-json-workflow")`.
 
 ```{r}
 # First ensure you have a database to import
-# Initialize if needed:
+# Initialise if needed:
 # boilerplate_init(data_path = "path/to", create_dirs = TRUE)
 
 # First ensure you have a database to import
-# Initialize if needed:
+# Initialise if needed:
 boilerplate_init(data_path = "my_project/data", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # import database (automatically detects JSON or RDS format)
@@ -208,7 +208,7 @@ boilerplate_save(unified_db, data_path = "my_project/data", format = "json", con
 # Example: Using a specific project directory for JSON data
 my_json_path <- file.path("my_analysis", "boilerplate_data")
 
-# Initialize if needed
+# Initialise if needed
 # boilerplate_init(data_path = my_json_path, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # import database (auto-detects JSON format)
@@ -423,7 +423,7 @@ Use `boilerplate_list_files()` to see all available database files:
 
 ```{r}
 # List all database files in your data directory
-# First ensure you have initialized a database:
+# First ensure you have initialised a database:
 # boilerplate_init(data_path = "my_project/data", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
 # Then list files:
@@ -574,7 +574,7 @@ unlink(temp_analysis, recursive = TRUE)
 # Example 3: For a real project with existing .boilerplate-data directory:
 # If you have an existing directory structure, you may need to specify:
 # db <- boilerplate_import(data_path = ".boilerplate-data/projects/default/data")
-# Or initialize it first:
+# Or initialise it first:
 # boilerplate_init(data_path = ".boilerplate-data", create_dirs = TRUE)
 ```
 
