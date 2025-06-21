@@ -180,7 +180,7 @@ boilerplate_save(unified_db, data_path = example_dir, confirm = FALSE, quiet = T
 # Generate text and automatically copy bibliography
 methods_text <- boilerplate_generate_text(
   category = "methods",
-  sections = "statistical.default",
+  sections = "statistical",  # The default entry will be used automatically
   db = unified_db,
   copy_bibliography = TRUE,
   bibliography_path = "manuscript/"
@@ -442,17 +442,16 @@ project-specific use:
 # cp -r boilerplate-database/.boilerplate-data my-project/.boilerplate-data
 
 # 3. Import and use in your project (auto-detects format)
-db <- boilerplate_import(data_path = ".boilerplate-data")
+# db <- boilerplate_import(data_path = ".boilerplate-data")
 
 # 4. Make project-specific changes
-db$methods$sample_size <- "We recruited {{n}} participants for {{study_name}}."
+# db$methods$sample_size <- "We recruited {{n}} participants for {{study_name}}."
 
 # 5. Save locally for your project
-# For RDS format:
-boilerplate_save(db, data_path = ".boilerplate-data")
+# boilerplate_save(db, data_path = ".boilerplate-data")
 
-# For JSON format:
-boilerplate_save(db, data_path = ".boilerplate-data", format = "json")
+# For JSON format (now the default):
+# boilerplate_save(db, data_path = ".boilerplate-data", format = "json")
 
 # 6. If you make changes that should be shared:
 # - Copy back to the central repository
@@ -471,14 +470,18 @@ Use `boilerplate_list_files()` to see all available database files:
 
 ``` r
 # List all database files in your data directory
-files <- boilerplate_list_files()
-print(files)
+# First ensure you have initialized a database:
+# boilerplate_init(data_path = "my_project/data", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
+
+# Then list files:
+# files <- boilerplate_list_files(data_path = "my_project/data")
+# print(files)
 
 # List only methods database files
-files <- boilerplate_list_files(category = "methods")
+# files <- boilerplate_list_files(data_path = "my_project/data", category = "methods")
 
 # List files from a specific period
-files <- boilerplate_list_files(pattern = "202401")  # January 2024 files
+# files <- boilerplate_list_files(data_path = "my_project/data", pattern = "202401")  # January 2024 files
 ```
 
 The function organises files into: - **Standard files**: Current working
@@ -531,27 +534,29 @@ Here’s a typical workflow for managing versions:
 
 ``` r
 # 1. Check what versions are available
-files <- boilerplate_list_files("methods")
+# files <- boilerplate_list_files(data_path = "my_project/data", category = "methods")
 
 # 2. Save current work with timestamp
-boilerplate_save(
-  db = methods_db,
-  category = "methods",
-  timestamp = TRUE  # Creates methods_db_20240115_150000.rds
-)
+# boilerplate_save(
+#   db = unified_db,
+#   data_path = "my_project/data",
+#   timestamp = TRUE,  # Creates timestamped backup
+#   confirm = FALSE,
+#   quiet = TRUE
+# )
 
 # 3. If you need to revert changes, restore from backup
-boilerplate_restore_backup("methods", restore = TRUE)
+# boilerplate_restore_backup(
+#   data_path = "my_project/data",
+#   category = "methods",
+#   restore = TRUE,
+#   confirm = FALSE
+# )
 
-# 4. Compare versions before deciding
-current_db <- boilerplate_import("methods")
-old_db <- boilerplate_import(
-  data_path = "boilerplate/data/methods_db_20240110_120000.rds"
-)
-
-# 5. Import and merge specific versions if needed
-v1 <- boilerplate_import(data_path = files$timestamped$path[1])
-v2 <- boilerplate_import(data_path = files$timestamped$path[2])
+# 4. Work with specific versions
+# List available backups first:
+# backups <- boilerplate_list_files(data_path = "my_project/data", pattern = "backup")
+# Then load a specific version if needed
 ```
 
 ### Best Practices
@@ -1002,16 +1007,18 @@ entries:
 
 ``` r
 # First, ensure you have a database to work with
-# If starting fresh, initialize it with example content:
+# Example using a temporary directory:
+temp_batch <- file.path(tempdir(), "batch_example")
 boilerplate_init(
-  data_path = here::here("boilerplate", "data"),
+  data_path = temp_batch,
   create_dirs = TRUE,
   create_empty = FALSE,  # FALSE loads example content with actual measures
-  confirm = FALSE
+  confirm = FALSE,
+  quiet = TRUE
 )
 
 # Load your database
-unified_db <- boilerplate_import(data_path = here::here("boilerplate", "data"))
+unified_db <- boilerplate_import(data_path = temp_batch, quiet = TRUE)
 
 # Example 1: Update specific references
 unified_db <- boilerplate_batch_edit(
@@ -1141,7 +1148,10 @@ unified_db <- boilerplate_batch_clean(
 )
 
 # Save all the changes made through batch operations
-boilerplate_save(unified_db, data_path = here::here("boilerplate", "data"))
+boilerplate_save(unified_db, data_path = temp_batch, confirm = FALSE, quiet = TRUE)
+
+# Clean up
+unlink(temp_batch, recursive = TRUE)
 ```
 
 ### Finding Entries That Need Cleaning

@@ -1,5 +1,33 @@
 # PLANNING.md
 
+## 2025-06-20: Documentation and Example Fixes (v1.3.0)
+
+### Issue
+User testing revealed several issues with README examples:
+1. `sections = "statistical.default"` caused errors because "default" is a field within "statistical", not a nested path
+2. Examples used `here::here()` even though the package no longer depends on 'here'
+3. Some examples referenced non-existent projects or used paths that wouldn't work for users
+4. Migration example failed because it's only for old RDS files, not the default JSON format
+
+### Solution
+1. Changed all instances of `"statistical.default"` to just `"statistical"` with comment explaining default will be used
+2. Replaced all `here::here()` references with temporary directories using `tempdir()` for examples
+3. Made all examples self-contained and runnable without prior setup
+4. Commented out examples that require specific setup with explanatory notes
+5. Added cleanup code (`unlink()`) to examples that create temporary files
+6. Fixed `boilerplate_list_files()` examples to include required `data_path` parameter
+
+### Technical Details
+- The `boilerplate_generate_text()` function navigates nested paths with dots, but when it finds a list with a "default" entry, it automatically uses that
+- All examples now use temporary directories that are cleaned up after running
+- Examples that can't be run directly (like cross-project operations) are commented with explanations
+
+### Testing
+- Created comprehensive test script to verify all README examples work
+- Updated test files to match corrected section paths
+- All 34 tests in test-readme-examples.R pass
+- README rebuilds correctly from Rmd source
+
 ## 2025-06-17: CRAN Policy Compliance (v1.2.1)
 
 ### Issue

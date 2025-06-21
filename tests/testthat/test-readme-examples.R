@@ -282,10 +282,10 @@ test_that("README bibliography with copy_bibliography works", {
   
   unified_db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
   
-  # Test generating text with statistical.default section
+  # Test generating text with statistical section (default will be used)
   methods_text <- boilerplate_generate_text(
     category = "methods",
-    sections = "statistical.default",
+    sections = "statistical",  # The default entry will be used automatically
     db = unified_db,
     copy_bibliography = FALSE,  # Don't copy for now
     quiet = TRUE
@@ -312,7 +312,7 @@ test_that("README bibliography with copy_bibliography works", {
   # Now generate text with copy
   methods_text <- boilerplate_generate_text(
     category = "methods",
-    sections = "statistical.default",
+    sections = "statistical",  # The default entry will be used automatically
     db = unified_db,
     copy_bibliography = TRUE,
     bibliography_path = manuscript_dir,

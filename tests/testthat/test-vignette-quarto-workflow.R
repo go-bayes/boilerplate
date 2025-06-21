@@ -23,7 +23,7 @@ test_that("Quarto workflow basic integration works", {
   # Test generating methods section
   methods_text <- boilerplate_generate_text(
     category = "methods",
-    sections = c("sample", "statistical.default"),
+    sections = c("sample", "statistical"),  # The default entry will be used automatically
     global_vars = list(
       population = "New Zealand adults",
       timeframe = "2020-2024"

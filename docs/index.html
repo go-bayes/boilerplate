@@ -231,7 +231,7 @@
 <span><span class="co"># Generate text and automatically copy bibliography</span></span>
 <span><span class="va">methods_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
 <span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  sections <span class="op">=</span> <span class="st">"statistical.default"</span>,</span>
+<span>  sections <span class="op">=</span> <span class="st">"statistical"</span>,  <span class="co"># The default entry will be used automatically</span></span>
 <span>  db <span class="op">=</span> <span class="va">unified_db</span>,</span>
 <span>  copy_bibliography <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  bibliography_path <span class="op">=</span> <span class="st">"manuscript/"</span></span>
@@ -480,17 +480,16 @@
 <span><span class="co"># cp -r boilerplate-database/.boilerplate-data my-project/.boilerplate-data</span></span>
 <span></span>
 <span><span class="co"># 3. Import and use in your project (auto-detects format)</span></span>
-<span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="st">".boilerplate-data"</span><span class="op">)</span></span>
+<span><span class="co"># db &lt;- boilerplate_import(data_path = ".boilerplate-data")</span></span>
 <span></span>
 <span><span class="co"># 4. Make project-specific changes</span></span>
-<span><span class="va">db</span><span class="op">$</span><span class="va">methods</span><span class="op">$</span><span class="va">sample_size</span> <span class="op">&lt;-</span> <span class="st">"We recruited {{n}} participants for {{study_name}}."</span></span>
+<span><span class="co"># db$methods$sample_size &lt;- "We recruited {{n}} participants for {{study_name}}."</span></span>
 <span></span>
 <span><span class="co"># 5. Save locally for your project</span></span>
-<span><span class="co"># For RDS format:</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="st">".boilerplate-data"</span><span class="op">)</span></span>
+<span><span class="co"># boilerplate_save(db, data_path = ".boilerplate-data")</span></span>
 <span></span>
-<span><span class="co"># For JSON format:</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">db</span>, data_path <span class="op">=</span> <span class="st">".boilerplate-data"</span>, format <span class="op">=</span> <span class="st">"json"</span><span class="op">)</span></span>
+<span><span class="co"># For JSON format (now the default):</span></span>
+<span><span class="co"># boilerplate_save(db, data_path = ".boilerplate-data", format = "json")</span></span>
 <span></span>
 <span><span class="co"># 6. If you make changes that should be shared:</span></span>
 <span><span class="co"># - Copy back to the central repository</span></span>
@@ -506,14 +505,18 @@
 <p>Use <code><a href="reference/boilerplate_list_files.html">boilerplate_list_files()</a></code> to see all available database files:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List all database files in your data directory</span></span>
-<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">files</span><span class="op">)</span></span>
+<span><span class="co"># First ensure you have initialized a database:</span></span>
+<span><span class="co"># boilerplate_init(data_path = "my_project/data", create_dirs = TRUE, confirm = FALSE, quiet = TRUE)</span></span>
+<span></span>
+<span><span class="co"># Then list files:</span></span>
+<span><span class="co"># files &lt;- boilerplate_list_files(data_path = "my_project/data")</span></span>
+<span><span class="co"># print(files)</span></span>
 <span></span>
 <span><span class="co"># List only methods database files</span></span>
-<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="co"># files &lt;- boilerplate_list_files(data_path = "my_project/data", category = "methods")</span></span>
 <span></span>
 <span><span class="co"># List files from a specific period</span></span>
-<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"202401"</span><span class="op">)</span>  <span class="co"># January 2024 files</span></span></code></pre></div>
+<span><span class="co"># files &lt;- boilerplate_list_files(data_path = "my_project/data", pattern = "202401")  # January 2024 files</span></span></code></pre></div>
 <p>The function organises files into: - <strong>Standard files</strong>: Current working versions (e.g., <code>methods_db.rds</code>) - <strong>Timestamped versions</strong>: Saved with timestamps (e.g., <code>methods_db_20240115_143022.rds</code>) - <strong>Backup files</strong>: Automatic backups (e.g., <code>methods_db_backup_20240115_140000.rds</code>)</p>
 </div>
 <div class="section level3">
@@ -558,27 +561,29 @@
 <p>Here’s a typical workflow for managing versions:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Check what versions are available</span></span>
-<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_list_files.html">boilerplate_list_files</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
+<span><span class="co"># files &lt;- boilerplate_list_files(data_path = "my_project/data", category = "methods")</span></span>
 <span></span>
 <span><span class="co"># 2. Save current work with timestamp</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span></span>
-<span>  db <span class="op">=</span> <span class="va">methods_db</span>,</span>
-<span>  category <span class="op">=</span> <span class="st">"methods"</span>,</span>
-<span>  timestamp <span class="op">=</span> <span class="cn">TRUE</span>  <span class="co"># Creates methods_db_20240115_150000.rds</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># boilerplate_save(</span></span>
+<span><span class="co">#   db = unified_db,</span></span>
+<span><span class="co">#   data_path = "my_project/data",</span></span>
+<span><span class="co">#   timestamp = TRUE,  # Creates timestamped backup</span></span>
+<span><span class="co">#   confirm = FALSE,</span></span>
+<span><span class="co">#   quiet = TRUE</span></span>
+<span><span class="co"># )</span></span>
 <span></span>
 <span><span class="co"># 3. If you need to revert changes, restore from backup</span></span>
-<span><span class="fu"><a href="reference/boilerplate_restore_backup.html">boilerplate_restore_backup</a></span><span class="op">(</span><span class="st">"methods"</span>, restore <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># boilerplate_restore_backup(</span></span>
+<span><span class="co">#   data_path = "my_project/data",</span></span>
+<span><span class="co">#   category = "methods",</span></span>
+<span><span class="co">#   restore = TRUE,</span></span>
+<span><span class="co">#   confirm = FALSE</span></span>
+<span><span class="co"># )</span></span>
 <span></span>
-<span><span class="co"># 4. Compare versions before deciding</span></span>
-<span><span class="va">current_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span><span class="st">"methods"</span><span class="op">)</span></span>
-<span><span class="va">old_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span></span>
-<span>  data_path <span class="op">=</span> <span class="st">"boilerplate/data/methods_db_20240110_120000.rds"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 5. Import and merge specific versions if needed</span></span>
-<span><span class="va">v1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">files</span><span class="op">$</span><span class="va">timestamped</span><span class="op">$</span><span class="va">path</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">v2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">files</span><span class="op">$</span><span class="va">timestamped</span><span class="op">$</span><span class="va">path</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># 4. Work with specific versions</span></span>
+<span><span class="co"># List available backups first:</span></span>
+<span><span class="co"># backups &lt;- boilerplate_list_files(data_path = "my_project/data", pattern = "backup")</span></span>
+<span><span class="co"># Then load a specific version if needed</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="best-practices">Best Practices<a class="anchor" aria-label="anchor" href="#best-practices"></a>
@@ -988,16 +993,18 @@
 <p>Use <code><a href="reference/boilerplate_batch_edit.html">boilerplate_batch_edit()</a></code> to update specific fields across multiple entries:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># First, ensure you have a database to work with</span></span>
-<span><span class="co"># If starting fresh, initialize it with example content:</span></span>
+<span><span class="co"># Example using a temporary directory:</span></span>
+<span><span class="va">temp_batch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"batch_example"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/boilerplate_init.html">boilerplate_init</a></span><span class="op">(</span></span>
-<span>  data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span>,</span>
+<span>  data_path <span class="op">=</span> <span class="va">temp_batch</span>,</span>
 <span>  create_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  create_empty <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># FALSE loads example content with actual measures</span></span>
-<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load your database</span></span>
-<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_import.html">boilerplate_import</a></span><span class="op">(</span>data_path <span class="op">=</span> <span class="va">temp_batch</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Example 1: Update specific references</span></span>
 <span><span class="va">unified_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/boilerplate_batch_edit.html">boilerplate_batch_edit</a></span><span class="op">(</span></span>
@@ -1124,7 +1131,10 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save all the changes made through batch operations</span></span>
-<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"boilerplate"</span>, <span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/boilerplate_save.html">boilerplate_save</a></span><span class="op">(</span><span class="va">unified_db</span>, data_path <span class="op">=</span> <span class="va">temp_batch</span>, confirm <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Clean up</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">temp_batch</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="finding-entries-that-need-cleaning">Finding Entries That Need Cleaning<a class="anchor" aria-label="anchor" href="#finding-entries-that-need-cleaning"></a>

@@ -768,7 +768,7 @@ text:</p>
 <span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co"># Generate text and automatically copy bibliography</span></span>
 <span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>methods_text <span class="ot">&lt;-</span> <span class="fu">boilerplate_generate_text</span>(</span>
 <span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;statistical.default&quot;</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="at">sections =</span> <span class="st">&quot;statistical&quot;</span>,  <span class="co"># The default entry will be used automatically</span></span>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
 <span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>  <span class="at">copy_bibliography =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>  <span class="at">bibliography_path =</span> <span class="st">&quot;manuscript/&quot;</span></span>
@@ -992,21 +992,20 @@ project-specific use:</p>
 <span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co"># cp -r boilerplate-database/.boilerplate-data my-project/.boilerplate-data</span></span>
 <span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># 3. Import and use in your project (auto-detects format)</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> <span class="st">&quot;.boilerplate-data&quot;</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co"># db &lt;- boilerplate_import(data_path = &quot;.boilerplate-data&quot;)</span></span>
 <span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a></span>
 <span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co"># 4. Make project-specific changes</span></span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>db<span class="sc">$</span>methods<span class="sc">$</span>sample_size <span class="ot">&lt;-</span> <span class="st">&quot;We recruited {{n}} participants for {{study_name}}.&quot;</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co"># db$methods$sample_size &lt;- &quot;We recruited {{n}} participants for {{study_name}}.&quot;</span></span>
 <span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a></span>
 <span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co"># 5. Save locally for your project</span></span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co"># For RDS format:</span></span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="fu">boilerplate_save</span>(db, <span class="at">data_path =</span> <span class="st">&quot;.boilerplate-data&quot;</span>)</span>
-<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a></span>
-<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co"># For JSON format:</span></span>
-<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="fu">boilerplate_save</span>(db, <span class="at">data_path =</span> <span class="st">&quot;.boilerplate-data&quot;</span>, <span class="at">format =</span> <span class="st">&quot;json&quot;</span>)</span>
-<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a></span>
-<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="co"># 6. If you make changes that should be shared:</span></span>
-<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co"># - Copy back to the central repository</span></span>
-<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="co"># - Submit a pull request with your improvements</span></span></code></pre></div>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co"># boilerplate_save(db, data_path = &quot;.boilerplate-data&quot;)</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co"># For JSON format (now the default):</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co"># boilerplate_save(db, data_path = &quot;.boilerplate-data&quot;, format = &quot;json&quot;)</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co"># 6. If you make changes that should be shared:</span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="co"># - Copy back to the central repository</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co"># - Submit a pull request with your improvements</span></span></code></pre></div>
 <h2 id="managing-database-versions">Managing Database Versions</h2>
 <p>The boilerplate package now supports version management for your
 databases. When you save databases with timestamps or when backups are
@@ -1015,14 +1014,18 @@ created, you can easily manage and restore these versions.</p>
 <p>Use <code>boilerplate_list_files()</code> to see all available
 database files:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># List all database files in your data directory</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_files</span>()</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">print</span>(files)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co"># First ensure you have initialized a database:</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co"># boilerplate_init(data_path = &quot;my_project/data&quot;, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)</span></span>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co"># List only methods database files</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_files</span>(<span class="at">category =</span> <span class="st">&quot;methods&quot;</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co"># List files from a specific period</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_files</span>(<span class="at">pattern =</span> <span class="st">&quot;202401&quot;</span>)  <span class="co"># January 2024 files</span></span></code></pre></div>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co"># Then list files:</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># files &lt;- boilerplate_list_files(data_path = &quot;my_project/data&quot;)</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># print(files)</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># List only methods database files</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># files &lt;- boilerplate_list_files(data_path = &quot;my_project/data&quot;, category = &quot;methods&quot;)</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co"># List files from a specific period</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co"># files &lt;- boilerplate_list_files(data_path = &quot;my_project/data&quot;, pattern = &quot;202401&quot;)  # January 2024 files</span></span></code></pre></div>
 <p>The function organises files into: - <strong>Standard files</strong>:
 Current working versions (e.g., <code>methods_db.rds</code>) -
 <strong>Timestamped versions</strong>: Saved with timestamps (e.g.,
@@ -1062,27 +1065,29 @@ restoration:</p>
 <h3 id="version-management-workflow">Version Management Workflow</h3>
 <p>Here’s a typical workflow for managing versions:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># 1. Check what versions are available</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">boilerplate_list_files</span>(<span class="st">&quot;methods&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co"># files &lt;- boilerplate_list_files(data_path = &quot;my_project/data&quot;, category = &quot;methods&quot;)</span></span>
 <span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
 <span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co"># 2. Save current work with timestamp</span></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">boilerplate_save</span>(</span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="at">db =</span> methods_db,</span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;methods&quot;</span>,</span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="at">timestamp =</span> <span class="cn">TRUE</span>  <span class="co"># Creates methods_db_20240115_150000.rds</span></span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>)</span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co"># 3. If you need to revert changes, restore from backup</span></span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="fu">boilerplate_restore_backup</span>(<span class="st">&quot;methods&quot;</span>, <span class="at">restore =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a></span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co"># 4. Compare versions before deciding</span></span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>current_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="st">&quot;methods&quot;</span>)</span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>old_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(</span>
-<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  <span class="at">data_path =</span> <span class="st">&quot;boilerplate/data/methods_db_20240110_120000.rds&quot;</span></span>
-<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>)</span>
-<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a></span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co"># 5. Import and merge specific versions if needed</span></span>
-<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> files<span class="sc">$</span>timestamped<span class="sc">$</span>path[<span class="dv">1</span>])</span>
-<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> files<span class="sc">$</span>timestamped<span class="sc">$</span>path[<span class="dv">2</span>])</span></code></pre></div>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co"># boilerplate_save(</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#   db = unified_db,</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#   data_path = &quot;my_project/data&quot;,</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#   timestamp = TRUE,  # Creates timestamped backup</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#   confirm = FALSE,</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#   quiet = TRUE</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co"># 3. If you need to revert changes, restore from backup</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co"># boilerplate_restore_backup(</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#   data_path = &quot;my_project/data&quot;,</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#   category = &quot;methods&quot;,</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#   restore = TRUE,</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#   confirm = FALSE</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co"># 4. Work with specific versions</span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co"># List available backups first:</span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co"># backups &lt;- boilerplate_list_files(data_path = &quot;my_project/data&quot;, pattern = &quot;backup&quot;)</span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co"># Then load a specific version if needed</span></span></code></pre></div>
 <h3 id="best-practices">Best Practices</h3>
 <ol style="list-style-type: decimal">
 <li><strong>Regular timestamped saves</strong>: Save important
@@ -1471,52 +1476,54 @@ update multiple entries at once or clean up inconsistent formatting.</p>
 <p>Use <code>boilerplate_batch_edit()</code> to update specific fields
 across multiple entries:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># First, ensure you have a database to work with</span></span>
-<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co"># If starting fresh, initialize it with example content:</span></span>
-<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
-<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>  <span class="at">data_path =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;boilerplate&quot;</span>, <span class="st">&quot;data&quot;</span>),</span>
-<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a>  <span class="at">create_empty =</span> <span class="cn">FALSE</span>,  <span class="co"># FALSE loads example content with actual measures</span></span>
-<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span></span>
-<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>)</span>
-<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a></span>
-<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="co"># Load your database</span></span>
-<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;boilerplate&quot;</span>, <span class="st">&quot;data&quot;</span>))</span>
-<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a></span>
-<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a><span class="co"># Example 1: Update specific references</span></span>
-<span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
-<span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
-<span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;reference&quot;</span>,</span>
-<span id="cb31-17"><a href="#cb31-17" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;sibley2021&quot;</span>,</span>
-<span id="cb31-18"><a href="#cb31-18" tabindex="-1"></a>  <span class="at">target_entries =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety&quot;</span>, <span class="st">&quot;depression&quot;</span>, <span class="st">&quot;life_satisfaction&quot;</span>),</span>
-<span id="cb31-19"><a href="#cb31-19" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
-<span id="cb31-20"><a href="#cb31-20" tabindex="-1"></a>)</span>
-<span id="cb31-21"><a href="#cb31-21" tabindex="-1"></a></span>
-<span id="cb31-22"><a href="#cb31-22" tabindex="-1"></a><span class="co"># Example 2: Update all references containing &quot;_reference&quot;</span></span>
-<span id="cb31-23"><a href="#cb31-23" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
-<span id="cb31-24"><a href="#cb31-24" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
-<span id="cb31-25"><a href="#cb31-25" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;reference&quot;</span>,</span>
-<span id="cb31-26"><a href="#cb31-26" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;sibley2023&quot;</span>,</span>
-<span id="cb31-27"><a href="#cb31-27" tabindex="-1"></a>  <span class="at">match_pattern =</span> <span class="st">&quot;_reference&quot;</span>,</span>
-<span id="cb31-28"><a href="#cb31-28" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
-<span id="cb31-29"><a href="#cb31-29" tabindex="-1"></a>)</span>
-<span id="cb31-30"><a href="#cb31-30" tabindex="-1"></a></span>
-<span id="cb31-31"><a href="#cb31-31" tabindex="-1"></a><span class="co"># Example 3: Use wildcards to target groups of entries</span></span>
-<span id="cb31-32"><a href="#cb31-32" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
-<span id="cb31-33"><a href="#cb31-33" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
-<span id="cb31-34"><a href="#cb31-34" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;waves&quot;</span>,</span>
-<span id="cb31-35"><a href="#cb31-35" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;1-15&quot;</span>,</span>
-<span id="cb31-36"><a href="#cb31-36" tabindex="-1"></a>  <span class="at">target_entries =</span> <span class="st">&quot;alcohol*&quot;</span>,  <span class="co"># All entries starting with &quot;alcohol&quot;</span></span>
-<span id="cb31-37"><a href="#cb31-37" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
-<span id="cb31-38"><a href="#cb31-38" tabindex="-1"></a>)</span>
-<span id="cb31-39"><a href="#cb31-39" tabindex="-1"></a></span>
-<span id="cb31-40"><a href="#cb31-40" tabindex="-1"></a><span class="co"># Example 4: Update entries with specific values</span></span>
-<span id="cb31-41"><a href="#cb31-41" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
-<span id="cb31-42"><a href="#cb31-42" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
-<span id="cb31-43"><a href="#cb31-43" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;reference&quot;</span>,</span>
-<span id="cb31-44"><a href="#cb31-44" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;sibley2024&quot;</span>,</span>
-<span id="cb31-45"><a href="#cb31-45" tabindex="-1"></a>  <span class="at">match_values =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety_reference&quot;</span>, <span class="st">&quot;depression_reference&quot;</span>),</span>
-<span id="cb31-46"><a href="#cb31-46" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
-<span id="cb31-47"><a href="#cb31-47" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co"># Example using a temporary directory:</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>temp_batch <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;batch_example&quot;</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="fu">boilerplate_init</span>(</span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  <span class="at">data_path =</span> temp_batch,</span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a>  <span class="at">create_dirs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>  <span class="at">create_empty =</span> <span class="cn">FALSE</span>,  <span class="co"># FALSE loads example content with actual measures</span></span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>  <span class="at">confirm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>)</span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a><span class="co"># Load your database</span></span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_import</span>(<span class="at">data_path =</span> temp_batch, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a><span class="co"># Example 1: Update specific references</span></span>
+<span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
+<span id="cb31-17"><a href="#cb31-17" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb31-18"><a href="#cb31-18" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;reference&quot;</span>,</span>
+<span id="cb31-19"><a href="#cb31-19" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;sibley2021&quot;</span>,</span>
+<span id="cb31-20"><a href="#cb31-20" tabindex="-1"></a>  <span class="at">target_entries =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety&quot;</span>, <span class="st">&quot;depression&quot;</span>, <span class="st">&quot;life_satisfaction&quot;</span>),</span>
+<span id="cb31-21"><a href="#cb31-21" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
+<span id="cb31-22"><a href="#cb31-22" tabindex="-1"></a>)</span>
+<span id="cb31-23"><a href="#cb31-23" tabindex="-1"></a></span>
+<span id="cb31-24"><a href="#cb31-24" tabindex="-1"></a><span class="co"># Example 2: Update all references containing &quot;_reference&quot;</span></span>
+<span id="cb31-25"><a href="#cb31-25" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
+<span id="cb31-26"><a href="#cb31-26" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb31-27"><a href="#cb31-27" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;reference&quot;</span>,</span>
+<span id="cb31-28"><a href="#cb31-28" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;sibley2023&quot;</span>,</span>
+<span id="cb31-29"><a href="#cb31-29" tabindex="-1"></a>  <span class="at">match_pattern =</span> <span class="st">&quot;_reference&quot;</span>,</span>
+<span id="cb31-30"><a href="#cb31-30" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
+<span id="cb31-31"><a href="#cb31-31" tabindex="-1"></a>)</span>
+<span id="cb31-32"><a href="#cb31-32" tabindex="-1"></a></span>
+<span id="cb31-33"><a href="#cb31-33" tabindex="-1"></a><span class="co"># Example 3: Use wildcards to target groups of entries</span></span>
+<span id="cb31-34"><a href="#cb31-34" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
+<span id="cb31-35"><a href="#cb31-35" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb31-36"><a href="#cb31-36" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;waves&quot;</span>,</span>
+<span id="cb31-37"><a href="#cb31-37" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;1-15&quot;</span>,</span>
+<span id="cb31-38"><a href="#cb31-38" tabindex="-1"></a>  <span class="at">target_entries =</span> <span class="st">&quot;alcohol*&quot;</span>,  <span class="co"># All entries starting with &quot;alcohol&quot;</span></span>
+<span id="cb31-39"><a href="#cb31-39" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
+<span id="cb31-40"><a href="#cb31-40" tabindex="-1"></a>)</span>
+<span id="cb31-41"><a href="#cb31-41" tabindex="-1"></a></span>
+<span id="cb31-42"><a href="#cb31-42" tabindex="-1"></a><span class="co"># Example 4: Update entries with specific values</span></span>
+<span id="cb31-43"><a href="#cb31-43" tabindex="-1"></a>unified_db <span class="ot">&lt;-</span> <span class="fu">boilerplate_batch_edit</span>(</span>
+<span id="cb31-44"><a href="#cb31-44" tabindex="-1"></a>  <span class="at">db =</span> unified_db,</span>
+<span id="cb31-45"><a href="#cb31-45" tabindex="-1"></a>  <span class="at">field =</span> <span class="st">&quot;reference&quot;</span>,</span>
+<span id="cb31-46"><a href="#cb31-46" tabindex="-1"></a>  <span class="at">new_value =</span> <span class="st">&quot;sibley2024&quot;</span>,</span>
+<span id="cb31-47"><a href="#cb31-47" tabindex="-1"></a>  <span class="at">match_values =</span> <span class="fu">c</span>(<span class="st">&quot;anxiety_reference&quot;</span>, <span class="st">&quot;depression_reference&quot;</span>),</span>
+<span id="cb31-48"><a href="#cb31-48" tabindex="-1"></a>  <span class="at">category =</span> <span class="st">&quot;measures&quot;</span></span>
+<span id="cb31-49"><a href="#cb31-49" tabindex="-1"></a>)</span></code></pre></div>
 <h3 id="preview-before-editing">Preview Before Editing</h3>
 <p>Always preview changes before applying them:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># preview what would change</span></span>
@@ -1596,7 +1603,10 @@ Fields</h3>
 <span id="cb34-38"><a href="#cb34-38" tabindex="-1"></a>)</span>
 <span id="cb34-39"><a href="#cb34-39" tabindex="-1"></a></span>
 <span id="cb34-40"><a href="#cb34-40" tabindex="-1"></a><span class="co"># Save all the changes made through batch operations</span></span>
-<span id="cb34-41"><a href="#cb34-41" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db, <span class="at">data_path =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;boilerplate&quot;</span>, <span class="st">&quot;data&quot;</span>))</span></code></pre></div>
+<span id="cb34-41"><a href="#cb34-41" tabindex="-1"></a><span class="fu">boilerplate_save</span>(unified_db, <span class="at">data_path =</span> temp_batch, <span class="at">confirm =</span> <span class="cn">FALSE</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb34-42"><a href="#cb34-42" tabindex="-1"></a></span>
+<span id="cb34-43"><a href="#cb34-43" tabindex="-1"></a><span class="co"># Clean up</span></span>
+<span id="cb34-44"><a href="#cb34-44" tabindex="-1"></a><span class="fu">unlink</span>(temp_batch, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <h3 id="finding-entries-that-need-cleaning">Finding Entries That Need
 Cleaning</h3>
 <p>Before cleaning, identify which entries contain specific

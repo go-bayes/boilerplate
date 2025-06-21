@@ -1,5 +1,30 @@
 # CHANGELOG_DEV.md
 
+## 2025-06-20: README and Documentation Fixes (v1.3.0)
+
+### Changes Made
+1. **Fixed README examples**
+   - Changed `sections = "statistical.default"` to `sections = "statistical"` with comments explaining default will be used
+   - Replaced all `here::here()` references with `tempdir()` in examples
+   - Made all examples self-contained and runnable
+   - Added cleanup code to examples that create temporary files
+   - Fixed `boilerplate_list_files()` examples to include required `data_path` parameter
+
+2. **Updated test files**
+   - Fixed test-readme-examples.R to use "statistical" instead of "statistical.default"
+   - Fixed test-vignette-quarto-workflow.R similarly
+   - All 34 README example tests now pass
+
+3. **Improved example clarity**
+   - Commented out examples requiring specific setup (e.g., cross-project operations)
+   - Added explanatory notes for examples that can't be run directly
+   - Made JSON migration example clearer that it's only for old RDS files
+
+### Technical Notes
+- All 847 tests pass
+- Code coverage at 73.12%
+- Examples are now more user-friendly and less likely to cause confusion
+
 ## 2025-06-19: Version Update for CRAN Resubmission (v1.3.0)
 
 ### Changes Made
