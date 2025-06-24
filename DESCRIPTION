@@ -1,6 +1,6 @@
 Package: boilerplate
 Title: Managing and Compiling Manuscript Templates
-Version: 1.3.0
+Version: 1.3.0.9000
 Authors@R: 
     person("Joseph", "Bulbulia", email = "joseph.bulbulia@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5861-2056"))

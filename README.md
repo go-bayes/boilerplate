@@ -11,6 +11,8 @@
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/boilerplate)](https://cran.r-project.org/web/packages/boilerplate)
 
 <!-- badges: end -->
 
