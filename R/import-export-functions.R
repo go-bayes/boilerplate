@@ -181,7 +181,7 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 
   # Copy file to backup
   file.copy(file_path, backup_path)
-  if (!quiet) cli_alert_info("created backup at: {backup_path}")
+  if (!quiet) cli::cli_alert_info("created backup at: {backup_path}")
 
   return(backup_path)
 }

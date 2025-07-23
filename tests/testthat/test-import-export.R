@@ -514,3 +514,139 @@ test_that("boilerplate_import handles legacy database formats", {
   expect_true("analysis" %in% names(imported))
   expect_equal(imported$analysis$description, "Analysis")
 })
+
+test_that("boilerplate_save creates backups for both RDS and JSON formats", {
+  temp_dir <- tempfile()
+  dir.create(temp_dir)
+  old_wd <- getwd()
+  setwd(temp_dir)
+  on.exit({
+    setwd(old_wd)
+    unlink(temp_dir, recursive = TRUE)
+  })
+  
+  test_db <- list(
+    methods = list(sample = list(default = "Original content")),
+    measures = list(test = list(name = "test"))
+  )
+  
+  # Create data directory
+  data_dir <- file.path(temp_dir, "boilerplate", "data")
+  dir.create(data_dir, recursive = TRUE)
+  
+  # Test JSON backup (default format)
+  # First save
+  boilerplate_save(
+    db = test_db,
+    data_path = data_dir,
+    confirm = FALSE,
+    quiet = TRUE,
+    create_backup = TRUE,
+    timestamp = FALSE
+  )
+  
+  # Verify file exists
+  json_file <- file.path(data_dir, "boilerplate_unified.json")
+  expect_true(file.exists(json_file))
+  
+  # Modify the database
+  test_db$methods$sample$default <- "Modified content"
+  
+  # Save again with backup enabled
+  boilerplate_save(
+    db = test_db,
+    data_path = data_dir,
+    confirm = FALSE,
+    quiet = TRUE,
+    create_backup = TRUE,
+    timestamp = FALSE
+  )
+  
+  # Check for backup file
+  backup_files <- list.files(data_dir, pattern = "boilerplate_unified\\.json\\.\\d{8}_\\d{6}\\.bak$")
+  expect_true(length(backup_files) > 0)
+  
+  # Verify backup contains original content
+  backup_content <- jsonlite::fromJSON(file.path(data_dir, backup_files[1]), simplifyVector = FALSE)
+  expect_equal(backup_content$methods$sample$default, "Original content")
+  
+  # Verify current file contains modified content
+  current_content <- jsonlite::fromJSON(json_file, simplifyVector = FALSE)
+  expect_equal(current_content$methods$sample$default, "Modified content")
+  
+  # Test RDS backup
+  # First save as RDS
+  test_db_rds <- list(
+    methods = list(sample = list(default = "Original RDS content"))
+  )
+  
+  boilerplate_save(
+    db = test_db_rds,
+    data_path = data_dir,
+    format = "rds",
+    confirm = FALSE,
+    quiet = TRUE,
+    create_backup = TRUE,
+    timestamp = FALSE
+  )
+  
+  # Verify RDS file exists
+  rds_file <- file.path(data_dir, "boilerplate_unified.rds")
+  expect_true(file.exists(rds_file))
+  
+  # Modify and save again
+  test_db_rds$methods$sample$default <- "Modified RDS content"
+  
+  boilerplate_save(
+    db = test_db_rds,
+    data_path = data_dir,
+    format = "rds",
+    confirm = FALSE,
+    quiet = TRUE,
+    create_backup = TRUE,
+    timestamp = FALSE
+  )
+  
+  # Check for RDS backup file
+  rds_backup_files <- list.files(data_dir, pattern = "boilerplate_unified\\.rds\\.\\d{8}_\\d{6}\\.bak$")
+  expect_true(length(rds_backup_files) > 0)
+  
+  # Verify RDS backup contains original content
+  rds_backup_content <- readRDS(file.path(data_dir, rds_backup_files[1]))
+  expect_equal(rds_backup_content$methods$sample$default, "Original RDS content")
+  
+  # Verify current RDS file contains modified content
+  rds_current_content <- readRDS(rds_file)
+  expect_equal(rds_current_content$methods$sample$default, "Modified RDS content")
+  
+  # Test that backup is not created when timestamp = TRUE
+  boilerplate_save(
+    db = test_db,
+    data_path = data_dir,
+    confirm = FALSE,
+    quiet = TRUE,
+    create_backup = TRUE,
+    timestamp = TRUE  # This should prevent backup creation
+  )
+  
+  # Count backup files - should be same as before
+  new_backup_count <- length(list.files(data_dir, pattern = "\\.bak$"))
+  expect_equal(new_backup_count, length(backup_files) + length(rds_backup_files))
+  
+  # Test that backup is not created for new files
+  new_data_dir <- file.path(temp_dir, "new_data")
+  dir.create(new_data_dir, recursive = TRUE)
+  
+  boilerplate_save(
+    db = test_db,
+    data_path = new_data_dir,
+    confirm = FALSE,
+    quiet = TRUE,
+    create_backup = TRUE,
+    timestamp = FALSE
+  )
+  
+  # No backup files should exist in new directory
+  new_backup_files <- list.files(new_data_dir, pattern = "\\.bak$")
+  expect_equal(length(new_backup_files), 0)
+})

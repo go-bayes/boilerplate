@@ -1,5 +1,8 @@
 # boilerplate 1.3.0.9000 (development version)
 
+## Bug fixes
+* Fixed missing backup functionality for JSON format in `boilerplate_save()`. Backups are now created for both RDS and JSON formats when `create_backup = TRUE`.
+
 # boilerplate 1.3.0 [2025-06-20]
 
 ## Bug fixes

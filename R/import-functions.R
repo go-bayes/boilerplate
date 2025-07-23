@@ -432,6 +432,11 @@ boilerplate_save <- function(
   if (format %in% c("json", "both")) {
     json_path <- file.path(data_path, paste0(base_name, ".json"))
 
+    # Create backup if file exists
+    if (file.exists(json_path) && create_backup && !timestamp) {
+      create_db_backup(json_path, quiet)
+    }
+
     # Ask for confirmation if file exists
     if (confirm && file.exists(json_path) && !timestamp) {
       if (!ask_yes_no(paste0("Overwrite ", save_type, " at ", json_path, "?"))) {

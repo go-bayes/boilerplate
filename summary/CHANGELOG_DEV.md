@@ -1,5 +1,18 @@
 # CHANGELOG_DEV.md
 
+## 2025-07-23: Fixed missing backup functionality for JSON format
+
+### Changes Made
+1. **Added backup functionality for JSON format in `boilerplate_save()`**
+   - Previously, backups were only created for RDS format files
+   - Now backups are created for both RDS and JSON formats when `create_backup = TRUE`
+   - Maintains consistency across all file formats
+
+### Technical Notes
+- The backup functionality was missing from the JSON section of the save function
+- Added the same backup logic that was already present for RDS files
+- Backup files are created with timestamp format: `filename.json.YYYYMMDD_HHMMSS.bak`
+
 ## 2025-06-21: Comprehensive Vignette and Example Fixes (v1.3.0)
 
 ### Changes Made

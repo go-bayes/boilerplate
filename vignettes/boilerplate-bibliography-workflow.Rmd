@@ -265,7 +265,7 @@ message("All references validated successfully!")
 - Keep your bibliography in version control (e.g., GitHub)
 - Use a consistent naming scheme for citation keys
 - Regular updates and maintenance
-- Consider using tools like Zotero with Better BibTeX for key management
+- Consider using BibTeX for key management (free, high functionality)
 
 ## 2. Cache Management
 
@@ -297,14 +297,8 @@ if (dir.exists(cache_dir)) {
 }
 ```
 
-## 3. Version Control Strategy
 
-- Don't commit large .bib files to every project
-- Use .gitignore for local bibliography copies
-- Track bibliography URL in boilerplate database
-- Use git-lfs for very large bibliography files
-
-## 4. Citation Key Conventions
+## 3. Citation Key Conventions
 
 Establish consistent citation keys:
 
@@ -344,10 +338,10 @@ if (dir.exists(cache_dir)) {
 ### Validation Errors
 
 ```{r troubleshoot-validation}
-# Debug validation issues
+# debug validation issues
 validation <- boilerplate_validate_references(db, quiet = FALSE)
 
-# Check specific text for citations
+# check specific text for citations
 text <- db$methods$sample$default
 citations <- grep("@[a-zA-Z0-9_:-]+", text, value = TRUE)
 print(citations)
@@ -358,18 +352,18 @@ print(citations)
 Here's a complete workflow from setup to document generation:
 
 ```{r complete-example}
-# 1. Initial setup (run once)
+# 1. init setup (run once)
 library(boilerplate)
 
-# Initialise new project
+# init new project
 temp_complete <- file.path(tempdir(), "complete_example")
 boilerplate_init(data_path = temp_complete, create_empty = FALSE, create_dirs = TRUE, confirm = FALSE, quiet = TRUE)
 
-# Import database
+# import database
 db <- boilerplate_import(data_path = temp_complete, quiet = TRUE)
 
-# Configure bibliography
-# Using the example bibliography included with the package
+# config bibliography
+# use example bibliography included with the package
 example_bib <- system.file("extdata", "example_references.bib", package = "boilerplate")
 db <- boilerplate_add_bibliography(
   db,
@@ -377,18 +371,18 @@ db <- boilerplate_add_bibliography(
   local_path = "references.bib"
 )
 
-# Save configuration
+# save configuration
 boilerplate_save(db, data_path = temp_complete, confirm = FALSE, quiet = TRUE)
 
-# 2. Daily workflow
-# Update bibliography if needed
+# 2. workflow
+# update bibliography if needed
 boilerplate_update_bibliography(db)
 
-# Copy to project
+# copy to project
 boilerplate_copy_bibliography(db, ".")
 
 # 3. Before submission
-# Validate all references
+# validate all references
 validation <- boilerplate_validate_references(db)
 
 if (validation$valid) {
@@ -397,7 +391,7 @@ if (validation$valid) {
   warning("Missing references: ", paste(validation$missing, collapse = ", "))
 }
 
-# 4. Generate final document
+# 4. generate final document
 final_text <- boilerplate_generate_text(
   category = "methods",
   sections = c("sample.default", "statistical.default"),
