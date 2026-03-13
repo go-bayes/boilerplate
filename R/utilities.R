@@ -378,8 +378,10 @@ make_clean_title <- function(x, case = "title") {
     stop("Only 'title' case is currently implemented")
   }
 
-  # replace underscores and hyphens with spaces
-  x <- gsub("[_-]", " ", x)
+  # replace underscores with spaces (preserve hyphens — they are intentional
+
+  # typography in display names, not word separators)
+  x <- gsub("_", " ", x)
 
   # remove extra whitespace
   x <- gsub("\\s+", " ", trimws(x))

@@ -1,6 +1,7 @@
-# boilerplate 1.3.0.9000 (development version)
+# boilerplate 1.3.0.9001 (development version)
 
 ## Bug fixes
+* `make_clean_title()` no longer strips hyphens from measure display names. Previously, `gsub("[_-]", " ", x)` treated hyphens as word separators (like underscores), converting "Honesty-Humility" to "Honesty Humility" and "Right-Wing Authoritarianism" to "Right Wing Authoritarianism". Since R identifiers cannot contain hyphens, any hyphen in a `name` field or `label_mappings` value is intentional typography and is now preserved.
 * Fixed missing backup functionality for JSON format in `boilerplate_save()`. Backups are now created for both RDS and JSON formats when `create_backup = TRUE`.
 
 # boilerplate 1.3.0 [2025-06-20]
