@@ -110,7 +110,7 @@ test_that("Internals file path handling works", {
   )
   
   expect_true(dir.exists(custom_path))
-  expect_true(grepl("methods_db.rds", file_path))
+  expect_true(grepl("methods_db\\.json$", file_path))
 })
 
 test_that("Internals validation functions work", {

@@ -184,18 +184,18 @@ test_that("boilerplate_save works correctly", {
   
   expect_true(file.exists(file.path(data_dir, "methods_db.json")))
   
-  # Test saving as RDS explicitly
-  boilerplate_save(
+  # Test saving as RDS explicitly (deprecated path; warning is expected)
+  suppressWarnings(boilerplate_save(
     db = test_db,
     data_path = data_dir,
     format = "rds",
     confirm = FALSE,
     quiet = TRUE,
     timestamp = FALSE
-  )
-  
+  ))
+
   expect_true(file.exists(file.path(data_dir, "boilerplate_unified.rds")))
-  
+
   # Clean up is handled by on.exit
 })
 
@@ -366,16 +366,16 @@ test_that("boilerplate_save handles different save modes", {
   saved_methods <- read_boilerplate_db(file.path(output_dir, "methods_db.json"))
   expect_equal(saved_methods$test$description, "Test method")
   
-  # Test RDS format explicitly
-  boilerplate_save(
+  # Test RDS format explicitly (deprecated path; warning is expected)
+  suppressWarnings(boilerplate_save(
     db = test_db,
     data_path = output_dir,
     format = "rds",
     confirm = FALSE,
     quiet = TRUE,
     timestamp = FALSE
-  )
-  
+  ))
+
   expect_true(file.exists(file.path(output_dir, "boilerplate_unified.rds")))
 })
 
@@ -580,7 +580,7 @@ test_that("boilerplate_save creates backups for both RDS and JSON formats", {
     methods = list(sample = list(default = "Original RDS content"))
   )
   
-  boilerplate_save(
+  suppressWarnings(boilerplate_save(
     db = test_db_rds,
     data_path = data_dir,
     format = "rds",
@@ -588,16 +588,16 @@ test_that("boilerplate_save creates backups for both RDS and JSON formats", {
     quiet = TRUE,
     create_backup = TRUE,
     timestamp = FALSE
-  )
-  
+  ))
+
   # Verify RDS file exists
   rds_file <- file.path(data_dir, "boilerplate_unified.rds")
   expect_true(file.exists(rds_file))
-  
+
   # Modify and save again
   test_db_rds$methods$sample$default <- "Modified RDS content"
-  
-  boilerplate_save(
+
+  suppressWarnings(boilerplate_save(
     db = test_db_rds,
     data_path = data_dir,
     format = "rds",
@@ -605,7 +605,7 @@ test_that("boilerplate_save creates backups for both RDS and JSON formats", {
     quiet = TRUE,
     create_backup = TRUE,
     timestamp = FALSE
-  )
+  ))
   
   # Check for RDS backup file
   rds_backup_files <- list.files(data_dir, pattern = "boilerplate_unified\\.rds\\.\\d{8}_\\d{6}\\.bak$")

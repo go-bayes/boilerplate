@@ -30,7 +30,10 @@ If NULL and db contains multiple categories, saves as unified database.}
 \item{data_path}{Character. Base path for data directory.
 If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
-\item{format}{Character. Format to save: "json" (default), "rds", or "both".}
+\item{format}{Character. Format to save. "json" (default) is the supported
+format. "rds" and "both" are accepted for backward compatibility but are
+deprecated and will be removed in a future release; using either emits a
+deprecation warning.}
 
 \item{confirm}{Logical. If TRUE, asks for confirmation. Default is TRUE.}
 
@@ -85,7 +88,7 @@ boilerplate_save(
 )
 
 # Check that file was created
-file.exists(file.path(data_path, "boilerplate_unified.rds"))
+file.exists(file.path(data_path, "boilerplate_unified.json"))
 
 # Save a single category
 boilerplate_save(

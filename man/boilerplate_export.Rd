@@ -9,7 +9,7 @@ boilerplate_export(
   output_file = NULL,
   select_elements = NULL,
   data_path = NULL,
-  format = "rds",
+  format = "json",
   confirm = TRUE,
   create_dirs = FALSE,
   quiet = FALSE,
@@ -28,7 +28,10 @@ boilerplate_export(
 \item{data_path}{Character. Base path for data directory.
 If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
-\item{format}{Character. Format to save: "rds" (default), "json", or "both".}
+\item{format}{Character. Format to save. "json" (default) is the supported
+format. "rds" and "both" are accepted for backward compatibility but are
+deprecated and will be removed in a future release; using either emits a
+deprecation warning.}
 
 \item{confirm}{Logical. If TRUE (default), asks for confirmation before overwriting.}
 
@@ -82,7 +85,7 @@ boilerplate_export(
 boilerplate_export(
   db = unified_db,
   select_elements = "methods.*",
-  output_file = "methods_only.rds",
+  output_file = "methods_only.json",
   data_path = export_path,
   confirm = FALSE,
   quiet = TRUE

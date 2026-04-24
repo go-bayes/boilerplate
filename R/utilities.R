@@ -174,7 +174,7 @@ modify_nested_entry <- function(db, path_parts, action, value = NULL, auto_sort 
 #'   If NULL, uses the "boilerplate/data/" subdirectory of the current working directory
 #'   via tools::R_user_dir("boilerplate", "data").
 #' @param file_name Character. Name of the file (without path).
-#'   If NULL, uses "[category]_db.rds".
+#'   If NULL, uses "[category]_db.json".
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
 #' @param confirm Logical. If TRUE, asks for confirmation before creating directories. Default is TRUE.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
@@ -187,7 +187,7 @@ get_db_file_path <- function(category, base_path = NULL, file_name = NULL,
                              create_dirs = FALSE, confirm = TRUE, quiet = FALSE) {
   # default file name
   if (is.null(file_name)) {
-    file_name <- paste0(category, "_db.rds")
+    file_name <- paste0(category, "_db.json")
     if (!quiet) cli_alert_info("using default file name: {file_name}")
   }
 
@@ -225,6 +225,29 @@ get_db_file_path <- function(category, base_path = NULL, file_name = NULL,
   if (!quiet) cli_alert_info("full file path: {file_path}")
 
   return(file_path)
+}
+
+#' Emit RDS-deprecation warning
+#'
+#' Internal helper used by exported save/export functions to warn callers that
+#' writing RDS is deprecated. Reading RDS remains supported during the
+#' deprecation window so that existing databases continue to load. See
+#' `boilerplate_migrate_to_json()` for the migration path.
+#'
+#' @param fn_name Character. Name of the calling exported function, surfaced in
+#'   the warning so users can trace the source.
+#' @return Invisible NULL.
+#' @keywords internal
+#' @noRd
+warn_rds_deprecated <- function(fn_name) {
+  warning(
+    "`format = \"rds\"` (and `format = \"both\"`) is deprecated in ",
+    fn_name, "() and will be removed in a future release. ",
+    "Use `format = \"json\"`. Existing RDS databases can be converted with ",
+    "boilerplate_migrate_to_json().",
+    call. = FALSE
+  )
+  invisible(NULL)
 }
 
 #' Helper function to ask for user confirmation

@@ -1,3 +1,42 @@
+# boilerplate 1.3.0.9002 (development version)
+
+This development release prepares for `1.4.0` and begins the phased removal of
+RDS as a storage format. The motivation is security: loading an RDS file can
+execute code through object hooks and crafted class attributes (see
+CVE-2024-27322 as a representative example), and RDS was the single remaining
+code-execution vector in the package. JSON covers every data shape the
+package uses, and migration utilities have been in place since `1.2.0`.
+
+## Format defaults
+* `boilerplate_export()` now defaults to `format = "json"` (previously `"rds"`).
+* The internal helper `write_boilerplate_db()` now defaults to `format = "json"`.
+* Default database filenames constructed by `get_db_file_path()` now end in
+  `.json` rather than `.rds`.
+
+## Deprecation
+* Passing `format = "rds"` or `format = "both"` to `boilerplate_save()`,
+  `boilerplate_export()`, or (by delegation) `boilerplate_init()` now emits a
+  deprecation warning. Writing RDS still works during the deprecation window.
+* Reading RDS via `boilerplate_import()` and the migration utilities
+  (`boilerplate_migrate_to_json()`, `boilerplate_rds_to_json()`,
+  `compare_rds_json()`) is unchanged, so existing databases continue to load
+  and can be converted with a single function call.
+* `boilerplate_init()` no longer demonstrates `format = "both"` in its
+  examples.
+
+## Tests
+* Tests in `test-generate-text.R` and `test-vignette-internals.R` that used
+  RDS only as an incidental fixture have been migrated to JSON. Tests that
+  exercise the RDS-to-JSON migration path continue to use RDS input on
+  purpose.
+
+## Planned for a future release
+* Removal of RDS writing entirely, and of `readRDS()` calls from
+  `boilerplate_import()`. `boilerplate_migrate_to_json()` will remain as a
+  one-way door for legacy `.rds` databases.
+* Symlink-safe copy and backup operations.
+* Explicit URL-scheme restrictions on remote bibliography downloads.
+
 # boilerplate 1.3.0.9001 (development version)
 
 ## Bug fixes

@@ -1,3 +1,71 @@
+# boilerplate 1.4.0 (DRAFT — do not submit until section is finalised)
+
+This section is under preparation for the 1.4.0 release. Fill in actual
+`R CMD check` results from `win-builder` and `R-hub` before submission.
+
+## Summary of changes in 1.4.0
+
+`1.4.0` is a minor-version release with one user-visible change and one
+deprecation, both motivated by security.
+
+* The default database format for `boilerplate_save()`, `boilerplate_export()`,
+  and `boilerplate_init()` is now JSON. RDS writing remains functional but
+  emits a deprecation warning.
+* Reading RDS is unchanged, so all existing user databases continue to load
+  and can be converted with `boilerplate_migrate_to_json()`.
+
+Rationale: `readRDS()` deserialisation can execute code through object hooks
+and crafted class attributes. JSON stores every data shape the package uses,
+the migration path has existed since `1.2.0`, and flipping the default
+eliminates the remaining code-execution surface in a package that is
+increasingly driven by automated workflows.
+
+## CRAN-policy touch-points
+
+* File-system behaviour is unchanged. Default data paths continue to use
+  `tools::R_user_dir("boilerplate", "data")`. No new directories are written
+  outside `tempdir()` or an explicit user-supplied path.
+* No new `Imports`. Deprecation warnings are emitted via base `warning()`
+  rather than adding a `lifecycle` dependency.
+* No network, shell, or `eval()` calls are added. The single existing
+  network site (bibliography download in `boilerplate_update_bibliography()`)
+  is unchanged in this release.
+* Reverse-dependency check: none, there are currently no downstream
+  dependencies.
+
+## Test environments
+
+<!-- Fill in before submission. Template copied from 1.3.0. -->
+
+* local macOS install (aarch64-apple-darwin20), R 4.5.1
+* win-builder (devel and release)
+* R-hub
+  - Windows (latest)
+  - macOS (latest)
+  - Ubuntu Linux (release)
+
+## R CMD check results
+
+<!-- Fill in actual results before submission. Expected: 0 / 0 / 0. -->
+
+0 errors | 0 warnings | 0 notes
+
+## Backward compatibility
+
+* `format = "rds"` and `format = "both"` are still accepted; they emit a
+  one-line warning and otherwise behave as before.
+* Existing RDS databases continue to load via `boilerplate_import()`. Users
+  are pointed at `boilerplate_migrate_to_json()` in the deprecation warning
+  and in the NEWS.
+* The examples and vignettes that previously demonstrated RDS writing have
+  been updated to JSON. The migration vignette
+  (`boilerplate-json-workflow.Rmd`) retains RDS only in the portions
+  demonstrating the migration itself.
+
+---
+
+# boilerplate 1.3.0 (previously submitted)
+
 ## Test environments
 
 * local macOS install (aarch64-apple-darwin20), R 4.5.1

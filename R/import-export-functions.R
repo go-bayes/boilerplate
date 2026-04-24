@@ -198,7 +198,10 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 #' @param select_elements Character vector. Optional paths to export (supports wildcards).
 #' @param data_path Character. Base path for data directory.
 #'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
-#' @param format Character. Format to save: "rds" (default), "json", or "both".
+#' @param format Character. Format to save. "json" (default) is the supported
+#'   format. "rds" and "both" are accepted for backward compatibility but are
+#'   deprecated and will be removed in a future release; using either emits a
+#'   deprecation warning.
 #' @param confirm Logical. If TRUE (default), asks for confirmation before overwriting.
 #' @param create_dirs Logical. If TRUE, creates directories if they don't exist.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
@@ -240,7 +243,7 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 #' boilerplate_export(
 #'   db = unified_db,
 #'   select_elements = "methods.*",
-#'   output_file = "methods_only.rds",
+#'   output_file = "methods_only.json",
 #'   data_path = export_path,
 #'   confirm = FALSE,
 #'   quiet = TRUE
@@ -256,7 +259,7 @@ boilerplate_export <- function(
     output_file = NULL,
     select_elements = NULL,
     data_path = NULL,
-    format = "rds",
+    format = "json",
     confirm = TRUE,
     create_dirs = FALSE,
     quiet = FALSE,
@@ -264,6 +267,11 @@ boilerplate_export <- function(
     save_by_category = TRUE,
     project = "default"
 ) {
+  # validate format and emit deprecation warning for rds
+  format <- match.arg(format, c("json", "rds", "both"))
+  if (format %in% c("rds", "both")) {
+    warn_rds_deprecated("boilerplate_export")
+  }
   if (!is.list(db)) {
     if (!quiet) cli_alert_danger("db must be a list")
     stop("db must be a list")

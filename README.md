@@ -12,7 +12,7 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lif
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/boilerplate)](https://cran.r-project.org/web/packages/boilerplate)
+status](https://www.r-pkg.org/badges/version/boilerplate)](https://CRAN.R-project.org/package=boilerplate)
 
 <!-- badges: end -->
 

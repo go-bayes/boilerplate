@@ -46,12 +46,14 @@ read_boilerplate_db <- function(file_path, format = "auto") {
 #'
 #' @param db Database to write
 #' @param file_path Path to save the file
-#' @param format Format to write ("json", "rds", "both"). Default is "rds".
+#' @param format Format to write ("json", "rds", "both"). Default is "json".
+#'   RDS writing is retained for round-trip and migration testing, but is
+#'   deprecated for new databases.
 #' @param pretty Logical. Pretty print JSON? Default is TRUE for human readability.
 #' @return Invisible TRUE on success
 #' @keywords internal
 #' @noRd
-write_boilerplate_db <- function(db, file_path, format = "rds", pretty = TRUE) {
+write_boilerplate_db <- function(db, file_path, format = "json", pretty = TRUE) {
   # only create directory if it doesn't exist
   dir_path <- dirname(file_path)
   if (!dir.exists(dir_path)) {

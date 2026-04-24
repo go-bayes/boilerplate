@@ -178,14 +178,14 @@ test_that("boilerplate_save handles JSON format", {
   json_files <- list.files(test_data_dir, pattern = "\\.json$", recursive = TRUE)
   expect_true(length(json_files) >= 1)
   
-  # Test saving as both formats
-  result2 <- boilerplate_save(
+  # Test saving as both formats (deprecated path; warning is expected)
+  result2 <- suppressWarnings(boilerplate_save(
     test_db,
     data_path = test_data_dir,
     format = "both",
     confirm = FALSE,
     quiet = TRUE
-  )
+  ))
   
   expect_true(result2)
   all_files <- list.files(test_data_dir, recursive = TRUE)
@@ -376,15 +376,15 @@ test_that("JSON databases maintain compatibility with RDS workflows", {
   test_path <- file.path(temp_dir, "compat_test")
   dir.create(test_path, showWarnings = FALSE)
   
-  # Save in both formats
-  boilerplate_save(
+  # Save in both formats (deprecated path; warning is expected)
+  suppressWarnings(boilerplate_save(
     test_db,
     data_path = test_path,
     format = "both",
     confirm = FALSE,
     quiet = TRUE,
     create_dirs = TRUE
-  )
+  ))
   
   # Find the saved files
   files <- list.files(test_path, full.names = TRUE)

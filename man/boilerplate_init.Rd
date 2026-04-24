@@ -37,7 +37,10 @@ If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 \item{create_empty}{Logical. If TRUE, creates empty database structures with just the template headings.
 Default is TRUE. Set to FALSE to use default content.}
 
-\item{format}{Character. Format to save: "json" (default), "rds", or "both".}
+\item{format}{Character. Format to save. "json" (default) is the supported
+format. "rds" and "both" are accepted for backward compatibility but are
+deprecated and will be removed in a future release; callers asked to
+write RDS receive a deprecation warning from \code{boilerplate_save()}.}
 
 \item{project}{Character. Project name for organizing databases. Default is "default".
 Projects are stored in separate subdirectories to allow multiple independent
@@ -68,11 +71,10 @@ boilerplate_init(
 # Check that unified JSON file was created
 list.files(data_path)
 
-# Initialise with default content in both formats
+# Initialise with default content (JSON)
 boilerplate_init(
   data_path = data_path,
   create_empty = FALSE,
-  format = "both",
   confirm = FALSE,
   quiet = TRUE
 )

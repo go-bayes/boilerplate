@@ -92,10 +92,10 @@ test_that("Version management file listing works", {
   
   db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
   
-  # Save in both formats
+  # Save in both formats (RDS is deprecated; warning is expected)
   boilerplate_save(db, data_path = temp_dir, format = "json", confirm = FALSE, quiet = TRUE)
-  boilerplate_save(db, data_path = temp_dir, format = "rds", confirm = FALSE, quiet = TRUE)
-  
+  suppressWarnings(boilerplate_save(db, data_path = temp_dir, format = "rds", confirm = FALSE, quiet = TRUE))
+
   # List all files
   all_files <- boilerplate_list_files(data_path = temp_dir)
   
@@ -223,10 +223,10 @@ test_that("Version management comparison works", {
   
   db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
   
-  # Save in both formats
+  # Save in both formats (RDS is deprecated; warning is expected)
   boilerplate_save(db, data_path = temp_dir, format = "json", confirm = FALSE, quiet = TRUE)
-  boilerplate_save(db, data_path = temp_dir, format = "rds", confirm = FALSE, quiet = TRUE)
-  
+  suppressWarnings(boilerplate_save(db, data_path = temp_dir, format = "rds", confirm = FALSE, quiet = TRUE))
+
   # Compare formats - need to specify individual files
   rds_file <- file.path(temp_dir, "boilerplate_unified.rds")
   json_file <- file.path(temp_dir, "boilerplate_unified.json")
