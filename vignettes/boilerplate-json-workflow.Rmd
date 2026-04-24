@@ -20,13 +20,22 @@ library(boilerplate)
 
 ## Introduction
 
-The `boilerplate` package now supports JSON format for all database operations. JSON provides several advantages over the traditional RDS format:
+JSON is the default database format in `boilerplate`. It carries every
+data shape the package needs and has several practical advantages over
+the legacy RDS format:
 
 - **Human-readable**: JSON files can be opened and edited in any text editor
 - **Version control friendly**: Changes are easily tracked in Git
 - **Language agnostic**: JSON files can be read by any programming language
 - **Web-friendly**: JSON is the standard format for web applications
 - **Template variables**: Support for `{{variable}}` placeholders in your text
+- **Safer to load**: JSON deserialisation cannot execute code, whereas
+  `readRDS()` can through object hooks and class attributes; loading a
+  hostile RDS from a collaborator is a real risk that JSON removes
+
+RDS writing is deprecated and will be removed in a future release.
+Reading existing RDS databases remains supported, and this vignette
+shows the canonical migration path via `boilerplate_migrate_to_json()`.
 
 ## Basic JSON Operations
 

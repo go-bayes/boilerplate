@@ -276,17 +276,23 @@ boilerplate_migrate_to_json(
 
 ## Format Differences
 
-### RDS Format
-- Binary R object
-- Preserves all R data types
-- Not human-readable
-- Platform-specific
-
-### JSON Format
+### JSON Format (default)
 - Text-based
-- Limited data types
+- Sufficient for every data shape the package uses (strings, lists,
+  numbers)
 - Human-readable
 - Cross-platform
+- Safe to load: JSON deserialisation cannot execute code
+
+### RDS Format (deprecated for writing)
+- Binary R object
+- Preserves R-specific types that the package does not use
+- Not human-readable
+- Platform-specific
+- Code-execution vector on load: `readRDS()` can invoke attacker code
+  through object hooks and class attributes. Writing is deprecated in
+  current releases; reading is retained only to support migration of
+  existing databases.
 
 ## Handling Special Cases
 

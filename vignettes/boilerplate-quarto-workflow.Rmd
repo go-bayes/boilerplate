@@ -189,7 +189,7 @@ cat(participant_text)
 
 ## Best Practices
 
-1. **Version Control**: Commit your `.boilerplate-data/*.rds` files to git
+1. **Version Control**: Commit your `.boilerplate-data/*.json` files to git
 2. **Documentation**: Document template variables in descriptions
 3. **Organization**: Use hierarchical paths (e.g., `methods.participants.recruitment`)
 4. **Collaboration**: Share databases through version control

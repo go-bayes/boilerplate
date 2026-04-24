@@ -61,12 +61,12 @@ boilerplate_save(
   confirm = FALSE,
   quiet = FALSE
 )
-#> ✔ Saved unified database to: boilerplate_unified_20240115_143022.rds
+#> ✔ Saved unified database to: boilerplate_unified_20240115_143022.json
 
 # Later, import specific version
 # Note: Replace with your actual timestamped filename
 db_milestone <- boilerplate_import(
-  data_path = "path/to/your/boilerplate_unified_20240115_143022.rds"
+  data_path = "path/to/your/boilerplate_unified_20240115_143022.json"
 )
 ```
 
@@ -130,7 +130,7 @@ boilerplate_restore_backup(data_path = temp_version, category = "methods", resto
 # 5. Compare versions
 current <- boilerplate_import("methods", data_path = temp_version, quiet = TRUE)
 old_version <- boilerplate_import(
-  data_path = "path/to/your/methods_db_20240110_120000.rds"
+  data_path = "path/to/your/methods_db_20240110_120000.json"
 )
 ```
 
@@ -150,7 +150,7 @@ While the package provides its own versioning, it works well with Git:
 boilerplate_save(db, data_path = temp_version, timestamp = TRUE, confirm = FALSE, quiet = TRUE)
 
 # Add to Git
-# git add boilerplate/data/boilerplate_unified_*.rds
+# git add boilerplate/data/boilerplate_unified_*.json
 # git commit -m "Snapshot before major refactoring"
 ```
 

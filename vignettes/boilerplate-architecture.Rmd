@@ -292,7 +292,11 @@ tests/testthat/
 
 ## Backwards Compatibility
 
-- RDS format support maintained
-- Automatic migration utilities
-- Deprecation warnings for old functions
+- RDS reading remains available during the deprecation window, so
+  existing databases continue to load via `boilerplate_import()`
+- RDS writing is deprecated and emits a warning through
+  `boilerplate_save()` and `boilerplate_export()`; it will be removed in
+  a future release
+- Automatic migration utilities (`boilerplate_migrate_to_json()`,
+  `boilerplate_rds_to_json()`) remain as a one-way door
 - Version detection in files
