@@ -40,6 +40,15 @@ reference:
     - boilerplate_import
     - boilerplate_save
     - boilerplate_init
+  - title: "Migration from RDS to JSON"
+    desc: >
+      Tools for converting legacy RDS databases to JSON. RDS writing is
+      deprecated; reading is retained so that existing databases continue
+      to load and can be migrated with a single call.
+    contents:
+    - boilerplate_migrate_to_json
+    - boilerplate_rds_to_json
+    - compare_rds_json
   - title: "Project Management Functions"
     contents:
     - boilerplate_copy_from_project
@@ -71,6 +80,7 @@ reference:
   - title: "Database Health Functions"
     contents:
     - boilerplate_check_health
+    - validate_json_database
   - title: "Version Management Functions"
     contents:
     - boilerplate_list_files
@@ -87,9 +97,3 @@ reference:
     - boilerplate_find_chars
     - boilerplate_measures_report
     - boilerplate_standardise_measures
-  - title: "JSON Support Functions"
-    contents:
-    - boilerplate_migrate_to_json
-    - boilerplate_rds_to_json
-    - compare_rds_json
-    - validate_json_database
