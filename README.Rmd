@@ -48,7 +48,7 @@ devtools::install_github("go-bayes/boilerplate")
 - **Hierarchical Organisation**: Organise content in nested categories using dot notation (e.g., `statistical.longitudinal.lmtp`)
 - **Default Content**: Comes with pre-loaded defaults for common methods sections
 - **Quarto/R Markdown Integration**: Generate sections for scientific reports
-- **JSON Default Format**: Human-readable JSON as default, with RDS support for legacy workflows
+- **JSON Default Format**: Human-readable JSON as default. RDS writing is deprecated; existing RDS databases remain readable and can be migrated with `boilerplate_migrate_to_json()`
 
 ### Text and Document Features
 - **Text Template Management**: Create, update, and retrieve reusable text templates
@@ -67,7 +67,7 @@ devtools::install_github("go-bayes/boilerplate")
 - **Preview Mode**: See all changes before applying them to prevent accidents
 - **Export Functions**: Create backups and share specific database subsets
 - **Safety Features**: Prevention of accidental file overwrites and standardised file naming
-- **JSON Migration**: Easy migration from RDS to JSON format with validation tools
+- **JSON Migration**: One-way migration from legacy RDS databases to JSON with validation tools
 - **Bibliography Management**: Automatic bibliography file management and citation validation
 
 ## Safety Features
@@ -75,7 +75,7 @@ devtools::install_github("go-bayes/boilerplate")
 The boilerplate package includes several safety features to prevent accidental data loss:
 
 - **Explicit category specification**: The `boilerplate_save()` function requires explicit specification of categories when saving individual databases
-- **Standardised file naming**: Consistent naming conventions (`boilerplate_unified.rds` for unified databases, `{category}_db.rds` for individual categories)
+- **Standardised file naming**: Consistent naming conventions (`boilerplate_unified.json` for unified databases, `{category}_db.json` for individual categories)
 - **Confirmation prompts**: All functions that modify files include confirmation prompts (when `confirm=TRUE`) before overwriting existing files
 - **Automatic timestamping**: Optional timestamps can be added to filenames (when `timestamp=TRUE`) to prevent overwrites
 - **Backup creation**: Automatic backup creation before overwriting files (when `create_backup=TRUE` in interactive sessions)
@@ -169,12 +169,20 @@ if (!validation$valid) {
 
 ## Working with JSON Format
 
-The boilerplate package supports JSON format for all database operations. JSON provides several advantages over the traditional RDS format:
+JSON is the default database format. It carries every data shape the
+package uses and has several practical advantages over the legacy RDS
+format:
 
 - **Human-readable**: JSON files can be opened and edited in any text editor
 - **Version control friendly**: Changes are easily tracked in Git
 - **Language agnostic**: JSON files can be read by any programming language
 - **Web-friendly**: JSON is the standard format for web applications
+- **Safer to load**: JSON deserialisation cannot execute code, whereas
+  `readRDS()` can through object hooks and class attributes
+
+RDS writing is deprecated and will be removed in a future release.
+Existing RDS databases continue to load via `boilerplate_import()` and
+can be converted with `boilerplate_migrate_to_json()`.
 
 For detailed JSON workflows, see `vignette("boilerplate-json-workflow")`.
 
@@ -440,9 +448,12 @@ Use `boilerplate_list_files()` to see all available database files:
 ```
 
 The function organises files into:
-- **Standard files**: Current working versions (e.g., `methods_db.rds`)
-- **Timestamped versions**: Saved with timestamps (e.g., `methods_db_20240115_143022.rds`)
-- **Backup files**: Automatic backups (e.g., `methods_db_backup_20240115_140000.rds`)
+- **Standard files**: Current working versions (e.g., `methods_db.json`)
+- **Timestamped versions**: Saved with timestamps (e.g., `methods_db_20240115_143022.json`)
+- **Backup files**: Automatic backups (e.g., `methods_db_backup_20240115_140000.json`)
+
+Legacy `.rds` files are still listed and can be read while the
+deprecation window is open.
 
 ### Importing Specific Versions
 
@@ -455,11 +466,11 @@ The enhanced `boilerplate_import()` function can now import any database file di
 # Import the current standard version
 # db <- boilerplate_import("methods")
 
-# Import a specific timestamped version  
-# db <- boilerplate_import(data_path = "path/to/methods_db_20240115_143022.rds")
+# Import a specific timestamped version
+# db <- boilerplate_import(data_path = "path/to/methods_db_20240115_143022.json")
 
 # Import a backup file
-# db <- boilerplate_import(data_path = "path/to/methods_db_backup_20240115_140000.rds")
+# db <- boilerplate_import(data_path = "path/to/methods_db_backup_20240115_140000.json")
 ```
 
 ### Restoring from Backups
@@ -1240,7 +1251,7 @@ boilerplate_save(unified_db)
 
 2. **Make backups**: Export your database before major changes
    ```{r}
-   boilerplate_export(unified_db, output_file = "backup_before_cleaning.rds")
+   boilerplate_export(unified_db, output_file = "backup_before_cleaning.json")
    ```
 
 3. **Use exclusions carefully**: Some entries might have special formatting requirements
