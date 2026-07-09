@@ -20,11 +20,12 @@ Ignored if data_path points to a specific file.}
 \item{data_path}{Character. Can be either:
 \itemize{
 \item A directory path containing database files (original behaviour)
-\item A specific file path to import (e.g., "data/methods_db_20240115_143022.rds")
+\item A specific file path to import (e.g., "data/methods_db_20240115_143022.json")
 If NULL (default), uses tools::R_user_dir("boilerplate", "data").
 }}
 
-\item{quiet}{Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.}
+\item{quiet}{Logical. If TRUE, suppresses progress alerts. Default is FALSE.
+Legacy RDS safety warnings are still emitted.}
 
 \item{project}{Character. Project name for organizing databases. Default is "default".
 Projects are stored in separate subdirectories to allow multiple independent
@@ -75,12 +76,12 @@ boilerplate_save(
 )
 
 # List files to see what's available
-list.files(data_path, pattern = "methods.*\\\\.rds")
+list.files(data_path, pattern = "methods.*\\\\.json")
 
 # Import the timestamped file directly
 timestamped_file <- list.files(
-  data_path, 
-  pattern = "methods.*_\\\\d{8}_\\\\d{6}\\\\.rds", 
+  data_path,
+  pattern = "methods.*_\\\\d{8}_\\\\d{6}\\\\.json",
   full.names = TRUE
 )[1]
 if (length(timestamped_file) > 0 && file.exists(timestamped_file)) {

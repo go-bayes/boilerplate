@@ -90,12 +90,15 @@ test_that("Version management file listing works", {
     quiet = TRUE
   )
   
-  db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
+  db <- boilerplate_import(
+    data_path = file.path(temp_dir, "boilerplate_unified.json"),
+    quiet = TRUE
+  )
   
-  # Save in both formats
+  # Save JSON with the package and create a legacy RDS fixture manually
   boilerplate_save(db, data_path = temp_dir, format = "json", confirm = FALSE, quiet = TRUE)
-  boilerplate_save(db, data_path = temp_dir, format = "rds", confirm = FALSE, quiet = TRUE)
-  
+  saveRDS(db, file.path(temp_dir, "boilerplate_unified.rds"))
+
   # List all files
   all_files <- boilerplate_list_files(data_path = temp_dir)
   
@@ -187,23 +190,29 @@ test_that("Version management migration works", {
   saveRDS(measures_db, file.path(temp_dir, "measures_db.rds"))
   
   # Migrate to JSON
-  expect_message(
-    boilerplate_migrate_to_json(
-      source_path = temp_dir,
-      output_path = temp_dir,
-      format = "unified",
-      backup = TRUE,
-      quiet = FALSE
+  expect_warning(
+    expect_message(
+      boilerplate_migrate_to_json(
+        source_path = temp_dir,
+        output_path = temp_dir,
+        format = "unified",
+        backup = TRUE,
+        quiet = FALSE
+      ),
+      "Migration Summary"
     ),
-    "Migration Summary"
+    "Reading legacy RDS database"
   )
-  
+
   # Check JSON file exists
   expect_true(file.exists(file.path(temp_dir, "boilerplate_unified.json")))
-  
+
   # Import and verify
-  db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-  
+  db <- boilerplate_import(
+    data_path = file.path(temp_dir, "boilerplate_unified.json"),
+    quiet = TRUE
+  )
+
   expect_equal(db$methods$sample, "Sample text")
   expect_equal(db$measures$scale1$name, "Scale 1")
 })
@@ -211,7 +220,7 @@ test_that("Version management migration works", {
 test_that("Version management comparison works", {
   temp_dir <- tempfile()
   on.exit(unlink(temp_dir, recursive = TRUE))
-  
+
   # Initialize
   boilerplate_init(
     data_path = temp_dir,
@@ -220,23 +229,23 @@ test_that("Version management comparison works", {
     confirm = FALSE,
     quiet = TRUE
   )
-  
+
   db <- boilerplate_import(data_path = temp_dir, quiet = TRUE)
-  
-  # Save in both formats
+
+  # Save JSON with the package and create a legacy RDS fixture manually
   boilerplate_save(db, data_path = temp_dir, format = "json", confirm = FALSE, quiet = TRUE)
-  boilerplate_save(db, data_path = temp_dir, format = "rds", confirm = FALSE, quiet = TRUE)
-  
+  saveRDS(db, file.path(temp_dir, "boilerplate_unified.rds"))
+
   # Compare formats - need to specify individual files
   rds_file <- file.path(temp_dir, "boilerplate_unified.rds")
   json_file <- file.path(temp_dir, "boilerplate_unified.json")
   
   if (file.exists(rds_file) && file.exists(json_file)) {
-    comparison <- compare_rds_json(
+    comparison <- suppressWarnings(compare_rds_json(
       rds_path = rds_file,
       json_path = json_file,
       ignore_meta = TRUE
-    )
+    ))
     
     expect_type(comparison, "list")
     # Empty list means no differences

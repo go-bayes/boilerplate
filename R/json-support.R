@@ -1,7 +1,19 @@
 #' JSON Support Functions for boilerplate Package
 #'
-#' These functions add JSON support to the boilerplate package while maintaining
-#' backward compatibility with RDS format.
+#' These functions support JSON databases and trusted legacy RDS reads.
+
+# warn users before loading legacy RDS files, which can execute code when deserialised
+#' @keywords internal
+#' @noRd
+read_rds_database <- function(file_path) {
+  warning(
+    "Reading legacy RDS database '", basename(file_path), "'. ",
+    "Only import RDS files from trusted sources and migrate them to JSON.",
+    call. = FALSE,
+    immediate. = TRUE
+  )
+  readRDS(file_path)
+}
 
 #' Read boilerplate Database from JSON or RDS
 #'
@@ -22,7 +34,10 @@ read_boilerplate_db <- function(file_path, format = "auto") {
   # Auto-detect format
   if (format == "auto") {
     ext <- tolower(tools::file_ext(file_path))
-    format <- if (ext == "json") "json" else "rds"
+    if (!ext %in% c("json", "rds")) {
+      stop("Unsupported database file extension: .", ext, ". Use .json or .rds.")
+    }
+    format <- ext
   }
 
   if (format == "json") {
@@ -33,32 +48,37 @@ read_boilerplate_db <- function(file_path, format = "auto") {
     # Convert JSON structure to match RDS structure if needed
     db <- standardise_json_structure(db)
   } else {
-    db <- readRDS(file_path)
+    db <- read_rds_database(file_path)
   }
 
   return(db)
 }
 
-#' Write boilerplate Database to JSON or RDS
+#' Write boilerplate Database to JSON
 #'
-#' Internal function to write database files in JSON and/or RDS format.
-#' Can write to both formats simultaneously for compatibility.
+#' Internal function to write database files in JSON format.
 #'
 #' @param db Database to write
 #' @param file_path Path to save the file
-#' @param format Format to write ("json", "rds", "both"). Default is "rds".
+#' @param format Format to write. Only "json" is supported. "rds" and "both"
+#'   error because the package no longer writes RDS files.
 #' @param pretty Logical. Pretty print JSON? Default is TRUE for human readability.
 #' @return Invisible TRUE on success
 #' @keywords internal
 #' @noRd
-write_boilerplate_db <- function(db, file_path, format = "rds", pretty = TRUE) {
+write_boilerplate_db <- function(db, file_path, format = "json", pretty = TRUE) {
+  format <- match.arg(format, c("json", "rds", "both"))
+  if (format %in% c("rds", "both")) {
+    abort_rds_writing("write_boilerplate_db")
+  }
+
   # only create directory if it doesn't exist
   dir_path <- dirname(file_path)
   if (!dir.exists(dir_path)) {
     stop("Directory does not exist: ", dir_path, ". Directory must be created explicitly by the user or calling function.")
   }
 
-  if (format %in% c("json", "both")) {
+  if (format == "json") {
     if (!requireNamespace("jsonlite", quietly = TRUE)) {
       stop("Package 'jsonlite' is required for JSON support. Please install it.")
     }
@@ -76,15 +96,6 @@ write_boilerplate_db <- function(db, file_path, format = "rds", pretty = TRUE) {
       auto_unbox = TRUE,
       null = "null"
     )
-  }
-
-  if (format %in% c("rds", "both")) {
-    rds_path <- if (tools::file_ext(file_path) == "rds") {
-      file_path
-    } else {
-      sub("\\.json$", ".rds", file_path)
-    }
-    saveRDS(db, rds_path)
   }
 
   invisible(TRUE)
@@ -184,7 +195,7 @@ boilerplate_rds_to_json <- function(
     for (rds_file in rds_files) {
       if (!quiet) cli::cli_alert_info("Converting {basename(rds_file)}")
 
-      db <- readRDS(rds_file)
+      db <- read_rds_database(rds_file)
       json_file <- sub("\\.rds$", ".json", rds_file)
 
       if (!is.null(output_path)) {
@@ -201,7 +212,7 @@ boilerplate_rds_to_json <- function(
       stop("File not found: ", input_path)
     }
 
-    db <- readRDS(input_path)
+    db <- read_rds_database(input_path)
     json_file <- if (!is.null(output_path)) {
       output_path
     } else {
@@ -215,5 +226,3 @@ boilerplate_rds_to_json <- function(
 
   invisible(TRUE)
 }
-
-

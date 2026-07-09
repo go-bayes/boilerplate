@@ -174,7 +174,7 @@ modify_nested_entry <- function(db, path_parts, action, value = NULL, auto_sort 
 #'   If NULL, uses the "boilerplate/data/" subdirectory of the current working directory
 #'   via tools::R_user_dir("boilerplate", "data").
 #' @param file_name Character. Name of the file (without path).
-#'   If NULL, uses "[category]_db.rds".
+#'   If NULL, uses "[category]_db.json".
 #' @param create_dirs Logical. If TRUE, creates directories that don't exist. Default is FALSE.
 #' @param confirm Logical. If TRUE, asks for confirmation before creating directories. Default is TRUE.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
@@ -187,7 +187,7 @@ get_db_file_path <- function(category, base_path = NULL, file_name = NULL,
                              create_dirs = FALSE, confirm = TRUE, quiet = FALSE) {
   # default file name
   if (is.null(file_name)) {
-    file_name <- paste0(category, "_db.rds")
+    file_name <- paste0(category, "_db.json")
     if (!quiet) cli_alert_info("using default file name: {file_name}")
   }
 
@@ -225,6 +225,27 @@ get_db_file_path <- function(category, base_path = NULL, file_name = NULL,
   if (!quiet) cli_alert_info("full file path: {file_path}")
 
   return(file_path)
+}
+
+#' Stop unsupported RDS writing
+#'
+#' Internal helper used by write paths to prevent the package from creating new
+#' RDS files. Reading RDS remains supported as a legacy migration bridge for
+#' trusted existing databases. See `boilerplate_migrate_to_json()` for the
+#' migration path.
+#'
+#' @param fn_name Character. Name of the calling exported function, surfaced in
+#'   the error so users can trace the source.
+#' @return No return value. Always errors.
+#' @keywords internal
+#' @noRd
+abort_rds_writing <- function(fn_name) {
+  stop(
+    "RDS writing is no longer supported in ", fn_name, "(). ",
+    "Use `format = \"json\"`. Existing trusted RDS databases can be converted with ",
+    "boilerplate_migrate_to_json().",
+    call. = FALSE
+  )
 }
 
 #' Helper function to ask for user confirmation
@@ -485,4 +506,3 @@ extract_template_variables <- function(text) {
   # Return unique variable names
   unique(var_names)
 }
-

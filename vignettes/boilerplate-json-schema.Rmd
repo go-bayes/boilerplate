@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Overview
 
-The boilerplate package supports JSON format for all database operations. This document describes the JSON schema structure for different database types.
+`boilerplate` uses JSON schemas to describe the structure expected for each database type. This vignette documents those schemas for users who want to inspect, validate, or generate database files outside R.
 
 # Unified Database Schema
 
@@ -63,7 +63,7 @@ Methods can have multiple text variants:
     "regression": {
       "linear": {
         "default": "We used linear regression to analyse {{outcome}}.",
-        "large": "We employed ordinary least squares linear regression to examine the relationship between {{predictors}} and {{outcome}}. Model assumptions were checked including...",
+        "large": "We employed ordinary least squares linear regression to examine the relationship between {{predictors}} and {{outcome}}. Model assumptions were examined, including...",
         "brief": "Linear regression was used."
       }
     }
@@ -276,17 +276,22 @@ boilerplate_migrate_to_json(
 
 ## Format Differences
 
-### RDS Format
-- Binary R object
-- Preserves all R data types
-- Not human-readable
-- Platform-specific
-
-### JSON Format
+### JSON Format (default)
 - Text-based
-- Limited data types
+- Sufficient for every data shape the package uses (strings, lists,
+  numbers)
 - Human-readable
 - Cross-platform
+- Safe to load: JSON deserialisation cannot execute code
+
+### RDS Format (not written by package APIs)
+- Binary R object
+- Preserves R-specific types that the package does not use
+- Not human-readable
+- Platform-specific
+- Code-execution vector on load: `readRDS()` can invoke attacker code
+  through object hooks and class attributes. Package APIs no longer write RDS;
+  reading is retained only to support migration of existing trusted databases.
 
 ## Handling Special Cases
 

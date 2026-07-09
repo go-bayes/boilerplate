@@ -55,8 +55,7 @@ get_empty_measures_db_structure <- function() {
 #' Initialise boilerplate Database
 #'
 #' This function initialises a boilerplate database. By default, it creates a single
-#' unified JSON database containing all categories. Legacy support for separate RDS
-#' files is maintained through the unified parameter.
+#' unified JSON database containing all categories.
 #'
 #' @param categories Character vector. Categories to include in the database.
 #'   Default is all categories: "measures", "methods", "results", "discussion", "appendix", "template".
@@ -69,7 +68,9 @@ get_empty_measures_db_structure <- function() {
 #' @param confirm Logical. If TRUE, asks for confirmation before making changes. Default is TRUE.
 #' @param create_empty Logical. If TRUE, creates empty database structures with just the template headings.
 #'   Default is TRUE. Set to FALSE to use default content.
-#' @param format Character. Format to save: "json" (default), "rds", or "both".
+#' @param format Character. Format to save. "json" (default) is the supported
+#'   format. "rds" and "both" are no longer supported because the package does
+#'   not write new RDS databases.
 #' @param project Character. Project name for organizing databases. Default is "default".
 #'   Projects are stored in separate subdirectories to allow multiple independent
 #'   boilerplate collections.
@@ -93,11 +94,10 @@ get_empty_measures_db_structure <- function() {
 #' # Check that unified JSON file was created
 #' list.files(data_path)
 #'
-#' # Initialise with default content in both formats
+#' # Initialise with default content (JSON)
 #' boilerplate_init(
 #'   data_path = data_path,
 #'   create_empty = FALSE,
-#'   format = "both",
 #'   confirm = FALSE,
 #'   quiet = TRUE
 #' )
@@ -121,6 +121,9 @@ boilerplate_init <- function(
 ) {
   merge_strategy <- match.arg(merge_strategy)
   format <- match.arg(format, c("json", "rds", "both"))
+  if (format %in% c("rds", "both")) {
+    abort_rds_writing("boilerplate_init")
+  }
   
   # Validate project name
   if (!is.character(project) || length(project) != 1 || project == "") {
@@ -290,4 +293,3 @@ boilerplate_init <- function(
 
 # The deprecated init functions have been removed entirely
 # Use boilerplate_init() for all initialization needs
-

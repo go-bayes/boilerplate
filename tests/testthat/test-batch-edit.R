@@ -491,6 +491,53 @@ test_that("batch edit functions work with loaded databases", {
   )
 })
 
+test_that("batch edit loads JSON file paths but rejects RDS file paths", {
+  skip_if_not_installed("jsonlite")
+
+  test_db <- list(
+    measures = list(
+      test_measure = list(
+        name = "test_measure",
+        description = "Original description",
+        reference = "old_ref"
+      )
+    )
+  )
+
+  temp_dir <- tempfile("batch_edit_files")
+  dir.create(temp_dir)
+  on.exit(unlink(temp_dir, recursive = TRUE))
+
+  json_file <- file.path(temp_dir, "boilerplate_unified.json")
+  rds_file <- file.path(temp_dir, "boilerplate_unified.rds")
+  jsonlite::write_json(test_db, json_file, auto_unbox = TRUE, pretty = TRUE)
+  saveRDS(test_db, rds_file)
+
+  updated_db <- boilerplate_batch_edit(
+    db = json_file,
+    field = "reference",
+    new_value = "new_ref_2026",
+    target_entries = "test_measure",
+    category = "measures",
+    confirm = FALSE,
+    quiet = TRUE
+  )
+  expect_equal(updated_db$measures$test_measure$reference, "new_ref_2026")
+
+  expect_error(
+    boilerplate_batch_edit(
+      db = rds_file,
+      field = "reference",
+      new_value = "new_ref_2026",
+      target_entries = "test_measure",
+      category = "measures",
+      confirm = FALSE,
+      quiet = TRUE
+    ),
+    "only loads JSON file paths directly"
+  )
+})
+
 test_that("batch edit preview mode works correctly", {
   test_db <- list(
     measures = list(
@@ -515,4 +562,3 @@ test_that("batch edit preview mode works correctly", {
   expect_equal(result$measures$test1$reference, "old1")
   expect_equal(result$measures$test2$reference, "old2")
 })
-

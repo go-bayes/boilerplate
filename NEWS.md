@@ -1,8 +1,54 @@
-# boilerplate 1.3.0.9001 (development version)
+# boilerplate 1.4.0 [2026-07-09]
+
+This release removes RDS writing from package APIs. The motivation is safety:
+loading an RDS file can execute code through object hooks and crafted class
+attributes, and JSON covers every data shape the package uses. Migration
+utilities have been in place since `1.2.0`.
+
+## Format defaults
+* `boilerplate_export()` now defaults to `format = "json"` (previously `"rds"`).
+* The internal helper `write_boilerplate_db()` now defaults to `format = "json"`.
+* Default database filenames constructed by `get_db_file_path()` now end in
+  `.json` rather than `.rds`.
+
+## RDS writing and legacy reading
+* Passing `format = "rds"` or `format = "both"` to `boilerplate_save()`,
+  `boilerplate_export()`, or `boilerplate_init()` now errors before any file is
+  written. The package no longer creates new RDS databases.
+* Reading RDS via `boilerplate_import()` and the migration utilities
+  (`boilerplate_migrate_to_json()`, `boilerplate_rds_to_json()`,
+  `compare_rds_json()`) remains supported. Existing databases continue to load
+  and can be converted with a single function call.
+* Reading a legacy RDS database now emits an R warning before
+  deserialisation. Users should only import RDS files from trusted sources and
+  should migrate those files to JSON.
+* Passing an `.rds` `output_file` to `boilerplate_export()` also errors before
+  any file is written.
+* `boilerplate_batch_edit()` now loads JSON file paths only. Legacy RDS files
+  must first be imported with `boilerplate_import()` or migrated with
+  `boilerplate_migrate_to_json()`.
+
+## Import behaviour
+* When both JSON and RDS database files are present, import helpers now prefer
+  the JSON file. RDS remains a fallback for legacy projects.
+* If the ignored legacy RDS file is newer than the JSON file, import helpers now
+  emit an R warning so users can migrate the newer RDS file instead of silently
+  loading stale JSON.
 
 ## Bug fixes
-* `make_clean_title()` no longer strips hyphens from measure display names. Previously, `gsub("[_-]", " ", x)` treated hyphens as word separators (like underscores), converting "Honesty-Humility" to "Honesty Humility" and "Right-Wing Authoritarianism" to "Right Wing Authoritarianism". Since R identifiers cannot contain hyphens, any hyphen in a `name` field or `label_mappings` value is intentional typography and is now preserved.
-* Fixed missing backup functionality for JSON format in `boilerplate_save()`. Backups are now created for both RDS and JSON formats when `create_backup = TRUE`.
+* `make_clean_title()` no longer strips hyphens from measure display names.
+  Hyphens in a `name` field or `label_mappings` value are treated as
+  intentional typography.
+* JSON backups are now created when `boilerplate_save(create_backup = TRUE)`
+  overwrites JSON files.
+
+## Tests
+* Tests in `test-generate-text.R` and `test-vignette-internals.R` that used
+  RDS only as an incidental fixture have been migrated to JSON. Tests that
+  exercise the RDS-to-JSON migration path continue to use RDS input on
+  purpose.
+* Tests now assert that package-level RDS write requests error before creating
+  files.
 
 # boilerplate 1.3.0 [2025-06-20]
 

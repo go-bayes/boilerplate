@@ -21,7 +21,7 @@ library(boilerplate)
 
 ## Introduction
 
-The `boilerplate` package is designed to streamline scientific writing in Quarto documents. This vignette demonstrates a complete workflow for using `boilerplate` to manage reusable text templates in your research papers.
+`boilerplate` helps Quarto projects reuse methods text without copy-paste drift. This vignette demonstrates a complete workflow for managing reusable text templates across scientific manuscripts.
 
 ## Why Use boilerplate with Quarto?
 
@@ -32,7 +32,7 @@ Quarto is becoming the standard for reproducible scientific documents. The `boil
 - Supporting collaborative workflows
 - Reducing errors through template reuse
 - Facilitating updates when methods change
-- Supporting both RDS and JSON formats for different use cases (see `vignette("boilerplate-json-workflow")`)
+- Using JSON databases that are easy to inspect, version, and share (see `vignette("boilerplate-json-workflow")`)
 
 ## Setting Up a Quarto Project
 
@@ -189,7 +189,7 @@ cat(participant_text)
 
 ## Best Practices
 
-1. **Version Control**: Commit your `.boilerplate-data/*.rds` files to git
+1. **Version Control**: Commit your `.boilerplate-data/*.json` files to git
 2. **Documentation**: Document template variables in descriptions
 3. **Organization**: Use hierarchical paths (e.g., `methods.participants.recruitment`)
 4. **Collaboration**: Share databases through version control
@@ -299,4 +299,4 @@ methods_text <- boilerplate_generate_text(
 
 ## Conclusion
 
-The `boilerplate` package enhances Quarto workflows by providing a robust system for managing reusable text templates. This approach ensures consistency, reduces errors, and streamlines the scientific writing process.
+`boilerplate` gives Quarto projects a repeatable way to store, update, and insert reusable text. The workflow keeps methods language consistent across manuscripts while leaving each document free to supply project-specific values.

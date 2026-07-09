@@ -191,14 +191,16 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 #'
 #' This function exports a boilerplate database or selected elements to disk.
 #' It supports exporting entire databases, specific categories, or selected
-#' elements using dot notation paths. Can export in RDS, JSON, or both formats.
+#' elements using dot notation paths. Exports are written as JSON.
 #'
 #' @param db List. The database to export (unified or single category).
 #' @param output_file Character. Optional output filename. If NULL, uses default naming.
 #' @param select_elements Character vector. Optional paths to export (supports wildcards).
 #' @param data_path Character. Base path for data directory.
 #'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
-#' @param format Character. Format to save: "rds" (default), "json", or "both".
+#' @param format Character. Format to save. "json" (default) is the supported
+#'   format. "rds" and "both" are no longer supported because the package does
+#'   not write new RDS databases.
 #' @param confirm Logical. If TRUE (default), asks for confirmation before overwriting.
 #' @param create_dirs Logical. If TRUE, creates directories if they don't exist.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
@@ -240,7 +242,7 @@ create_db_backup <- function(file_path, quiet = FALSE) {
 #' boilerplate_export(
 #'   db = unified_db,
 #'   select_elements = "methods.*",
-#'   output_file = "methods_only.rds",
+#'   output_file = "methods_only.json",
 #'   data_path = export_path,
 #'   confirm = FALSE,
 #'   quiet = TRUE
@@ -256,7 +258,7 @@ boilerplate_export <- function(
     output_file = NULL,
     select_elements = NULL,
     data_path = NULL,
-    format = "rds",
+    format = "json",
     confirm = TRUE,
     create_dirs = FALSE,
     quiet = FALSE,
@@ -264,6 +266,14 @@ boilerplate_export <- function(
     save_by_category = TRUE,
     project = "default"
 ) {
+  # validate format before any file-system side effects
+  format <- match.arg(format, c("json", "rds", "both"))
+  if (format %in% c("rds", "both")) {
+    abort_rds_writing("boilerplate_export")
+  }
+  if (!is.null(output_file) && tolower(tools::file_ext(output_file)) == "rds") {
+    abort_rds_writing("boilerplate_export")
+  }
   if (!is.list(db)) {
     if (!quiet) cli_alert_danger("db must be a list")
     stop("db must be a list")
@@ -385,27 +395,8 @@ boilerplate_export <- function(
     for (cat in names(selected_db)) {
       base_name <- paste0(cat, "_db")
 
-      # Save in requested format(s)
-      if (format %in% c("rds", "both")) {
-        cat_file <- file.path(data_path, paste0(base_name, ".rds"))
-
-        # Check for overwrite
-        proceed <- TRUE
-        if (confirm && file.exists(cat_file)) {
-          proceed <- ask_yes_no(paste0("overwrite existing file: ", cat_file, "?"))
-        }
-
-        if (proceed) {
-          if (!quiet) cli_alert_info("saving {cat} to {cat_file}")
-          write_boilerplate_db(selected_db[[cat]], cat_file, format = "rds")
-          saved_files <- c(saved_files, cat_file)
-          if (!quiet) cli_alert_success("saved {cat} database (RDS)")
-        } else {
-          if (!quiet) cli_alert_info("save cancelled for {cat}")
-        }
-      }
-
-      if (format %in% c("json", "both")) {
+      # Save JSON
+      if (format == "json") {
         cat_file <- file.path(data_path, paste0(base_name, ".json"))
 
         # Check for overwrite
@@ -446,6 +437,9 @@ boilerplate_export <- function(
       if (ext %in% c("rds", "json")) {
         format <- ext
       }
+      if (format == "rds") {
+        abort_rds_writing("boilerplate_export")
+      }
     } else {
       # Use default naming
       if (is_unified) {
@@ -455,27 +449,8 @@ boilerplate_export <- function(
       }
     }
 
-    # Save in requested format(s)
-    if (format %in% c("rds", "both")) {
-      output_path <- file.path(data_path, paste0(base_name, ".rds"))
-
-      # Check for overwrite
-      proceed <- TRUE
-      if (confirm && file.exists(output_path)) {
-        proceed <- ask_yes_no(paste0("save to output file? this will overwrite: ", output_path))
-      }
-
-      if (proceed) {
-        if (!quiet) cli_alert_info("saving selected elements to {output_path}")
-        write_boilerplate_db(selected_db, output_path, format = "rds")
-        saved_files <- c(saved_files, output_path)
-        if (!quiet) cli_alert_success("saved selected elements to {output_path}")
-      } else {
-        if (!quiet) cli_alert_info("save cancelled by user")
-      }
-    }
-
-    if (format %in% c("json", "both")) {
+    # Save JSON
+    if (format == "json") {
       output_path <- file.path(data_path, paste0(base_name, ".json"))
 
       # Check for overwrite
@@ -501,4 +476,3 @@ boilerplate_export <- function(
     }
   }
 }
-

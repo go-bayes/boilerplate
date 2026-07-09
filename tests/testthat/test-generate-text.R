@@ -237,11 +237,11 @@ test_that("boilerplate_generate_text handles database from file", {
     )
   )
 
-  db_path <- file.path(temp_dir, "test_db.rds")
-  saveRDS(test_db, db_path)
+  db_path <- file.path(temp_dir, "test_db.json")
+  jsonlite::write_json(test_db, db_path, pretty = TRUE, auto_unbox = TRUE)
 
   # Test with database loaded from file
-  db_from_file <- readRDS(db_path)
+  db_from_file <- jsonlite::read_json(db_path, simplifyVector = FALSE)
   result <- boilerplate_generate_text(
     category = "methods",
     sections = "sample",

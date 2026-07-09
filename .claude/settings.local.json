@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(LC_ALL=C grep -n '[^ -~]' R/default-databases.R)",
+      "Bash(grep:*)",
+      "Bash(mv:*)",
+      "Bash(Rscript:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(R CMD build:*)",
+      "Bash(R CMD check:*)",
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(rm:*)",
+      "Bash(touch:*)",
+      "Bash(R:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(node:*)",
+      "Bash(tar:*)",
+      "Bash(true)",
+      "Bash(rg:*)",
+      "Bash(sudo npm i -g @anthropic-ai/claude-code)",
+      "Bash(git rm:*)",
+      "Bash(awk:*)",
+      "Bash(cp:*)",
+      "Bash(sed:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(for:*)",
+      "Bash(do perl:*)",
+      "Bash(done)",
+      "Bash(do sed -i '' 's/\\\\dontrun/\\\\donttest/g' \"$file\")",
+      "Bash(yamllint:*)",
+      "Bash(python3:*)",
+      "Bash(git push:*)",
+      "Bash(do echo -n \"$file: \")",
+      "WebFetch(domain:claude.ai)",
+      "WebSearch"
+    ],
+    "deny": []
+  }
+}

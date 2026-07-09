@@ -1,3 +1,28 @@
+# warn if JSON preference would hide a newer legacy RDS file
+#' @keywords internal
+#' @noRd
+warn_if_newer_rds_ignored <- function(json_path, rds_path) {
+  if (!file.exists(json_path) || !file.exists(rds_path)) {
+    return(invisible(FALSE))
+  }
+
+  json_mtime <- file.info(json_path)$mtime
+  rds_mtime <- file.info(rds_path)$mtime
+
+  if (!is.na(json_mtime) && !is.na(rds_mtime) && rds_mtime > json_mtime) {
+    warning(
+      "Ignoring newer legacy RDS database '", basename(rds_path), "' because ",
+      "JSON database '", basename(json_path), "' is preferred. ",
+      "Migrate the RDS file to JSON if it contains newer changes.",
+      call. = FALSE,
+      immediate. = TRUE
+    )
+    return(invisible(TRUE))
+  }
+
+  invisible(FALSE)
+}
+
 #' Import boilerplate Database(s)
 #'
 #' This function imports one or more boilerplate databases from disk. It automatically
@@ -10,9 +35,10 @@
 #'   Ignored if data_path points to a specific file.
 #' @param data_path Character. Can be either:
 #'   - A directory path containing database files (original behaviour)
-#'   - A specific file path to import (e.g., "data/methods_db_20240115_143022.rds")
+#'   - A specific file path to import (e.g., "data/methods_db_20240115_143022.json")
 #'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
-#' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
+#' @param quiet Logical. If TRUE, suppresses progress alerts. Default is FALSE.
+#'   Legacy RDS safety warnings are still emitted.
 #' @param project Character. Project name for organizing databases. Default is "default".
 #'   Projects are stored in separate subdirectories to allow multiple independent
 #'   boilerplate collections.
@@ -56,12 +82,12 @@
 #' )
 #'
 #' # List files to see what's available
-#' list.files(data_path, pattern = "methods.*\\.rds")
+#' list.files(data_path, pattern = "methods.*\\.json")
 #'
 #' # Import the timestamped file directly
 #' timestamped_file <- list.files(
-#'   data_path, 
-#'   pattern = "methods.*_\\d{8}_\\d{6}\\.rds", 
+#'   data_path,
+#'   pattern = "methods.*_\\d{8}_\\d{6}\\.json",
 #'   full.names = TRUE
 #' )[1]
 #' if (length(timestamped_file) > 0 && file.exists(timestamped_file)) {
@@ -145,31 +171,32 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
     categories <- c("measures", "methods", "results", "discussion", "appendix", "template")
     unified_db <- list()
 
-    # Try each category with both RDS and JSON extensions
+    # prefer JSON when both formats exist; keep RDS as a legacy fallback
     for (cat in categories) {
-      # Check for RDS first (backward compatibility)
-      rds_path <- file.path(data_path, paste0(cat, "_db.rds"))
       json_path <- file.path(data_path, paste0(cat, "_db.json"))
+      rds_path <- file.path(data_path, paste0(cat, "_db.rds"))
 
-      if (file.exists(rds_path)) {
-        if (!quiet) cli_alert_info("importing {cat} database (RDS)")
-        unified_db[[cat]] <- read_boilerplate_db(rds_path)
-      } else if (file.exists(json_path)) {
+      if (file.exists(json_path)) {
+        warn_if_newer_rds_ignored(json_path, rds_path)
         if (!quiet) cli_alert_info("importing {cat} database (JSON)")
         unified_db[[cat]] <- read_boilerplate_db(json_path)
+      } else if (file.exists(rds_path)) {
+        if (!quiet) cli_alert_info("importing {cat} database (RDS)")
+        unified_db[[cat]] <- read_boilerplate_db(rds_path)
       }
     }
 
     # Also check for unified database (RDS or JSON)
-    unified_rds <- file.path(data_path, "boilerplate_unified.rds")
     unified_json <- file.path(data_path, "boilerplate_unified.json")
+    unified_rds <- file.path(data_path, "boilerplate_unified.rds")
 
-    if (file.exists(unified_rds)) {
-      if (!quiet) cli_alert_info("found unified database (RDS), importing...")
-      unified_db <- read_boilerplate_db(unified_rds)
-    } else if (file.exists(unified_json)) {
+    if (file.exists(unified_json)) {
+      warn_if_newer_rds_ignored(unified_json, unified_rds)
       if (!quiet) cli_alert_info("found unified database (JSON), importing...")
       unified_db <- read_boilerplate_db(unified_json)
+    } else if (file.exists(unified_rds)) {
+      if (!quiet) cli_alert_info("found unified database (RDS), importing...")
+      unified_db <- read_boilerplate_db(unified_rds)
     }
 
     if (!quiet) cli_alert_success("imported {length(unified_db)} database(s)")
@@ -182,6 +209,7 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
   unified_json <- file.path(data_path, "boilerplate_unified.json")
   
   if (file.exists(unified_json)) {
+    warn_if_newer_rds_ignored(unified_json, unified_rds)
     if (!quiet) cli_alert_info("loading unified database (JSON)")
     full_db <- read_boilerplate_db(unified_json)
   } else if (file.exists(unified_rds)) {
@@ -194,14 +222,19 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
       rds_path <- file.path(data_path, paste0(category, "_db.rds"))
       json_path <- file.path(data_path, paste0(category, "_db.json"))
 
-      if (file.exists(rds_path)) {
-        if (!quiet) cli_alert_info("importing {category} database (RDS)")
-        db <- read_boilerplate_db(rds_path)
-      } else if (file.exists(json_path)) {
+      if (file.exists(json_path)) {
+        warn_if_newer_rds_ignored(json_path, rds_path)
         if (!quiet) cli_alert_info("importing {category} database (JSON)")
         db <- read_boilerplate_db(json_path)
+      } else if (file.exists(rds_path)) {
+        if (!quiet) cli_alert_info("importing {category} database (RDS)")
+        db <- read_boilerplate_db(rds_path)
       } else {
-        stop("Database file not found: boilerplate_unified.json/rds or ", category, "_db.json/rds in ", data_path)
+        stop(
+          "Database file not found: boilerplate_unified.json, ",
+          "boilerplate_unified.rds, ", category, "_db.json, or ",
+          category, "_db.rds in ", data_path
+        )
       }
 
       if (!quiet) cli_alert_success("imported {category} database")
@@ -214,12 +247,13 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
         rds_path <- file.path(data_path, paste0(cat, "_db.rds"))
         json_path <- file.path(data_path, paste0(cat, "_db.json"))
 
-        if (file.exists(rds_path)) {
-          if (!quiet) cli_alert_info("importing {cat} database (RDS)")
-          result[[cat]] <- read_boilerplate_db(rds_path)
-        } else if (file.exists(json_path)) {
+        if (file.exists(json_path)) {
+          warn_if_newer_rds_ignored(json_path, rds_path)
           if (!quiet) cli_alert_info("importing {cat} database (JSON)")
           result[[cat]] <- read_boilerplate_db(json_path)
+        } else if (file.exists(rds_path)) {
+          if (!quiet) cli_alert_info("importing {cat} database (RDS)")
+          result[[cat]] <- read_boilerplate_db(rds_path)
         } else {
           if (!quiet) cli_alert_warning("{cat} database not found")
         }
@@ -255,14 +289,16 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
 
 #' Save boilerplate Database
 #'
-#' This function saves a boilerplate database to disk in RDS, JSON, or both formats.
+#' This function saves a boilerplate database to disk in JSON format.
 #'
 #' @param db List. The database to save. Can be a single category database or unified database.
 #' @param category Character. The category name if saving a single category.
 #'   If NULL and db contains multiple categories, saves as unified database.
 #' @param data_path Character. Base path for data directory.
 #'   If NULL (default), uses tools::R_user_dir("boilerplate", "data").
-#' @param format Character. Format to save: "json" (default), "rds", or "both".
+#' @param format Character. Format to save. "json" (default) is the supported
+#'   format. "rds" and "both" are no longer supported because the package does
+#'   not write new RDS databases.
 #' @param confirm Logical. If TRUE, asks for confirmation. Default is TRUE.
 #' @param create_dirs Logical. If TRUE, creates directories if they don't exist. Default is FALSE.
 #' @param quiet Logical. If TRUE, suppresses all CLI alerts. Default is FALSE.
@@ -303,7 +339,7 @@ boilerplate_import <- function(category = NULL, data_path = NULL, quiet = FALSE,
 #' )
 #'
 #' # Check that file was created
-#' file.exists(file.path(data_path, "boilerplate_unified.rds"))
+#' file.exists(file.path(data_path, "boilerplate_unified.json"))
 #'
 #' # Save a single category
 #' boilerplate_save(
@@ -338,6 +374,12 @@ boilerplate_save <- function(
   # Validate project name
   if (!is.character(project) || length(project) != 1 || project == "") {
     stop("Project must be a non-empty character string")
+  }
+
+  # Validate format before any file-system side effects
+  format <- match.arg(format, c("json", "rds", "both"))
+  if (format %in% c("rds", "both")) {
+    abort_rds_writing("boilerplate_save")
   }
   
   # Set default data path
@@ -375,9 +417,6 @@ boilerplate_save <- function(
     }
   }
 
-  # Validate format
-  format <- match.arg(format, c("rds", "json", "both"))
-
   # Determine base filename
   if (is.null(category)) {
     # Check if db looks like a unified database
@@ -407,29 +446,7 @@ boilerplate_save <- function(
   # Save in requested format(s)
   files_saved <- character()
 
-  if (format %in% c("rds", "both")) {
-    rds_path <- file.path(data_path, paste0(base_name, ".rds"))
-
-    # Create backup if file exists
-    if (file.exists(rds_path) && create_backup && !timestamp) {
-      create_db_backup(rds_path, quiet)
-    }
-
-    # Ask for confirmation
-    if (confirm && file.exists(rds_path) && !timestamp) {
-      if (!ask_yes_no(paste0("Overwrite ", save_type, " at ", rds_path, "?"))) {
-        if (!quiet) cli_alert_info("save cancelled")
-        return(invisible(FALSE))
-      }
-    }
-
-    # Save RDS
-    write_boilerplate_db(db, rds_path, format = "rds")
-    if (!quiet) cli_alert_success("saved {save_type} to {rds_path}")
-    files_saved <- c(files_saved, rds_path)
-  }
-
-  if (format %in% c("json", "both")) {
+  if (format == "json") {
     json_path <- file.path(data_path, paste0(base_name, ".json"))
 
     # Create backup if file exists

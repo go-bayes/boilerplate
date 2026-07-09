@@ -4,8 +4,11 @@
 #' in a boilerplate database. It supports pattern matching, explicit lists, and
 #' various editing operations.
 #'
-#' @param db List or character. The database to edit (can be a single category or unified database),
-#'   or a file path to a JSON/RDS database file which will be loaded automatically.
+#' @param db List or character. The database to edit (can be a single category
+#'   or unified database), or a file path to a JSON database file which will be
+#'   loaded automatically. Legacy RDS files should be imported explicitly with
+#'   \code{\link{boilerplate_import}} or migrated with
+#'   \code{\link{boilerplate_migrate_to_json}} before batch editing.
 #' @param field Character. The field to edit (e.g., "reference", "description").
 #' @param new_value Character. The new value to set for the field.
 #' @param target_entries Character vector. Entries to edit. Can be:
@@ -75,7 +78,7 @@
 #' # First save the database to a JSON file
 #' json_file <- file.path(temp_dir, "boilerplate_unified.json")
 #' boilerplate_save(unified_db, format = "json", data_path = temp_dir, quiet = TRUE)
-#' 
+#'
 #' # Now edit directly from the file
 #' db <- boilerplate_batch_edit(
 #'   db = json_file,  # File path instead of database object
@@ -112,11 +115,18 @@ boilerplate_batch_edit <- function(
     stop("Package 'cli' is required. Please install it.")
   }
 
-  # If db is a file path, load it using the internal function
+  # load JSON file paths only; legacy RDS reads must pass through import/migration
   if (is.character(db) && length(db) == 1 && file.exists(db)) {
-    # Get the format parameter value or default to "auto"
-    format <- "auto"
-    db <- read_boilerplate_db(db, format = format)
+    ext <- tolower(tools::file_ext(db))
+    if (ext != "json") {
+      stop(
+        "boilerplate_batch_edit() only loads JSON file paths directly. ",
+        "Import trusted legacy RDS files with boilerplate_import() or migrate ",
+        "them with boilerplate_migrate_to_json() before batch editing.",
+        call. = FALSE
+      )
+    }
+    db <- read_boilerplate_db(db, format = "json")
   }
 
   # Input validation
@@ -323,7 +333,7 @@ boilerplate_batch_edit <- function(
 #'     born_nz = list(reference = "old_ref", waves = "1-10")
 #'   )
 #' )
-#' 
+#'
 #' # Update multiple fields for specific entries
 #' unified_db <- boilerplate_batch_edit_multi(
 #'   db = unified_db,

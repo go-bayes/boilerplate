@@ -37,7 +37,9 @@ If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 \item{create_empty}{Logical. If TRUE, creates empty database structures with just the template headings.
 Default is TRUE. Set to FALSE to use default content.}
 
-\item{format}{Character. Format to save: "json" (default), "rds", or "both".}
+\item{format}{Character. Format to save. "json" (default) is the supported
+format. "rds" and "both" are no longer supported because the package does
+not write new RDS databases.}
 
 \item{project}{Character. Project name for organizing databases. Default is "default".
 Projects are stored in separate subdirectories to allow multiple independent
@@ -48,8 +50,7 @@ Invisibly returns TRUE if successful.
 }
 \description{
 This function initialises a boilerplate database. By default, it creates a single
-unified JSON database containing all categories. Legacy support for separate RDS
-files is maintained through the unified parameter.
+unified JSON database containing all categories.
 }
 \examples{
 # Create a temporary directory for examples
@@ -68,11 +69,10 @@ boilerplate_init(
 # Check that unified JSON file was created
 list.files(data_path)
 
-# Initialise with default content in both formats
+# Initialise with default content (JSON)
 boilerplate_init(
   data_path = data_path,
   create_empty = FALSE,
-  format = "both",
   confirm = FALSE,
   quiet = TRUE
 )

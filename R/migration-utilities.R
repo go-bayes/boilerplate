@@ -179,8 +179,7 @@ migrate_to_unified_json <- function(rds_files, output_path, validate, quiet, res
     tryCatch({
       if (!quiet) cli::cli_alert_info("Processing {basename(rds_file)}")
 
-      # Load RDS
-      db <- readRDS(rds_file)
+      db <- read_rds_database(rds_file)
 
       # Determine category from filename
       base_name <- tools::file_path_sans_ext(basename(rds_file))
@@ -247,8 +246,7 @@ migrate_to_separate_json <- function(rds_files, output_path, validate, quiet, re
     tryCatch({
       if (!quiet) cli::cli_alert_info("Converting {basename(rds_file)}")
 
-      # Load RDS
-      db <- readRDS(rds_file)
+      db <- read_rds_database(rds_file)
 
       # Prepare for JSON
       db <- prepare_for_json(db)
@@ -529,7 +527,7 @@ merge_unified_dbs <- function(db1, db2) {
 #' @export
 compare_rds_json <- function(rds_path, json_path, ignore_meta = TRUE) {
   # Load both
-  rds_db <- readRDS(rds_path)
+  rds_db <- read_rds_database(rds_path)
   json_db <- jsonlite::read_json(json_path, simplifyVector = FALSE)
 
   # Prepare RDS for comparison

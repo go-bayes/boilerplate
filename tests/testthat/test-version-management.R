@@ -21,20 +21,20 @@ test_that("boilerplate_import can import from file path", {
     analysis = list(default = "Test analysis text")
   )
   
-  # Save with timestamp (explicitly as RDS for this test)
+  # Save with timestamp
   boilerplate_save(
     db = test_db,
     category = "methods",
     data_path = data_path,
     timestamp = TRUE,
-    format = "rds",
+    format = "json",
     confirm = FALSE,
     quiet = TRUE
   )
   
   # Find the timestamped file
-  files <- list.files(data_path, pattern = "methods_db_.*\\.rds", full.names = TRUE)
-  timestamped_file <- files[grepl("_\\d{8}_\\d{6}\\.rds$", files)][1]
+  files <- list.files(data_path, pattern = "methods_db_.*\\.json", full.names = TRUE)
+  timestamped_file <- files[grepl("_\\d{8}_\\d{6}\\.json$", files)][1]
   
   # Test importing from file path
   imported_db <- boilerplate_import(data_path = timestamped_file, quiet = TRUE)
@@ -139,17 +139,23 @@ test_that("boilerplate_restore_backup works correctly", {
   saveRDS(backup_db, backup_file)
   
   # Test viewing backup without restoring
-  viewed_db <- boilerplate_restore_backup(
-    category = "methods",
-    data_path = data_path,
-    restore = FALSE,
-    quiet = TRUE
+  viewed_db <- expect_warning(
+    boilerplate_restore_backup(
+      category = "methods",
+      data_path = data_path,
+      restore = FALSE,
+      quiet = TRUE
+    ),
+    regexp = "Reading legacy RDS database"
   )
   
   expect_equal(viewed_db$sample$default, "Backup sample text")
   
   # Check that standard file hasn't changed
-  current_db <- boilerplate_import("methods", data_path = data_path, quiet = TRUE)
+  current_db <- expect_warning(
+    boilerplate_import("methods", data_path = data_path, quiet = TRUE),
+    regexp = "Reading legacy RDS database"
+  )
   expect_equal(current_db$sample$default, "Initial sample text")
   
   # Clean up

@@ -92,12 +92,15 @@ test_that("json-workflow vignette: RDS to JSON migration works", {
   # Migrate to JSON
   json_dir <- file.path(temp_dir, "json_data")
   
-  results <- boilerplate_migrate_to_json(
-    source_path = rds_dir,
-    output_path = json_dir,
-    format = "unified",
-    backup = FALSE,
-    quiet = TRUE
+  results <- expect_warning(
+    boilerplate_migrate_to_json(
+      source_path = rds_dir,
+      output_path = json_dir,
+      format = "unified",
+      backup = FALSE,
+      quiet = TRUE
+    ),
+    regexp = "Reading legacy RDS database"
   )
   
   # Check if migration worked - results contains migrated files
@@ -207,7 +210,10 @@ test_that("json-workflow vignette: compare RDS and JSON formats work", {
   jsonlite::write_json(test_db, json_file, auto_unbox = TRUE, pretty = TRUE)
   
   # Compare formats
-  differences <- compare_rds_json(rds_file, json_file)
+  differences <- expect_warning(
+    compare_rds_json(rds_file, json_file),
+    regexp = "Reading legacy RDS database"
+  )
   
   # Should have no differences for this simple structure
   expect_equal(length(differences), 0)

@@ -20,7 +20,7 @@ library(boilerplate)
 
 ## Introduction
 
-Starting with version 1.1.0, boilerplate supports **projects** - a way to organize multiple independent collections of boilerplate content. This is particularly useful when:
+Starting with version 1.1.0, `boilerplate` supports **projects**: independent collections of boilerplate content under one data path. Projects are useful when:
 
 - You want to keep your personal boilerplate separate from shared content
 - You're working with colleagues who have their own boilerplate collections
@@ -141,7 +141,7 @@ boilerplate_copy_from_project(
 
 ### Conflict Handling
 
-When copying between projects, you can handle conflicts in three ways:
+When copying between projects, choose one of three conflict strategies:
 
 ```{r eval=FALSE}
 # Skip conflicting entries (default)
@@ -233,7 +233,7 @@ names(my_db$measures)  # Should include "jane_work_stress"
    boilerplate_save(my_db, project = "my_research")
    ```
 
-3. **Regular backups**: Projects are independent, so back them up separately
+3. **Regular backups**: Projects are independent; back them up separately
    ```{r eval=FALSE}
    boilerplate_export(
      db = my_db,
@@ -259,6 +259,6 @@ Projects in boilerplate provide a flexible way to:
 - Keep different collections of content separate
 - Share content with colleagues without mixing databases
 - Experiment with new content without affecting your main database
-- Maintain clear organization as your boilerplate collection grows
+- Maintain clear organisation as your boilerplate collection grows
 
 The project system is entirely optional - if you don't need multiple collections, simply continue using boilerplate as before, and everything will work with the "default" project.

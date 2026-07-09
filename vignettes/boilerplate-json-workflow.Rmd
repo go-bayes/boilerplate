@@ -20,13 +20,22 @@ library(boilerplate)
 
 ## Introduction
 
-The `boilerplate` package now supports JSON format for all database operations. JSON provides several advantages over the traditional RDS format:
+JSON is the default database format in `boilerplate`. It carries every
+data shape the package needs and has several practical advantages over
+the legacy RDS format:
 
 - **Human-readable**: JSON files can be opened and edited in any text editor
 - **Version control friendly**: Changes are easily tracked in Git
 - **Language agnostic**: JSON files can be read by any programming language
 - **Web-friendly**: JSON is the standard format for web applications
 - **Template variables**: Support for `{{variable}}` placeholders in your text
+- **Safer to load**: JSON deserialisation cannot execute code, whereas
+  `readRDS()` can execute code through object hooks and class attributes.
+  Only import RDS files from trusted sources.
+
+The package no longer writes RDS files. Reading existing RDS databases remains
+supported for trusted legacy files, and this vignette shows the canonical
+migration path via `boilerplate_migrate_to_json()`.
 
 ## Basic JSON Operations
 
@@ -289,7 +298,7 @@ cat("Measures entries:", length(measures_names), "\n")
 
 ## Integration with Existing Workflow
 
-JSON databases work seamlessly with all existing boilerplate functions:
+JSON databases work with the existing boilerplate functions:
 
 ```{r integration}
 # Generate text using JSON database
@@ -349,7 +358,7 @@ cat(measures_text)
    - Use unified format for complete databases
    - Use separate files for modular management
 
-7. **Track database contents**: Regularly check database contents:
+7. **Track database contents**: Regularly review database contents:
    ```r
    # List all paths
    methods_paths <- boilerplate_list_paths(boilerplate_methods(db))
@@ -358,7 +367,7 @@ cat(measures_text)
 
 ## Conclusion
 
-JSON support in boilerplate provides a modern, flexible way to manage your research text databases. Whether you're starting fresh or migrating existing RDS databases, the JSON functionality integrates seamlessly with your workflow while providing better visibility and version control.
+JSON support gives boilerplate a text-based database format that is easier to inspect, compare, and version. New projects can start with JSON, and existing projects can migrate trusted RDS databases when they are ready.
 
 ```{r cleanup, include=FALSE}
 # Clean up

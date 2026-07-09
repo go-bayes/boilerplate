@@ -208,7 +208,7 @@ demographics_text <- boilerplate_generate_text(
     quiet = TRUE
   )
      db = unified_db,
-     output_file = "boilerplate_backup_2024.rds"
+     output_file = "boilerplate_backup_2024.json"
    )
    ```
 
@@ -292,12 +292,12 @@ jan_files <- boilerplate_list_files(pattern = "202401")
 # Save with timestamp
 boilerplate_save(
   db = unified_db,
-  timestamp = TRUE  # Creates boilerplate_unified_20240115_143022.rds
+  timestamp = TRUE  # Creates boilerplate_unified_20240115_143022.json
 )
 
 # Import a specific timestamped version
 old_version <- boilerplate_import(
-  data_path = "boilerplate/data/boilerplate_unified_20240110_120000.rds"
+  data_path = "boilerplate/data/boilerplate_unified_20240110_120000.json"
 )
 ```
 
