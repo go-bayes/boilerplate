@@ -38,9 +38,8 @@ If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 Default is TRUE. Set to FALSE to use default content.}
 
 \item{format}{Character. Format to save. "json" (default) is the supported
-format. "rds" and "both" are accepted for backward compatibility but are
-deprecated and will be removed in a future release; callers asked to
-write RDS receive a deprecation warning from \code{boilerplate_save()}.}
+format. "rds" and "both" are no longer supported because the package does
+not write new RDS databases.}
 
 \item{project}{Character. Project name for organizing databases. Default is "default".
 Projects are stored in separate subdirectories to allow multiple independent
@@ -51,8 +50,7 @@ Invisibly returns TRUE if successful.
 }
 \description{
 This function initialises a boilerplate database. By default, it creates a single
-unified JSON database containing all categories. Legacy support for separate RDS
-files is maintained through the unified parameter.
+unified JSON database containing all categories.
 }
 \examples{
 # Create a temporary directory for examples

@@ -227,27 +227,25 @@ get_db_file_path <- function(category, base_path = NULL, file_name = NULL,
   return(file_path)
 }
 
-#' Emit RDS-deprecation warning
+#' Stop unsupported RDS writing
 #'
-#' Internal helper used by exported save/export functions to warn callers that
-#' writing RDS is deprecated. Reading RDS remains supported during the
-#' deprecation window so that existing databases continue to load. See
-#' `boilerplate_migrate_to_json()` for the migration path.
+#' Internal helper used by write paths to prevent the package from creating new
+#' RDS files. Reading RDS remains supported as a legacy migration bridge for
+#' trusted existing databases. See `boilerplate_migrate_to_json()` for the
+#' migration path.
 #'
 #' @param fn_name Character. Name of the calling exported function, surfaced in
-#'   the warning so users can trace the source.
-#' @return Invisible NULL.
+#'   the error so users can trace the source.
+#' @return No return value. Always errors.
 #' @keywords internal
 #' @noRd
-warn_rds_deprecated <- function(fn_name) {
-  warning(
-    "`format = \"rds\"` (and `format = \"both\"`) is deprecated in ",
-    fn_name, "() and will be removed in a future release. ",
-    "Use `format = \"json\"`. Existing RDS databases can be converted with ",
+abort_rds_writing <- function(fn_name) {
+  stop(
+    "RDS writing is no longer supported in ", fn_name, "(). ",
+    "Use `format = \"json\"`. Existing trusted RDS databases can be converted with ",
     "boilerplate_migrate_to_json().",
     call. = FALSE
   )
-  invisible(NULL)
 }
 
 #' Helper function to ask for user confirmation
@@ -508,4 +506,3 @@ extract_template_variables <- function(text) {
   # Return unique variable names
   unique(var_names)
 }
-

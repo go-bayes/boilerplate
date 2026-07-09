@@ -20,8 +20,11 @@ boilerplate_batch_edit(
 )
 }
 \arguments{
-\item{db}{List or character. The database to edit (can be a single category or unified database),
-or a file path to a JSON/RDS database file which will be loaded automatically.}
+\item{db}{List or character. The database to edit (can be a single category
+or unified database), or a file path to a JSON database file which will be
+loaded automatically. Legacy RDS files should be imported explicitly with
+\code{\link{boilerplate_import}} or migrated with
+\code{\link{boilerplate_migrate_to_json}} before batch editing.}
 
 \item{field}{Character. The field to edit (e.g., "reference", "description").}
 

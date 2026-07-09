@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This vignette documents the internal functions of the `boilerplate` package. These functions are not exported but are essential for understanding the package's architecture and contributing to its development.
+The internal functions in `boilerplate` define how the package navigates databases, writes files, and generates text. This vignette documents those non-exported functions for contributors who need to understand the package architecture.
 
 # Core Database Operations
 
@@ -162,11 +162,11 @@ read_boilerplate_db(file)
 
 ### `write_boilerplate_db()`
 
-Writes database to JSON or RDS format.
+Writes database to JSON format.
 
 ```r
 # Internal function in json-support.R
-write_boilerplate_db(db, file, format = c("auto", "json", "rds"))
+write_boilerplate_db(db, file, format = "json")
 ```
 
 **Parameters:**

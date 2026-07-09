@@ -47,9 +47,9 @@ devtools::install_github("go-bayes/boilerplate")
   sections
 - **Quarto/R Markdown Integration**: Generate sections for scientific
   reports
-- **JSON Default Format**: Human-readable JSON as default. RDS writing
-  is deprecated; existing RDS databases remain readable and can be
-  migrated with `boilerplate_migrate_to_json()`
+- **JSON Default Format**: Human-readable JSON as default. The package
+  no longer writes RDS files; existing trusted RDS databases remain
+  readable and can be migrated with `boilerplate_migrate_to_json()`
 
 ### Text and Document Features
 
@@ -108,6 +108,22 @@ accidental data loss:
   files (when `create_backup=TRUE` in interactive sessions)
 - **Directory safety**: Functions require explicit permission to create
   new directories (when `create_dirs=TRUE`)
+
+## Sharing Databases
+
+A boilerplate database is a plain JSON file; share it the way you
+would share any text file:
+
+- **Share JSON files.** JSON carries data only, whereas loading an RDS
+  file can execute code. When a collaborator sends an RDS database, ask
+  for a JSON export, or migrate the file yourself with
+  `boilerplate_migrate_to_json()` once you trust its source.
+- **Share the smallest useful selection.**
+  `boilerplate_export(select_elements = ...)` writes just the entries a
+  collaborator needs (for example, a set of measure descriptions) so
+  that recipients can review exactly what they receive.
+- **Keep the JSON database as the source of record.** Track it with git
+  and review diffs before merging changes from collaborators.
 
 ## Basic Usage with Unified Database
 
@@ -209,11 +225,12 @@ format:
   language
 - **Web-friendly**: JSON is the standard format for web applications
 - **Safer to load**: JSON deserialisation cannot execute code, whereas
-  `readRDS()` can through object hooks and class attributes
+  `readRDS()` can execute code through object hooks and class attributes
 
-RDS writing is deprecated and will be removed in a future release.
-Existing RDS databases continue to load via `boilerplate_import()` and
-can be converted with `boilerplate_migrate_to_json()`.
+The package no longer writes RDS files. Existing RDS databases continue
+to load via `boilerplate_import()` and can be converted with
+`boilerplate_migrate_to_json()`. Only import RDS files from trusted
+sources.
 
 For detailed JSON workflows, see
 `vignette("boilerplate-json-workflow")`.
@@ -294,7 +311,7 @@ location:
 - Organising files according to a specific project structure
 - Testing and development scenarios
 
-All key functions in the package (`boilerplate_init()`,
+The core functions in the package (`boilerplate_init()`,
 `boilerplate_import()`, `boilerplate_save()`, and
 `boilerplate_export()`) accept a `data_path` parameter to specify a
 custom location. When working with custom paths, be sure to use the same
@@ -499,8 +516,8 @@ with timestamps (e.g., `methods_db_20240115_143022.json`) - **Backup
 files**: Automatic backups (e.g.,
 `methods_db_backup_20240115_140000.json`)
 
-Legacy `.rds` files are still listed and can be read while the
-deprecation window is open.
+Legacy `.rds` files are still listed and can be read for trusted
+migration workflows.
 
 ### Importing Specific Versions
 
@@ -905,10 +922,9 @@ unified_db$measures$depression_phq9 <- list(...) # CORRECT
 
 ## Standardising and Reporting on Measures
 
-The package includes powerful tools for standardising measure entries
-and reporting on database quality. This is particularly useful when
-working with legacy databases or when multiple contributors have added
-measures with inconsistent formatting.
+The package standardises measure entries and reports on database
+quality. These tools are useful when legacy databases or multiple
+contributors have produced inconsistent measure formatting.
 
 ### Standardising Measures
 
@@ -1085,7 +1101,7 @@ Example output:
 
 1.  Run standardisation after importing legacy databases to ensure
     consistency
-2.  Check the quality report to identify measures needing attention
+2.  Review the quality report to identify measures needing attention
 3.  Review standardised output before saving to ensure nothing important
     was lost
 4.  Keep the original - use `boilerplate_export()` to create a backup
@@ -1095,9 +1111,9 @@ Example output:
 
 ## Batch Editing and Cleaning Databases
 
-The package includes powerful functions for batch editing and cleaning
-your databases. These are particularly useful when you need to update
-multiple entries at once or clean up inconsistent formatting.
+The package includes functions for batch editing and cleaning databases.
+Batch operations are useful when you need to update multiple entries at
+once or clean up inconsistent formatting.
 
 ### Batch Editing Fields
 
@@ -1389,9 +1405,9 @@ unified_db <- boilerplate_batch_clean(
 )
 ```
 
-These batch operations make it easy to maintain consistency across your
-entire database, especially when dealing with legacy data or
-contributions from multiple sources.
+Batch operations help maintain consistency across the database,
+especially when legacy data or multiple contributors have introduced
+inconsistent formatting.
 
 ## Appendix Content with the Unified Database
 
@@ -1403,7 +1419,7 @@ unified database:
 unified_db <- boilerplate_import()
 
 # add detailed measures documentation to appendix
-unified_db$appendix$detailed_measures <- "# Detailed Measures Documentation\n\n## Overview\n\nThis appendix provides comprehensive documentation for all measures used in this study, including full item text, response options, and psychometric properties.\n\n## {{exposure_var}} Measure\n\n{{exposure_details}}\n\n## Outcome Measures\n\n{{outcome_details}}"
+unified_db$appendix$detailed_measures <- "# Detailed Measures Documentation\n\n## Overview\n\nThis appendix documents all measures used in this study, including full item text, response options, and psychometric properties.\n\n## {{exposure_var}} Measure\n\n{{exposure_details}}\n\n## Outcome Measures\n\n{{outcome_details}}"
 
 # save the changes to the unified database
 boilerplate_save(unified_db)
@@ -1584,8 +1600,8 @@ cat(abstract_text)
 
 ## Complete Workflow Example with the Unified Database
 
-This example demonstrates combining multiple components to create a
-complete methods section using the unified database approach:
+The unified database can combine multiple components into a complete
+methods section:
 
 ``` r
 # initialise all databases and import them
@@ -1657,7 +1673,7 @@ A BibTeX entry for LaTeX users:
                        Standardised Text for Scientific Reports}},
       year         = 2025,
       publisher    = {Zenodo},
-      version      = {1.3.0},
+      version      = {1.4.0},
       doi          = {10.5281/zenodo.13370825},
       url          = {https://github.com/go-bayes/boilerplate}
     }
@@ -1683,26 +1699,26 @@ example**:
 
 ## Development Roadmap
 
-The `boilerplate` package is under active development. Here’s our
-planned roadmap for upcoming features:
+The `boilerplate` package is under active development. The roadmap below
+records planned areas rather than release promises:
 
 ### 🚀 Near Term
 
-**Enhanced Documentation and Examples (v1.3.1)** - Comprehensive example
-testing framework - Enhanced vignette coverage for all workflows -
-Improved error messages with helpful suggestions - Video tutorials for
-common workflows
+**Documentation and Examples** - Additional example testing for common
+workflows - Expanded vignette coverage for migration and collaboration
+workflows - Improved error messages with helpful suggestions - Video
+tutorials for common workflows
 
 ### 📋 Medium Term
 
-**Enhanced Type Safety (v1.4.x)** - Implementation of S3 classes for all
-database objects - Custom print methods for cleaner output - Validation
-methods for database integrity - Better IDE support with autocompletion
+**Enhanced Type Safety** - Implementation of S3 classes for all database
+objects - Custom print methods for cleaner output - Validation methods
+for database integrity - Better IDE support with autocompletion
 
 ### 🔮 Long Term
 
 **Modern R Infrastructure (v2.0)** - Migration to S7 object system (once
-stable) - Performance optimizations - Extended validation framework -
+stable) - Performance improvements - Extended validation framework -
 Advanced project management features
 
 ### 🎯 Design Principles
@@ -1715,10 +1731,10 @@ standards as they mature
 
 ### 📊 Current State
 
-- **Version**: 1.3.0 (CRAN submission ready)
-- **Code coverage**: 73.12%
+- **Version**: 1.4.0 (CRAN submission ready)
 - **Dependencies**: Minimal (6 packages)
-- **Test suite**: 847 tests across 30 files
+- **Test suite**: 901 passing expectations across 30 test files in local
+  `devtools::test()`
 
 We welcome feedback and contributions! Please see our [contribution
 guidelines](https://github.com/go-bayes/boilerplate/blob/main/.github/CONTRIBUTING.md)

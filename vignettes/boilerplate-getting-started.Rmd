@@ -17,11 +17,11 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This tutorial walks you through a complete workflow using the boilerplate package, from initial setup to generating a complete methods section for a scientific paper. We'll build a real example step by step.
+This tutorial builds a complete `boilerplate` workflow, from initial setup to a generated methods section for a scientific manuscript. The example develops one project step by step.
 
-# Scenario: Writing a Psychology Research Paper
+# Scenario: Writing a Psychology Manuscript
 
-Imagine you're writing a paper about the relationship between political attitudes and well-being. You want to:
+Imagine you are writing a manuscript about the relationship between political attitudes and well-being. You want to:
 
 1. Use standardised text for common methods
 2. Ensure consistency across co-authors
@@ -299,7 +299,7 @@ if ("political_orientation" %in% names(boilerplate_measures(db))) {
 
 # Step 7: Validate Your Work
 
-## Check Database Structure
+## Verify Database Structure
 
 Ensure your database is properly structured:
 
@@ -327,7 +327,7 @@ cat("\nAvailable measures:\n")
 print(names(measures_db))
 ```
 
-## Check References
+## Verify References
 
 ```{r validate-references}
 # Ensure all citations are in your bibliography
@@ -434,9 +434,11 @@ boilerplate_export(
 team_db <- boilerplate_import(file.path(shared_path, "shared_boilerplate.json"))
 ```
 
-## 2. Multiple Papers from Same Dataset
+When sharing with collaborators, send JSON exports rather than RDS files: JSON carries data only, whereas loading an RDS file can execute code. Exporting a selection with `select_elements` also keeps the shared file small enough for recipients to review before importing.
 
-Create variants for different papers:
+## 2. Multiple Manuscripts from Same Dataset
+
+Create variants for different manuscripts:
 
 ```{r multiple-papers}
 # Paper 1: Focus on political orientation
@@ -477,7 +479,7 @@ db <- boilerplate_batch_edit(
 
 ## 4. Quality Control
 
-Create a comprehensive reporting function for your team:
+Create a reporting function for your team:
 
 ```{r quality-control}
 check_manuscript_ready <- function(db) {
@@ -561,7 +563,7 @@ You've learned how to:
 
 The boilerplate package helps you:
 - ✓ Write consistent, professional methods sections
-- ✓ Reuse content across multiple papers
+- ✓ Reuse content across multiple manuscripts
 - ✓ Collaborate effectively with co-authors
 - ✓ Maintain version control of your text
 - ✓ Ensure citation completeness
@@ -570,7 +572,7 @@ The boilerplate package helps you:
 
 - Read the [JSON Workflow](boilerplate-json-workflow.html) vignette for advanced database management
 - See the [Architecture](boilerplate-architecture.html) vignette to understand the package design
-- Check the [Measures Workflow](boilerplate-measures-workflow.html) for detailed measure documentation
+- See the [Measures Workflow](boilerplate-measures-workflow.html) vignette for detailed measure documentation
 - Explore the [Bibliography Management](boilerplate-bibliography-workflow.html) guide for reference handling
 
 Happy writing!

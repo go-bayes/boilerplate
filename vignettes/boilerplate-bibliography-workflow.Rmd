@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-The boilerplate package provides powerful bibliography management features that integrate seamlessly with your scientific writing workflow. This vignette demonstrates how to set up centralised bibliography management, validate citations, and ensure consistency across your manuscripts.
+`boilerplate` can keep bibliography files in one place while manuscripts use project-specific boilerplate databases. This vignette shows how to set up centralised bibliography management, validate citations, and keep references consistent across manuscripts.
 
 # Overview: Why Centralised Bibliography Management?
 
@@ -97,7 +97,7 @@ boilerplate_copy_bibliography(db, target_dir = ".", update_first = TRUE)
 
 # Validating References
 
-## Check All Citations Exist
+## Verify All Citations Exist
 
 Ensure all citations in your boilerplate text exist in the bibliography:
 
@@ -234,7 +234,7 @@ validation <- boilerplate_validate_references(team_db)
 stopifnot(validation$valid)  # Ensure no missing references
 ```
 
-## Automated Reference Checking
+## Automated Reference Verification
 
 Add to your CI/CD pipeline:
 
@@ -265,7 +265,7 @@ message("All references validated successfully!")
 - Keep your bibliography in version control (e.g., GitHub)
 - Use a consistent naming scheme for citation keys
 - Regular updates and maintenance
-- Consider using BibTeX for key management (free, high functionality)
+- Consider using BibTeX to manage citation keys
 
 ## 2. Cache Management
 
@@ -408,6 +408,6 @@ The boilerplate package's bibliography management features provide:
 2. **Automatic distribution** - Bibliography copied when needed
 3. **Validation** - Ensure all citations are defined
 4. **Caching** - Fast local access with periodic updates
-5. **Integration** - Works seamlessly with Quarto/R Markdown
+5. **Integration** - Works with Quarto/R Markdown
 
 By following this workflow, you can maintain consistent, accurate references across all your manuscripts while reducing duplicate effort and potential errors.

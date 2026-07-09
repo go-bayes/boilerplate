@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 # Why Boilerplate?
 
 Have you ever found yourself:
-- Copy-pasting methods sections between papers?
+- Copy-pasting methods sections between manuscripts?
 - Struggling to keep consistent language across co-authored manuscripts?
 - Manually updating sample sizes in multiple places?
 - Losing track of which version of your methods description is the latest?
@@ -29,7 +29,7 @@ The `boilerplate` package solves these problems by treating your scientific text
 
 Let's walk through a realistic example. Dr. Sarah Chen is conducting a series of studies on workplace well-being. She needs to:
 
-1. Maintain consistent methods descriptions across 3 papers
+1. Maintain consistent methods descriptions across 3 manuscripts
 2. Update sample sizes and demographics dynamically
 3. Ensure all co-authors use the same measure descriptions
 4. Keep track of citations across all manuscripts
@@ -341,11 +341,11 @@ study3_methods <- generate_study_methods(study3_config, db)
 Ensure consistency across manuscripts:
 
 ```{r quality-control}
-# Check all papers use current measure descriptions
+# Inspect whether all manuscripts use current measure descriptions
 papers <- c("study1", "study2", "study3")
 
 for (paper in papers) {
-  # Note: This assumes each paper has its own boilerplate database
+  # Note: This assumes each manuscript has its own boilerplate database
   # which would need to be created first
   paper_path <- file.path(project_root, paper, "boilerplate")
   if (dir.exists(paper_path)) {
@@ -367,7 +367,7 @@ for (paper in papers) {
 
 # Integration with R Markdown/Quarto
 
-## Seamless Document Generation
+## Document Generation
 
 In your Quarto document (`manuscript.qmd`):
 
@@ -504,13 +504,13 @@ db <- boilerplate_add_entry(
 
 The `boilerplate` package transforms scientific writing from a copy-paste exercise into a structured, maintainable process. Key benefits:
 
-- **Consistency**: Same descriptions across all papers
+- **Consistency**: Same descriptions across all manuscripts
 - **Efficiency**: Update once, use everywhere
 - **Collaboration**: Share standardised text with your team
 - **Reproducibility**: Version control your methods
 - **Flexibility**: Customize for each study while maintaining standards
 
-Ready to get started? Check out:
+Start with:
 - [Getting Started Tutorial](boilerplate-getting-started.html) for a complete walkthrough
 - [Bibliography Management](boilerplate-bibliography-workflow.html) for citation handling
 - [Measures Workflow](boilerplate-measures-workflow.html) for detailed measure documentation

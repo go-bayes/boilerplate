@@ -31,9 +31,8 @@ If NULL and db contains multiple categories, saves as unified database.}
 If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
 \item{format}{Character. Format to save. "json" (default) is the supported
-format. "rds" and "both" are accepted for backward compatibility but are
-deprecated and will be removed in a future release; using either emits a
-deprecation warning.}
+format. "rds" and "both" are no longer supported because the package does
+not write new RDS databases.}
 
 \item{confirm}{Logical. If TRUE, asks for confirmation. Default is TRUE.}
 
@@ -61,7 +60,7 @@ boilerplate collections.}
 Invisible TRUE if successful, with saved file paths as an attribute.
 }
 \description{
-This function saves a boilerplate database to disk in RDS, JSON, or both formats.
+This function saves a boilerplate database to disk in JSON format.
 }
 \examples{
 # Create a temporary directory

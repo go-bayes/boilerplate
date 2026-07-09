@@ -46,13 +46,16 @@ test_that("boilerplate_migrate_to_json migrates RDS to JSON correctly", {
   saveRDS(measures_db, file.path(temp_source, "measures_db.rds"))
 
   # Test unified migration
-  results <- boilerplate_migrate_to_json(
-    source_path = temp_source,
-    output_path = temp_output,
-    format = "unified",
-    validate = FALSE,  # Skip validation as we don't have schemas in test
-    backup = TRUE,
-    quiet = TRUE
+  results <- expect_warning(
+    boilerplate_migrate_to_json(
+      source_path = temp_source,
+      output_path = temp_output,
+      format = "unified",
+      validate = FALSE,  # Skip validation as we don't have schemas in test
+      backup = TRUE,
+      quiet = TRUE
+    ),
+    regexp = "Reading legacy RDS database"
   )
 
   expect_type(results, "list")
@@ -76,13 +79,16 @@ test_that("boilerplate_migrate_to_json migrates RDS to JSON correctly", {
   temp_output2 <- file.path(tempdir(), "test_migrate_output2")
   dir.create(temp_output2, showWarnings = FALSE, recursive = TRUE)
 
-  results2 <- boilerplate_migrate_to_json(
-    source_path = temp_source,
-    output_path = temp_output2,
-    format = "separate",
-    validate = FALSE,
-    backup = FALSE,
-    quiet = TRUE
+  results2 <- expect_warning(
+    boilerplate_migrate_to_json(
+      source_path = temp_source,
+      output_path = temp_output2,
+      format = "separate",
+      validate = FALSE,
+      backup = FALSE,
+      quiet = TRUE
+    ),
+    regexp = "Reading legacy RDS database"
   )
 
   expect_length(results2$errors, 0)
@@ -164,7 +170,10 @@ test_that("compare_rds_json identifies differences correctly", {
   jsonlite::write_json(json_db, temp_json, auto_unbox = TRUE)
 
   # Compare
-  differences <- compare_rds_json(temp_rds, temp_json, ignore_meta = TRUE)
+  differences <- expect_warning(
+    compare_rds_json(temp_rds, temp_json, ignore_meta = TRUE),
+    regexp = "Reading legacy RDS database"
+  )
 
   expect_type(differences, "list")
   expect_true(length(differences) > 0)
@@ -175,7 +184,10 @@ test_that("compare_rds_json identifies differences correctly", {
 
   # Test with identical databases
   saveRDS(json_db, temp_rds)
-  differences2 <- compare_rds_json(temp_rds, temp_json, ignore_meta = TRUE)
+  differences2 <- expect_warning(
+    compare_rds_json(temp_rds, temp_json, ignore_meta = TRUE),
+    regexp = "Reading legacy RDS database"
+  )
 
   # Some differences might still exist due to JSON/RDS conversion
   # but should be minimal
@@ -221,7 +233,10 @@ test_that("migration handles nested structures correctly", {
   saveRDS(nested_db, rds_file)
 
   # Convert to JSON
-  boilerplate_rds_to_json(rds_file, quiet = TRUE)
+  expect_warning(
+    boilerplate_rds_to_json(rds_file, quiet = TRUE),
+    regexp = "Reading legacy RDS database"
+  )
   json_file <- sub("\\.rds$", ".json", rds_file)
 
   expect_true(file.exists(json_file))
@@ -280,13 +295,16 @@ test_that("migration handles special characters and edge cases", {
   rds_file <- file.path(temp_dir, "special_db.rds")
   saveRDS(special_db, rds_file)
 
-  results <- boilerplate_migrate_to_json(
-    source_path = rds_file,
-    output_path = temp_output,
-    format = "separate",
-    validate = FALSE,
-    backup = FALSE,
-    quiet = TRUE
+  results <- expect_warning(
+    boilerplate_migrate_to_json(
+      source_path = rds_file,
+      output_path = temp_output,
+      format = "separate",
+      validate = FALSE,
+      backup = FALSE,
+      quiet = TRUE
+    ),
+    regexp = "Reading legacy RDS database"
   )
 
   expect_length(results$errors, 0)
@@ -336,13 +354,16 @@ test_that("migration creates proper backups", {
   saveRDS(test_db, file.path(temp_source, "test.rds"))
 
   # Migrate with backup
-  results <- boilerplate_migrate_to_json(
-    source_path = temp_source,
-    output_path = temp_output,
-    format = "unified",
-    validate = FALSE,
-    backup = TRUE,
-    quiet = TRUE
+  results <- expect_warning(
+    boilerplate_migrate_to_json(
+      source_path = temp_source,
+      output_path = temp_output,
+      format = "unified",
+      validate = FALSE,
+      backup = TRUE,
+      quiet = TRUE
+    ),
+    regexp = "Reading legacy RDS database"
   )
 
   # Check backup created
@@ -358,4 +379,3 @@ test_that("migration creates proper backups", {
   # Clean up
   unlink(c(temp_source, temp_output), recursive = TRUE)
 })
-

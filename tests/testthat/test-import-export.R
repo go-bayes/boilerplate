@@ -36,10 +36,13 @@ test_that("boilerplate_import and boilerplate_export work correctly", {
   saveRDS(test_measures, file.path(data_dir, "measures_db.rds"))
   
   # Test import
-  unified_db <- boilerplate_import(
-    category = NULL,  # NULL imports all categories
-    data_path = data_dir,
-    quiet = TRUE
+  unified_db <- expect_warning(
+    boilerplate_import(
+      category = NULL,  # NULL imports all categories
+      data_path = data_dir,
+      quiet = TRUE
+    ),
+    regexp = "Reading legacy RDS database"
   )
   
   expect_type(unified_db, "list")
@@ -53,7 +56,7 @@ test_that("boilerplate_import and boilerplate_export work correctly", {
   boilerplate_export(
     db = unified_db,
     data_path = export_dir,
-    output_file = "exported.rds",
+    output_file = "exported.json",
     save_by_category = TRUE,
     quiet = TRUE,
     confirm = FALSE,
@@ -90,13 +93,16 @@ test_that("boilerplate_export handles selective export", {
     db = test_db,
     select_elements = "methods.sample",
     data_path = export_dir,
-    output_file = "boilerplate_export.rds",
+    output_file = "boilerplate_export.json",
     quiet = TRUE,
     confirm = FALSE,
     create_dirs = TRUE
   )
   
-  exported <- readRDS(file.path(export_dir, "boilerplate_export.rds"))
+  exported <- jsonlite::read_json(
+    file.path(export_dir, "boilerplate_export.json"),
+    simplifyVector = FALSE
+  )
   
   # Should only have sample, not analysis
   expect_true("sample" %in% names(exported$methods))
@@ -125,13 +131,16 @@ test_that("boilerplate_export handles wildcard selection", {
     db = test_db,
     select_elements = "methods.statistical.*",
     data_path = export_dir,
-    output_file = "boilerplate_export.rds",
+    output_file = "boilerplate_export.json",
     quiet = TRUE,
     confirm = FALSE,
     create_dirs = TRUE
   )
   
-  exported <- readRDS(file.path(export_dir, "boilerplate_export.rds"))
+  exported <- jsonlite::read_json(
+    file.path(export_dir, "boilerplate_export.json"),
+    simplifyVector = FALSE
+  )
   
   # Should have both statistical methods
   expect_true("longitudinal" %in% names(exported$methods$statistical))
@@ -184,17 +193,19 @@ test_that("boilerplate_save works correctly", {
   
   expect_true(file.exists(file.path(data_dir, "methods_db.json")))
   
-  # Test saving as RDS explicitly (deprecated path; warning is expected)
-  suppressWarnings(boilerplate_save(
-    db = test_db,
-    data_path = data_dir,
-    format = "rds",
-    confirm = FALSE,
-    quiet = TRUE,
-    timestamp = FALSE
-  ))
-
-  expect_true(file.exists(file.path(data_dir, "boilerplate_unified.rds")))
+  # RDS writing is not supported
+  expect_error(
+    boilerplate_save(
+      db = test_db,
+      data_path = data_dir,
+      format = "rds",
+      confirm = FALSE,
+      quiet = TRUE,
+      timestamp = FALSE
+    ),
+    "RDS writing is no longer supported"
+  )
+  expect_false(file.exists(file.path(data_dir, "boilerplate_unified.rds")))
 
   # Clean up is handled by on.exit
 })
@@ -228,12 +239,18 @@ test_that("boilerplate_import handles various database formats", {
   saveRDS(results_db, file.path(data_dir, "results_db.rds"))
   
   # Import specific category
-  imported_methods <- boilerplate_import(category = "methods", data_path = data_dir, quiet = TRUE)
+  imported_methods <- expect_warning(
+    boilerplate_import(category = "methods", data_path = data_dir, quiet = TRUE),
+    regexp = "Reading legacy RDS database"
+  )
   expect_true(is.list(imported_methods))
   expect_equal(imported_methods$analysis$main$description, "Main analysis")
   
   # Import all categories
-  imported_all <- boilerplate_import(category = NULL, data_path = data_dir, quiet = TRUE)
+  imported_all <- expect_warning(
+    boilerplate_import(category = NULL, data_path = data_dir, quiet = TRUE),
+    regexp = "Reading legacy RDS database"
+  )
   expect_true("methods" %in% names(imported_all))
   expect_true("results" %in% names(imported_all))
   
@@ -244,7 +261,10 @@ test_that("boilerplate_import handles various database formats", {
   )
   
   saveRDS(unified_db, file.path(data_dir, "boilerplate_unified.rds"))
-  imported_unified <- boilerplate_import(category = NULL, data_path = data_dir, quiet = TRUE)
+  imported_unified <- expect_warning(
+    boilerplate_import(category = NULL, data_path = data_dir, quiet = TRUE),
+    regexp = "Reading legacy RDS database"
+  )
   expect_true("methods" %in% names(imported_unified))
   expect_true("results" %in% names(imported_unified))
 })
@@ -282,15 +302,15 @@ test_that("boilerplate_export handles complex selection patterns", {
     db = test_db,
     select_elements = c("methods.statistical.longitudinal.*", "results.main"),
     data_path = temp_dir,
-    output_file = "multi_select.rds",
+    output_file = "multi_select.json",
     save_by_category = FALSE,
     quiet = TRUE,
     confirm = FALSE,
     create_dirs = TRUE
   )
   
-  export_path <- file.path(temp_dir, "multi_select.rds")
-  exported <- readRDS(export_path)
+  export_path <- file.path(temp_dir, "multi_select.json")
+  exported <- jsonlite::read_json(export_path, simplifyVector = FALSE)
   
   # Check selected elements are present
   expect_true("lmtp" %in% names(exported$methods$statistical$longitudinal))
@@ -306,14 +326,14 @@ test_that("boilerplate_export handles complex selection patterns", {
   boilerplate_export(
     db = test_db,
     data_path = temp_dir,
-    output_file = "full_export.rds",
+    output_file = "full_export.json",
     save_by_category = FALSE,
     quiet = TRUE,
     confirm = FALSE
   )
   
-  full_export_path <- file.path(temp_dir, "full_export.rds")
-  full_exported <- readRDS(full_export_path)
+  full_export_path <- file.path(temp_dir, "full_export.json")
+  full_exported <- jsonlite::read_json(full_export_path, simplifyVector = FALSE)
   expect_equal(full_exported, test_db)
 })
 
@@ -366,17 +386,19 @@ test_that("boilerplate_save handles different save modes", {
   saved_methods <- read_boilerplate_db(file.path(output_dir, "methods_db.json"))
   expect_equal(saved_methods$test$description, "Test method")
   
-  # Test RDS format explicitly (deprecated path; warning is expected)
-  suppressWarnings(boilerplate_save(
-    db = test_db,
-    data_path = output_dir,
-    format = "rds",
-    confirm = FALSE,
-    quiet = TRUE,
-    timestamp = FALSE
-  ))
-
-  expect_true(file.exists(file.path(output_dir, "boilerplate_unified.rds")))
+  # RDS writing is not supported
+  expect_error(
+    boilerplate_save(
+      db = test_db,
+      data_path = output_dir,
+      format = "rds",
+      confirm = FALSE,
+      quiet = TRUE,
+      timestamp = FALSE
+    ),
+    "RDS writing is no longer supported"
+  )
+  expect_false(file.exists(file.path(output_dir, "boilerplate_unified.rds")))
 })
 
 test_that("import/export functions handle errors gracefully", {
@@ -415,7 +437,7 @@ test_that("import/export functions handle errors gracefully", {
     boilerplate_export(
       db = test_db,
       data_path = "/invalid/nonexistent/path",
-      output_file = "file.rds",
+      output_file = "file.json",
       quiet = TRUE,
       confirm = FALSE,
       create_dirs = FALSE
@@ -462,19 +484,19 @@ test_that("boilerplate_export preserves database structure", {
   boilerplate_export(
     db = test_db,
     data_path = temp_dir,
-    output_file = "preserved.rds",
+    output_file = "preserved.json",
     quiet = TRUE,
     confirm = FALSE,
     create_dirs = TRUE
   )
   
   # Read back and verify structure
-  export_path <- file.path(temp_dir, "preserved.rds")
-  imported <- readRDS(export_path)
+  export_path <- file.path(temp_dir, "preserved.json")
+  imported <- jsonlite::read_json(export_path, simplifyVector = FALSE)
   
   expect_equal(imported$methods$numeric_data, 42)
   expect_equal(imported$methods$character_data, "test string")
-  expect_equal(imported$methods$vector_data, c(1, 2, 3))
+  expect_equal(unlist(imported$methods$vector_data), c(1, 2, 3))
   expect_equal(imported$methods$list_data$a, 1)
   expect_equal(imported$methods$list_data$b, "two")
   expect_equal(imported$methods$list_data$c, TRUE)
@@ -508,14 +530,17 @@ test_that("boilerplate_import handles legacy database formats", {
   saveRDS(old_methods, file.path(data_dir, "methods_db.rds"))
   
   # Import should work correctly
-  imported <- boilerplate_import(category = "methods", data_path = data_dir, quiet = TRUE)
+  imported <- expect_warning(
+    boilerplate_import(category = "methods", data_path = data_dir, quiet = TRUE),
+    regexp = "Reading legacy RDS database"
+  )
   
   # The imported data should match what we saved
   expect_true("analysis" %in% names(imported))
   expect_equal(imported$analysis$description, "Analysis")
 })
 
-test_that("boilerplate_save creates backups for both RDS and JSON formats", {
+test_that("boilerplate_save creates backups for JSON format", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
   old_wd <- getwd()
@@ -574,51 +599,6 @@ test_that("boilerplate_save creates backups for both RDS and JSON formats", {
   current_content <- jsonlite::fromJSON(json_file, simplifyVector = FALSE)
   expect_equal(current_content$methods$sample$default, "Modified content")
   
-  # Test RDS backup
-  # First save as RDS
-  test_db_rds <- list(
-    methods = list(sample = list(default = "Original RDS content"))
-  )
-  
-  suppressWarnings(boilerplate_save(
-    db = test_db_rds,
-    data_path = data_dir,
-    format = "rds",
-    confirm = FALSE,
-    quiet = TRUE,
-    create_backup = TRUE,
-    timestamp = FALSE
-  ))
-
-  # Verify RDS file exists
-  rds_file <- file.path(data_dir, "boilerplate_unified.rds")
-  expect_true(file.exists(rds_file))
-
-  # Modify and save again
-  test_db_rds$methods$sample$default <- "Modified RDS content"
-
-  suppressWarnings(boilerplate_save(
-    db = test_db_rds,
-    data_path = data_dir,
-    format = "rds",
-    confirm = FALSE,
-    quiet = TRUE,
-    create_backup = TRUE,
-    timestamp = FALSE
-  ))
-  
-  # Check for RDS backup file
-  rds_backup_files <- list.files(data_dir, pattern = "boilerplate_unified\\.rds\\.\\d{8}_\\d{6}\\.bak$")
-  expect_true(length(rds_backup_files) > 0)
-  
-  # Verify RDS backup contains original content
-  rds_backup_content <- readRDS(file.path(data_dir, rds_backup_files[1]))
-  expect_equal(rds_backup_content$methods$sample$default, "Original RDS content")
-  
-  # Verify current RDS file contains modified content
-  rds_current_content <- readRDS(rds_file)
-  expect_equal(rds_current_content$methods$sample$default, "Modified RDS content")
-  
   # Test that backup is not created when timestamp = TRUE
   boilerplate_save(
     db = test_db,
@@ -631,7 +611,7 @@ test_that("boilerplate_save creates backups for both RDS and JSON formats", {
   
   # Count backup files - should be same as before
   new_backup_count <- length(list.files(data_dir, pattern = "\\.bak$"))
-  expect_equal(new_backup_count, length(backup_files) + length(rds_backup_files))
+  expect_equal(new_backup_count, length(backup_files))
   
   # Test that backup is not created for new files
   new_data_dir <- file.path(temp_dir, "new_data")

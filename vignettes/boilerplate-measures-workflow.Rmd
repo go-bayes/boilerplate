@@ -21,7 +21,7 @@ library(boilerplate)
 
 # Overview
 
-This vignette provides a comprehensive guide to working with measures in the boilerplate package. Measures are a special type of content that describes variables, instruments, and scales used in research. The package provides powerful tools for managing, standardising, and generating formatted text about your measures.
+Measures in `boilerplate` describe variables, instruments, and scales used in research. This vignette shows how to store measure metadata, standardise measure entries, and generate formatted methods text from those entries.
 
 # Quick Start: Adding and Using Measures
 
@@ -553,7 +553,7 @@ unified_db$measures$my_measure$type <- "continuous"
 
 If you encounter issues:
 
-1. Check the measure structure matches the examples
+1. Verify that the measure structure matches the examples
 2. Run `boilerplate_measures_report()` to identify problems
 3. Use `verbose = TRUE` in functions for detailed output
 4. Consult the package documentation: `?boilerplate_generate_measures`
@@ -568,4 +568,4 @@ The boilerplate package provides a complete workflow for managing research measu
 4. **Edit** multiple measures efficiently with batch operations
 5. **Generate** professional formatted output for publications
 
-By following this workflow, you can maintain a high-quality, consistent database of measures that integrates seamlessly with your research documentation.
+This workflow keeps measure descriptions consistent across research documentation while preserving the item-level details needed for methods sections and appendices.

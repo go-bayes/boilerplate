@@ -47,7 +47,8 @@ boilerplate_db (unified)
 - **Single Source of Truth**: All content managed through one unified database
 - **Consistent Interface**: Same functions work across all content types
 - **Hierarchical Organisation**: Dot notation paths for nested content
-- **Format Agnostic**: Supports both RDS (legacy) and JSON formats
+- **JSON Storage**: Uses JSON for active writes, with trusted legacy RDS reads
+  available for migration
 
 ## 2. Path System
 
@@ -65,7 +66,7 @@ Content is organised using dot notation paths:
 - **Navigation**: `get_nested_folder()` traverses the hierarchy
 - **Modification**: `modify_nested_entry()` adds/updates/removes entries
 - **Wildcards**: `methods.statistical.*` matches all statistical methods
-- **Validation**: `boilerplate_path_exists()` checks path validity
+- **Validation**: `boilerplate_path_exists()` tests path validity
 
 ## 3. Template Variable System
 
@@ -125,14 +126,14 @@ R/
 boilerplate_init()
     ├── Creates directory structure
     ├── Initialises empty databases
-    └── Saves as unified.json/rds
+    └── Saves as boilerplate_unified.json
 ```
 
 ## 2. Import Flow
 
 ```
 External Data → boilerplate_import()
-    ├── Detects format (JSON/RDS/CSV)
+    ├── Detects JSON or trusted legacy RDS format
     ├── Validates structure
     ├── Merges with existing
     └── Updates unified database
@@ -292,11 +293,11 @@ tests/testthat/
 
 ## Backwards Compatibility
 
-- RDS reading remains available during the deprecation window, so
-  existing databases continue to load via `boilerplate_import()`
-- RDS writing is deprecated and emits a warning through
-  `boilerplate_save()` and `boilerplate_export()`; it will be removed in
-  a future release
+- RDS reading remains available as a trusted legacy migration bridge. Existing
+  databases continue to load via `boilerplate_import()`
+- RDS writing is no longer supported by package APIs; `boilerplate_save()`,
+  `boilerplate_export()`, and `boilerplate_init()` error before creating RDS
+  files
 - Automatic migration utilities (`boilerplate_migrate_to_json()`,
   `boilerplate_rds_to_json()`) remain as a one-way door
 - Version detection in files

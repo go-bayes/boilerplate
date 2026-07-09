@@ -29,9 +29,8 @@ boilerplate_export(
 If NULL (default), uses tools::R_user_dir("boilerplate", "data").}
 
 \item{format}{Character. Format to save. "json" (default) is the supported
-format. "rds" and "both" are accepted for backward compatibility but are
-deprecated and will be removed in a future release; using either emits a
-deprecation warning.}
+format. "rds" and "both" are no longer supported because the package does
+not write new RDS databases.}
 
 \item{confirm}{Logical. If TRUE (default), asks for confirmation before overwriting.}
 
@@ -53,7 +52,7 @@ Invisible TRUE if successful.
 \description{
 This function exports a boilerplate database or selected elements to disk.
 It supports exporting entire databases, specific categories, or selected
-elements using dot notation paths. Can export in RDS, JSON, or both formats.
+elements using dot notation paths. Exports are written as JSON.
 }
 \examples{
 # Create a temporary directory and initialise databases

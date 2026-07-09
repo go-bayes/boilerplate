@@ -21,7 +21,7 @@ library(boilerplate)
 
 ## Overview
 
-The boilerplate package provides comprehensive version management features to help you track changes, manage different versions of your databases, and recover from backups when needed.
+`boilerplate` can timestamp database saves, list saved versions, and restore backups. These tools help users track changes without replacing external version control.
 
 ## Managing Multiple Versions
 
@@ -136,10 +136,10 @@ old_version <- boilerplate_import(
 
 ## Best Practices
 
-1. **Regular timestamped saves**: Save with timestamps at key milestones
+1. **Regular timestamped saves**: Save with timestamps at major milestones
 2. **Document changes**: Use meaningful commit messages when saving
 3. **Clean up old versions**: Periodically review and archive old versions
-4. **Test before overwriting**: Import and check old versions before replacing
+4. **Test before overwriting**: Import and inspect old versions before replacing
 
 ## Integration with Version Control
 
@@ -158,7 +158,7 @@ boilerplate_save(db, data_path = temp_version, timestamp = TRUE, confirm = FALSE
 
 ### Finding Lost Work
 
-If you've lost work, check these locations:
+If you've lost work, inspect these locations:
 
 ```{r troubleshooting}
 # List all files including backups
@@ -198,4 +198,4 @@ Version management in boilerplate provides:
 - Simple restoration from backups
 - Direct import of any version by path
 
-This ensures you never lose work and can always recover from mistakes or explore different versions of your content.
+Version management gives users a recovery path after accidental overwrites and a way to compare different versions of their content.
