@@ -1,4 +1,5 @@
 url: https://go-bayes.github.io/boilerplate/
+llm-docs: false
 
 # ---logo -----------------------------------------------------------
 logo: man/figures/logo-new.png
@@ -42,9 +43,9 @@ reference:
     - boilerplate_init
   - title: "Migration from RDS to JSON"
     desc: >
-      Tools for converting legacy RDS databases to JSON. RDS writing is
-      deprecated; reading is retained so that existing databases continue
-      to load and can be migrated with a single call.
+      Convert legacy RDS databases to JSON. RDS writing is no longer supported;
+      reading is retained so that existing databases continue to load and can
+      be migrated with a single call.
     contents:
     - boilerplate_migrate_to_json
     - boilerplate_rds_to_json

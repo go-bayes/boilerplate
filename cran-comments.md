@@ -40,7 +40,7 @@ local RDS files.
 * local macOS install (aarch64-apple-darwin23), R 4.6.0
 * win-builder devel: pending
 * win-builder release: pending
-* R-hub: pending
+* R-hub R-devel and R-release: pending
 
 ## R CMD check results
 

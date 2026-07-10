@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to boilerplate: Practical Examples">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
 <h2 id="why-boilerplate">Why Boilerplate?<a class="anchor" aria-label="anchor" href="#why-boilerplate"></a>
 </h2>
 <p>Have you ever found yourself: - Copy-pasting methods sections between
-papers? - Struggling to keep consistent language across co-authored
+manuscripts? - Struggling to keep consistent language across co-authored
 manuscripts? - Manually updating sample sizes in multiple places? -
 Losing track of which version of your methods description is the
 latest?</p>
@@ -82,7 +82,7 @@ and dynamically generated.</p>
 <p>Let’s walk through a realistic example. Dr. Sarah Chen is conducting
 a series of studies on workplace well-being. She needs to:</p>
 <ol style="list-style-type: decimal">
-<li>Maintain consistent methods descriptions across 3 papers</li>
+<li>Maintain consistent methods descriptions across 3 manuscripts</li>
 <li>Update sample sizes and demographics dynamically</li>
 <li>Ensure all co-authors use the same measure descriptions</li>
 <li>Keep track of citations across all manuscripts</li>
@@ -390,11 +390,11 @@ samples:</p>
 </h3>
 <p>Ensure consistency across manuscripts:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Check all papers use current measure descriptions</span></span>
+<code class="sourceCode R"><span><span class="co"># Inspect whether all manuscripts use current measure descriptions</span></span>
 <span><span class="va">papers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"study1"</span>, <span class="st">"study2"</span>, <span class="st">"study3"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">paper</span> <span class="kw">in</span> <span class="va">papers</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># Note: This assumes each paper has its own boilerplate database</span></span>
+<span>  <span class="co"># Note: This assumes each manuscript has its own boilerplate database</span></span>
 <span>  <span class="co"># which would need to be created first</span></span>
 <span>  <span class="va">paper_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">project_root</span>, <span class="va">paper</span>, <span class="st">"boilerplate"</span><span class="op">)</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">paper_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -418,7 +418,7 @@ samples:</p>
 <h2 id="integration-with-r-markdownquarto">Integration with R Markdown/Quarto<a class="anchor" aria-label="anchor" href="#integration-with-r-markdownquarto"></a>
 </h2>
 <div class="section level3">
-<h3 id="seamless-document-generation">Seamless Document Generation<a class="anchor" aria-label="anchor" href="#seamless-document-generation"></a>
+<h3 id="document-generation">Document Generation<a class="anchor" aria-label="anchor" href="#document-generation"></a>
 </h3>
 <p>In your Quarto document (<code>manuscript.qmd</code>):</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">---</span></span>
@@ -522,7 +522,7 @@ benefits:</p>
 <ul>
 <li>
 <strong>Consistency</strong>: Same descriptions across all
-papers</li>
+manuscripts</li>
 <li>
 <strong>Efficiency</strong>: Update once, use everywhere</li>
 <li>
@@ -534,8 +534,8 @@ team</li>
 <strong>Flexibility</strong>: Customize for each study while
 maintaining standards</li>
 </ul>
-<p>Ready to get started? Check out: - <a href="boilerplate-getting-started.html">Getting Started Tutorial</a> for
-a complete walkthrough - <a href="boilerplate-bibliography-workflow.html">Bibliography
+<p>Start with: - <a href="boilerplate-getting-started.html">Getting
+Started Tutorial</a> for a complete walkthrough - <a href="boilerplate-bibliography-workflow.html">Bibliography
 Management</a> for citation handling - <a href="boilerplate-measures-workflow.html">Measures Workflow</a> for
 detailed measure documentation</p>
 <p>Your future self (and your collaborators) will thank you!</p>
@@ -551,7 +551,7 @@ detailed measure documentation</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

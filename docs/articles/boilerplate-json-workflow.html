@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Working with JSON Databases in boilerplate">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,13 +66,13 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://go-bayes.github.io/boilerplate/">boilerplate</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; boilerplate 1.3.0.9000</span></span></code></pre></div>
+<span><span class="co">#&gt; boilerplate 1.4.0</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The <code>boilerplate</code> package now supports JSON format for all
-database operations. JSON provides several advantages over the
-traditional RDS format:</p>
+<p>JSON is the default database format in <code>boilerplate</code>. It
+carries every data shape the package needs and has several practical
+advantages over the legacy RDS format:</p>
 <ul>
 <li>
 <strong>Human-readable</strong>: JSON files can be opened and edited
@@ -89,7 +89,16 @@ applications</li>
 <li>
 <strong>Template variables</strong>: Support for
 <code>{{variable}}</code> placeholders in your text</li>
+<li>
+<strong>Safer to load</strong>: JSON deserialisation cannot execute
+code, whereas <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code> can execute code through object
+hooks and class attributes. Only import RDS files from trusted
+sources.</li>
 </ul>
+<p>The package no longer writes RDS files. Reading existing RDS
+databases remains supported for trusted legacy files, and this vignette
+shows the canonical migration path via
+<code><a href="../reference/boilerplate_migrate_to_json.html">boilerplate_migrate_to_json()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="basic-json-operations">Basic JSON Operations<a class="anchor" aria-label="anchor" href="#basic-json-operations"></a>
@@ -221,9 +230,13 @@ JSON format:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Migrating 2 RDS files to JSON</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating backup in /var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpTob4FM/migrated_json/backup_20250726_075823</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating backup in /var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpE2t7i3/migrated_json/backup_20260710_203634</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing measures_db.rds</span></span>
+<span><span class="co">#&gt; Warning: Reading legacy RDS database 'measures_db.rds'. Only import RDS files</span></span>
+<span><span class="co">#&gt; from trusted sources and migrate them to JSON.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Processing methods_db.rds</span></span>
+<span><span class="co">#&gt; Warning: Reading legacy RDS database 'methods_db.rds'. Only import RDS files</span></span>
+<span><span class="co">#&gt; from trusted sources and migrate them to JSON.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Saving unified database to boilerplate_unified.json</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Migration Summary</span></span>
@@ -232,8 +245,8 @@ JSON format:</p>
 <span></span>
 <span><span class="co"># Check migration results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">migrated</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpTob4FM/rds_example/measures_db.rds"</span></span>
-<span><span class="co">#&gt; [2] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpTob4FM/rds_example/methods_db.rds"</span></span>
+<span><span class="co">#&gt; [1] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpE2t7i3/rds_example/measures_db.rds"</span></span>
+<span><span class="co">#&gt; [2] "/var/folders/q9/lkcn14l97mb6mkhbxsxrpr4w0000gn/T//RtmpE2t7i3/rds_example/methods_db.rds"</span></span>
 <span></span>
 <span><span class="co"># Verify the migrated data  </span></span>
 <span><span class="co"># The migrated file is in the output directory</span></span>
@@ -330,7 +343,7 @@ JSON format:</p>
 <span><span class="co">#&gt;   ..$ : chr "Feeling nervous or on edge"</span></span>
 <span><span class="co">#&gt;   ..$ : chr "Not being able to stop worrying"</span></span>
 <span><span class="co">#&gt;  $ standardised     : logi TRUE</span></span>
-<span><span class="co">#&gt;  $ standardised_date: Date[1:1], format: "2025-07-26"</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ standardised_date: Date[1:1], format: "2026-07-10"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="validating-json-structure-and-health">Validating JSON Structure and Health<a class="anchor" aria-label="anchor" href="#validating-json-structure-and-health"></a>
@@ -397,8 +410,7 @@ databases:</p>
 <div class="section level2">
 <h2 id="integration-with-existing-workflow">Integration with Existing Workflow<a class="anchor" aria-label="anchor" href="#integration-with-existing-workflow"></a>
 </h2>
-<p>JSON databases work seamlessly with all existing boilerplate
-functions:</p>
+<p>JSON databases work with the existing boilerplate functions:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate text using JSON database</span></span>
 <span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_generate_text.html">boilerplate_generate_text</a></span><span class="op">(</span></span>
@@ -488,7 +500,7 @@ correct</p></li>
 </ul>
 </li>
 <li>
-<p><strong>Track database contents</strong>: Regularly check
+<p><strong>Track database contents</strong>: Regularly review
 database contents:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List all paths</span></span>
@@ -500,11 +512,10 @@ database contents:</p>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>JSON support in boilerplate provides a modern, flexible way to manage
-your research text databases. Whether you’re starting fresh or migrating
-existing RDS databases, the JSON functionality integrates seamlessly
-with your workflow while providing better visibility and version
-control.</p>
+<p>JSON support gives boilerplate a text-based database format that is
+easier to inspect, compare, and version. New projects can start with
+JSON, and existing projects can migrate trusted RDS databases when they
+are ready.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -517,7 +528,7 @@ control.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

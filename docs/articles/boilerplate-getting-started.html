@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting Started with boilerplate: A Complete Workflow">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">boilerplate</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,15 +67,14 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This tutorial walks you through a complete workflow using the
-boilerplate package, from initial setup to generating a complete methods
-section for a scientific paper. We’ll build a real example step by
-step.</p>
+<p>This tutorial builds a complete <code>boilerplate</code> workflow,
+from initial setup to a generated methods section for a scientific
+manuscript. The example develops one project step by step.</p>
 </div>
 <div class="section level2">
-<h2 id="scenario-writing-a-psychology-research-paper">Scenario: Writing a Psychology Research Paper<a class="anchor" aria-label="anchor" href="#scenario-writing-a-psychology-research-paper"></a>
+<h2 id="scenario-writing-a-psychology-manuscript">Scenario: Writing a Psychology Manuscript<a class="anchor" aria-label="anchor" href="#scenario-writing-a-psychology-manuscript"></a>
 </h2>
-<p>Imagine you’re writing a paper about the relationship between
+<p>Imagine you are writing a manuscript about the relationship between
 political attitudes and well-being. You want to:</p>
 <ol style="list-style-type: decimal">
 <li>Use standardised text for common methods</li>
@@ -363,7 +362,7 @@ pol_text &lt;- boilerplate_generate_measures( measures =
 <h2 id="step-7-validate-your-work">Step 7: Validate Your Work<a class="anchor" aria-label="anchor" href="#step-7-validate-your-work"></a>
 </h2>
 <div class="section level3">
-<h3 id="check-database-structure">Check Database Structure<a class="anchor" aria-label="anchor" href="#check-database-structure"></a>
+<h3 id="verify-database-structure">Verify Database Structure<a class="anchor" aria-label="anchor" href="#verify-database-structure"></a>
 </h3>
 <p>Ensure your database is properly structured:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -390,7 +389,7 @@ pol_text &lt;- boilerplate_generate_measures( measures =
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">measures_db</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="check-references">Check References<a class="anchor" aria-label="anchor" href="#check-references"></a>
+<h3 id="verify-references">Verify References<a class="anchor" aria-label="anchor" href="#verify-references"></a>
 </h3>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ensure all citations are in your bibliography</span></span>
@@ -472,10 +471,15 @@ boilerplate_export(
 
 # Collaborator imports
 team_db &lt;- boilerplate_import(file.path(shared_path, "shared_boilerplate.json"))</code></pre>
+<p>When sharing with collaborators, send JSON exports rather than RDS
+files: JSON carries data only, whereas loading an RDS file can execute
+code. Exporting a selection with <code>select_elements</code> also keeps
+the shared file small enough for recipients to review before
+importing.</p>
 <div class="section level3">
-<h3 id="multiple-papers-from-same-dataset">2. Multiple Papers from Same Dataset<a class="anchor" aria-label="anchor" href="#multiple-papers-from-same-dataset"></a>
+<h3 id="multiple-manuscripts-from-same-dataset">2. Multiple Manuscripts from Same Dataset<a class="anchor" aria-label="anchor" href="#multiple-manuscripts-from-same-dataset"></a>
 </h3>
-<p>Create variants for different papers:</p>
+<p>Create variants for different manuscripts:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Paper 1: Focus on political orientation</span></span>
 <span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/boilerplate_path_ops.html">boilerplate_add_entry</a></span><span class="op">(</span></span>
@@ -514,7 +518,7 @@ team_db &lt;- boilerplate_import(file.path(shared_path, "shared_boilerplate.json
 <div class="section level3">
 <h3 id="quality-control">4. Quality Control<a class="anchor" aria-label="anchor" href="#quality-control"></a>
 </h3>
-<p>Create a comprehensive reporting function for your team:</p>
+<p>Create a reporting function for your team:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">check_manuscript_ready</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">db</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Manuscript Checklist:\n"</span><span class="op">)</span></span>
@@ -606,7 +610,7 @@ parameters</li>
 <strong>Integrate</strong> with Quarto/R Markdown documents</li>
 </ol>
 <p>The boilerplate package helps you: - ✓ Write consistent, professional
-methods sections - ✓ Reuse content across multiple papers - ✓
+methods sections - ✓ Reuse content across multiple manuscripts - ✓
 Collaborate effectively with co-authors - ✓ Maintain version control of
 your text - ✓ Ensure citation completeness</p>
 </div>
@@ -618,8 +622,8 @@ your text - ✓ Ensure citation completeness</p>
 vignette for advanced database management</li>
 <li>See the <a href="boilerplate-architecture.html">Architecture</a>
 vignette to understand the package design</li>
-<li>Check the <a href="boilerplate-measures-workflow.html">Measures
-Workflow</a> for detailed measure documentation</li>
+<li>See the <a href="boilerplate-measures-workflow.html">Measures
+Workflow</a> vignette for detailed measure documentation</li>
 <li>Explore the <a href="boilerplate-bibliography-workflow.html">Bibliography
 Management</a> guide for reference handling</li>
 </ul>
@@ -636,7 +640,7 @@ Management</a> guide for reference handling</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

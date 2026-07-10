@@ -36,7 +36,6 @@
 ^codecov\.yml$
 ^CRAN-SUBMISSION$
 ^inst/ROADMAP_S3_CLASSES\.md$
-^planning$
 ^summary$
 ^\.vscode$
 ^CRAN_COMPLIANCE_ANALYSIS\.md$

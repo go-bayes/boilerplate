@@ -1,5 +1,5 @@
-pandoc: 3.7.0.2
-pkgdown: 2.1.3
+pandoc: '3.10'
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   boilerplate-architecture: boilerplate-architecture.html
@@ -14,7 +14,7 @@ articles:
   boilerplate-projects: boilerplate-projects.html
   boilerplate-quarto-workflow: boilerplate-quarto-workflow.html
   version-management-section: version-management-section.html
-last_built: 2025-07-25T19:58Z
+last_built: 2026-07-10T08:36Z
 urls:
   reference: https://go-bayes.github.io/boilerplate/reference
   article: https://go-bayes.github.io/boilerplate/articles
