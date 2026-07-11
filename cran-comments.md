@@ -37,10 +37,14 @@ local RDS files.
 
 ## Test environments
 
-* local macOS install (aarch64-apple-darwin23), R 4.6.0
-* win-builder devel: pending
-* win-builder release: pending
-* R-hub R-devel and R-release: pending
+* local macOS install (aarch64-apple-darwin23), R 4.6.0:
+  0 errors | 0 warnings | 0 notes
+* win-builder devel, R-devel r90225 (UCRT):
+  0 errors | 0 warnings | 1 note (reviewed; expected)
+* win-builder release, R 4.6.1 (UCRT):
+  0 errors | 0 warnings | 1 note (reviewed; expected)
+* R-hub Linux, Windows, and macOS, R-devel: passed
+* R-hub Ubuntu, R 4.6.1 release: passed
 
 ## R CMD check results
 
@@ -57,11 +61,6 @@ Local source-tarball result: 0 errors | 0 warnings | 0 notes.
   been updated to JSON. The migration vignette
   (`boilerplate-json-workflow.Rmd`) retains RDS only in the portions
   demonstrating the migration itself.
-
-## Submission note
-
-Do not submit until the pending win-builder and R-hub results above have been
-replaced with actual results.
 
 ---
 
