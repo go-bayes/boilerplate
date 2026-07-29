@@ -1,3 +1,16 @@
+# boilerplate (development version)
+
+## LMTP reporting text
+* New shipped database `inst/extdata/lmtp_boilerplate.json` holds the
+  standardised narration for longitudinal modified treatment policy reporting
+  under the NZAVS-LMTP-v1 workflow, under `methods.lmtp.*` and `results.lmtp.*`
+  paths. Reporting software resolves entries by dot-separated path and
+  substitutes realised values through the `{{variable}}` syntax, so that no
+  report prose is hardcoded in analysis packages.
+* New build script `data-raw/lmtp-boilerplate-entries.R` regenerates that
+  database and verifies every non-templated sentence verbatim against the
+  approved registration source.
+
 # boilerplate 1.4.0 [2026-07-09]
 
 This release removes RDS writing from package APIs. The motivation is safety:

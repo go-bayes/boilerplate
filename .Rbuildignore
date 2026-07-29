@@ -39,3 +39,4 @@
 ^summary$
 ^\.vscode$
 ^CRAN_COMPLIANCE_ANALYSIS\.md$
+^data-raw$
