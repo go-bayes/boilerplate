@@ -11,7 +11,7 @@
   database and verifies every non-templated sentence verbatim against the
   approved registration source.
 
-# boilerplate 1.4.0 [2026-07-09]
+# boilerplate 1.4.0 [2026-07-12]
 
 This release removes RDS writing from package APIs. The motivation is safety:
 loading an RDS file can execute code through object hooks and crafted class
