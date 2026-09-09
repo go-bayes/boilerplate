@@ -437,3 +437,18 @@ test_that("boilerplate_generate_measures handles empty fields gracefully", {
   expect_true(grepl("#### Null Items", result))
   expect_true(grepl("#### Minimal", result))
 })
+
+
+test_that("references survive missing or extracted descriptions in both formats", {
+  for (description in list(NULL, "", "Ordinal response: (1 to 7)")) {
+    db <- list(measure = list(description = description,
+      reference = "first2000; @second2001", items = list("An item.")))
+    for (as_table in c(FALSE, TRUE)) {
+      result <- boilerplate_generate_measures("Measures", "measure", db = db,
+        table_format = as_table, quiet = TRUE)
+      expect_match(result, "[@first2000; @second2001]", fixed = TRUE)
+      expect_equal(length(gregexpr("@first2000", result, fixed = TRUE)[[1]]), 1L)
+      expect_false(grepl("NULL", result, fixed = TRUE))
+    }
+  }
+})

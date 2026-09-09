@@ -1,5 +1,7 @@
 # boilerplate (development version)
 
+* Preserve measure references in prose and tables when descriptions are absent or consist only of extracted response-scale information.
+
 ## LMTP reporting text
 * New shipped database `inst/extdata/lmtp_boilerplate.json` holds the
   standardised narration for longitudinal modified treatment policy reporting

@@ -217,6 +217,8 @@ boilerplate_generate_measures <- function(
             desc_with_ref <- paste0(desc_with_ref, ".")
           }
           var_text <- paste0(var_text, "| Description | ", desc_with_ref, " |\n")
+        } else if (!is.null(measure_info$reference)) {
+          var_text <- paste0(var_text, "| Reference | [@", measure_info$reference, "] |\n")
         }
 
         # add scale info
@@ -283,6 +285,8 @@ boilerplate_generate_measures <- function(
           }
 
           var_text <- paste0(var_text, "\n\n")
+        } else if (!is.null(measure_info$reference)) {
+          var_text <- paste0(var_text, "[@", measure_info$reference, "]\n\n")
         }
 
         # add scale info if extracted
