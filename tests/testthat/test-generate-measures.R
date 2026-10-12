@@ -452,3 +452,21 @@ test_that("references survive missing or extracted descriptions in both formats"
     }
   }
 })
+
+
+test_that("measure tables recognise reverse-coded labels alongside legacy labels", {
+  items <- c(
+    "First response.",
+    "Second response (reverse-coded).",
+    "Third response (r).",
+    "Fourth response (reversed).",
+    "I do not agree with this statement."
+  )
+  db <- list(example = list(description = "An example measure.", items = items))
+  result <- boilerplate::boilerplate_generate_measures(
+    variable_heading = "Measures", variables = "example", db = db,
+    table_format = TRUE, quiet = TRUE
+  )
+  expect_match(result, "| Reversed Items | 2, 3, 4 |", fixed = TRUE)
+  expect_match(result, "Second response (reverse-coded).", fixed = TRUE)
+})

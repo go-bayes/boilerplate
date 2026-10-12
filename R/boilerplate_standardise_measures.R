@@ -162,6 +162,7 @@ boilerplate_standardise_measures <- function(
         reversed_patterns <- c(
           "\\(reversed\\s*(scored)?\\s*\\)",
           "\\(r\\)",
+          "\\(reverse[- ]coded\\)",
           "\\breversed\\b"
         )
 

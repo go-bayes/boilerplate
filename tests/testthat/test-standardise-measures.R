@@ -201,3 +201,20 @@ test_that("measures report handles special characters", {
   expect_true(report_df$has_waves[3])
 })
 
+
+
+test_that("reversal indices recognise reverse-coded labels without inferring from negatives", {
+  items <- c(
+    "First response.",
+    "Second response (reverse-coded).",
+    "Third response (r).",
+    "Fourth response (reversed).",
+    "I do not agree with this statement."
+  )
+  result <- boilerplate_standardise_measures(
+    list(example = list(description = "An example measure.", items = items)),
+    clean_descriptions = FALSE, quiet = TRUE
+  )
+  expect_equal(result$example$reversed_items, c(2, 3, 4))
+  expect_identical(result$example$items, items)
+})

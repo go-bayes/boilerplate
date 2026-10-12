@@ -177,7 +177,7 @@ boilerplate_generate_measures <- function(
       # check for reversed items in item text
       if (!is.null(measure_info$items)) {
         for (i in seq_along(measure_info$items)) {
-          if (grepl("\\(reversed\\)|\\(r\\)|\\breversed\\b", measure_info$items[[i]], ignore.case = TRUE)) {
+          if (grepl("\\(reversed\\)|\\(r\\)|\\breversed\\b|\\(reverse[- ]coded\\)", measure_info$items[[i]], ignore.case = TRUE)) {
             reversed_items <- c(reversed_items, as.character(i))
           }
         }
